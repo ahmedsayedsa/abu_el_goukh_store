@@ -298,102 +298,83 @@
         </div>
     </header>
 
-    <!-- EPIC CINEMATIC VIDEO HERO (Trek International Ad Experience) -->
-    <section class="relative bg-[#0A0A0C] text-white overflow-hidden pt-16 pb-20 lg:pt-24 lg:pb-28 border-b border-white/10">
+    <!-- EPIC CINEMATIC VIDEO HERO (Full-Bleed Dynamic Background Experience) -->
+    <section class="relative bg-[#0A0A0C] text-white overflow-hidden pt-16 pb-24 lg:pt-24 lg:pb-32 border-b border-white/10 min-h-[580px] lg:min-h-[640px] flex items-center justify-center">
         
-        <!-- Subtle Ambient Video Backdrop for Atmospheric Vibe -->
-        <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-20">
+        <!-- High-Visibility Full-Bleed Background Video (Directly Under Text from the Very Top) -->
+        <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-60 sm:opacity-70 transition-opacity duration-700">
             <iframe 
-                class="absolute top-1/2 left-1/2 w-[160vw] h-[160vh] -translate-x-1/2 -translate-y-1/2 object-cover pointer-events-none"
+                id="hero-bg-yt-video"
+                class="absolute top-1/2 left-1/2 w-[180vw] h-[180vh] min-w-[177.77vh] min-h-[56.25vw] -translate-x-1/2 -translate-y-1/2 object-cover pointer-events-none scale-105"
                 src="https://www.youtube-nocookie.com/embed/QuLgTeymJUI?autoplay=1&mute=1&loop=1&playlist=QuLgTeymJUI&controls=0&showinfo=0&rel=0&iv_load_policy=3&disablekb=1&modestbranding=1&playsinline=1&enablejsapi=1" 
-                title="Abo El Goukh Background Cycling Loop" 
+                title="Abo El Goukh Background Cycling Film" 
                 frameborder="0" 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
             </iframe>
         </div>
-        <div class="absolute inset-0 bg-gradient-to-b from-[#0A0A0C] via-transparent to-[#0A0A0C] z-10 pointer-events-none"></div>
 
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
+        <!-- Subtle Contrast Vignette Overlay for High Text Readability -->
+        <div class="absolute inset-0 bg-gradient-to-b from-[#0A0A0C]/75 via-[#0A0A0C]/40 to-[#0A0A0C]/85 z-10 pointer-events-none"></div>
+
+        <!-- Hero Content (Floating over Video) -->
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 w-full">
             <div class="text-center max-w-4xl mx-auto space-y-6">
                 
                 <!-- Category Badge & Live Video Sound Button -->
                 <div class="flex flex-wrap items-center justify-center gap-3">
-                    <div class="inline-flex items-center gap-2 bg-white/10 border border-white/15 px-4 py-1.5 rounded-full text-xs font-bold text-white shadow-sm backdrop-blur-md">
+                    <div class="inline-flex items-center gap-2 bg-black/60 border border-white/20 px-4 py-1.5 rounded-full text-xs font-bold text-white shadow-lg backdrop-blur-md">
                         <span class="w-2 h-2 rounded-full bg-trek-red animate-pulse"></span>
                         <span class="num-font uppercase tracking-wider text-[11px]">ABO EL GOUKH • OFFICIAL EGYPT FLEET 2026</span>
                     </div>
 
-                    <button onclick="toggleHeroVideoSound()" id="btn-hero-sound" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-1.5 rounded-full text-xs font-bold transition shadow-sm hover:scale-105">
+                    <button onclick="toggleHeroVideoSound()" id="btn-hero-sound" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-1.5 rounded-full text-xs font-bold transition shadow-lg hover:scale-105 backdrop-blur-md">
                         <span id="sound-icon">🔊</span>
                         <span id="sound-text">تشغيل صوت الإعلان</span>
                     </button>
                 </div>
 
                 <!-- Main Hero Headline -->
-                <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.12] text-white drop-shadow-md">
+                <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.12] text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
                     عجل أصلي يعيش العمر.<br>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-gray-400">
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-100 to-gray-300">
                         خفة وسرعة وضمان في شوارع مصر.
                     </span>
                 </h1>
 
                 <!-- Subtitle / Value Proposition -->
-                <p class="text-sm sm:text-base lg:text-lg text-white/90 max-w-3xl mx-auto font-normal leading-relaxed drop-shadow">
-                    منذ عام <strong class="text-white">1925</strong>، صرح "أبو الجوخ" هو الاسم الأول والموثوق لتجارة العجل في مصر. شاسيهات ألومنيوم طيران خفيفة، نواقل سرعات Shimano يابانية أصلية، تجميع وضبط يدوي مجاني، وشحن لحد باب بيتك في كافة المحافظات مع ميزة التقسيط الفوري.
+                <p class="text-sm sm:text-base lg:text-lg text-white/95 max-w-3xl mx-auto font-medium leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+                    منذ عام <strong class="text-white font-black">1925</strong>، صرح "أبو الجوخ" هو الاسم الأول والموثوق لتجارة العجل في مصر. شاسيهات ألومنيوم طيران خفيفة، نواقل سرعات Shimano يابانية أصلية، تجميع وضبط يدوي مجاني، وشحن لحد باب بيتك في كافة المحافظات مع ميزة التقسيط الفوري.
                 </p>
 
                 <!-- Call to Action Buttons -->
-                <div class="pt-2 flex flex-wrap justify-center items-center gap-4">
-                    <a href="shop.html" class="bg-trek-red hover:bg-trek-redhover text-white font-black text-sm px-8 py-3.5 rounded-xl transition shadow-xl hover:shadow-2xl flex items-center gap-2">
-                        <span>تصفح كتالوج العجل والأسعار (55 موديل)</span>
+                <div class="pt-4 flex flex-wrap justify-center items-center gap-4">
+                    <a href="shop.html" class="bg-trek-red hover:bg-trek-redhover text-white font-black text-sm px-9 py-4 rounded-xl transition shadow-2xl hover:scale-105 flex items-center gap-2">
+                        <span>تصفح كتالوج العجل والأسعار (62 موديل)</span>
                         <span class="transform -rotate-180 font-bold">←</span>
                     </a>
-                    <a href="https://wa.me/201202925192" target="_blank" class="bg-white/10 hover:bg-white/20 text-white font-bold text-sm px-6 py-3.5 rounded-xl border border-white/20 transition flex items-center gap-2">
+                    <a href="https://wa.me/201202925192" target="_blank" class="bg-black/50 hover:bg-black/70 text-white font-bold text-sm px-7 py-4 rounded-xl border border-white/30 backdrop-blur-md transition flex items-center gap-2 hover:scale-105 shadow-xl">
                         <svg class="w-4 h-4 fill-current text-emerald-400" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.109.005.253-.042.395.299.144.347.491 1.199.534 1.286.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.174.086.275.072.376-.043.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.824z"/></svg>
                         <span>استشارة فورية لاختيار مقاسك</span>
                     </a>
                 </div>
 
-                <!-- HD CINEMATIC VIDEO SHOWCASE FRAME (VIBRANT, PROMINENT & CRYSTAL CLEAR) -->
-                <div class="pt-8 max-w-4xl mx-auto">
-                    <div class="relative rounded-3xl overflow-hidden shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] border-2 border-white/20 bg-black aspect-video group">
-                        
-                        <iframe 
-                            id="showcase-yt-video"
-                            class="w-full h-full object-cover"
-                            src="https://www.youtube-nocookie.com/embed/QuLgTeymJUI?autoplay=1&mute=1&loop=1&playlist=QuLgTeymJUI&controls=1&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&playsinline=1&enablejsapi=1" 
-                            title="Abo El Goukh Road Bike Commercial Showcase" 
-                            frameborder="0" 
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                            allowfullscreen>
-                        </iframe>
-
-                        <!-- Top Floating Film Badge -->
-                        <div class="absolute top-3.5 right-4 z-20 pointer-events-none flex items-center gap-2 bg-black/70 backdrop-blur-md border border-white/20 px-3.5 py-1 rounded-full text-[11px] font-bold text-white">
-                            <span class="w-2 h-2 rounded-full bg-trek-red animate-ping"></span>
-                            <span>🎬 الإعلان الرسمي: متعة السرعة والانطلاق مع دراجات الطرق 2026</span>
-                        </div>
-
+                <!-- Highlight Spec Badges with Egyptian Quality Proofs -->
+                <div class="flex flex-wrap justify-center items-center gap-3 sm:gap-5 pt-8 text-xs text-white/95">
+                    <div class="flex items-center gap-2 bg-black/50 border border-white/20 px-4 py-2.5 rounded-xl backdrop-blur-md shadow-lg">
+                        <span class="text-emerald-400 font-black">✓</span>
+                        <span>شاسيه ألومنيوم 6061 خفيف مش حديد</span>
                     </div>
-
-                    <!-- Highlight Spec Badges with Egyptian Quality Proofs -->
-                    <div class="flex flex-wrap justify-center items-center gap-3 sm:gap-5 mt-7 text-xs text-white/90">
-                        <div class="flex items-center gap-2 bg-white/5 border border-white/15 px-4 py-2 rounded-xl backdrop-blur-sm">
-                            <span class="text-emerald-400 font-black">✓</span>
-                            <span>شاسيه ألومنيوم 6061 خفيف مش حديد</span>
-                        </div>
-                        <div class="flex items-center gap-2 bg-white/5 border border-white/15 px-4 py-2 rounded-xl backdrop-blur-sm">
-                            <span class="text-emerald-400 font-black">✓</span>
-                            <span>سرعات شيمانو Shimano ياباني أصلية</span>
-                        </div>
-                        <div class="flex items-center gap-2 bg-white/5 border border-white/15 px-4 py-2 rounded-xl backdrop-blur-sm">
-                            <span class="text-emerald-400 font-black">✓</span>
-                            <span>تصلك مجمعة ومضبوطة وجاهزة للركوب</span>
-                        </div>
-                        <div class="flex items-center gap-2 bg-white/5 border border-white/15 px-4 py-2 rounded-xl backdrop-blur-sm">
-                            <span class="text-amber-400 font-black">💳</span>
-                            <span>تقسيط حتى 36 شهر مع فاليو وبنوك مصر</span>
-                        </div>
+                    <div class="flex items-center gap-2 bg-black/50 border border-white/20 px-4 py-2.5 rounded-xl backdrop-blur-md shadow-lg">
+                        <span class="text-emerald-400 font-black">✓</span>
+                        <span>سرعات شيمانو Shimano يابانية أصلية</span>
+                    </div>
+                    <div class="flex items-center gap-2 bg-black/50 border border-white/20 px-4 py-2.5 rounded-xl backdrop-blur-md shadow-lg">
+                        <span class="text-emerald-400 font-black">✓</span>
+                        <span>تصلك مجمعة ومضبوطة وجاهزة للركوب</span>
+                    </div>
+                    <div class="flex items-center gap-2 bg-black/50 border border-white/20 px-4 py-2.5 rounded-xl backdrop-blur-md shadow-lg">
+                        <span class="text-amber-400 font-black">💳</span>
+                        <span>تقسيط حتى 36 شهر مع فاليو وبنوك مصر</span>
                     </div>
                 </div>
 
@@ -1137,23 +1118,23 @@
             }, 150);
         }
 
-        // Live Video Showcase Sound Toggle
+        // Background Video Sound Toggle
         let isHeroVideoMuted = true;
 
         function toggleHeroVideoSound() {
-            const iframe = document.getElementById('showcase-yt-video');
+            const iframe = document.getElementById('hero-bg-yt-video');
             const soundIcon = document.getElementById('sound-icon');
             const soundText = document.getElementById('sound-text');
 
             if (isHeroVideoMuted) {
                 // Unmute
-                iframe.src = 'https://www.youtube-nocookie.com/embed/QuLgTeymJUI?autoplay=1&mute=0&loop=1&playlist=QuLgTeymJUI&controls=1&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1';
+                iframe.src = 'https://www.youtube-nocookie.com/embed/QuLgTeymJUI?autoplay=1&mute=0&loop=1&playlist=QuLgTeymJUI&controls=0&showinfo=0&rel=0&iv_load_policy=3&disablekb=1&modestbranding=1&playsinline=1&enablejsapi=1';
                 isHeroVideoMuted = false;
                 soundIcon.innerText = '🔇';
                 soundText.innerText = 'كتم الصوت';
             } else {
                 // Mute
-                iframe.src = 'https://www.youtube-nocookie.com/embed/QuLgTeymJUI?autoplay=1&mute=1&loop=1&playlist=QuLgTeymJUI&controls=1&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=1';
+                iframe.src = 'https://www.youtube-nocookie.com/embed/QuLgTeymJUI?autoplay=1&mute=1&loop=1&playlist=QuLgTeymJUI&controls=0&showinfo=0&rel=0&iv_load_policy=3&disablekb=1&modestbranding=1&playsinline=1&enablejsapi=1';
                 isHeroVideoMuted = true;
                 soundIcon.innerText = '🔊';
                 soundText.innerText = 'تشغيل صوت الإعلان';

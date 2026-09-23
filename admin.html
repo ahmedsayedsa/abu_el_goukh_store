@@ -68,7 +68,7 @@
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                     </a>
                     <a href="shop.html" target="_blank" class="text-xs font-bold text-trek-gray hover:text-trek-black transition px-3 py-1.5 rounded-lg border border-trek-border bg-white flex items-center gap-1.5">
-                        <span>معاينة الكتالوج (55 عجلة)</span>
+                        <span>معاينة الكتالوج (62 عجلة)</span>
                         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                     </a>
                     <button onclick="openAddModal()" class="bg-trek-red hover:bg-trek-redhover text-white text-xs font-bold px-4 py-2 rounded-lg transition shadow-sm flex items-center gap-1.5">
@@ -90,7 +90,7 @@
             <div class="bg-white p-5 rounded-2xl border border-trek-border shadow-sm flex items-center justify-between">
                 <div>
                     <span class="text-xs text-trek-gray font-bold block mb-1">إجمالي العجل المعروض</span>
-                    <span id="stat-total" class="text-3xl font-black text-trek-black num-font">55</span>
+                    <span id="stat-total" class="text-3xl font-black text-trek-black num-font">62</span>
                     <span class="text-[11px] text-emerald-600 font-semibold block mt-1">✓ جاهزة للشراء أونلاين</span>
                 </div>
                 <div class="w-12 h-12 rounded-xl bg-red-50 text-trek-red flex items-center justify-center text-2xl font-bold">
@@ -137,7 +137,7 @@
         <div class="flex items-center gap-3 mb-6 border-b border-trek-border pb-3">
             <button id="main-tab-products" onclick="switchMainTab('products')" class="px-5 py-3 rounded-xl text-sm font-black bg-trek-black text-white transition flex items-center gap-2 shadow-sm">
                 <span>🚲 المنتجات والمخزون</span>
-                <span class="bg-white/20 text-white text-xs px-2 py-0.5 rounded-full num-font" id="tab-products-badge">55</span>
+                <span class="bg-white/20 text-white text-xs px-2 py-0.5 rounded-full num-font" id="tab-products-badge">62</span>
             </button>
             <button id="main-tab-orders" onclick="switchMainTab('orders')" class="px-5 py-3 rounded-xl text-sm font-bold bg-white text-trek-black border border-trek-border hover:bg-trek-lightgray transition flex items-center gap-2">
                 <span>📦 الطلبات الواردة (E-Commerce Orders)</span>
@@ -150,7 +150,7 @@
         <!-- Filter & Search Toolbar -->
         <div class="bg-white p-4 rounded-2xl border border-trek-border shadow-sm mb-6 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-2 w-full sm:w-auto">
-                <button onclick="filterTable('all')" id="btn-tab-all" class="px-4 py-2 rounded-xl text-xs font-bold bg-trek-black text-white transition">الكل (55)</button>
+                <button onclick="filterTable('all')" id="btn-tab-all" class="px-4 py-2 rounded-xl text-xs font-bold bg-trek-black text-white transition">الكل (62)</button>
                 <button onclick="filterTable('mountain')" id="btn-tab-mountain" class="px-4 py-2 rounded-xl text-xs font-bold bg-trek-lightgray hover:bg-gray-200 text-trek-black transition">جبلي</button>
                 <button onclick="filterTable('road')" id="btn-tab-road" class="px-4 py-2 rounded-xl text-xs font-bold bg-trek-lightgray hover:bg-gray-200 text-trek-black transition">سرعة وطريق</button>
                 <button onclick="filterTable('kids')" id="btn-tab-kids" class="px-4 py-2 rounded-xl text-xs font-bold bg-trek-lightgray hover:bg-gray-200 text-trek-black transition">أطفال وبناتي</button>
@@ -188,7 +188,7 @@
             <!-- Table Footer -->
             <div class="p-4 bg-trek-cardbg border-t border-trek-border flex justify-between items-center text-xs text-trek-gray">
                 <div>يتم حفظ أي تعديل في المتجر فوراً وبشكل مجاني تماماً.</div>
-                <div id="showing-count" class="font-bold">عرض 55 من 55 عجلة</div>
+                <div id="showing-count" class="font-bold">عرض 62 من 62 عجلة</div>
             </div>
         </div>
         </div>
@@ -1157,6 +1157,24 @@
         }
 ]];
 
+        
+        // Check version or length of cached products
+        try {
+            const cached = localStorage.getItem('abu_el_goukh_admin_products');
+            if (cached) {
+                const parsed = JSON.parse(cached);
+                if (!Array.isArray(parsed) || parsed.length < 20) {
+                    // Force upgrade to all 62 products
+                    localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(initialProducts));
+                    products = initialProducts;
+                }
+            } else {
+                localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(initialProducts));
+            }
+        } catch(e) {
+            console.error(e);
+        }
+
         // Load or initialize (Auto-migrate if stored products are outdated or < 20)
         const saved = localStorage.getItem('abu_el_goukh_admin_products');
         if (saved) {
@@ -1192,6 +1210,10 @@
 
             document.getElementById('stat-total').innerText = products.length;
             document.getElementById('showing-count').innerText = `عرض ${filtered.length} من أصل ${products.length} عجلة`;
+            const tabProdBadge = document.getElementById('tab-products-badge');
+            if (tabProdBadge) tabProdBadge.innerText = products.length;
+            const btnAll = document.getElementById('btn-tab-all');
+            if (btnAll) btnAll.innerText = `الكل (${products.length})`;
 
             if (filtered.length === 0) {
                 tbody.innerHTML = `
@@ -1587,13 +1609,16 @@
                         تصل الدراجة مجمعة ومضبوطة بالكامل مع شهادة الضمان المعتمدة. يحق للعميل معاينة الشحنة قبل الاستلام.
                     </div>
 
-                    <script>
-                        window.onload = function() { window.print(); }
-                    </script>
                 </body>
                 </html>
             `);
             printWindow.document.close();
+            setTimeout(() => {
+                try {
+                    printWindow.focus();
+                    printWindow.print();
+                } catch(e) { console.error(e); }
+            }, 300);
         }
 
         function sendUpdatedWhatsApp() {

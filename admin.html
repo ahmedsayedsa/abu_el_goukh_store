@@ -349,22 +349,830 @@
 
         // Fetch products or load from local copy
         const initialProducts = [
-            {"id": 1, "name": "ترنكس 136 برو ألومنيوم مقاس 29", "category": "mountain", "price": 11500, "size": "29", "gears": "شيمانو تورني 21 سرعة", "frame": "ألومنيوم 6061 معالج", "image": "https://media.zbooni.com/merchants/media/products/109246/1735216982659_croppedImg.jpg", "active": true},
-            {"id": 2, "name": "زوم 26 العالمية مساعدين هيدروليك", "category": "mountain", "price": 7500, "size": "26", "gears": "شيمانو 21 سرعة أصلي", "frame": "ألومنيوم خفيف", "image": "https://media.zbooni.com/merchants/media/products/109246/1735217352952_croppedImg.jpg", "active": true},
-            {"id": 3, "name": "فري استايل نيجر احترافية جادون 360", "category": "road", "price": 6900, "size": "20", "gears": "سرعة واحدة استايل", "frame": "فولاذ صلب هيدروفورم", "image": "https://media.zbooni.com/merchants/media/products/109246/1735153672953_croppedImg.jpg", "active": true},
-            {"id": 4, "name": "دبابة زوم مقاس عريض بنز كاوتش 4.0", "category": "fat", "price": 6900, "size": "26", "gears": "شيمانو 21 سرعة", "frame": "فولاذ معالج ضد الصدأ", "image": "https://media.zbooni.com/merchants/media/products/109246/1735153530582_croppedImg.jpg", "active": true},
-            {"id": 5, "name": "دراجة أطفال كاندي مقاس 16 بناتي باسكيت", "category": "kids", "price": 3800, "size": "16", "gears": "سرعة واحدة آمنة", "frame": "ألومنيوم خفيف مع سنادات", "image": "https://media.zbooni.com/merchants/media/products/109246/1735153902037_croppedImg.jpg", "active": true},
-            {"id": 6, "name": "دراجة جبلية زوم 24 للأولاد سرعات", "category": "mountain", "price": 5400, "size": "24", "gears": "شيمانو 18 سرعة", "frame": "ألومنيوم خفيف", "image": "https://media.zbooni.com/merchants/media/products/109246/1735216982659_croppedImg.jpg", "active": true},
-            {"id": 7, "name": "رودكس سباق احترافي أسفلت مقاس 28", "category": "road", "price": 14200, "size": "28", "gears": "شيمانو كلاريس 16 سرعة", "frame": "ألومنيوم طيران فائق الخفة", "image": "https://media.zbooni.com/merchants/media/products/109246/1735153672953_croppedImg.jpg", "active": true},
-            {"id": 8, "name": "عجلة دبابة جبال ثلجية كاوتش عريض", "category": "fat", "price": 8200, "size": "26", "gears": "شيمانو 24 سرعة", "frame": "ألومنيوم مقوى", "image": "https://media.zbooni.com/merchants/media/products/109246/1735153530582_croppedImg.jpg", "active": true}
-        ];
+        {
+                "id": 1189653,
+                "name": "عجلة",
+                "category": "mountain",
+                "price": 5000,
+                "size": "29",
+                "gears": "شيمانو أصلي 21 سرعة ياباني",
+                "frame": "ألومنيوم 6061 معالج حرارياً",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1735216982659_croppedImg.jpg",
+                "sku": "ABU-1189653",
+                "badge": "FLAGSHIP",
+                "active": true
+        },
+        {
+                "id": 1189697,
+                "name": "دراجه, 12",
+                "category": "kids",
+                "price": 2900,
+                "size": "12",
+                "gears": "سرعة واحدة آمنة للأطفال",
+                "frame": "ألومنيوم خفيف مع عجلات مساعدة",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1735151673889_croppedImg.jpg",
+                "sku": "ABU-1189697",
+                "badge": "KIDS BEST",
+                "active": true
+        },
+        {
+                "id": 1189711,
+                "name": "دراجه دبابة",
+                "category": "fat",
+                "price": 6900,
+                "size": "26",
+                "gears": "شيمانو تورني 21 سرعة أصلي",
+                "frame": "فولاذ صلب معالج ضد الصدأ لكاوتش 4.0",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1735153530582_croppedImg.jpg",
+                "sku": "ABU-1189711",
+                "badge": "ORIGINAL",
+                "active": true
+        },
+        {
+                "id": 1189712,
+                "name": "دراجه  فري استايل نيجر",
+                "category": "road",
+                "price": 6900,
+                "size": "26",
+                "gears": "شيمانو كلاريس / تورني ياباني 16-21 سرعة",
+                "frame": "ألومنيوم طيران 6061 فائق الخفة",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1735153672953_croppedImg.jpg",
+                "sku": "ABU-1189712",
+                "badge": "ORIGINAL",
+                "active": true
+        },
+        {
+                "id": 1189713,
+                "name": "دراجه 16. برون",
+                "category": "kids",
+                "price": 3950,
+                "size": "16",
+                "gears": "سرعة واحدة آمنة للأطفال",
+                "frame": "ألومنيوم خفيف مع عجلات مساعدة",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1735153784625_croppedImg.jpg",
+                "sku": "ABU-1189713",
+                "badge": "KIDS BEST",
+                "active": true
+        },
+        {
+                "id": 1189715,
+                "name": "دراجه 16 برون بناتي",
+                "category": "kids",
+                "price": 4100,
+                "size": "16",
+                "gears": "سرعة واحدة آمنة للأطفال",
+                "frame": "ألومنيوم خفيف مع عجلات مساعدة",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1735153902037_croppedImg.jpg",
+                "sku": "ABU-1189715",
+                "badge": "KIDS BEST",
+                "active": true
+        },
+        {
+                "id": 1189716,
+                "name": "دراجه 20 من 6  سنوات الي  10 سنوات",
+                "category": "kids",
+                "price": 3500,
+                "size": "20",
+                "gears": "سرعة واحدة آمنة للأطفال",
+                "frame": "ألومنيوم خفيف مع عجلات مساعدة",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1735154050579_croppedImg.jpg",
+                "sku": "ABU-1189716",
+                "badge": "KIDS BEST",
+                "active": true
+        },
+        {
+                "id": 1189718,
+                "name": "دراجه 12",
+                "category": "kids",
+                "price": 2250,
+                "size": "12",
+                "gears": "سرعة واحدة آمنة للأطفال",
+                "frame": "ألومنيوم خفيف مع عجلات مساعدة",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1735154594186_croppedImg.jpg",
+                "sku": "ABU-1189718",
+                "badge": "KIDS BEST",
+                "active": true
+        },
+        {
+                "id": 1190074,
+                "name": "دراجه 16 برون بناتي",
+                "category": "kids",
+                "price": 3950,
+                "size": "16",
+                "gears": "سرعة واحدة آمنة للأطفال",
+                "frame": "ألومنيوم خفيف مع عجلات مساعدة",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1735216702470_croppedImg.jpg",
+                "sku": "ABU-1190074",
+                "badge": "KIDS BEST",
+                "active": true
+        },
+        {
+                "id": 1190076,
+                "name": "دراجه كركورة مصنع  زوم اصلي مقاس 24. أو  26",
+                "category": "mountain",
+                "price": 5500,
+                "size": "24",
+                "gears": "شيمانو أصلي 21 سرعة ياباني",
+                "frame": "ألومنيوم 6061 معالج حرارياً",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1735216818160_croppedImg.jpg",
+                "sku": "ABU-1190076",
+                "badge": "BESTSELLER",
+                "active": true
+        },
+        {
+                "id": 1190077,
+                "name": "دراجه كركورة مصنع  زوم اصلي مقاس 24. أو  26",
+                "category": "mountain",
+                "price": 5500,
+                "size": "24",
+                "gears": "شيمانو أصلي 21 سرعة ياباني",
+                "frame": "ألومنيوم 6061 معالج حرارياً",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1735216818160_croppedImg_n6VnUgH.jpg",
+                "sku": "ABU-1190077",
+                "badge": "BESTSELLER",
+                "active": true
+        },
+        {
+                "id": 1190082,
+                "name": "ترنكس 136. برو مقاس 29.",
+                "category": "mountain",
+                "price": 11500,
+                "size": "29",
+                "gears": "شيمانو أصلي 21 سرعة ياباني",
+                "frame": "ألومنيوم 6061 معالج حرارياً",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1735216982659_croppedImg.jpg",
+                "sku": "ABU-1190082",
+                "badge": "PRO GRADE",
+                "active": true
+        },
+        {
+                "id": 1190088,
+                "name": "دراجه 16 رويال 3320",
+                "category": "kids",
+                "price": 2850,
+                "size": "16",
+                "gears": "سرعة واحدة آمنة للأطفال",
+                "frame": "ألومنيوم خفيف مع عجلات مساعدة",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1735217200814_croppedImg.jpg",
+                "sku": "ABU-1190088",
+                "badge": "KIDS BEST",
+                "active": true
+        },
+        {
+                "id": 1190090,
+                "name": "دراجه زوم 26 بسعر مغري",
+                "category": "mountain",
+                "price": 7500,
+                "size": "26",
+                "gears": "شيمانو أصلي 21 سرعة ياباني",
+                "frame": "ألومنيوم 6061 معالج حرارياً",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1735217352952_croppedImg.jpg",
+                "sku": "ABU-1190090",
+                "badge": "BESTSELLER",
+                "active": true
+        },
+        {
+                "id": 1190093,
+                "name": "دراجه زوم دبابات 7500",
+                "category": "fat",
+                "price": 6900,
+                "size": "26",
+                "gears": "شيمانو تورني 21 سرعة أصلي",
+                "frame": "فولاذ صلب معالج ضد الصدأ لكاوتش 4.0",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1735217678684_croppedImg.jpg",
+                "sku": "ABU-1190093",
+                "badge": "BESTSELLER",
+                "active": true
+        },
+        {
+                "id": 1190095,
+                "name": "دراجه بناتي جديده",
+                "category": "kids",
+                "price": 3900,
+                "size": "26",
+                "gears": "سرعة واحدة آمنة للأطفال",
+                "frame": "ألومنيوم خفيف مع عجلات مساعدة",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1735217789173_croppedImg.jpg",
+                "sku": "ABU-1190095",
+                "badge": "KIDS BEST",
+                "active": true
+        },
+        {
+                "id": 1190100,
+                "name": "دراجه نيجر مقاس 20",
+                "category": "kids",
+                "price": 6900,
+                "size": "20",
+                "gears": "سرعة واحدة آمنة للأطفال",
+                "frame": "ألومنيوم خفيف مع عجلات مساعدة",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1735218052025_croppedImg.jpg",
+                "sku": "ABU-1190100",
+                "badge": "KIDS BEST",
+                "active": true
+        },
+        {
+                "id": 1190102,
+                "name": "دراجه 20 برون بناتي نمره 1",
+                "category": "kids",
+                "price": 4200,
+                "size": "20",
+                "gears": "سرعة واحدة آمنة للأطفال",
+                "frame": "ألومنيوم خفيف مع عجلات مساعدة",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1735218180663_croppedImg.jpg",
+                "sku": "ABU-1190102",
+                "badge": "KIDS BEST",
+                "active": true
+        },
+        {
+                "id": 1195103,
+                "name": "دراجه برون",
+                "category": "mountain",
+                "price": 4200,
+                "size": "29",
+                "gears": "شيمانو أصلي 21 سرعة ياباني",
+                "frame": "ألومنيوم 6061 معالج حرارياً",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1735216982659_croppedImg.jpg",
+                "sku": "ABU-1195103",
+                "badge": "ORIGINAL",
+                "active": true
+        },
+        {
+                "id": 1198891,
+                "name": "دراجه بناتي فريزن",
+                "category": "kids",
+                "price": 3900,
+                "size": "26",
+                "gears": "سرعة واحدة آمنة للأطفال",
+                "frame": "ألومنيوم خفيف مع عجلات مساعدة",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1736447409272_croppedImg.jpg",
+                "sku": "ABU-1198891",
+                "badge": "KIDS BEST",
+                "active": true
+        },
+        {
+                "id": 1198965,
+                "name": "دراجه نيجر مقاس 20",
+                "category": "kids",
+                "price": 5900,
+                "size": "20",
+                "gears": "سرعة واحدة آمنة للأطفال",
+                "frame": "ألومنيوم خفيف مع عجلات مساعدة",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1736456227173_croppedImg.jpg",
+                "sku": "ABU-1198965",
+                "badge": "KIDS BEST",
+                "active": true
+        },
+        {
+                "id": 1198966,
+                "name": "دراجه نيجر مقاس 20",
+                "category": "kids",
+                "price": 5900,
+                "size": "20",
+                "gears": "سرعة واحدة آمنة للأطفال",
+                "frame": "ألومنيوم خفيف مع عجلات مساعدة",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1736456227173_croppedImg_kd4IRfz.jpg",
+                "sku": "ABU-1198966",
+                "badge": "KIDS BEST",
+                "active": true
+        },
+        {
+                "id": 1198971,
+                "name": "دراجه 16 سبيدر نمره 1 اصلي وليس كوبي",
+                "category": "kids",
+                "price": 3900,
+                "size": "16",
+                "gears": "سرعة واحدة آمنة للأطفال",
+                "frame": "ألومنيوم خفيف مع عجلات مساعدة",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1736456676943_croppedImg.jpg",
+                "sku": "ABU-1198971",
+                "badge": "KIDS BEST",
+                "active": true
+        },
+        {
+                "id": 1198973,
+                "name": "دراجه سوبر مان  20 اصلي",
+                "category": "kids",
+                "price": 3800,
+                "size": "20",
+                "gears": "سرعة واحدة آمنة للأطفال",
+                "frame": "ألومنيوم خفيف مع عجلات مساعدة",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1736456847538_croppedImg.jpg",
+                "sku": "ABU-1198973",
+                "badge": "KIDS BEST",
+                "active": true
+        },
+        {
+                "id": 1198974,
+                "name": "دراجه 20    برون تصفيات",
+                "category": "kids",
+                "price": 3500,
+                "size": "20",
+                "gears": "سرعة واحدة آمنة للأطفال",
+                "frame": "ألومنيوم خفيف مع عجلات مساعدة",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1736456982323_croppedImg.jpg",
+                "sku": "ABU-1198974",
+                "badge": "KIDS BEST",
+                "active": true
+        },
+        {
+                "id": 1198976,
+                "name": "دراجه براون جديد.   20.  من سن 7. الي.  12 سنة",
+                "category": "kids",
+                "price": 3950,
+                "size": "20",
+                "gears": "سرعة واحدة آمنة للأطفال",
+                "frame": "ألومنيوم خفيف مع عجلات مساعدة",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1735216982659_croppedImg.jpg",
+                "sku": "ABU-1198976",
+                "badge": "KIDS BEST",
+                "active": true
+        },
+        {
+                "id": 1199234,
+                "name": "دراجه 20 برون بناتي نمره 1 اصلي وليس كوبي",
+                "category": "kids",
+                "price": 4200,
+                "size": "20",
+                "gears": "سرعة واحدة آمنة للأطفال",
+                "frame": "ألومنيوم خفيف مع عجلات مساعدة",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1736510479027_croppedImg.jpg",
+                "sku": "ABU-1199234",
+                "badge": "KIDS BEST",
+                "active": true
+        },
+        {
+                "id": 1201500,
+                "name": "دراجات مقاس 12 من سن  ثلاث سنوات الي 6 سنوات",
+                "category": "kids",
+                "price": 2400,
+                "size": "12",
+                "gears": "سرعة واحدة آمنة للأطفال",
+                "frame": "ألومنيوم خفيف مع عجلات مساعدة",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1736859897642_croppedImg.jpg",
+                "sku": "ABU-1201500",
+                "badge": "KIDS BEST",
+                "active": true
+        },
+        {
+                "id": 1201501,
+                "name": "دراجات 16 من سن 4و5 سنوات بسعر مغري جدا",
+                "category": "kids",
+                "price": 2950,
+                "size": "16",
+                "gears": "سرعة واحدة آمنة للأطفال",
+                "frame": "ألومنيوم خفيف مع عجلات مساعدة",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1736860023736_croppedImg.jpg",
+                "sku": "ABU-1201501",
+                "badge": "KIDS BEST",
+                "active": true
+        },
+        {
+                "id": 1201504,
+                "name": "دراجه 20 من سن 7 سنوات الي 10 سنوات واكتر",
+                "category": "kids",
+                "price": 2900,
+                "size": "20",
+                "gears": "سرعة واحدة آمنة للأطفال",
+                "frame": "ألومنيوم خفيف مع عجلات مساعدة",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1736860114733_croppedImg.jpg",
+                "sku": "ABU-1201504",
+                "badge": "KIDS BEST",
+                "active": true
+        },
+        {
+                "id": 1201505,
+                "name": "دراجات 20 من 7 الي 10 سنوات موديلات جديده",
+                "category": "kids",
+                "price": 3150,
+                "size": "20",
+                "gears": "سرعة واحدة آمنة للأطفال",
+                "frame": "ألومنيوم خفيف مع عجلات مساعدة",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1736860208105_croppedImg.jpg",
+                "sku": "ABU-1201505",
+                "badge": "KIDS BEST",
+                "active": true
+        },
+        {
+                "id": 1201506,
+                "name": "دراجات 16 من سن 5سنوات الي 8 سنوات",
+                "category": "kids",
+                "price": 4500,
+                "size": "16",
+                "gears": "سرعة واحدة آمنة للأطفال",
+                "frame": "ألومنيوم خفيف مع عجلات مساعدة",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1736860300904_croppedImg.jpg",
+                "sku": "ABU-1201506",
+                "badge": "KIDS BEST",
+                "active": true
+        },
+        {
+                "id": 1201507,
+                "name": "دراجات مقاس 12 السعر مفاجاه من سن 3 سنوات الي 6 سنوات",
+                "category": "kids",
+                "price": 2450,
+                "size": "12",
+                "gears": "سرعة واحدة آمنة للأطفال",
+                "frame": "ألومنيوم خفيف مع عجلات مساعدة",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1736860391333_croppedImg.jpg",
+                "sku": "ABU-1201507",
+                "badge": "KIDS BEST",
+                "active": true
+        },
+        {
+                "id": 1201508,
+                "name": "دراجات مقاس 20 بسعر مغري جدا سن 7الي 10",
+                "category": "kids",
+                "price": 3200,
+                "size": "20",
+                "gears": "سرعة واحدة آمنة للأطفال",
+                "frame": "ألومنيوم خفيف مع عجلات مساعدة",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1736860546028_croppedImg.jpg",
+                "sku": "ABU-1201508",
+                "badge": "KIDS BEST",
+                "active": true
+        },
+        {
+                "id": 1516235,
+                "name": "دراجات ابو الجوخ",
+                "category": "mountain",
+                "price": 3900,
+                "size": "29",
+                "gears": "شيمانو أصلي 21 سرعة ياباني",
+                "frame": "ألومنيوم 6061 معالج حرارياً",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1766161192665_croppedImg.jpg",
+                "sku": "ABU-1516235",
+                "badge": "ORIGINAL",
+                "active": true
+        },
+        {
+                "id": 1516237,
+                "name": "دراجات ابو الجوخ",
+                "category": "mountain",
+                "price": 3900,
+                "size": "29",
+                "gears": "شيمانو أصلي 21 سرعة ياباني",
+                "frame": "ألومنيوم 6061 معالج حرارياً",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1766161262941_croppedImg.jpg",
+                "sku": "ABU-1516237",
+                "badge": "ORIGINAL",
+                "active": true
+        },
+        {
+                "id": 1516238,
+                "name": "دراجات ابو الجوخ",
+                "category": "mountain",
+                "price": 4000,
+                "size": "29",
+                "gears": "شيمانو أصلي 21 سرعة ياباني",
+                "frame": "ألومنيوم 6061 معالج حرارياً",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1766161554579_croppedImg.jpg",
+                "sku": "ABU-1516238",
+                "badge": "ORIGINAL",
+                "active": true
+        },
+        {
+                "id": 1516239,
+                "name": "دراجات ابو الجوخ",
+                "category": "mountain",
+                "price": 3500,
+                "size": "29",
+                "gears": "شيمانو أصلي 21 سرعة ياباني",
+                "frame": "ألومنيوم 6061 معالج حرارياً",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1735216982659_croppedImg.jpg",
+                "sku": "ABU-1516239",
+                "badge": "ORIGINAL",
+                "active": true
+        },
+        {
+                "id": 1516242,
+                "name": "دراجات ابو الجوخ",
+                "category": "mountain",
+                "price": 3500,
+                "size": "29",
+                "gears": "شيمانو أصلي 21 سرعة ياباني",
+                "frame": "ألومنيوم 6061 معالج حرارياً",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1766161666011_croppedImg.jpg",
+                "sku": "ABU-1516242",
+                "badge": "ORIGINAL",
+                "active": true
+        },
+        {
+                "id": 1516247,
+                "name": "دراجات ابو الجوخ دراجات ابو الجوخ ٢٤ و٢٦ سرعات ومساعدين",
+                "category": "mountain",
+                "price": 6500,
+                "size": "29",
+                "gears": "شيمانو أصلي 21 سرعة ياباني",
+                "frame": "ألومنيوم 6061 معالج حرارياً",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1766161820370_croppedImg.jpg",
+                "sku": "ABU-1516247",
+                "badge": "ORIGINAL",
+                "active": true
+        },
+        {
+                "id": 1516250,
+                "name": "دراجات ابو الجوخ",
+                "category": "mountain",
+                "price": 8500,
+                "size": "29",
+                "gears": "شيمانو أصلي 21 سرعة ياباني",
+                "frame": "ألومنيوم 6061 معالج حرارياً",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1766162089822_croppedImg.jpg",
+                "sku": "ABU-1516250",
+                "badge": "PRO GRADE",
+                "active": true
+        },
+        {
+                "id": 1516255,
+                "name": "دراجات ابو الجوخ",
+                "category": "mountain",
+                "price": 6500,
+                "size": "29",
+                "gears": "شيمانو أصلي 21 سرعة ياباني",
+                "frame": "ألومنيوم 6061 معالج حرارياً",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1766162229293_croppedImg.jpg",
+                "sku": "ABU-1516255",
+                "badge": "ORIGINAL",
+                "active": true
+        },
+        {
+                "id": 1516335,
+                "name": "دراجات ابو الجوخ",
+                "category": "mountain",
+                "price": 5500,
+                "size": "29",
+                "gears": "شيمانو أصلي 21 سرعة ياباني",
+                "frame": "ألومنيوم 6061 معالج حرارياً",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1766169836977_croppedImg.jpg",
+                "sku": "ABU-1516335",
+                "badge": "ORIGINAL",
+                "active": true
+        },
+        {
+                "id": 1516337,
+                "name": "دراجات ابو الجوخ ٨٥٠٠",
+                "category": "mountain",
+                "price": 8000,
+                "size": "29",
+                "gears": "شيمانو أصلي 21 سرعة ياباني",
+                "frame": "ألومنيوم 6061 معالج حرارياً",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1766169967868_croppedImg.jpg",
+                "sku": "ABU-1516337",
+                "badge": "ORIGINAL",
+                "active": true
+        },
+        {
+                "id": 1581338,
+                "name": "دراجه 26  مونت",
+                "category": "mountain",
+                "price": 5500,
+                "size": "26",
+                "gears": "شيمانو أصلي 21 سرعة ياباني",
+                "frame": "ألومنيوم 6061 معالج حرارياً",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1735216982659_croppedImg.jpg",
+                "sku": "ABU-1581338",
+                "badge": "ORIGINAL",
+                "active": true
+        },
+        {
+                "id": 1581341,
+                "name": "دراجات جود بوي",
+                "category": "mountain",
+                "price": 3500,
+                "size": "29",
+                "gears": "شيمانو أصلي 21 سرعة ياباني",
+                "frame": "ألومنيوم 6061 معالج حرارياً",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1772303642921_croppedImg.jpg",
+                "sku": "ABU-1581341",
+                "badge": "ORIGINAL",
+                "active": true
+        },
+        {
+                "id": 1581344,
+                "name": "دراجات 26 الومنيوم ماركة روك",
+                "category": "mountain",
+                "price": 7500,
+                "size": "26",
+                "gears": "شيمانو أصلي 21 سرعة ياباني",
+                "frame": "ألومنيوم 6061 معالج حرارياً",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1772303817218_croppedImg.jpg",
+                "sku": "ABU-1581344",
+                "badge": "ORIGINAL",
+                "active": true
+        },
+        {
+                "id": 1611369,
+                "name": "دراجات بي ام اكس مقاس 12 ومقاس 16",
+                "category": "kids",
+                "price": 2900,
+                "size": "12",
+                "gears": "سرعة واحدة آمنة للأطفال",
+                "frame": "ألومنيوم خفيف مع عجلات مساعدة",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1775231392297_croppedImg.jpg",
+                "sku": "ABU-1611369",
+                "badge": "KIDS BEST",
+                "active": true
+        },
+        {
+                "id": 1668524,
+                "name": "دراجات زوم نيجر انواع",
+                "category": "road",
+                "price": 6900,
+                "size": "26",
+                "gears": "شيمانو كلاريس / تورني ياباني 16-21 سرعة",
+                "frame": "ألومنيوم طيران 6061 فائق الخفة",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1781190131954_croppedImg.jpg",
+                "sku": "ABU-1668524",
+                "badge": "BESTSELLER",
+                "active": true
+        },
+        {
+                "id": 1668533,
+                "name": "دراجات بروان العالمية توكيل الماني",
+                "category": "mountain",
+                "price": 4500,
+                "size": "29",
+                "gears": "شيمانو أصلي 21 سرعة ياباني",
+                "frame": "ألومنيوم 6061 معالج حرارياً",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1781190522119_croppedImg.jpg",
+                "sku": "ABU-1668533",
+                "badge": "ORIGINAL",
+                "active": true
+        },
+        {
+                "id": 1668541,
+                "name": "دراجات زوم انواع مختلفة",
+                "category": "mountain",
+                "price": 5500,
+                "size": "29",
+                "gears": "شيمانو أصلي 21 سرعة ياباني",
+                "frame": "ألومنيوم 6061 معالج حرارياً",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1781191235017_croppedImg.jpg",
+                "sku": "ABU-1668541",
+                "badge": "BESTSELLER",
+                "active": true
+        },
+        {
+                "id": 1668543,
+                "name": "دراجات فيكتور الالمنيوم",
+                "category": "mountain",
+                "price": 9500,
+                "size": "29",
+                "gears": "شيمانو أصلي 21 سرعة ياباني",
+                "frame": "ألومنيوم 6061 معالج حرارياً",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1781191521016_croppedImg.jpg",
+                "sku": "ABU-1668543",
+                "badge": "PRO GRADE",
+                "active": true
+        },
+        {
+                "id": 1668545,
+                "name": "دراجات ١٢؛ انواع",
+                "category": "mountain",
+                "price": 2900,
+                "size": "29",
+                "gears": "شيمانو أصلي 21 سرعة ياباني",
+                "frame": "ألومنيوم 6061 معالج حرارياً",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1781191602015_croppedImg.jpg",
+                "sku": "ABU-1668545",
+                "badge": "ORIGINAL",
+                "active": true
+        },
+        {
+                "id": 1668547,
+                "name": "دراجات برون العالمية توكيل الماني ضمان سنة",
+                "category": "mountain",
+                "price": 4500,
+                "size": "29",
+                "gears": "شيمانو أصلي 21 سرعة ياباني",
+                "frame": "ألومنيوم 6061 معالج حرارياً",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1781191658766_croppedImg.jpg",
+                "sku": "ABU-1668547",
+                "badge": "ORIGINAL",
+                "active": true
+        },
+        {
+                "id": 1668559,
+                "name": "دراجات بناتي انواع مختلفة",
+                "category": "kids",
+                "price": 4900,
+                "size": "26",
+                "gears": "سرعة واحدة آمنة للأطفال",
+                "frame": "ألومنيوم خفيف مع عجلات مساعدة",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1781192252460_croppedImg.jpg",
+                "sku": "ABU-1668559",
+                "badge": "KIDS BEST",
+                "active": true
+        },
+        {
+                "id": 1668565,
+                "name": "دراجات زوم دبابة 400",
+                "category": "fat",
+                "price": 7500,
+                "size": "26",
+                "gears": "شيمانو تورني 21 سرعة أصلي",
+                "frame": "فولاذ صلب معالج ضد الصدأ لكاوتش 4.0",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1781192843619_croppedImg.jpg",
+                "sku": "ABU-1668565",
+                "badge": "BESTSELLER",
+                "active": true
+        },
+        {
+                "id": 1668568,
+                "name": "دراجات بناتي انواع مختلفة",
+                "category": "kids",
+                "price": 4900,
+                "size": "26",
+                "gears": "سرعة واحدة آمنة للأطفال",
+                "frame": "ألومنيوم خفيف مع عجلات مساعدة",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1781193257335_croppedImg.jpg",
+                "sku": "ABU-1668568",
+                "badge": "KIDS BEST",
+                "active": true
+        },
+        {
+                "id": 1668571,
+                "name": "دراجات رودكس  مونت بالكميات",
+                "category": "mountain",
+                "price": 5500,
+                "size": "29",
+                "gears": "شيمانو أصلي 21 سرعة ياباني",
+                "frame": "ألومنيوم 6061 معالج حرارياً",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1781193378564_croppedImg.jpg",
+                "sku": "ABU-1668571",
+                "badge": "ORIGINAL",
+                "active": true
+        },
+        {
+                "id": 1668575,
+                "name": "دراجات زوم سرعات اوتوماتيكي ومساعدين انواع وفرامل ديسك",
+                "category": "mountain",
+                "price": 7500,
+                "size": "29",
+                "gears": "شيمانو أصلي 21 سرعة ياباني",
+                "frame": "ألومنيوم 6061 معالج حرارياً",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1781193517008_croppedImg.jpg",
+                "sku": "ABU-1668575",
+                "badge": "BESTSELLER",
+                "active": true
+        },
+        {
+                "id": 1668580,
+                "name": "دراجات سرعات ماركة اسباركي وانواع مختلفه",
+                "category": "mountain",
+                "price": 6900,
+                "size": "29",
+                "gears": "شيمانو أصلي 21 سرعة ياباني",
+                "frame": "ألومنيوم 6061 معالج حرارياً",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1781193841658_croppedImg.jpg",
+                "sku": "ABU-1668580",
+                "badge": "ORIGINAL",
+                "active": true
+        },
+        {
+                "id": 1668605,
+                "name": "دراجات فولتس العامية توكيل الماني ضمان سنة المونيوم",
+                "category": "mountain",
+                "price": 8700,
+                "size": "29",
+                "gears": "شيمانو أصلي 21 سرعة ياباني",
+                "frame": "ألومنيوم 6061 معالج حرارياً",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1781195406754_croppedImg.jpg",
+                "sku": "ABU-1668605",
+                "badge": "PRO GRADE",
+                "active": true
+        },
+        {
+                "id": 1670341,
+                "name": "دراجات زوم العالمية الومنيوم مساعدين وسرعات وفرامل ديسك بريك",
+                "category": "mountain",
+                "price": 8900,
+                "size": "29",
+                "gears": "شيمانو أصلي 21 سرعة ياباني",
+                "frame": "ألومنيوم 6061 معالج حرارياً",
+                "image": "https://media.zbooni.com/merchants/media/products/109246/1781374103923_croppedImg.jpg",
+                "sku": "ABU-1670341",
+                "badge": "PRO GRADE",
+                "active": true
+        }
+]];
 
-        // Load or initialize
+        // Load or initialize (Auto-migrate if stored products are outdated or < 20)
         const saved = localStorage.getItem('abu_el_goukh_admin_products');
         if (saved) {
-            try { products = JSON.parse(saved); } catch(e) { products = initialProducts; }
+            try { 
+                products = JSON.parse(saved); 
+                if (!Array.isArray(products) || products.length < 20) {
+                    // Upgrade to full 62 bikes preserving any user additions
+                    products = initialProducts;
+                    localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(products));
+                }
+            } catch(e) { 
+                products = initialProducts; 
+            }
         } else {
             products = initialProducts;
+            localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(products));
         }
 
         let currentFilter = 'all';
@@ -592,6 +1400,220 @@
         }
 
 
+        
+        // --- ORDER EDIT & DETAIL MODAL LOGIC ---
+        let currentEditingOrder = null;
+
+        function openOrderModal(orderId) {
+            const orders = getStoredOrders();
+            const ord = orders.find(o => o.id === orderId);
+            if (!ord) return;
+            currentEditingOrder = ord;
+
+            document.getElementById('edit-ord-id').value = ord.id;
+            document.getElementById('view-ord-id-badge').innerText = ord.id;
+            document.getElementById('view-ord-date').innerText = ord.date || 'اليوم';
+            document.getElementById('edit-ord-status').value = ord.status || 'جديد (قيد المراجعة)';
+
+            document.getElementById('edit-ord-customer').value = ord.customer || '';
+            document.getElementById('edit-ord-phone').value = ord.phone || '';
+            document.getElementById('edit-ord-alt-phone').value = ord.altPhone || '';
+            document.getElementById('edit-ord-gov').value = ord.gov || 'القاهرة';
+            document.getElementById('edit-ord-city').value = ord.city || '';
+            document.getElementById('edit-ord-address').value = ord.address || '';
+            document.getElementById('edit-ord-notes').value = ord.notes || '';
+
+            document.getElementById('btn-call-customer').href = `tel:${ord.phone}`;
+            document.getElementById('btn-wa-customer').href = `https://wa.me/2${ord.phone}`;
+
+            // Financials
+            document.getElementById('edit-ord-subtotal').value = ord.subtotal || ord.total || 0;
+            document.getElementById('edit-ord-shipping').value = ord.shipping !== undefined ? ord.shipping : 150;
+            document.getElementById('edit-ord-discount').value = ord.discount || 0;
+            document.getElementById('edit-ord-payment').value = ord.payment || 'الدفع عند الاستلام والمعاينة';
+
+            // Items List
+            const itemsContainer = document.getElementById('view-ord-items-container');
+            const items = Array.isArray(ord.items) && ord.items.length > 0 ? ord.items : [{ name: ord.item_name || 'دراجة هوائية من أبو الجوخ', price: ord.subtotal || ord.total || 0 }];
+            document.getElementById('view-ord-items-count').innerText = `${items.length} منتجات`;
+
+            itemsContainer.innerHTML = items.map(item => `
+                <div class="flex items-center justify-between p-3 bg-trek-lightgray rounded-xl border border-trek-border">
+                    <div class="flex items-center gap-3">
+                        <img src="${item.image || 'https://media.zbooni.com/merchants/media/products/109246/1735216982659_croppedImg.jpg'}" class="w-12 h-12 object-contain bg-white rounded-lg p-1 border border-trek-border">
+                        <div>
+                            <div class="text-xs font-bold text-trek-black">${item.name}</div>
+                            <div class="text-[10px] text-trek-gray">${item.specs || 'أصلي معتمد'}</div>
+                        </div>
+                    </div>
+                    <div class="text-xs font-black text-trek-black num-font">
+                        ${Number(item.price || 0).toLocaleString('en-US')} ج.م
+                    </div>
+                </div>
+            `).join('');
+
+            recalcOrderTotal();
+
+            document.getElementById('order-details-modal').classList.remove('hidden');
+            document.getElementById('order-details-modal').classList.add('flex');
+        }
+
+        function closeOrderModal() {
+            document.getElementById('order-details-modal').classList.add('hidden');
+            document.getElementById('order-details-modal').classList.remove('flex');
+        }
+
+        function recalcOrderTotal() {
+            const subtotal = Number(document.getElementById('edit-ord-subtotal').value) || 0;
+            const shipping = Number(document.getElementById('edit-ord-shipping').value) || 0;
+            const discount = Number(document.getElementById('edit-ord-discount').value) || 0;
+            const total = subtotal + shipping - discount;
+            document.getElementById('view-ord-total-calc').innerText = total.toLocaleString('en-US') + ' ج.م';
+            return total;
+        }
+
+        function saveEditedOrder(e) {
+            e.preventDefault();
+            const orderId = document.getElementById('edit-ord-id').value;
+            let orders = getStoredOrders();
+            const index = orders.findIndex(o => o.id === orderId);
+            if (index === -1) return;
+
+            const subtotal = Number(document.getElementById('edit-ord-subtotal').value) || 0;
+            const shipping = Number(document.getElementById('edit-ord-shipping').value) || 0;
+            const discount = Number(document.getElementById('edit-ord-discount').value) || 0;
+            const total = subtotal + shipping - discount;
+
+            orders[index] = {
+                ...orders[index],
+                customer: document.getElementById('edit-ord-customer').value.trim(),
+                phone: document.getElementById('edit-ord-phone').value.trim(),
+                altPhone: document.getElementById('edit-ord-alt-phone').value.trim(),
+                gov: document.getElementById('edit-ord-gov').value,
+                city: document.getElementById('edit-ord-city').value.trim(),
+                address: document.getElementById('edit-ord-address').value.trim(),
+                notes: document.getElementById('edit-ord-notes').value.trim(),
+                status: document.getElementById('edit-ord-status').value,
+                payment: document.getElementById('edit-ord-payment').value,
+                subtotal: subtotal,
+                shipping: shipping,
+                discount: discount,
+                total: total
+            };
+
+            saveStoredOrders(orders);
+            renderOrdersTable();
+            closeOrderModal();
+            alert('✓ تم حفظ وتحديث بيانات الطلب بنجاح في النظام!');
+        }
+
+        function printOrderInvoice() {
+            if (!currentEditingOrder) return;
+            const ord = currentEditingOrder;
+            const printWindow = window.open('', '_blank');
+            const items = Array.isArray(ord.items) && ord.items.length > 0 ? ord.items : [{ name: ord.item_name || 'دراجة هوائية من أبو الجوخ', price: ord.total || 0 }];
+            
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html lang="ar" dir="rtl">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>بوليصة شحن وفاتورة - طلب ${ord.id}</title>
+                    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+                    <style>
+                        body { font-family: 'Cairo', sans-serif; padding: 30px; color: #111; direction: rtl; }
+                        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #111; padding-bottom: 15px; margin-bottom: 20px; }
+                        .box { border: 1px solid #ddd; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+                        th, td { border: 1px solid #eee; padding: 10px; text-align: right; }
+                        th { background: #f8f8f8; font-weight: bold; }
+                        .total-box { font-size: 18px; font-weight: 900; color: #D50000; text-align: left; margin-top: 15px; }
+                        @media print { button { display: none; } }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <div>
+                            <h1 style="margin:0; font-size: 24px;">شركة أبو الجوخ لتجارة الدراجات 1925</h1>
+                            <p style="margin: 5px 0 0 0; font-size: 12px; color: #666;">التوكيل المعتمد • المقر الرئيسي 12 شارع الجمهورية، القاهرة • هاتف: 01202925192</p>
+                        </div>
+                        <div style="text-align: left;">
+                            <h2 style="margin:0; color:#D50000;">بوليصة شحن</h2>
+                            <p style="margin: 5px 0 0 0; font-weight: bold;">رقم الطلب: ${ord.id}</p>
+                            <p style="margin: 2px 0 0 0; font-size: 11px;">تاريخ: ${ord.date || new Date().toLocaleDateString('ar-EG')}</p>
+                        </div>
+                    </div>
+
+                    <div class="box">
+                        <h3 style="margin-top:0; font-size: 14px; border-bottom: 1px solid #eee; padding-bottom: 5px;">بيانات المستلم وعنوان التوصيل</h3>
+                        <p style="margin: 4px 0;"><strong>اسم العميل:</strong> ${ord.customer}</p>
+                        <p style="margin: 4px 0;"><strong>رقم الهاتف:</strong> ${ord.phone} ${ord.altPhone ? ' | ' + ord.altPhone : ''}</p>
+                        <p style="margin: 4px 0;"><strong>المحافظة والمدينة:</strong> ${ord.gov} - ${ord.city}</p>
+                        <p style="margin: 4px 0;"><strong>العنوان التفصيلي:</strong> ${ord.address}</p>
+                        ${ord.notes ? `<p style="margin: 4px 0;"><strong>ملاحظات التسليم:</strong> ${ord.notes}</p>` : ''}
+                    </div>
+
+                    <div class="box">
+                        <h3 style="margin-top:0; font-size: 14px; border-bottom: 1px solid #eee; padding-bottom: 5px;">المنتجات المطلوبة والفاتورة</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>م</th>
+                                    <th>اسم الدراجة / المنتج</th>
+                                    <th>السعر</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${items.map((it, i) => `
+                                    <tr>
+                                        <td>${i+1}</td>
+                                        <td>${it.name}</td>
+                                        <td>${Number(it.price || 0).toLocaleString('en-US')} ج.م</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+
+                        <div style="margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">
+                            <p style="margin: 3px 0;"><strong>المجموع الفرعي:</strong> ${Number(ord.subtotal || ord.total || 0).toLocaleString('en-US')} ج.م</p>
+                            <p style="margin: 3px 0;"><strong>تكلفة الشحن:</strong> ${Number(ord.shipping || 0).toLocaleString('en-US')} ج.م</p>
+                            ${ord.discount ? `<p style="margin: 3px 0; color: green;"><strong>الخصم:</strong> -${Number(ord.discount).toLocaleString('en-US')} ج.م</p>` : ''}
+                            <p style="margin: 3px 0;"><strong>طريقة الدفع:</strong> ${ord.payment}</p>
+                            <div class="total-box">المبلغ المطلوب تحصيله: ${Number(ord.total || ord.subtotal || 0).toLocaleString('en-US')} ج.م</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 25px; font-size: 11px; color: #666; text-align: center; border-top: 1px dashed #ccc; padding-top: 15px;">
+                        تصل الدراجة مجمعة ومضبوطة بالكامل مع شهادة الضمان المعتمدة. يحق للعميل معاينة الشحنة قبل الاستلام.
+                    </div>
+
+                    <script>
+                        window.onload = function() { window.print(); }
+                    </script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+        }
+
+        function sendUpdatedWhatsApp() {
+            if (!currentEditingOrder) return;
+            const ord = currentEditingOrder;
+            const text = encodeURIComponent(
+                `*تفاصيل طلبك المعتمد من متجر أبو الجوخ 1925*%0A` +
+                `----------------------------------%0A` +
+                `*رقم الطلب:* ${ord.id}%0A` +
+                `*الاسم:* ${ord.customer}%0A` +
+                `*المحافظة والعنوان:* ${ord.gov} - ${ord.city} (${ord.address})%0A` +
+                `*حالة الطلب:* ${ord.status}%0A` +
+                `*طريقة الدفع:* ${ord.payment}%0A` +
+                `*الإجمالي المطلوب:* ${Number(ord.total || ord.subtotal || 0).toLocaleString('en-US')} ج.م%0A` +
+                `----------------------------------%0A` +
+                `الدراجة يتم تجميعها وضبطها بعناية من قبل فنيينا. لأي استفسار يرجى الرد على هذه الرسالة.`
+            );
+            window.open(`https://wa.me/2${ord.phone}?text=${text}`, '_blank');
+        }
+
         // --- ORDERS MANAGEMENT LOGIC ---
         let currentMainTab = 'products';
         let currentOrderFilter = 'all';
@@ -711,6 +1733,9 @@
                         </td>
                         <td class="py-3.5 px-4 text-center">
                             <div class="flex items-center justify-center gap-1.5">
+                                <button onclick="openOrderModal('${ord.id}')" class="px-2.5 py-1.5 rounded-lg bg-trek-black hover:bg-trek-charcoal text-white text-[11px] font-black transition flex items-center gap-1" title="عرض وتعديل بيانات الطلب">
+                                    <span>✏️ تفاصيل وتعديل</span>
+                                </button>
                                 <a href="${waLink}" target="_blank" class="p-1.5 rounded-lg bg-emerald-100 hover:bg-emerald-600 hover:text-white text-emerald-800 transition text-[11px] font-bold" title="محادثة واتساب للعميل">
                                     💬
                                 </a>
@@ -821,5 +1846,191 @@
             updateOrdersBadge();
         });
     </script>
+
+    <!-- FULL ORDER DETAILS & EDIT MODAL (صفحة تفاصيل وتعديل الطلب بالكامل) -->
+    <div id="order-details-modal" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl relative text-right animate-in fade-in zoom-in duration-150 max-h-[92vh] overflow-y-auto border border-trek-border">
+            
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between border-b border-trek-border pb-4 mb-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl bg-trek-red/10 text-trek-red flex items-center justify-center text-2xl font-bold">
+                        📦
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h3 class="text-xl font-black text-trek-black">تفاصيل وتعديل الطلب</h3>
+                            <span id="view-ord-id-badge" class="bg-trek-black text-white text-xs font-black px-2.5 py-0.5 rounded-full num-font">AEG-000000</span>
+                        </div>
+                        <p class="text-xs text-trek-gray mt-0.5">تاريخ ووقت استلام الطلب: <span id="view-ord-date" class="font-semibold text-trek-black num-font"></span></p>
+                    </div>
+                </div>
+                <button onclick="closeOrderModal()" class="w-9 h-9 rounded-full bg-trek-lightgray hover:bg-trek-border text-trek-black flex items-center justify-center font-bold text-base transition">✕</button>
+            </div>
+
+            <form id="order-edit-form" onsubmit="saveEditedOrder(event)" class="space-y-6">
+                <input type="hidden" id="edit-ord-id" value="">
+
+                <!-- 1. Order Status Bar -->
+                <div class="bg-trek-lightgray p-4 rounded-2xl border border-trek-border flex flex-col sm:flex-row justify-between items-center gap-3">
+                    <div class="text-xs font-black text-trek-black flex items-center gap-1.5">
+                        <span>🚦 حالة الطلب الحالية:</span>
+                    </div>
+                    <select id="edit-ord-status" class="w-full sm:w-64 text-xs font-bold py-2.5 px-3 rounded-xl border border-trek-border bg-white outline-none cursor-pointer">
+                        <option value="جديد (قيد المراجعة)">🔵 جديد (قيد المراجعة)</option>
+                        <option value="تم تأكيد الطلب مع العميل">📞 تم تأكيد الطلب مع العميل</option>
+                        <option value="جاري التجهيز والضبط الفني">🔧 جاري التجهيز والضبط الفني</option>
+                        <option value="تم الشحن مع المندوب">🚚 تم الشحن مع المندوب</option>
+                        <option value="مكتمل وتم التوصيل والاستلام">✅ مكتمل وتم التوصيل والاستلام</option>
+                        <option value="ملغي من قبل العميل">❌ ملغي من قبل العميل</option>
+                    </select>
+                </div>
+
+                <!-- 2. Customer Information (Editable) -->
+                <div class="bg-white rounded-2xl border border-trek-border p-5 space-y-4">
+                    <h4 class="text-sm font-black text-trek-black border-b border-trek-border pb-2 flex items-center gap-2">
+                        <span>👤</span>
+                        <span>بيانات العميل والتوصيل (قابلة للتعديل إذا أدخل العميل بيانات غير دقيقة)</span>
+                    </h4>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-bold text-trek-black mb-1">اسم العميل بالكامل *</label>
+                            <input type="text" id="edit-ord-customer" required class="w-full bg-trek-cardbg border border-trek-border focus:border-trek-black focus:bg-white text-xs rounded-xl p-3 outline-none font-bold">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-trek-black mb-1">رقم الموبايل الأساسي *</label>
+                            <div class="flex gap-2">
+                                <input type="tel" id="edit-ord-phone" required class="flex-1 bg-trek-cardbg border border-trek-border focus:border-trek-black focus:bg-white text-xs rounded-xl p-3 outline-none font-bold num-font" dir="ltr">
+                                <a id="btn-call-customer" href="#" class="px-3 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-300 rounded-xl flex items-center justify-center text-sm font-bold" title="اتصال">📞</a>
+                                <a id="btn-wa-customer" href="#" target="_blank" class="px-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl flex items-center justify-center text-sm font-bold" title="واتساب">💬</a>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-trek-black mb-1">رقم هاتف بديل / واتساب</label>
+                            <input type="tel" id="edit-ord-alt-phone" class="w-full bg-trek-cardbg border border-trek-border focus:border-trek-black focus:bg-white text-xs rounded-xl p-3 outline-none font-bold num-font" dir="ltr">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-trek-black mb-1">المحافظة *</label>
+                            <select id="edit-ord-gov" required class="w-full bg-trek-cardbg border border-trek-border focus:border-trek-black focus:bg-white text-xs rounded-xl p-3 outline-none font-bold">
+                                <option value="القاهرة">القاهرة</option>
+                                <option value="الجيزة">الجيزة</option>
+                                <option value="الإسكندرية">الإسكندرية</option>
+                                <option value="القليوبية">القليوبية</option>
+                                <option value="الشرقية">الشرقية</option>
+                                <option value="الدقهلية">الدقهلية (المنصورة)</option>
+                                <option value="الغربية">الغربية (طنطا / المحلة)</option>
+                                <option value="المنوفية">المنوفية</option>
+                                <option value="البحيرة">البحيرة</option>
+                                <option value="كفر الشيخ">كفر الشيخ</option>
+                                <option value="دمياط">دمياط</option>
+                                <option value="بورسعيد">بورسعيد</option>
+                                <option value="الإسماعيلية">الإسماعيلية</option>
+                                <option value="السويس">السويس</option>
+                                <option value="الفيوم">الفيوم</option>
+                                <option value="بني سويف">بني سويف</option>
+                                <option value="المنيا">المنيا</option>
+                                <option value="أسيوط">أسيوط</option>
+                                <option value="سوهاج">سوهاج</option>
+                                <option value="قنا">قنا</option>
+                                <option value="الأقصر">الأقصر</option>
+                                <option value="أسوان">أسوان</option>
+                                <option value="البحر الأحمر">البحر الأحمر (الغردقة)</option>
+                                <option value="جنوب سيناء">جنوب سيناء (شرم الشيخ)</option>
+                                <option value="مطروح">مطروح والساحل الشمالي</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-trek-black mb-1">المدينة / الحي / المركز *</label>
+                            <input type="text" id="edit-ord-city" required class="w-full bg-trek-cardbg border border-trek-border focus:border-trek-black focus:bg-white text-xs rounded-xl p-3 outline-none font-bold">
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-bold text-trek-black mb-1">العنوان التفصيلي وأقرب علامة مميزة *</label>
+                            <textarea id="edit-ord-address" rows="2" required class="w-full bg-trek-cardbg border border-trek-border focus:border-trek-black focus:bg-white text-xs rounded-xl p-3 outline-none font-semibold"></textarea>
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-bold text-trek-black mb-1">ملاحظات التوصيل وميعاد التسليم</label>
+                            <textarea id="edit-ord-notes" rows="2" class="w-full bg-trek-cardbg border border-trek-border focus:border-trek-black focus:bg-white text-xs rounded-xl p-3 outline-none font-medium"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Ordered Products & Financial Breakdown (Editable) -->
+                <div class="bg-white rounded-2xl border border-trek-border p-5 space-y-4">
+                    <h4 class="text-sm font-black text-trek-black border-b border-trek-border pb-2 flex items-center justify-between">
+                        <span class="flex items-center gap-2">
+                            <span>🚲</span>
+                            <span>المنتجات المطلوبة والفاتورة المالية</span>
+                        </span>
+                        <span id="view-ord-items-count" class="text-xs text-trek-gray font-normal"></span>
+                    </h4>
+
+                    <!-- Items Container -->
+                    <div id="view-ord-items-container" class="space-y-2.5 max-h-48 overflow-y-auto">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <!-- Financial Inputs -->
+                    <div class="pt-4 border-t border-trek-border grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                        <div>
+                            <label class="block font-bold text-trek-gray mb-1">المجموع الفرعي (ج.م):</label>
+                            <input type="number" id="edit-ord-subtotal" oninput="recalcOrderTotal()" class="w-full bg-trek-cardbg border border-trek-border rounded-xl p-2.5 font-bold num-font outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-trek-gray mb-1">تكلفة الشحن (ج.م):</label>
+                            <input type="number" id="edit-ord-shipping" oninput="recalcOrderTotal()" class="w-full bg-trek-cardbg border border-trek-border rounded-xl p-2.5 font-bold num-font outline-none">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-trek-gray mb-1">الخصم الترويجي (ج.م):</label>
+                            <input type="number" id="edit-ord-discount" oninput="recalcOrderTotal()" class="w-full bg-trek-cardbg border border-trek-border rounded-xl p-2.5 font-bold num-font outline-none text-emerald-600">
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-trek-lightgray rounded-xl flex justify-between items-center">
+                        <div>
+                            <span class="text-xs font-bold text-trek-gray block">طريقة الدفع:</span>
+                            <select id="edit-ord-payment" class="text-xs font-bold bg-white border border-trek-border rounded-lg p-1.5 mt-1 outline-none">
+                                <option value="الدفع عند الاستلام والمعاينة">💵 الدفع عند الاستلام والمعاينة</option>
+                                <option value="بطاقة بنكية / فيزا عبر Paymob">💳 بطاقة بنكية / فيزا عبر Paymob</option>
+                                <option value="تحويل إنستاباي / محفظة فودافون كاش">📱 تحويل إنستاباي / محفظة كاش</option>
+                                <option value="تقسيط فاليو ValU / أمان / سهولة">⚡ تقسيط فاليو / أمان / سهولة</option>
+                            </select>
+                        </div>
+                        <div class="text-left">
+                            <span class="text-xs text-trek-gray block font-semibold">المبلغ الإجمالي النهائي:</span>
+                            <span id="view-ord-total-calc" class="text-2xl font-black text-trek-red num-font">0 ج.م</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Action Buttons -->
+                <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-trek-border">
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="printOrderInvoice()" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-trek-lightgray hover:bg-trek-border text-trek-black transition flex items-center gap-1.5 shadow-sm">
+                            <span>🖨️ طباعة بوليصة الشحن والفاتورة</span>
+                        </button>
+                        <button type="button" onclick="sendUpdatedWhatsApp()" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 transition flex items-center gap-1.5">
+                            <span>📱 إرسال تفاصيل الفاتورة للعميل</span>
+                        </button>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="closeOrderModal()" class="px-5 py-2.5 rounded-xl text-xs font-bold text-trek-gray hover:bg-trek-lightgray transition">إغلاق</button>
+                        <button type="submit" class="px-7 py-2.5 rounded-xl text-xs font-black bg-trek-red hover:bg-trek-redhover text-white transition shadow-md flex items-center gap-1.5">
+                            <span>💾 حفظ التعديلات</span>
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
 </body>
 </html>

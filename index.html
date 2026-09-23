@@ -129,6 +129,19 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
+
+        function toggleMobileNav() {
+            const drawer = document.getElementById('mobile-nav-drawer');
+            const overlay = document.getElementById('mobile-nav-overlay');
+            if (drawer.classList.contains('translate-x-full')) {
+                drawer.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                drawer.classList.add('translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
         tailwind.config = {
             theme: {
                 extend: {
@@ -261,24 +274,26 @@
                     </a>
 
                     <!-- Trek-Style Nav Categories with High-Intent Egyptian Cycling Terms -->
-                    <nav class="hidden lg:flex items-center gap-7 text-[14px] font-bold text-trek-black">
+                    <nav class="hidden lg:flex items-center gap-6 text-[13px] xl:text-[14px] font-bold text-trek-black">
                         <a href="index.html" class="text-trek-red border-b-2 border-trek-red pb-1">الرئيسية</a>
                         <a href="shop.html" class="hover:text-trek-red transition flex items-center gap-1.5">
-                            <span>متجر العجل (55 موديل)</span>
-                            <span class="bg-trek-red text-white text-[9px] font-black px-1.5 py-0.5 rounded num-font">SHOP</span>
+                            <span>كتالوج العجل (55 موديل)</span>
+                            <span class="bg-trek-red text-white text-[9px] font-black px-1.5 py-0.5 rounded num-font">55</span>
                         </a>
-                        <a href="shop.html#bikes-grid" class="hover:text-trek-red transition">عجل جبلي</a>
-                        <a href="shop.html#bikes-grid" class="hover:text-trek-red transition">عجل سرعة وطريق</a>
-                        <a href="shop.html#bikes-grid" class="hover:text-trek-red transition">عجل أطفال وبناتي</a>
-                        <a href="shop.html#bikes-grid" class="hover:text-trek-red transition">عجل دبابات</a>
-                        <a href="#engineering" class="hover:text-trek-red transition">الهندسة والأصالة</a>
-                        <a href="#faq" class="hover:text-trek-red transition">الأسئلة الشائعة</a>
+                        <a href="warranty.html" class="hover:text-trek-red transition">الضمان المعتمد</a>
+                        <a href="shipping.html" class="hover:text-trek-red transition">الشحن للمحافظات</a>
+                        <a href="checkout.html" class="hover:text-trek-red transition">السلة والدفع</a>
+                        <a href="#reviews" class="hover:text-trek-red transition">تجارب العملاء</a>
                         <a href="#locations" class="hover:text-trek-red transition">الفروع والصيانة</a>
                     </nav>
                 </div>
 
                 <!-- Right Actions -->
-                <div class="flex items-center gap-4">
+                <div class="flex items-center gap-3 sm:gap-4">
+                    <!-- Mobile Hamburger Button -->
+                    <button onclick="toggleMobileNav()" class="lg:hidden p-2 rounded-xl bg-trek-lightgray hover:bg-trek-border transition text-trek-black" aria-label="القائمة">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
                     <a href="shop.html" class="hidden sm:inline-flex items-center gap-2 bg-trek-black hover:bg-trek-charcoal text-white text-xs font-bold py-2.5 px-5 rounded-full transition shadow-sm">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
                         <span>تصفح الكتالوج الكامل</span>
@@ -759,6 +774,102 @@
         </div>
     </section>
 
+
+    <!-- SOCIAL PROOF & CYCLIST REVIEWS (تجارب وآراء الدراجين في مصر) -->
+    <section id="reviews" class="py-20 bg-white border-b border-trek-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs font-black text-trek-red uppercase tracking-wider num-font block mb-1">REAL RIDERS FEEDBACK</span>
+                <h2 class="text-3xl sm:text-4xl font-black text-trek-black">تجارب أبطال الدراجات وعملاء أبو الجوخ في مصر</h2>
+                <p class="text-xs sm:text-sm text-trek-gray mt-2">أكثر من 50,000 عميل في كافة محافظات مصر يثقون في أبو الجوخ منذ 100 عام.</p>
+                <div class="flex items-center justify-center gap-1 text-amber-400 mt-3 text-lg">
+                    <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                    <span class="text-xs font-black text-trek-black num-font mr-2">4.9 / 5 تقييم عام</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-right">
+                
+                <!-- Review 1 -->
+                <div class="bg-trek-cardbg rounded-2xl p-6 border border-trek-border hover:border-trek-black transition flex flex-col justify-between shadow-sm">
+                    <div>
+                        <div class="flex items-center gap-1 text-amber-400 text-sm mb-3">
+                            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                        </div>
+                        <p class="text-xs text-trek-black font-semibold leading-relaxed mb-4">
+                            "اشتريت ترنكس 29 وجتلي مجمعة ومضبوطة بالمللي لحد باب بيتي في الشيخ زايد خلال 24 ساعة فقط. التقفيل أصلي وسرعات شيمانو بتنقل بنعومة خيالية بدون أي صوت."
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-trek-border flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-trek-black text-white flex items-center justify-center font-bold text-xs num-font">إ.ع</div>
+                        <div>
+                            <div class="text-xs font-black text-trek-black">كابتن إسلام عبد العزيز</div>
+                            <div class="text-[10px] text-trek-gray">عضو نادي دراجات الجيزة • ترنكس برو 29</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 2 -->
+                <div class="bg-trek-cardbg rounded-2xl p-6 border border-trek-border hover:border-trek-black transition flex flex-col justify-between shadow-sm">
+                    <div>
+                        <div class="flex items-center gap-1 text-amber-400 text-sm mb-3">
+                            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                        </div>
+                        <p class="text-xs text-trek-black font-semibold leading-relaxed mb-4">
+                            "المعاينة وفحص العجلة قبل الدفع دي أكتر ميزة طمنتني. فتحت الكرتونة وفحصت مقاس الشاسيه والفرامل الديسك مع مندوب الشحن في سموحة قبل ما أسدد قرش واحد."
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-trek-border flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs num-font">م.ق</div>
+                        <div>
+                            <div class="text-xs font-black text-trek-black">د. ميار القاضي</div>
+                            <div class="text-[10px] text-trek-gray">الإسكندرية • دراجة زوم هجين</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 3 -->
+                <div class="bg-trek-cardbg rounded-2xl p-6 border border-trek-border hover:border-trek-black transition flex flex-col justify-between shadow-sm">
+                    <div>
+                        <div class="flex items-center gap-1 text-amber-400 text-sm mb-3">
+                            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                        </div>
+                        <p class="text-xs text-trek-black font-semibold leading-relaxed mb-4">
+                            "أبو الجوخ اسم عريق من أيام والدي وجدي، وما زالوا الرقم واحد في مصر. شاسيه ألومنيوم طيران وضمان مدى الحياة وشهادة الضمان مختومة داخل الكرتونة."
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-trek-border flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs num-font">هـ.ص</div>
+                        <div>
+                            <div class="text-xs font-black text-trek-black">م. هشام الصاوي</div>
+                            <div class="text-[10px] text-trek-gray">طنطا، الغربية • دراجة كلاسيك تورينج</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 4 -->
+                <div class="bg-trek-cardbg rounded-2xl p-6 border border-trek-border hover:border-trek-black transition flex flex-col justify-between shadow-sm">
+                    <div>
+                        <div class="flex items-center gap-1 text-amber-400 text-sm mb-3">
+                            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                        </div>
+                        <p class="text-xs text-trek-black font-semibold leading-relaxed mb-4">
+                            "التقسيط عبر فاليو على الموقع مأخدش دقيقتين، واستلمت العجلة لأولادي مقاس 20 و16 مجمعة بالكامل وجاهزة على الركوب فوراً بدون أي مصاريف تجميع إضافية."
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-trek-border flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold text-xs num-font">ك.ش</div>
+                        <div>
+                            <div class="text-xs font-black text-trek-black">أ. كريم الشناوي</div>
+                            <div class="text-[10px] text-trek-gray">القاهرة الجديدة • دراجات أطفال رويال</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
     <!-- STORE LOCATIONS & TEST-RIDE (Fروع أبو الجوخ ومراكز الصيانة) -->
     <section id="locations" class="py-20 bg-trek-lightgray border-b border-trek-border">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -932,10 +1043,10 @@
                 <div>
                     <h4 class="text-xs font-black uppercase tracking-wider text-trek-red num-font mb-4">خدمة العملاء</h4>
                     <ul class="space-y-2 text-xs text-white/70">
-                        <li><a href="#" class="hover:text-white transition">سياسة الضمان المعتمد</a></li>
-                        <li><a href="#" class="hover:text-white transition">الشحن والتوصيل للمحافظات</a></li>
-                        <li><a href="#" class="hover:text-white transition">خيارات التقسيط مع Paymob</a></li>
-                        <li><a href="#" class="hover:text-white transition">دليل اختيار مقاس الدراجة</a></li>
+                        <li><a href="warranty.html" class="hover:text-white transition">سياسة الضمان المعتمد</a></li>
+                        <li><a href="shipping.html" class="hover:text-white transition">الشحن والتوصيل للمحافظات</a></li>
+                        <li><a href="checkout.html" class="hover:text-white transition">خيارات التقسيط مع Paymob</a></li>
+                        <li><a href="shop.html#bike-finder" class="hover:text-white transition">دليل اختيار مقاس الدراجة</a></li>
                         <li><a href="#locations" class="hover:text-white transition">فروعنا ومراكز الصيانة</a></li>
                     </ul>
                 </div>
@@ -976,6 +1087,19 @@
 
     <!-- INTERACTIVE SCRIPT -->
     <script>
+
+        function toggleMobileNav() {
+            const drawer = document.getElementById('mobile-nav-drawer');
+            const overlay = document.getElementById('mobile-nav-overlay');
+            if (drawer.classList.contains('translate-x-full')) {
+                drawer.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                drawer.classList.add('translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
         const specsData = {
             1: {
                 title: "1. شاسيه ألومنيوم معالج حرارياً (Heat-Treated 6061)",
@@ -1036,5 +1160,40 @@
             <iframe id="modal-yt-player" class="w-full h-full" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
     </div>
+
+    <!-- MOBILE NAVIGATION DRAWER -->
+    <div id="mobile-nav-overlay" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden" onclick="toggleMobileNav()"></div>
+    <div id="mobile-nav-drawer" class="fixed top-0 right-0 bottom-0 w-80 max-w-[85vw] bg-white z-50 shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col justify-between text-right p-6">
+        <div class="space-y-6">
+            <div class="flex items-center justify-between border-b border-trek-border pb-4">
+                <div class="flex items-center gap-3">
+                    <img src="abu_el_goukh_logo.png" alt="أبو الجوخ" class="h-10 w-auto object-contain">
+                    <span class="font-black text-lg text-trek-black">أبو الجوخ 1925</span>
+                </div>
+                <button onclick="toggleMobileNav()" class="w-8 h-8 rounded-full bg-trek-lightgray hover:bg-trek-border flex items-center justify-center font-bold text-sm">✕</button>
+            </div>
+
+            <nav class="space-y-3 text-sm font-bold text-trek-black">
+                <a href="index.html" class="block py-2.5 px-3 rounded-xl bg-trek-red/10 text-trek-red font-black">🏠 الصفحة الرئيسية</a>
+                <a href="shop.html" class="block py-2.5 px-3 rounded-xl hover:bg-trek-lightgray transition">🚲 كتالوج العجل (55 موديل)</a>
+                <a href="checkout.html" class="block py-2.5 px-3 rounded-xl hover:bg-trek-lightgray transition">💳 إتمام الطلب وسلة الشراء</a>
+                <a href="warranty.html" class="block py-2.5 px-3 rounded-xl hover:bg-trek-lightgray transition">🛡️ شهادة الضمان المعتمد</a>
+                <a href="shipping.html" class="block py-2.5 px-3 rounded-xl hover:bg-trek-lightgray transition">🚚 الشحن للمحافظات</a>
+                <a href="#reviews" onclick="toggleMobileNav()" class="block py-2.5 px-3 rounded-xl hover:bg-trek-lightgray transition">⭐ تجارب العملاء</a>
+                <a href="#locations" onclick="toggleMobileNav()" class="block py-2.5 px-3 rounded-xl hover:bg-trek-lightgray transition">📍 فروعنا ومراكز الخدمة</a>
+                <a href="admin.html" target="_blank" class="block py-2.5 px-3 rounded-xl hover:bg-trek-lightgray text-emerald-600 transition">🔒 لوحة التحكم (إدارة المتجر)</a>
+            </nav>
+        </div>
+
+        <div class="space-y-3 pt-6 border-t border-trek-border">
+            <a href="https://wa.me/201202925192" target="_blank" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition flex items-center justify-center gap-2">
+                <span>💬 محادثة واتساب المباشرة</span>
+            </a>
+            <a href="tel:01202925192" class="w-full py-2.5 bg-trek-lightgray hover:bg-trek-border text-trek-black rounded-xl text-xs font-bold transition flex items-center justify-center gap-2">
+                <span>📞 اتصال: 01202925192</span>
+            </a>
+        </div>
+    </div>
+
 </body>
 </html>

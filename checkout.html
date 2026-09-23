@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أبو الجوخ 1925 | إتمام الطلب والشحن لجميع المحافظات</title>
+    <meta name="description" content="أتمم طلب دراجتك الأصلية من أبو الجوخ 1925. شحن سريع لكافة محافظات مصر، فحص ومعاينة قبل الاستلام والدفع، إمكانية التقسيط حتى 36 شهراً.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        trek: {
+                            black: '#111111',
+                            charcoal: '#1A1A1A',
+                            red: '#D50000',
+                            redhover: '#B70000',
+                            gray: '#707070',
+                            lightgray: '#F5F5F7',
+                            border: '#E5E5E7',
+                            cardbg: '#FAFAFA'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Cairo', 'sans-serif'],
+                        outfit: ['Outfit', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Cairo', sans-serif; background-color: #FAFAFA; color: #111111; }
+        .num-font { font-family: 'Outfit', sans-serif; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col bg-[#FAFAFA] text-trek-black">
+
+    <!-- Top Utility Bar -->
+    <div class="bg-trek-charcoal text-white text-[11px] font-semibold py-2 px-4 border-b border-white/10">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
+            <div class="flex items-center gap-3">
+                <span class="flex items-center gap-1.5 text-emerald-400 font-bold">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse inline-block"></span>
+                    شحن آمن ومؤمن بالكامل • معاينة وفحص الدراجة وتجربة مقاسها قبل الدفع
+                </span>
+            </div>
+            <div class="flex items-center gap-4 text-white/80">
+                <a href="tel:01202925192" class="hover:text-white transition font-bold flex items-center gap-1">
+                    <span class="text-emerald-400">📞</span> الخط الساخن: <span class="num-font text-white">01202925192</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-white border-b border-trek-border sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-6">
+                <a href="index.html" class="flex items-center gap-3 group">
+                    <img src="abu_el_goukh_logo.png" alt="أبو الجوخ 1925" class="h-12 w-auto object-contain">
+                    <div class="hidden sm:block border-r border-trek-border pr-3">
+                        <span class="font-black text-xl text-trek-black block leading-none">أبو الجوخ</span>
+                        <span class="text-[9px] uppercase tracking-wider text-trek-red font-black num-font block mt-0.5">EST. 1925 • الدفع الآمن</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Steps Breadcrumb -->
+            <div class="hidden md:flex items-center gap-3 text-xs font-bold">
+                <a href="shop.html" class="text-trek-gray hover:text-trek-black transition">1. اختيار الدراجة</a>
+                <span class="text-trek-border">←</span>
+                <span class="text-trek-red bg-trek-red/10 px-3 py-1 rounded-full">2. بيانات الشحن والدفع</span>
+                <span class="text-trek-border">←</span>
+                <span class="text-trek-gray">3. تأكيد واستلام</span>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <a href="shop.html" class="text-xs font-bold text-trek-gray hover:text-trek-black border border-trek-border rounded-full px-4 py-2 hover:bg-trek-lightgray transition flex items-center gap-1.5">
+                    <span>← العودة للمتجر</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Checkout Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full">
+        <div class="mb-8">
+            <h1 class="text-2xl sm:text-3xl font-black text-trek-black tracking-tight">إتمام الطلب والشحن السريع</h1>
+            <p class="text-xs sm:text-sm text-trek-gray mt-1">يرجى ملء بيانات التوصيل بدقة لضمان سرعة التسليم خلال 24 - 48 ساعة لباب منزلك.</p>
+        </div>
+
+        <form id="checkout-form" onsubmit="handlePlaceOrder(event)" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- Left Form Area (7 Cols) -->
+            <div class="lg:col-span-7 space-y-6">
+                
+                <!-- Recipient Info Card -->
+                <div class="bg-white rounded-2xl border border-trek-border p-6 shadow-sm">
+                    <div class="flex items-center gap-3 pb-4 border-b border-trek-border mb-5">
+                        <span class="w-8 h-8 rounded-full bg-trek-black text-white flex items-center justify-center font-bold text-sm">1</span>
+                        <div>
+                            <h2 class="text-base font-black text-trek-black">بيانات المستلم وعنوان التوصيل</h2>
+                            <p class="text-xs text-trek-gray">سيتواصل معك مندوب الشحن لتأكيد ميعاد التسليم بدقة</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-bold text-trek-black mb-1.5">الاسم ثلاثي أو رباعي <span class="text-trek-red">*</span></label>
+                            <input type="text" id="cust-name" required placeholder="مثال: أحمد محمود طارق" class="w-full text-xs font-semibold px-4 py-3 rounded-xl border border-trek-border focus:border-trek-black focus:ring-1 focus:ring-trek-black outline-none transition bg-trek-cardbg">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-trek-black mb-1.5">رقم الموبايل الأساسي <span class="text-trek-red">*</span></label>
+                            <input type="tel" id="cust-phone" required pattern="^01[0125][0-9]{8}$" placeholder="01xxxxxxxxx" class="w-full text-xs font-semibold num-font px-4 py-3 rounded-xl border border-trek-border focus:border-trek-black focus:ring-1 focus:ring-trek-black outline-none transition bg-trek-cardbg" dir="ltr">
+                            <span class="text-[10px] text-trek-gray mt-1 block">رقم شبكة مصرية (11 رقم)</span>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-trek-black mb-1.5">رقم واتساب أو هاتف بديل (اختياري)</label>
+                            <input type="tel" id="cust-alt-phone" placeholder="01xxxxxxxxx" class="w-full text-xs font-semibold num-font px-4 py-3 rounded-xl border border-trek-border focus:border-trek-black focus:ring-1 focus:ring-trek-black outline-none transition bg-trek-cardbg" dir="ltr">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-trek-black mb-1.5">المحافظة <span class="text-trek-red">*</span></label>
+                            <select id="cust-gov" required onchange="updateShippingGov()" class="w-full text-xs font-bold px-4 py-3 rounded-xl border border-trek-border focus:border-trek-black focus:ring-1 focus:ring-trek-black outline-none transition bg-trek-cardbg">
+                                <option value="">-- اختر محافظتك --</option>
+                                <option value="القاهرة" data-fee="150" selected>القاهرة (شحن سريع 24 ساعة - 150 ج.م)</option>
+                                <option value="الجيزة" data-fee="150">الجيزة (شحن سريع 24 ساعة - 150 ج.م)</option>
+                                <option value="الإسكندرية" data-fee="250">الإسكندرية (250 ج.م)</option>
+                                <option value="القليوبية" data-fee="200">القليوبية (200 ج.م)</option>
+                                <option value="الشرقية" data-fee="250">الشرقية (250 ج.م)</option>
+                                <option value="الدقهلية" data-fee="250">الدقهلية (المنصورة) (250 ج.م)</option>
+                                <option value="الغربية" data-fee="250">الغربية (طنطا / المحلة) (250 ج.م)</option>
+                                <option value="المنوفية" data-fee="250">المنوفية (250 ج.م)</option>
+                                <option value="البحيرة" data-fee="250">البحيرة (دمنهور) (250 ج.م)</option>
+                                <option value="كفر الشيخ" data-fee="250">كفر الشيخ (250 ج.م)</option>
+                                <option value="دمياط" data-fee="250">دمياط (250 ج.م)</option>
+                                <option value="بورسعيد" data-fee="250">بورسعيد (250 ج.م)</option>
+                                <option value="الإسماعيلية" data-fee="250">الإسماعيلية (250 ج.م)</option>
+                                <option value="السويس" data-fee="250">السويس (250 ج.م)</option>
+                                <option value="الفيوم" data-fee="280">الفيوم (280 ج.م)</option>
+                                <option value="بني سويف" data-fee="300">بني سويف (300 ج.م)</option>
+                                <option value="المنيا" data-fee="320">المنيا (320 ج.م)</option>
+                                <option value="أسيوط" data-fee="350">أسيوط (350 ج.م)</option>
+                                <option value="سوهاج" data-fee="350">سوهاج (350 ج.م)</option>
+                                <option value="قنا" data-fee="350">قنا (350 ج.م)</option>
+                                <option value="الأقصر" data-fee="380">الأقصر (380 ج.م)</option>
+                                <option value="أسوان" data-fee="400">أسوان (400 ج.م)</option>
+                                <option value="البحر الأحمر" data-fee="400">البحر الأحمر (الغردقة) (400 ج.م)</option>
+                                <option value="جنوب سيناء" data-fee="400">جنوب سيناء (شرم الشيخ) (400 ج.م)</option>
+                                <option value="مطروح" data-fee="350">مطروح والساحل الشمالي (350 ج.م)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-trek-black mb-1.5">المدينة أو الحي أو المركز <span class="text-trek-red">*</span></label>
+                            <input type="text" id="cust-city" required placeholder="مثال: مصر الجديدة / الدقي / سموحة" class="w-full text-xs font-semibold px-4 py-3 rounded-xl border border-trek-border focus:border-trek-black focus:ring-1 focus:ring-trek-black outline-none transition bg-trek-cardbg">
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-bold text-trek-black mb-1.5">العنوان التفصيلي وأقرب علامة مميزة <span class="text-trek-red">*</span></label>
+                            <input type="text" id="cust-address" required placeholder="اسم الشارع، رقم العمارة، رقم الشقة أو الدور، وأقرب علامة معروفة" class="w-full text-xs font-semibold px-4 py-3 rounded-xl border border-trek-border focus:border-trek-black focus:ring-1 focus:ring-trek-black outline-none transition bg-trek-cardbg">
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-bold text-trek-black mb-1.5">ملاحظات التوصيل أو مواعيد الاستلام المناسبة (اختياري)</label>
+                            <textarea id="cust-notes" rows="2" placeholder="مثال: يرجى الاتصال قبل الوصول بساعة، التواجد بالمنزل بعد الساعة 5 مساءً" class="w-full text-xs font-medium px-4 py-3 rounded-xl border border-trek-border focus:border-trek-black focus:ring-1 focus:ring-trek-black outline-none transition bg-trek-cardbg"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Methods Card -->
+                <div class="bg-white rounded-2xl border border-trek-border p-6 shadow-sm">
+                    <div class="flex items-center gap-3 pb-4 border-b border-trek-border mb-5">
+                        <span class="w-8 h-8 rounded-full bg-trek-black text-white flex items-center justify-center font-bold text-sm">2</span>
+                        <div>
+                            <h2 class="text-base font-black text-trek-black">اختر طريقة الدفع المناسبة لك</h2>
+                            <p class="text-xs text-trek-gray">جميع المعاملات المالية محمية ومضمونة 100%</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3" id="payment-options">
+                        
+                        <!-- Option 1: Cash on Delivery with Inspection (Recommended) -->
+                        <label class="flex items-start gap-4 p-4 rounded-xl border-2 border-emerald-600 bg-emerald-50/50 cursor-pointer transition hover:bg-emerald-50">
+                            <input type="radio" name="payment_method" value="الدفع عند الاستلام والمعاينة" checked class="mt-1 text-trek-red focus:ring-trek-red w-4 h-4">
+                            <div class="flex-1">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-sm font-black text-trek-black">الدفع عند الاستلام بعد المعاينة والتجربة</span>
+                                    <span class="bg-emerald-600 text-white text-[10px] font-black px-2 py-0.5 rounded-full">الأكثر أماناً والأكثر طلباً</span>
+                                </div>
+                                <p class="text-xs text-emerald-800 mt-1 leading-relaxed">
+                                    افتح كرتونة التوكيل وافحص الشاسيه ومقاس العجلة ونواقل سرعات شيمانو وتأكد من سلامتها 100% أمام مندوب الشحن قبل سداد أي مبلغ!
+                                </p>
+                            </div>
+                        </label>
+
+                        <!-- Option 2: Paymob Card / Meeza -->
+                        <label class="flex items-start gap-4 p-4 rounded-xl border border-trek-border bg-trek-cardbg cursor-pointer transition hover:bg-white hover:border-trek-black">
+                            <input type="radio" name="payment_method" value="بطاقة بنكية / فيزا عبر Paymob" class="mt-1 text-trek-red focus:ring-trek-red w-4 h-4">
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm font-bold text-trek-black">بطاقة ائتمان / ميزة / كارت بنكي (Paymob)</span>
+                                    <div class="flex items-center gap-1.5 opacity-80 text-[10px] font-bold">
+                                        <span class="bg-white px-2 py-0.5 border border-trek-border rounded">Visa</span>
+                                        <span class="bg-white px-2 py-0.5 border border-trek-border rounded">Mastercard</span>
+                                        <span class="bg-white px-2 py-0.5 border border-trek-border rounded">Meeza</span>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-trek-gray mt-1">دفع إلكتروني فوري وآمن 100% بتشفير بنكي 256-bit عبر بوابة Paymob المعتمدة بدون رسوم إضافية.</p>
+                            </div>
+                        </label>
+
+                        <!-- Option 3: InstaPay / Vodafone Cash -->
+                        <label class="flex items-start gap-4 p-4 rounded-xl border border-trek-border bg-trek-cardbg cursor-pointer transition hover:bg-white hover:border-trek-black">
+                            <input type="radio" name="payment_method" value="تحويل إنستاباي / محفظة فودافون كاش" class="mt-1 text-trek-red focus:ring-trek-red w-4 h-4">
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm font-bold text-trek-black">تحويل فوري عبر إنستاباي (InstaPay) أو محفظة كاش</span>
+                                    <span class="bg-purple-100 text-purple-800 text-[10px] font-black px-2 py-0.5 rounded">فوري وسريع</span>
+                                </div>
+                                <p class="text-xs text-trek-gray mt-1">تحويل لحظي على حساب إنستاباي الرسمي للشركة أو محفظة فودافون كاش الرسمية، مع إرسال إيصال التحويل على واتساب لتسريع الشحن فوراً.</p>
+                            </div>
+                        </label>
+
+                        <!-- Option 4: ValU / Aman Installments -->
+                        <label class="flex items-start gap-4 p-4 rounded-xl border border-trek-border bg-trek-cardbg cursor-pointer transition hover:bg-white hover:border-trek-black">
+                            <input type="radio" name="payment_method" value="تقسيط فاليو ValU / أمان / سهولة" class="mt-1 text-trek-red focus:ring-trek-red w-4 h-4">
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm font-bold text-trek-black">تقسيط فوري حتى 36 شهراً (ValU • أمان • سهولة)</span>
+                                    <span class="bg-amber-100 text-amber-900 text-[10px] font-black px-2 py-0.5 rounded">تقسيط بدون مقدم</span>
+                                </div>
+                                <p class="text-xs text-trek-gray mt-1">اختر مدة التقسيط من 6 إلى 36 شهراً عبر حسابك المفعل في تطبيق فاليو أو سهولة، وسيتم تأكيد القسط فورياً.</p>
+                            </div>
+                        </label>
+
+                    </div>
+                </div>
+
+                <!-- Included Guarantees Badges -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div class="bg-white p-3.5 rounded-xl border border-trek-border text-center">
+                        <div class="text-lg mb-1">🔧</div>
+                        <div class="text-xs font-black text-trek-black">تجميع وضبط 100% مجاناً</div>
+                        <div class="text-[10px] text-trek-gray mt-0.5">مشحمة ومشدودة وجاهزة على الركوب</div>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-trek-border text-center">
+                        <div class="text-lg mb-1">🛡️</div>
+                        <div class="text-xs font-black text-trek-black">ضمان التوكيل المعتمد</div>
+                        <div class="text-[10px] text-trek-gray mt-0.5">شهادة ضمان مختومة مدى الحياة للشاسيه</div>
+                    </div>
+                    <div class="bg-white p-3.5 rounded-xl border border-trek-border text-center">
+                        <div class="text-lg mb-1">🔄</div>
+                        <div class="text-xs font-black text-trek-black">استبدال واسترجاع 14 يوم</div>
+                        <div class="text-[10px] text-trek-gray mt-0.5">وفقاً لقانون حماية المستهلك المصري</div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" id="btn-submit-order" class="w-full py-4 px-6 rounded-2xl bg-trek-red hover:bg-trek-redhover text-white text-base font-black transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-3">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <span>تأكيد الطلب وشحن الدراجة الآن</span>
+                </button>
+            </div>
+
+            <!-- Right Order Summary Area (5 Cols) -->
+            <div class="lg:col-span-5 sticky top-28 space-y-6">
+                
+                <div class="bg-white rounded-2xl border border-trek-border p-6 shadow-sm">
+                    <div class="flex items-center justify-between pb-4 border-b border-trek-border mb-4">
+                        <h2 class="text-base font-black text-trek-black">ملخص سلة المشتريات</h2>
+                        <span id="summary-items-count" class="bg-trek-lightgray text-trek-black text-xs font-bold px-2.5 py-1 rounded-full num-font">0 منتجات</span>
+                    </div>
+
+                    <!-- Cart Items Container -->
+                    <div id="checkout-items-list" class="space-y-3 max-h-80 overflow-y-auto pr-1">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <!-- Promo Code Box -->
+                    <div class="mt-6 pt-4 border-t border-trek-border">
+                        <label class="block text-xs font-bold text-trek-black mb-1.5">هل لديك كود خصم ترويجي؟</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="promo-input" placeholder="مثال: GOUKH1925" class="flex-1 text-xs font-bold px-3 py-2.5 rounded-xl border border-trek-border focus:border-trek-black outline-none uppercase" dir="ltr">
+                            <button type="button" onclick="applyPromoCode()" class="bg-trek-black hover:bg-trek-charcoal text-white text-xs font-bold px-4 py-2.5 rounded-xl transition">تطبيق</button>
+                        </div>
+                        <div id="promo-msg" class="text-[11px] font-bold mt-1.5 hidden"></div>
+                    </div>
+
+                    <!-- Price Calculations -->
+                    <div class="mt-6 pt-4 border-t border-trek-border space-y-2.5 text-xs">
+                        <div class="flex justify-between text-trek-gray">
+                            <span>المجموع الفرعي للدراجات:</span>
+                            <span id="price-subtotal" class="font-bold text-trek-black num-font">0 ج.م</span>
+                        </div>
+                        <div class="flex justify-between text-trek-gray">
+                            <span>تكلفة الشحن والتوصيل للمحافظة:</span>
+                            <span id="price-shipping" class="font-bold text-trek-black num-font">150 ج.م</span>
+                        </div>
+                        <div id="discount-row" class="hidden flex justify-between text-emerald-600 font-bold">
+                            <span>خصم كود الترويج (5%):</span>
+                            <span id="price-discount" class="num-font">-0 ج.م</span>
+                        </div>
+                        <div class="pt-3 border-t border-trek-border flex justify-between items-baseline">
+                            <span class="text-sm font-black text-trek-black">الإجمالي الكلي النهائي:</span>
+                            <div class="text-right">
+                                <span id="price-total" class="text-2xl font-black text-trek-red num-font">0 ج.م</span>
+                                <span class="block text-[10px] text-trek-gray">شامل ضريبة القيمة المضافة والشحن</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fast Assistance Box -->
+                <div class="bg-emerald-50 rounded-2xl border border-emerald-200 p-5 text-right">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="text-2xl">💬</span>
+                        <div>
+                            <h4 class="text-xs font-black text-emerald-950">هل تحتاج مساعدة في اختيار المقاس أو تأكيد الطلب؟</h4>
+                            <p class="text-[11px] text-emerald-800">خبراء الدراجات في أبو الجوخ متاحون الآن لمساعدتك</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-2 mt-3">
+                        <a href="https://wa.me/201202925192?text=مرحباً،+أحتاج+مساعدة+في+إتمام+طلبي+من+الموقع" target="_blank" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 px-3 rounded-xl text-center transition flex items-center justify-center gap-1.5">
+                            <span>محادثة واتساب مباشرة</span>
+                        </a>
+                        <a href="tel:01202925192" class="bg-white hover:bg-gray-50 text-emerald-900 border border-emerald-300 text-xs font-bold py-2.5 px-3 rounded-xl transition">
+                            <span>اتصال 01202925192</span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+        </form>
+    </main>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 text-center relative shadow-2xl animate-in fade-in duration-300">
+            <div class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-3xl mx-auto mb-4">
+                ✓
+            </div>
+            <h3 class="text-2xl font-black text-trek-black">تم تأكيد طلبك بنجاح!</h3>
+            <p class="text-xs text-trek-gray mt-2">شكراً لثقتك في أبو الجوخ 1925. جاري تجهيز دراجتك وضبطها على يد فنيينا المتخصصين لشحنها فوراً.</p>
+
+            <div class="my-6 p-4 bg-trek-lightgray rounded-2xl text-right text-xs space-y-2">
+                <div class="flex justify-between border-b border-trek-border pb-2">
+                    <span class="text-trek-gray">رقم الطلب المرجعي:</span>
+                    <span id="modal-order-id" class="font-black text-trek-black num-font">AEG-000000</span>
+                </div>
+                <div class="flex justify-between border-b border-trek-border pb-2">
+                    <span class="text-trek-gray">الاسم والمحافظة:</span>
+                    <span id="modal-order-customer" class="font-bold text-trek-black">-</span>
+                </div>
+                <div class="flex justify-between border-b border-trek-border pb-2">
+                    <span class="text-trek-gray">طريقة الدفع:</span>
+                    <span id="modal-order-payment" class="font-bold text-trek-black">-</span>
+                </div>
+                <div class="flex justify-between pt-1">
+                    <span class="text-trek-gray">إجمالي المبلغ المطلوب:</span>
+                    <span id="modal-order-total" class="font-black text-trek-red num-font text-base">-</span>
+                </div>
+            </div>
+
+            <div class="space-y-2.5">
+                <a id="modal-whatsapp-btn" href="#" target="_blank" class="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black transition flex items-center justify-center gap-2">
+                    <span>📱 إرسال تفاصيل الفاتورة ومتابعة الشحنة عبر واتساب</span>
+                </a>
+                <a href="shop.html" class="w-full py-3 px-4 bg-trek-black hover:bg-trek-charcoal text-white rounded-xl text-xs font-bold transition block">
+                    العودة لكتالوج العجل
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-trek-border py-6 text-center text-xs text-trek-gray mt-12">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+            <div>جميع الحقوق محفوظة © 2026 شركة أبو الجوخ لتجارة الدراجات منذ عام 1925.</div>
+            <div class="flex items-center gap-4 text-trek-black font-semibold">
+                <a href="warranty.html" class="hover:text-trek-red">سياسة الضمان</a>
+                <span>•</span>
+                <a href="shipping.html" class="hover:text-trek-red">الشحن والتوصيل</a>
+                <span>•</span>
+                <a href="admin.html" class="hover:text-trek-red text-emerald-600">لوحة الإدارة</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Checkout Application Logic -->
+    <script>
+        // Sample default bike if cart was opened directly without adding items
+        const defaultSampleBike = {
+            id: 'sample-trinx-m100',
+            name: 'دراجة ترنكس M100 برو ألومنيوم 2026 (Trinx M100 Pro) - سرعات شيمانو 21',
+            price: 7850,
+            image: 'https://media.zbooni.com/merchants/media/products/109246/1735153530582_croppedImg.jpg',
+            specs: 'مقاس 26/29 • شاسيه ألومنيوم • فرامل ديسك'
+        };
+
+        let cart = [];
+        let appliedDiscountPercent = 0;
+        let shippingFee = 150;
+
+        // Load cart from localStorage or fallback
+        function initCheckout() {
+            try {
+                const storedCart = localStorage.getItem('abu_el_goukh_cart');
+                if (storedCart) {
+                    cart = JSON.parse(storedCart);
+                }
+            } catch (e) {
+                console.error(e);
+            }
+
+            if (!cart || cart.length === 0) {
+                cart = [defaultSampleBike];
+            }
+
+            renderCheckoutItems();
+            updateCalculations();
+        }
+
+        function renderCheckoutItems() {
+            const container = document.getElementById('checkout-items-list');
+            document.getElementById('summary-items-count').innerText = `${cart.length} منتجات`;
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 text-trek-gray">
+                        <div class="text-3xl mb-1">🛒</div>
+                        <div class="font-bold text-xs">سلتك فارغة</div>
+                        <a href="shop.html" class="inline-block mt-3 text-xs text-trek-red font-bold underline">اختر دراجة من الكتالوج</a>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = cart.map((item, idx) => {
+                return `
+                    <div class="flex items-center gap-3 p-3 bg-trek-lightgray rounded-xl border border-trek-border">
+                        <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-contain bg-white rounded-lg p-1 border border-trek-border">
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-xs font-bold text-trek-black line-clamp-1">${item.name}</h4>
+                            <p class="text-[10px] text-trek-gray mt-0.5">${item.specs || 'شاسيه ألومنيوم • ضمان الوكيل'}</p>
+                            <div class="text-xs font-black text-trek-black num-font mt-1">${Number(item.price).toLocaleString('en-US')} ج.م</div>
+                        </div>
+                        <button type="button" onclick="removeItem(${idx})" title="حذف" class="text-trek-gray hover:text-trek-red font-bold text-sm p-1.5">✕</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function removeItem(index) {
+            cart.splice(index, 1);
+            localStorage.setItem('abu_el_goukh_cart', JSON.stringify(cart));
+            renderCheckoutItems();
+            updateCalculations();
+        }
+
+        function updateShippingGov() {
+            const select = document.getElementById('cust-gov');
+            const selectedOption = select.options[select.selectedIndex];
+            if (selectedOption && selectedOption.dataset.fee) {
+                shippingFee = parseInt(selectedOption.dataset.fee, 10);
+            } else {
+                shippingFee = 150;
+            }
+            updateCalculations();
+        }
+
+        function updateCalculations() {
+            let subtotal = cart.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
+            let discountAmount = Math.round(subtotal * (appliedDiscountPercent / 100));
+            let total = subtotal - discountAmount + shippingFee;
+
+            document.getElementById('price-subtotal').innerText = subtotal.toLocaleString('en-US') + ' ج.م';
+            document.getElementById('price-shipping').innerText = shippingFee.toLocaleString('en-US') + ' ج.م';
+            
+            const discRow = document.getElementById('discount-row');
+            if (discountAmount > 0) {
+                discRow.classList.remove('hidden');
+                document.getElementById('price-discount').innerText = '-' + discountAmount.toLocaleString('en-US') + ' ج.م';
+            } else {
+                discRow.classList.add('hidden');
+            }
+
+            document.getElementById('price-total').innerText = total.toLocaleString('en-US') + ' ج.م';
+        }
+
+        function applyPromoCode() {
+            const input = document.getElementById('promo-input').value.trim().toUpperCase();
+            const msg = document.getElementById('promo-msg');
+            msg.classList.remove('hidden', 'text-emerald-600', 'text-trek-red');
+
+            if (input === 'GOUKH1925') {
+                appliedDiscountPercent = 5;
+                msg.classList.add('text-emerald-600');
+                msg.innerText = '✓ تم تطبيق خصم 5% الخاص بعملاء أبو الجوخ!';
+            } else if (input === 'FREESHIP') {
+                shippingFee = 0;
+                msg.classList.add('text-emerald-600');
+                msg.innerText = '✓ تم تطبيق الشحن المجاني بنجاح!';
+            } else {
+                appliedDiscountPercent = 0;
+                msg.classList.add('text-trek-red');
+                msg.innerText = 'كود الخصم غير صحيح أو منتهي الصلاحية.';
+            }
+            updateCalculations();
+        }
+
+        function handlePlaceOrder(e) {
+            e.preventDefault();
+
+            if (cart.length === 0) {
+                alert('سلة المشتريات فارغة! يرجى اختيار دراجة أولاً.');
+                window.location.href = 'shop.html';
+                return;
+            }
+
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const altPhone = document.getElementById('cust-alt-phone').value.trim();
+            const gov = document.getElementById('cust-gov').value;
+            const city = document.getElementById('cust-city').value.trim();
+            const address = document.getElementById('cust-address').value.trim();
+            const notes = document.getElementById('cust-notes').value.trim();
+
+            const paymentRadio = document.querySelector('input[name="payment_method"]:checked');
+            const paymentMethod = paymentRadio ? paymentRadio.value : 'الدفع عند الاستلام';
+
+            const subtotal = cart.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
+            const discountAmount = Math.round(subtotal * (appliedDiscountPercent / 100));
+            const total = subtotal - discountAmount + shippingFee;
+
+            const orderId = 'AEG-' + Math.floor(100000 + Math.random() * 900000);
+            const orderDate = new Date().toLocaleString('ar-EG');
+
+            const orderData = {
+                id: orderId,
+                date: orderDate,
+                customer: name,
+                phone: phone,
+                altPhone: altPhone,
+                gov: gov,
+                city: city,
+                address: address,
+                notes: notes,
+                payment: paymentMethod,
+                items: cart,
+                subtotal: subtotal,
+                shipping: shippingFee,
+                discount: discountAmount,
+                total: total,
+                status: 'جديد (قيد المراجعة)'
+            };
+
+            // Save order to localStorage for Admin Panel
+            try {
+                let existingOrders = JSON.parse(localStorage.getItem('abu_el_goukh_orders') || '[]');
+                existingOrders.unshift(orderData);
+                localStorage.setItem('abu_el_goukh_orders', JSON.stringify(existingOrders));
+            } catch (err) {
+                console.error(err);
+            }
+
+            // Clear Cart
+            localStorage.removeItem('abu_el_goukh_cart');
+
+            // Format WhatsApp Message
+            const itemsText = cart.map(item => `• ${item.name} (${Number(item.price).toLocaleString('en-US')} ج.م)`).join('%0A');
+            const waMessage = 
+                `*طلب جديد من متجر أبو الجوخ 1925 الإلكتروني*%0A` +
+                `----------------------------------%0A` +
+                `*رقم الطلب:* ${orderId}%0A` +
+                `*الاسم:* ${name}%0A` +
+                `*رقم الموبايل:* ${phone}%0A` +
+                (altPhone ? `*هاتف بديل:* ${altPhone}%0A` : '') +
+                `*المحافظة والمدينة:* ${gov} - ${city}%0A` +
+                `*العنوان بالتفصيل:* ${address}%0A` +
+                (notes ? `*ملاحظات التسليم:* ${notes}%0A` : '') +
+                `----------------------------------%0A` +
+                `*المنتجات المطلوبة:*%0A${itemsText}%0A` +
+                `----------------------------------%0A` +
+                `*المجموع الفرعي:* ${subtotal.toLocaleString('en-US')} ج.م%0A` +
+                `*تكلفة الشحن:* ${shippingFee.toLocaleString('en-US')} ج.م%0A` +
+                (discountAmount > 0 ? `*الخصم:* -${discountAmount.toLocaleString('en-US')} ج.م%0A` : '') +
+                `*الإجمالي النهائي:* ${total.toLocaleString('en-US')} ج.م%0A` +
+                `*طريقة الدفع:* ${paymentMethod}%0A` +
+                `----------------------------------%0A` +
+                `يرجى تأكيد ميعاد الشحن والتوصيل. شكراً لكم!`;
+
+            const waUrl = `https://wa.me/201202925192?text=${waMessage}`;
+
+            // Show Confirmation Modal
+            document.getElementById('modal-order-id').innerText = orderId;
+            document.getElementById('modal-order-customer').innerText = `${name} (${gov})`;
+            document.getElementById('modal-order-payment').innerText = paymentMethod;
+            document.getElementById('modal-order-total').innerText = total.toLocaleString('en-US') + ' ج.م';
+            document.getElementById('modal-whatsapp-btn').href = waUrl;
+
+            const modal = document.getElementById('success-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            // Automatically open WhatsApp in new tab after 800ms
+            setTimeout(() => {
+                window.open(waUrl, '_blank');
+            }, 800);
+        }
+
+        window.addEventListener('DOMContentLoaded', initCheckout);
+    </script>
+</body>
+</html>

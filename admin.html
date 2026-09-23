@@ -133,6 +133,20 @@
 
         </div>
 
+        <!-- Main Mode Tabs: Products vs Orders -->
+        <div class="flex items-center gap-3 mb-6 border-b border-trek-border pb-3">
+            <button id="main-tab-products" onclick="switchMainTab('products')" class="px-5 py-3 rounded-xl text-sm font-black bg-trek-black text-white transition flex items-center gap-2 shadow-sm">
+                <span>🚲 المنتجات والمخزون</span>
+                <span class="bg-white/20 text-white text-xs px-2 py-0.5 rounded-full num-font" id="tab-products-badge">55</span>
+            </button>
+            <button id="main-tab-orders" onclick="switchMainTab('orders')" class="px-5 py-3 rounded-xl text-sm font-bold bg-white text-trek-black border border-trek-border hover:bg-trek-lightgray transition flex items-center gap-2">
+                <span>📦 الطلبات الواردة (E-Commerce Orders)</span>
+                <span class="bg-trek-red text-white text-xs font-black px-2 py-0.5 rounded-full num-font" id="tab-orders-badge">0</span>
+            </button>
+        </div>
+
+        <!-- PRODUCTS VIEW -->
+        <div id="view-products">
         <!-- Filter & Search Toolbar -->
         <div class="bg-white p-4 rounded-2xl border border-trek-border shadow-sm mb-6 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-2 w-full sm:w-auto">
@@ -177,6 +191,57 @@
                 <div id="showing-count" class="font-bold">عرض 55 من 55 عجلة</div>
             </div>
         </div>
+        </div>
+        <!-- END PRODUCTS VIEW -->
+
+        <!-- ORDERS VIEW -->
+        <div id="view-orders" class="hidden space-y-6">
+            <!-- Orders Toolbar -->
+            <div class="bg-white p-4 rounded-2xl border border-trek-border shadow-sm flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-black text-trek-black">تصفية الطلبات:</span>
+                    <button onclick="filterOrders('all')" id="btn-ord-all" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-trek-black text-white transition">الكل</button>
+                    <button onclick="filterOrders('جديد')" id="btn-ord-new" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-trek-lightgray text-trek-black hover:bg-gray-200 transition">جديد</button>
+                    <button onclick="filterOrders('تم الشحن')" id="btn-ord-shipped" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-trek-lightgray text-trek-black hover:bg-gray-200 transition">تم الشحن</button>
+                    <button onclick="filterOrders('مكتمل')" id="btn-ord-completed" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-trek-lightgray text-trek-black hover:bg-gray-200 transition">مكتمل</button>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="addDemoOrder()" class="px-4 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold rounded-xl border border-emerald-300 transition flex items-center gap-1.5">
+                        <span>+ إضافة طلب تجريبي للاختبار</span>
+                    </button>
+                    <button onclick="exportOrdersToCSV()" class="px-4 py-2 bg-trek-lightgray hover:bg-gray-200 text-trek-black text-xs font-bold rounded-xl border border-trek-border transition flex items-center gap-1.5">
+                        <span>📥 تصدير CSV / Excel</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Orders Table Container -->
+            <div class="bg-white rounded-2xl border border-trek-border shadow-sm overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-right text-xs">
+                        <thead class="bg-trek-lightgray text-trek-gray font-bold border-b border-trek-border uppercase text-[11px]">
+                            <tr>
+                                <th class="py-3.5 px-4">رقم الطلب والتاريخ</th>
+                                <th class="py-3.5 px-4">العميل والموبايل</th>
+                                <th class="py-3.5 px-4">المحافظة والعنوان</th>
+                                <th class="py-3.5 px-4">المنتجات المطلوبة</th>
+                                <th class="py-3.5 px-4">الإجمالي وطريقة الدفع</th>
+                                <th class="py-3.5 px-4 text-center">حالة الطلب</th>
+                                <th class="py-3.5 px-4 text-center">إجراءات سريعة</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-table-body" class="divide-y divide-trek-border">
+                            <!-- Populated dynamically by JS -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="p-4 bg-trek-cardbg border-t border-trek-border flex justify-between items-center text-xs text-trek-gray">
+                    <div>الطلبات تسجل تلقائياً عند إتمام أي عميل عملية الشراء من صفحة checkout.html.</div>
+                    <div id="orders-count-label" class="font-bold">0 طلبات مسجلة</div>
+                </div>
+            </div>
+        </div>
+        <!-- END ORDERS VIEW -->
 
     </main>
 
@@ -396,10 +461,12 @@
                 }
             });
             renderTable();
+            updateOrdersBadge();
         }
 
         function searchTable(val) {
             renderTable();
+            updateOrdersBadge();
         }
 
         function calcInstallment(val) {
@@ -501,6 +568,7 @@
             localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(products));
             closeModal();
             renderTable();
+            updateOrdersBadge();
             alert('تم حفظ ونشر العجلة بنجاح في المتجر!');
         }
 
@@ -510,6 +578,7 @@
                 p.active = !p.active;
                 localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(products));
                 renderTable();
+            updateOrdersBadge();
             }
         }
 
@@ -518,12 +587,238 @@
                 products = products.filter(x => x.id !== id);
                 localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(products));
                 renderTable();
+            updateOrdersBadge();
             }
+        }
+
+
+        // --- ORDERS MANAGEMENT LOGIC ---
+        let currentMainTab = 'products';
+        let currentOrderFilter = 'all';
+
+        function switchMainTab(tab) {
+            currentMainTab = tab;
+            const btnProd = document.getElementById('main-tab-products');
+            const btnOrd = document.getElementById('main-tab-orders');
+            const viewProd = document.getElementById('view-products');
+            const viewOrd = document.getElementById('view-orders');
+
+            if (tab === 'products') {
+                btnProd.className = 'px-5 py-3 rounded-xl text-sm font-black bg-trek-black text-white transition flex items-center gap-2 shadow-sm';
+                btnOrd.className = 'px-5 py-3 rounded-xl text-sm font-bold bg-white text-trek-black border border-trek-border hover:bg-trek-lightgray transition flex items-center gap-2';
+                viewProd.classList.remove('hidden');
+                viewOrd.classList.add('hidden');
+            } else {
+                btnOrd.className = 'px-5 py-3 rounded-xl text-sm font-black bg-trek-black text-white transition flex items-center gap-2 shadow-sm';
+                btnProd.className = 'px-5 py-3 rounded-xl text-sm font-bold bg-white text-trek-black border border-trek-border hover:bg-trek-lightgray transition flex items-center gap-2';
+                viewOrd.classList.remove('hidden');
+                viewProd.classList.add('hidden');
+                renderOrdersTable();
+            }
+        }
+
+        function getStoredOrders() {
+            try {
+                const stored = localStorage.getItem('abu_el_goukh_orders');
+                if (stored) {
+                    return JSON.parse(stored);
+                }
+            } catch (e) {
+                console.error(e);
+            }
+            return [];
+        }
+
+        function saveStoredOrders(orders) {
+            localStorage.setItem('abu_el_goukh_orders', JSON.stringify(orders));
+            updateOrdersBadge();
+        }
+
+        function updateOrdersBadge() {
+            const orders = getStoredOrders();
+            const badge = document.getElementById('tab-orders-badge');
+            if (badge) {
+                badge.innerText = orders.length;
+            }
+        }
+
+        function renderOrdersTable() {
+            const orders = getStoredOrders();
+            const tbody = document.getElementById('orders-table-body');
+            const countLabel = document.getElementById('orders-count-label');
+            countLabel.innerText = `${orders.length} طلبات مسجلة`;
+
+            let filtered = orders;
+            if (currentOrderFilter !== 'all') {
+                filtered = orders.filter(o => (o.status || '').includes(currentOrderFilter));
+            }
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="py-12 text-center text-trek-gray">
+                            <div class="text-3xl mb-2">📦</div>
+                            <div class="font-bold text-sm text-trek-black">لا توجد طلبات واردة حالياً</div>
+                            <div class="text-xs text-trek-gray mt-1">عندما يقوم عميل بتأكيد طلب من صفحة checkout.html سيظهر هنا فوراً.</div>
+                            <button onclick="addDemoOrder()" class="mt-4 px-4 py-2 bg-trek-black text-white text-xs font-bold rounded-xl hover:bg-trek-charcoal transition">إضافة طلب تجريبي للمعاينة</button>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map((ord, idx) => {
+                const itemsList = Array.isArray(ord.items) 
+                    ? ord.items.map(it => `• ${it.name} (${Number(it.price).toLocaleString('en-US')} ج.م)`).join('<br>')
+                    : (ord.item_name || 'دراجة هوائية');
+
+                let statusBadgeColor = 'bg-blue-50 text-blue-800 border-blue-200';
+                if ((ord.status || '').includes('شحن')) statusBadgeColor = 'bg-amber-50 text-amber-800 border-amber-200';
+                if ((ord.status || '').includes('مكتمل') || (ord.status || '').includes('توصيل')) statusBadgeColor = 'bg-emerald-50 text-emerald-800 border-emerald-200';
+                if ((ord.status || '').includes('ملغي')) statusBadgeColor = 'bg-red-50 text-red-800 border-red-200';
+
+                const waText = encodeURIComponent(`أهلاً بك أستاذ ${ord.customer}، معك إدارة متجر أبو الجوخ 1925 بخصوص طلبك رقم ${ord.id}.`);
+                const waLink = `https://wa.me/2${ord.phone}?text=${waText}`;
+
+                return `
+                    <tr class="hover:bg-gray-50/80 transition">
+                        <td class="py-3.5 px-4 font-bold">
+                            <div class="text-xs font-black text-trek-black num-font">${ord.id}</div>
+                            <div class="text-[10px] text-trek-gray mt-0.5">${ord.date || 'اليوم'}</div>
+                        </td>
+                        <td class="py-3.5 px-4">
+                            <div class="text-xs font-bold text-trek-black">${ord.customer}</div>
+                            <a href="tel:${ord.phone}" class="text-[11px] text-trek-red font-bold num-font hover:underline block mt-0.5" dir="ltr">${ord.phone}</a>
+                        </td>
+                        <td class="py-3.5 px-4 text-trek-gray text-[11px] max-w-xs">
+                            <div class="font-bold text-trek-black">${ord.gov || 'القاهرة'} - ${ord.city || ''}</div>
+                            <div class="text-[10px] line-clamp-2 mt-0.5">${ord.address || 'العنوان المسجل'}</div>
+                        </td>
+                        <td class="py-3.5 px-4 text-[11px] leading-relaxed max-w-xs">
+                            ${itemsList}
+                        </td>
+                        <td class="py-3.5 px-4">
+                            <div class="text-xs font-black text-trek-black num-font">${Number(ord.total || ord.subtotal || 0).toLocaleString('en-US')} ج.م</div>
+                            <div class="text-[10px] text-trek-gray mt-0.5">${ord.payment || 'عند الاستلام'}</div>
+                        </td>
+                        <td class="py-3.5 px-4 text-center">
+                            <select onchange="updateOrderStatus('${ord.id}', this.value)" class="text-[10px] font-bold py-1 px-2 rounded-lg border ${statusBadgeColor} outline-none cursor-pointer">
+                                <option value="جديد (قيد المراجعة)" ${ord.status === 'جديد (قيد المراجعة)' ? 'selected' : ''}>جديد</option>
+                                <option value="تم الشحن مع المندوب" ${ord.status === 'تم الشحن مع المندوب' ? 'selected' : ''}>تم الشحن</option>
+                                <option value="مكتمل وتم التوصيل" ${ord.status === 'مكتمل وتم التوصيل' ? 'selected' : ''}>مكتمل</option>
+                                <option value="ملغي" ${ord.status === 'ملغي' ? 'selected' : ''}>ملغي</option>
+                            </select>
+                        </td>
+                        <td class="py-3.5 px-4 text-center">
+                            <div class="flex items-center justify-center gap-1.5">
+                                <a href="${waLink}" target="_blank" class="p-1.5 rounded-lg bg-emerald-100 hover:bg-emerald-600 hover:text-white text-emerald-800 transition text-[11px] font-bold" title="محادثة واتساب للعميل">
+                                    💬
+                                </a>
+                                <button onclick="deleteOrder('${ord.id}')" class="p-1.5 rounded-lg bg-red-50 hover:bg-red-600 hover:text-white text-red-600 transition text-[11px]" title="حذف الطلب">
+                                    🗑️
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function updateOrderStatus(orderId, newStatus) {
+            const orders = getStoredOrders();
+            const ord = orders.find(o => o.id === orderId);
+            if (ord) {
+                ord.status = newStatus;
+                saveStoredOrders(orders);
+                renderOrdersTable();
+            }
+        }
+
+        function deleteOrder(orderId) {
+            if (confirm(`هل أنت متأكد من حذف الطلب رقم ${orderId}؟`)) {
+                let orders = getStoredOrders();
+                orders = orders.filter(o => o.id !== orderId);
+                saveStoredOrders(orders);
+                renderOrdersTable();
+            }
+        }
+
+        function filterOrders(status) {
+            currentOrderFilter = status;
+            ['all', 'new', 'shipped', 'completed'].forEach(s => {
+                const btn = document.getElementById(`btn-ord-${s}`);
+                if (btn) btn.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold bg-trek-lightgray text-trek-black hover:bg-gray-200 transition';
+            });
+            const activeBtn = document.getElementById(`btn-ord-${status === 'جديد' ? 'new' : status === 'تم الشحن' ? 'shipped' : status === 'مكتمل' ? 'completed' : 'all'}`);
+            if (activeBtn) activeBtn.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold bg-trek-black text-white transition';
+            renderOrdersTable();
+        }
+
+        function addDemoOrder() {
+            const demoId = 'AEG-' + Math.floor(100000 + Math.random() * 900000);
+            const demoOrder = {
+                id: demoId,
+                date: new Date().toLocaleDateString('ar-EG') + ' ' + new Date().toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'}),
+                customer: 'محمود طارق عبد العزيز',
+                phone: '01202925192',
+                gov: 'القاهرة',
+                city: 'مدينة نصر',
+                address: 'شارع مكرم عبيد، عمارة 14، الدور الخامس',
+                items: [
+                    { name: 'دراجة ترنكس 136 برو ألومنيوم مقاس 29', price: 11500 }
+                ],
+                subtotal: 11500,
+                shipping: 150,
+                total: 11650,
+                payment: 'الدفع عند الاستلام والمعاينة',
+                status: 'جديد (قيد المراجعة)'
+            };
+            const orders = getStoredOrders();
+            orders.unshift(demoOrder);
+            saveStoredOrders(orders);
+            renderOrdersTable();
+            alert('تمت إضافة طلب تجريبي بنجاح!');
+        }
+
+        function exportOrdersToCSV() {
+            const orders = getStoredOrders();
+            if (orders.length === 0) {
+                alert('لا توجد طلبات للتصدير');
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,﻿";
+            csvContent += "رقم الطلب,التاريخ,اسم العميل,الموبايل,المحافظة,المدينة,العنوان,طريقة الدفع,الإجمالي,الحالة\n";
+
+            orders.forEach(o => {
+                const row = [
+                    o.id,
+                    `"${o.date || ''}"`,
+                    `"${o.customer || ''}"`,
+                    `"${o.phone || ''}"`,
+                    `"${o.gov || ''}"`,
+                    `"${o.city || ''}"`,
+                    `"${o.address || ''}"`,
+                    `"${o.payment || ''}"`,
+                    o.total || o.subtotal || 0,
+                    `"${o.status || ''}"`
+                ].join(",");
+                csvContent += row + "\n";
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `abu_el_goukh_orders_${new Date().toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         // Initialize on load
         window.addEventListener('DOMContentLoaded', () => {
             renderTable();
+            updateOrdersBadge();
         });
     </script>
 </body>

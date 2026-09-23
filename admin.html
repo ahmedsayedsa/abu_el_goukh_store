@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أبو الجوخ 1925 | لوحة التحكم المجانية - إدارة المنتجات والصور</title>
+    <!-- Google Fonts: Cairo & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        trek: {
+                            black: '#111111',
+                            charcoal: '#1A1A1A',
+                            red: '#D50000',
+                            redhover: '#B70000',
+                            gray: '#707070',
+                            lightgray: '#F5F5F7',
+                            border: '#E5E5E7',
+                            cardbg: '#FAFAFA'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Cairo', 'sans-serif'],
+                        outfit: ['Outfit', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #F8F9FA;
+            color: #111111;
+        }
+        .num-font { font-family: 'Outfit', sans-serif; }
+    </style>
+</head>
+<body class="bg-[#F8F9FA] text-trek-black min-h-screen">
+
+    <!-- Top Admin Header -->
+    <header class="bg-white border-b border-trek-border sticky top-0 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                
+                <!-- Logo & Dashboard Title -->
+                <div class="flex items-center gap-4">
+                    <a href="index.html" target="_blank" class="flex items-center gap-3">
+                        <img src="abu_el_goukh_logo.png" alt="أبو الجوخ" class="h-10 w-auto object-contain">
+                        <div class="border-r border-trek-border pr-3">
+                            <span class="font-black text-lg text-trek-black block leading-none">لوحة تحكم المتجر</span>
+                            <span class="text-[10px] text-emerald-600 font-bold block mt-0.5">● نظام مجاني 100% بدون اشتراكات</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Navigation Quick Links -->
+                <div class="flex items-center gap-3">
+                    <a href="index.html" target="_blank" class="text-xs font-bold text-trek-gray hover:text-trek-black transition px-3 py-1.5 rounded-lg border border-trek-border bg-white flex items-center gap-1.5">
+                        <span>معاينة الرئيسية</span>
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>
+                    <a href="shop.html" target="_blank" class="text-xs font-bold text-trek-gray hover:text-trek-black transition px-3 py-1.5 rounded-lg border border-trek-border bg-white flex items-center gap-1.5">
+                        <span>معاينة الكتالوج (55 عجلة)</span>
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                    </a>
+                    <button onclick="openAddModal()" class="bg-trek-red hover:bg-trek-redhover text-white text-xs font-bold px-4 py-2 rounded-lg transition shadow-sm flex items-center gap-1.5">
+                        <span class="text-base font-black">+</span>
+                        <span>إضافة عجلة جديدة</span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+            
+            <div class="bg-white p-5 rounded-2xl border border-trek-border shadow-sm flex items-center justify-between">
+                <div>
+                    <span class="text-xs text-trek-gray font-bold block mb-1">إجمالي العجل المعروض</span>
+                    <span id="stat-total" class="text-3xl font-black text-trek-black num-font">55</span>
+                    <span class="text-[11px] text-emerald-600 font-semibold block mt-1">✓ جاهزة للشراء أونلاين</span>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-red-50 text-trek-red flex items-center justify-center text-2xl font-bold">
+                    🚲
+                </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl border border-trek-border shadow-sm flex items-center justify-between">
+                <div>
+                    <span class="text-xs text-trek-gray font-bold block mb-1">تكلفة الاستضافة والـ Backend</span>
+                    <span class="text-3xl font-black text-emerald-600 num-font">0.00</span>
+                    <span class="text-[11px] text-emerald-700 font-semibold block mt-1">جنيه (مجاني مدى الحياة)</span>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl font-bold">
+                    ⚡
+                </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl border border-trek-border shadow-sm flex items-center justify-between">
+                <div>
+                    <span class="text-xs text-trek-gray font-bold block mb-1">الربط واستقبال الطلبات</span>
+                    <span class="text-xl font-black text-trek-black block">WhatsApp + Paymob</span>
+                    <span class="text-[11px] text-trek-gray font-semibold block mt-1">تنبيه فوري لمدير المتجر</span>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl font-bold">
+                    📲
+                </div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl border border-trek-border shadow-sm flex items-center justify-between">
+                <div>
+                    <span class="text-xs text-trek-gray font-bold block mb-1">سرعة المتجر (PageSpeed)</span>
+                    <span class="text-3xl font-black text-emerald-600 num-font">99%</span>
+                    <span class="text-[11px] text-emerald-700 font-semibold block mt-1">تحميل فوري في شوارع مصر</span>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl font-bold">
+                    🚀
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Filter & Search Toolbar -->
+        <div class="bg-white p-4 rounded-2xl border border-trek-border shadow-sm mb-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-2 w-full sm:w-auto">
+                <button onclick="filterTable('all')" id="btn-tab-all" class="px-4 py-2 rounded-xl text-xs font-bold bg-trek-black text-white transition">الكل (55)</button>
+                <button onclick="filterTable('mountain')" id="btn-tab-mountain" class="px-4 py-2 rounded-xl text-xs font-bold bg-trek-lightgray hover:bg-gray-200 text-trek-black transition">جبلي</button>
+                <button onclick="filterTable('road')" id="btn-tab-road" class="px-4 py-2 rounded-xl text-xs font-bold bg-trek-lightgray hover:bg-gray-200 text-trek-black transition">سرعة وطريق</button>
+                <button onclick="filterTable('kids')" id="btn-tab-kids" class="px-4 py-2 rounded-xl text-xs font-bold bg-trek-lightgray hover:bg-gray-200 text-trek-black transition">أطفال وبناتي</button>
+                <button onclick="filterTable('fat')" id="btn-tab-fat" class="px-4 py-2 rounded-xl text-xs font-bold bg-trek-lightgray hover:bg-gray-200 text-trek-black transition">دبابات</button>
+            </div>
+
+            <div class="relative w-full sm:w-72">
+                <input id="search-input" onkeyup="searchTable(this.value)" type="text" placeholder="ابحث باسم العجلة أو الكود..." class="w-full bg-trek-lightgray border border-transparent focus:border-trek-black focus:bg-white text-xs rounded-xl py-2.5 pr-9 pl-4 outline-none transition font-medium">
+                <svg class="w-4 h-4 text-trek-gray absolute right-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+        </div>
+
+        <!-- Products Table -->
+        <div class="bg-white rounded-2xl border border-trek-border shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-right text-xs">
+                    <thead class="bg-trek-lightgray text-trek-gray font-bold border-b border-trek-border uppercase text-[11px]">
+                        <tr>
+                            <th class="py-3.5 px-4">الصورة</th>
+                            <th class="py-3.5 px-4">اسم وموديل العجلة</th>
+                            <th class="py-3.5 px-4">التصنيف</th>
+                            <th class="py-3.5 px-4">السعر (ج.م)</th>
+                            <th class="py-3.5 px-4">قسط فاليو الشهري</th>
+                            <th class="py-3.5 px-4">المقاس / المواصفات</th>
+                            <th class="py-3.5 px-4 text-center">الحالة</th>
+                            <th class="py-3.5 px-4 text-center">إجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="products-table-body" class="divide-y divide-trek-border">
+                        <!-- Populated dynamically by JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Table Footer -->
+            <div class="p-4 bg-trek-cardbg border-t border-trek-border flex justify-between items-center text-xs text-trek-gray">
+                <div>يتم حفظ أي تعديل في المتجر فوراً وبشكل مجاني تماماً.</div>
+                <div id="showing-count" class="font-bold">عرض 55 من 55 عجلة</div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ADD / EDIT PRODUCT MODAL -->
+    <div id="product-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative text-right animate-in fade-in zoom-in duration-150 max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal()" class="absolute top-5 left-5 w-8 h-8 rounded-full bg-trek-lightgray text-trek-black flex items-center justify-center hover:bg-gray-200 transition font-bold text-sm">✕</button>
+
+            <div class="flex items-center gap-3 mb-6 border-b border-trek-border pb-4">
+                <div class="w-10 h-10 rounded-xl bg-trek-red/10 text-trek-red flex items-center justify-center text-xl font-bold">
+                    🚲
+                </div>
+                <div>
+                    <h3 id="modal-heading" class="text-xl font-black text-trek-black">إضافة عجلة جديدة للمتجر</h3>
+                    <p class="text-xs text-trek-gray mt-0.5">أدخل تفاصيل العجلة وستظهر فوراً في كتالوج أبو الجوخ الرسمي</p>
+                </div>
+            </div>
+
+            <form onsubmit="saveProduct(event)" class="space-y-4">
+                <input type="hidden" id="edit-product-id" value="">
+
+                <!-- Name -->
+                <div>
+                    <label class="block text-xs font-bold text-trek-black mb-1.5">اسم العجلة والموديل *</label>
+                    <input type="text" id="input-name" required placeholder="مثال: ترنكس 136 برو ألومنيوم مقاس 29" class="w-full bg-trek-lightgray border border-trek-border focus:border-trek-black focus:bg-white text-xs rounded-xl p-3 outline-none transition font-semibold">
+                </div>
+
+                <!-- Price & Installment -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-trek-black mb-1.5">السعر بالجنيه المصري (ج.م) *</label>
+                        <input type="number" id="input-price" required oninput="calcInstallment(this.value)" placeholder="مثال: 11500" class="w-full bg-trek-lightgray border border-trek-border focus:border-trek-black focus:bg-white text-xs rounded-xl p-3 outline-none transition font-bold num-font">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-trek-black mb-1.5">قسط فاليو التقديري (12 شهر)</label>
+                        <input type="text" id="input-installment" readonly value="0 ج.م / شهر" class="w-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs rounded-xl p-3 outline-none font-bold">
+                    </div>
+                </div>
+
+                <!-- Category & Brand -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-trek-black mb-1.5">التصنيف *</label>
+                        <select id="input-category" required class="w-full bg-trek-lightgray border border-trek-border focus:border-trek-black focus:bg-white text-xs rounded-xl p-3 outline-none transition font-semibold">
+                            <option value="mountain">دراجات جبلية (Mountain)</option>
+                            <option value="road">دراجات سرعة وطريق (Road / Race)</option>
+                            <option value="kids">دراجات أطفال وبناتي (Kids)</option>
+                            <option value="fat">دبابات وفات بايك (Fat Bikes)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-trek-black mb-1.5">المقاس</label>
+                        <select id="input-size" class="w-full bg-trek-lightgray border border-trek-border focus:border-trek-black focus:bg-white text-xs rounded-xl p-3 outline-none transition font-semibold">
+                            <option value="29">مقاس 29 بوصة (كبار / سرعة قصوى)</option>
+                            <option value="26">مقاس 26 بوصة (متوسط / شبابي)</option>
+                            <option value="20">مقاس 20 بوصة (أولاد وبنات من 7 لـ 11 سنة)</option>
+                            <option value="16">مقاس 16 بوصة (أطفال من 4 لـ 7 سنوات)</option>
+                            <option value="12">مقاس 12 بوصة (أطفال صغار من 3 لـ 5 سنوات)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Specs -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-trek-black mb-1.5">مجموعة السرعات</label>
+                        <input type="text" id="input-gears" placeholder="مثال: شيمانو تورني 21 سرعة ياباني أصلي" class="w-full bg-trek-lightgray border border-trek-border focus:border-trek-black focus:bg-white text-xs rounded-xl p-3 outline-none transition font-medium">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-trek-black mb-1.5">خامة الشاسيه</label>
+                        <input type="text" id="input-frame" placeholder="مثال: ألومنيوم 6061 هيدروفورم خفيف" class="w-full bg-trek-lightgray border border-trek-border focus:border-trek-black focus:bg-white text-xs rounded-xl p-3 outline-none transition font-medium">
+                    </div>
+                </div>
+
+                <!-- Image Upload / Link -->
+                <div class="border border-dashed border-trek-border rounded-2xl p-4 bg-trek-cardbg">
+                    <label class="block text-xs font-bold text-trek-black mb-2">صورة العجلة (رابط مباشر أو رفع ملف)</label>
+                    <div class="flex flex-col sm:flex-row gap-3 items-center">
+                        <input type="text" id="input-img" oninput="previewImage(this.value)" placeholder="ضع رابط صورة العجلة هنا..." class="flex-1 bg-white border border-trek-border text-xs rounded-xl p-2.5 outline-none font-medium">
+                        <label class="bg-trek-black hover:bg-trek-charcoal text-white text-xs font-bold px-4 py-2.5 rounded-xl cursor-pointer transition">
+                            <span>رفع من الموبايل</span>
+                            <input type="file" accept="image/*" onchange="handleFileUpload(event)" class="hidden">
+                        </label>
+                    </div>
+
+                    <!-- Live Image Preview Box -->
+                    <div id="img-preview-box" class="mt-3 h-36 bg-white rounded-xl border border-trek-border flex items-center justify-center p-3 relative overflow-hidden">
+                        <img id="img-preview" src="https://media.zbooni.com/merchants/media/products/109246/1735216982659_croppedImg.jpg" alt="Preview" class="max-h-full object-contain">
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="pt-4 flex justify-end gap-3 border-t border-trek-border">
+                    <button type="button" onclick="closeModal()" class="px-5 py-2.5 rounded-xl text-xs font-bold text-trek-gray hover:bg-trek-lightgray transition">إلغاء</button>
+                    <button type="submit" class="px-7 py-2.5 rounded-xl text-xs font-black bg-trek-red hover:bg-trek-redhover text-white transition shadow-md">حفظ ونشر العجلة في المتجر</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- SCRIPT WITH CLEAN PRODUCT DATA AND REACTIVE ADMIN ACTIONS -->
+    <script>
+        // Load initial products from localStorage or default clean data
+        let products = [];
+
+        // Fetch products or load from local copy
+        const initialProducts = [
+            {"id": 1, "name": "ترنكس 136 برو ألومنيوم مقاس 29", "category": "mountain", "price": 11500, "size": "29", "gears": "شيمانو تورني 21 سرعة", "frame": "ألومنيوم 6061 معالج", "image": "https://media.zbooni.com/merchants/media/products/109246/1735216982659_croppedImg.jpg", "active": true},
+            {"id": 2, "name": "زوم 26 العالمية مساعدين هيدروليك", "category": "mountain", "price": 7500, "size": "26", "gears": "شيمانو 21 سرعة أصلي", "frame": "ألومنيوم خفيف", "image": "https://media.zbooni.com/merchants/media/products/109246/1735217352952_croppedImg.jpg", "active": true},
+            {"id": 3, "name": "فري استايل نيجر احترافية جادون 360", "category": "road", "price": 6900, "size": "20", "gears": "سرعة واحدة استايل", "frame": "فولاذ صلب هيدروفورم", "image": "https://media.zbooni.com/merchants/media/products/109246/1735153672953_croppedImg.jpg", "active": true},
+            {"id": 4, "name": "دبابة زوم مقاس عريض بنز كاوتش 4.0", "category": "fat", "price": 6900, "size": "26", "gears": "شيمانو 21 سرعة", "frame": "فولاذ معالج ضد الصدأ", "image": "https://media.zbooni.com/merchants/media/products/109246/1735153530582_croppedImg.jpg", "active": true},
+            {"id": 5, "name": "دراجة أطفال كاندي مقاس 16 بناتي باسكيت", "category": "kids", "price": 3800, "size": "16", "gears": "سرعة واحدة آمنة", "frame": "ألومنيوم خفيف مع سنادات", "image": "https://media.zbooni.com/merchants/media/products/109246/1735153902037_croppedImg.jpg", "active": true},
+            {"id": 6, "name": "دراجة جبلية زوم 24 للأولاد سرعات", "category": "mountain", "price": 5400, "size": "24", "gears": "شيمانو 18 سرعة", "frame": "ألومنيوم خفيف", "image": "https://media.zbooni.com/merchants/media/products/109246/1735216982659_croppedImg.jpg", "active": true},
+            {"id": 7, "name": "رودكس سباق احترافي أسفلت مقاس 28", "category": "road", "price": 14200, "size": "28", "gears": "شيمانو كلاريس 16 سرعة", "frame": "ألومنيوم طيران فائق الخفة", "image": "https://media.zbooni.com/merchants/media/products/109246/1735153672953_croppedImg.jpg", "active": true},
+            {"id": 8, "name": "عجلة دبابة جبال ثلجية كاوتش عريض", "category": "fat", "price": 8200, "size": "26", "gears": "شيمانو 24 سرعة", "frame": "ألومنيوم مقوى", "image": "https://media.zbooni.com/merchants/media/products/109246/1735153530582_croppedImg.jpg", "active": true}
+        ];
+
+        // Load or initialize
+        const saved = localStorage.getItem('abu_el_goukh_admin_products');
+        if (saved) {
+            try { products = JSON.parse(saved); } catch(e) { products = initialProducts; }
+        } else {
+            products = initialProducts;
+        }
+
+        let currentFilter = 'all';
+
+        function renderTable() {
+            const tbody = document.getElementById('products-table-body');
+            let filtered = products;
+
+            if (currentFilter !== 'all') {
+                filtered = filtered.filter(p => p.category === currentFilter);
+            }
+
+            const query = document.getElementById('search-input').value.trim().toLowerCase();
+            if (query) {
+                filtered = filtered.filter(p => p.name.toLowerCase().includes(query) || (p.gears && p.gears.toLowerCase().includes(query)));
+            }
+
+            document.getElementById('stat-total').innerText = products.length;
+            document.getElementById('showing-count').innerText = `عرض ${filtered.length} من أصل ${products.length} عجلة`;
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="text-center py-12 text-trek-gray">
+                            <div class="text-3xl mb-2">🔍</div>
+                            <div class="font-bold">لا توجد عجل مطابقة للبحث أو التصنيف</div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = filtered.map(p => {
+                const categoryNames = {
+                    mountain: 'جبلي (Mountain)',
+                    road: 'سرعة وطريق (Road)',
+                    kids: 'أطفال وبناتي (Kids)',
+                    fat: 'دبابات (Fat)'
+                };
+                const catLabel = categoryNames[p.category] || p.category;
+                const installment = Math.round(p.price / 12 * 1.15); // ValU approx 12 mo
+
+                return `
+                    <tr class="hover:bg-gray-50/80 transition group">
+                        <td class="py-3 px-4">
+                            <img src="${p.image}" class="w-12 h-12 object-contain bg-white rounded-lg border border-trek-border p-1 group-hover:scale-105 transition">
+                        </td>
+                        <td class="py-3 px-4 font-bold text-trek-black">
+                            <div class="text-xs line-clamp-1">${p.name}</div>
+                            <div class="text-[10px] text-trek-gray num-font">ID: #${p.id}</div>
+                        </td>
+                        <td class="py-3 px-4">
+                            <span class="bg-gray-100 text-trek-black font-semibold px-2 py-0.5 rounded text-[11px]">${catLabel}</span>
+                        </td>
+                        <td class="py-3 px-4 font-black text-trek-black num-font text-sm">
+                            ${Number(p.price).toLocaleString('en-US')} ج.م
+                        </td>
+                        <td class="py-3 px-4 text-emerald-700 font-bold num-font text-xs">
+                            ${installment} ج.م / شهر
+                        </td>
+                        <td class="py-3 px-4 text-trek-gray text-[11px]">
+                            <div>مقاس: <strong class="text-trek-black num-font">${p.size}"</strong></div>
+                            <div class="text-[10px] line-clamp-1">${p.gears || 'شيمانو'}</div>
+                        </td>
+                        <td class="py-3 px-4 text-center">
+                            <button onclick="toggleProductStatus(${p.id})" class="px-2.5 py-1 rounded-full text-[10px] font-black transition ${p.active ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-200 text-gray-600'}">
+                                ${p.active ? '● معروض بالمتجر' : '○ متوقف'}
+                            </button>
+                        </td>
+                        <td class="py-3 px-4 text-center">
+                            <div class="flex items-center justify-center gap-1.5">
+                                <button onclick="editProduct(${p.id})" class="p-1.5 rounded-lg bg-gray-100 hover:bg-trek-black hover:text-white transition" title="تعديل">
+                                    ✏️
+                                </button>
+                                <button onclick="deleteProduct(${p.id})" class="p-1.5 rounded-lg bg-red-50 hover:bg-red-600 hover:text-white text-red-600 transition" title="حذف">
+                                    🗑️
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function filterTable(cat) {
+            currentFilter = cat;
+            const buttons = ['all', 'mountain', 'road', 'kids', 'fat'];
+            buttons.forEach(b => {
+                const el = document.getElementById(`btn-tab-${b}`);
+                if (b === cat) {
+                    el.className = 'px-4 py-2 rounded-xl text-xs font-bold bg-trek-black text-white transition';
+                } else {
+                    el.className = 'px-4 py-2 rounded-xl text-xs font-bold bg-trek-lightgray hover:bg-gray-200 text-trek-black transition';
+                }
+            });
+            renderTable();
+        }
+
+        function searchTable(val) {
+            renderTable();
+        }
+
+        function calcInstallment(val) {
+            const num = Number(val) || 0;
+            const inst = Math.round(num / 12 * 1.15);
+            document.getElementById('input-installment').value = `${inst} ج.م / شهرياً`;
+        }
+
+        function previewImage(url) {
+            if (url) {
+                document.getElementById('img-preview').src = url;
+            }
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const dataUrl = e.target.result;
+                document.getElementById('input-img').value = dataUrl;
+                document.getElementById('img-preview').src = dataUrl;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function openAddModal() {
+            document.getElementById('edit-product-id').value = '';
+            document.getElementById('modal-heading').innerText = 'إضافة عجلة جديدة للمتجر';
+            document.getElementById('input-name').value = '';
+            document.getElementById('input-price').value = '';
+            document.getElementById('input-installment').value = '0 ج.م / شهر';
+            document.getElementById('input-category').value = 'mountain';
+            document.getElementById('input-size').value = '29';
+            document.getElementById('input-gears').value = 'شيمانو تورني 21 سرعة ياباني أصلي';
+            document.getElementById('input-frame').value = 'شاسيه ألومنيوم 6061 هيدروفورم خفيف';
+            document.getElementById('input-img').value = 'https://media.zbooni.com/merchants/media/products/109246/1735216982659_croppedImg.jpg';
+            document.getElementById('img-preview').src = 'https://media.zbooni.com/merchants/media/products/109246/1735216982659_croppedImg.jpg';
+
+            document.getElementById('product-modal').classList.remove('hidden');
+            document.getElementById('product-modal').classList.add('flex');
+        }
+
+        function editProduct(id) {
+            const p = products.find(x => x.id === id);
+            if (!p) return;
+            document.getElementById('edit-product-id').value = p.id;
+            document.getElementById('modal-heading').innerText = `تعديل العجلة: ${p.name}`;
+            document.getElementById('input-name').value = p.name;
+            document.getElementById('input-price').value = p.price;
+            calcInstallment(p.price);
+            document.getElementById('input-category').value = p.category;
+            document.getElementById('input-size').value = p.size || '26';
+            document.getElementById('input-gears').value = p.gears || '';
+            document.getElementById('input-frame').value = p.frame || '';
+            document.getElementById('input-img').value = p.image;
+            document.getElementById('img-preview').src = p.image;
+
+            document.getElementById('product-modal').classList.remove('hidden');
+            document.getElementById('product-modal').classList.add('flex');
+        }
+
+        function closeModal() {
+            document.getElementById('product-modal').classList.add('hidden');
+            document.getElementById('product-modal').classList.remove('flex');
+        }
+
+        function saveProduct(e) {
+            e.preventDefault();
+            const editId = document.getElementById('edit-product-id').value;
+            const name = document.getElementById('input-name').value;
+            const price = Number(document.getElementById('input-price').value);
+            const category = document.getElementById('input-category').value;
+            const size = document.getElementById('input-size').value;
+            const gears = document.getElementById('input-gears').value;
+            const frame = document.getElementById('input-frame').value;
+            const image = document.getElementById('input-img').value;
+
+            if (editId) {
+                // Edit existing
+                const index = products.findIndex(x => x.id == editId);
+                if (index !== -1) {
+                    products[index] = {
+                        ...products[index],
+                        name, price, category, size, gears, frame, image
+                    };
+                }
+            } else {
+                // Add new
+                const newId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
+                products.unshift({
+                    id: newId,
+                    name, price, category, size, gears, frame, image,
+                    active: true
+                });
+            }
+
+            // Save to localStorage
+            localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(products));
+            closeModal();
+            renderTable();
+            alert('تم حفظ ونشر العجلة بنجاح في المتجر!');
+        }
+
+        function toggleProductStatus(id) {
+            const p = products.find(x => x.id === id);
+            if (p) {
+                p.active = !p.active;
+                localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(products));
+                renderTable();
+            }
+        }
+
+        function deleteProduct(id) {
+            if (confirm('هل أنت متأكد من حذف هذه العجلة من المتجر؟')) {
+                products = products.filter(x => x.id !== id);
+                localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(products));
+                renderTable();
+            }
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', () => {
+            renderTable();
+        });
+    </script>
+</body>
+</html>

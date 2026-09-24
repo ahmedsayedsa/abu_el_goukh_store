@@ -2242,6 +2242,14 @@
             if (document.getElementById('cod-fee')) document.getElementById('cod-fee').value = cd.fee || 0;
             if (document.getElementById('cod-max')) document.getElementById('cod-max').value = cd.maxLimit || 35000;
             if (document.getElementById('cod-inspection')) document.getElementById('cod-inspection').checked = cd.allowInspection !== false;
+        // PayTabs
+        const pt = cfg.paytabs || {};
+        if (document.getElementById('paytabs-enabled')) document.getElementById('paytabs-enabled').checked = pt.enabled !== false;
+        if (document.getElementById('paytabs-mode')) document.getElementById('paytabs-mode').value = pt.mode || 'live';
+        if (document.getElementById('paytabs-profile-id')) document.getElementById('paytabs-profile-id').value = pt.profileId || '';
+        if (document.getElementById('paytabs-server-key')) document.getElementById('paytabs-server-key').value = pt.serverKey || '';
+        if (document.getElementById('paytabs-client-key')) document.getElementById('paytabs-client-key').value = pt.clientKey || '';
+        
         }
 
         function collectPaymentSettingsFromUI() {

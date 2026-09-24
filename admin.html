@@ -2288,6 +2288,13 @@
                     maxLimit: Number(document.getElementById('cod-max') ? document.getElementById('cod-max').value : 35000),
                     allowInspection: document.getElementById('cod-inspection') ? document.getElementById('cod-inspection').checked : true
                 },
+                paytabs: {
+                    enabled: document.getElementById('paytabs-enabled') ? document.getElementById('paytabs-enabled').checked : false,
+                    mode: document.getElementById('paytabs-mode') ? document.getElementById('paytabs-mode').value : 'live',
+                    profileId: document.getElementById('paytabs-profile-id') ? document.getElementById('paytabs-profile-id').value.trim() : '',
+                    serverKey: document.getElementById('paytabs-server-key') ? document.getElementById('paytabs-server-key').value.trim() : '',
+                    clientKey: document.getElementById('paytabs-client-key') ? document.getElementById('paytabs-client-key').value.trim() : ''
+                },
                 updatedAt: new Date().toISOString()
             };
         }

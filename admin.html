@@ -577,7 +577,50 @@
 
             </div>
 
-            <!-- 5. WEBHOOK & CALLBACK URLS -->
+<!-- 4.5. PAYTABS (باي تابس) -->
+<div class="bg-white rounded-2xl border border-trek-border shadow-sm p-6 space-y-5">
+    <div class="flex items-center justify-between border-b border-trek-border pb-4">
+        <div class="flex items-center gap-3">
+            <span class="text-2xl font-black text-blue-600">🟦</span>
+            <div>
+                <h3 class="text-base font-black text-trek-black">PayTabs (باي تابس)</h3>
+                <p class="text-[11px] text-trek-gray">دفع إلكتروني عبر بوابة PayTabs مع دعم بيئات live و test.</p>
+            </div>
+        </div>
+        <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" id="paytabs-enabled" class="sr-only peer">
+            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+            <span class="mr-2 text-xs font-bold text-trek-black">مفعل</span>
+        </label>
+    </div>
+
+    <!-- Environment Mode Selector -->
+    <div class="bg-trek-lightgray/70 p-3 rounded-xl flex items-center justify-between text-xs">
+        <span class="font-bold text-trek-black">بيئة التشغيل (Environment):</span>
+        <select id="paytabs-mode" class="p-1.5 px-3 rounded-lg border border-trek-border bg-white text-xs font-bold outline-none">
+            <option value="live">🚀 بيئة الإنتاج الحقيقية (Live Production)</option>
+            <option value="test">🧪 بيئة الاختبار التجريبية (Sandbox / Test)</option>
+        </select>
+    </div>
+
+    <!-- Keys Inputs -->
+    <div class="space-y-3">
+        <div>
+            <label class="block text-xs font-bold text-trek-black mb-1">Profile ID:</label>
+            <input type="text" id="paytabs-profile-id" placeholder="Your PayTabs Profile ID" class="w-full p-2.5 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white outline-none">
+        </div>
+        <div>
+            <label class="block text-xs font-bold text-trek-black mb-1">Server Key:</label>
+            <input type="password" id="paytabs-server-key" placeholder="Your Server Key" class="w-full p-2.5 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white outline-none">
+        </div>
+        <div>
+            <label class="block text-xs font-bold text-trek-black mb-1">Client Key:</label>
+            <input type="text" id="paytabs-client-key" placeholder="Your Client Key" class="w-full p-2.5 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white outline-none">
+        </div>
+    </div>
+</div>
+
+<!-- 5. WEBHOOK & CALLBACK URLS -->
             <div class="bg-white rounded-2xl border border-trek-border shadow-sm p-6 space-y-4">
                 <div class="flex items-center gap-2 text-trek-black">
                     <span class="text-xl">🔗</span>
@@ -2147,6 +2190,13 @@
                 fee: 0,
                 maxLimit: 35000,
                 allowInspection: true
+            },
+            paytabs: {
+                enabled: false,
+                mode: 'live',
+                profileId: '',
+                serverKey: '',
+                clientKey: ''
             }
         };
 

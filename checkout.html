@@ -684,62 +684,44 @@
                 btn.innerHTML = `<svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg> <span>جاري التحويل لبوابة الدفع…</span>`;
 
                 try {
-                    const cartDesc = cart.map(i => i.name).join(' | ').substring(0, 100);
-                    const response = await fetch(ptEndpoint, {
+                    const cartDesc = cart.map(i => i.name).join(' | ');
+                    const returnUrl = window.location.origin + '/checkout?payment=success&order=' + orderId;
+
+                    // Call our Vercel serverless proxy (solves CORS issue)
+                    const response = await fetch('/api/paytabs-create', {
                         method: 'POST',
-                        headers: {
-                            'Authorization': serverKey,
-                            'Content-Type': 'application/json'
-                        },
+                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                            profile_id: parseInt(profileId),
-                            tran_type: 'sale',
-                            tran_class: 'ecom',
-                            cart_id: orderId,
-                            cart_currency: 'EGP',
-                            cart_amount: total,
-                            cart_description: 'أبو الجوخ 1925 – ' + cartDesc,
-                            customer_details: {
-                                name: name,
-                                phone: phone,
-                                email: 'customer@abu-el-goukh.com',
-                                street1: address || city,
-                                city: city || gov,
-                                state: gov,
-                                country: 'EG',
-                                zip: '12345'
-                            },
-                            shipping_details: {
-                                name: name,
-                                phone: phone,
-                                email: 'customer@abu-el-goukh.com',
-                                street1: address || city,
-                                city: city || gov,
-                                state: gov,
-                                country: 'EG',
-                                zip: '12345'
-                            },
-                            return: returnUrl,
-                            callback: callbackUrl
+                            profileId,
+                            serverKey,
+                            mode: ptMode,
+                            orderId,
+                            total,
+                            cartDescription: 'أبو الجوخ 1925 – ' + cartDesc,
+                            customerName: name,
+                            customerPhone: phone,
+                            customerCity: city || gov,
+                            customerState: gov,
+                            customerAddress: address,
+                            returnUrl
                         })
                     });
 
                     const data = await response.json();
 
                     if (data && data.redirect_url) {
-                        // Clear cart before redirect
                         localStorage.removeItem('abu_el_goukh_cart');
                         window.location.href = data.redirect_url;
                         return;
                     } else {
-                        const errMsg = (data && (data.message || data.code)) ? JSON.stringify(data) : 'خطأ غير محدد';
+                        const errMsg = (data && (data.message || data.error)) ? JSON.stringify(data) : 'لم يتم استلام رابط الدفع';
                         throw new Error(errMsg);
                     }
                 } catch (err) {
                     console.error('PayTabs error:', err);
                     btn.disabled = false;
                     btn.innerHTML = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> <span>تأكيد الطلب وشحن الدراجة الآن</span>`;
-                    alert('⚠️ تعذر الاتصال ببوابة PayTabs:\n' + err.message + '\n\nتأكد من صحة الـ Profile ID والـ Server Key في إعدادات الأدمن، أو اختر طريقة دفع أخرى.');
+                    alert('⚠️ تعذر التحويل لبوابة PayTabs:\n' + err.message + '\n\nتأكد من صحة البيانات في إعدادات الأدمن.');
                     return;
                 }
             }

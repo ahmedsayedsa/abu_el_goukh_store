@@ -758,11 +758,14 @@
                     </div>
 
                     <div class="space-y-2">
-                        <button onclick="addToCartCurrent()" class="w-full py-3.5 bg-trek-black hover:bg-trek-charcoal text-white font-bold text-xs rounded-sm transition flex items-center justify-center gap-2">
+                        <a id="modal-full-page-btn" href="product.html" class="w-full py-3 bg-trek-red hover:bg-red-700 text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-2 shadow-sm">
+                            <span>🔍 فتح صفحة المنتج والمواصفات الكاملة ↗</span>
+                        </a>
+                        <button onclick="addToCartCurrent()" class="w-full py-3 bg-trek-black hover:bg-trek-charcoal text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-2">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
                             <span>إضافة إلى سلة الشراء ومتابعة الدفع</span>
                         </button>
-                        <a id="modal-whatsapp-link" href="#" target="_blank" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-sm transition flex items-center justify-center gap-2">
+                        <a id="modal-whatsapp-link" href="#" target="_blank" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition flex items-center justify-center gap-2">
                             <span>طلب واستفسار عبر واتساب مباشرة</span>
                         </a>
                     </div>
@@ -1573,7 +1576,7 @@
                 const badgeClass = p.badge === 'FLAGSHIP' ? 'bg-trek-red text-white' : 'bg-trek-black text-white';
 
                 return `
-                    <div class="trek-card rounded-xl p-5 flex flex-col justify-between group cursor-pointer" onclick="openProductQuickview(${p.id})">
+                    <div class="trek-card rounded-xl p-5 flex flex-col justify-between group cursor-pointer hover:border-trek-black transition relative" onclick="window.location.href='product.html?id=' + ${p.id}">
                         <div>
                             <!-- Card Header: Badges & SKU -->
                             <div class="flex justify-between items-center mb-3">
@@ -1614,7 +1617,17 @@
                             </div>
                             <div class="text-[10px] text-trek-gray mt-1 flex justify-between items-center">
                                 <span>تقسيط من <strong class="text-trek-black num-font font-bold">${installFormatted}</strong> ج.م/ش</span>
-                                <span class="text-trek-red font-bold text-[11px] group-hover:translate-x-[-2px] transition-transform">التفاصيل ←</span>
+                                <span class="text-trek-red font-bold text-[11px] group-hover:translate-x-[-2px] transition-transform">المواصفات بالكامل ←</span>
+                            </div>
+
+                            <!-- Quick Action Buttons -->
+                            <div class="flex items-center gap-2 mt-3 pt-2 border-t border-trek-border/60">
+                                <button onclick="event.stopPropagation(); buyNowDirect(${p.id});" class="flex-grow py-2 px-3 bg-trek-red hover:bg-red-700 text-white font-bold text-[11px] rounded-lg transition flex items-center justify-center gap-1 shadow-sm">
+                                    <span>⚡ شراء فوري</span>
+                                </button>
+                                <button onclick="event.stopPropagation(); openProductQuickview(${p.id});" class="p-2 bg-trek-lightgray hover:bg-trek-border text-trek-black rounded-lg transition text-xs font-bold" title="نظرة سريعة">
+                                    <span>🔍</span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -1693,6 +1706,8 @@
             document.getElementById('modal-install').innerText = Math.round(p.price / 12).toLocaleString('en-US');
             document.getElementById('modal-img').src = p.image;
             document.getElementById('modal-sku').innerText = 'SKU: ' + p.sku;
+            const fullPageBtn = document.getElementById('modal-full-page-btn');
+            if (fullPageBtn) fullPageBtn.href = 'product.html?id=' + p.id;
             document.getElementById('modal-whatsapp-link').href = "https://wa.me/201202925192?text=" + encodeURIComponent("استفسار بخصوص دراجة أبو الجوخ: " + p.name + " (سعر: " + p.price + " ج.م)");
 
             const m = document.getElementById('product-modal');

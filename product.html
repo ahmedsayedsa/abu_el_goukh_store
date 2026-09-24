@@ -793,7 +793,7 @@
                         <li><a href="checkout.html" class="hover:text-white transition">سلة الشراء وإتمام الطلب</a></li>
                         <li><a href="warranty.html" class="hover:text-white transition">شهادة الضمان المعتمد</a></li>
                         <li><a href="shipping.html" class="hover:text-white transition">الشحن والتوصيل للمحافظات</a></li>
-                        <li><a href="admin.html" target="_blank" class="text-emerald-400 hover:text-emerald-300 transition">لوحة التحكم الإدارية</a></li>
+                        
                     </ul>
                 </div>
 
@@ -901,7 +901,7 @@
                 <a href="checkout.html" class="block py-2 px-3 rounded-xl hover:bg-trek-lightgray transition">💳 إتمام الطلب وسلة الشراء</a>
                 <a href="warranty.html" class="block py-2 px-3 rounded-xl hover:bg-trek-lightgray transition">🛡️ شهادة الضمان المعتمد</a>
                 <a href="shipping.html" class="block py-2 px-3 rounded-xl hover:bg-trek-lightgray transition">🚚 الشحن للمحافظات</a>
-                <a href="admin.html" target="_blank" class="block py-2 px-3 rounded-xl hover:bg-trek-lightgray text-emerald-600 transition">🔒 لوحة التحكم (الادارة)</a>
+                
             </nav>
         </div>
 
@@ -1900,7 +1900,7 @@
                     <div class="bg-white border border-trek-border hover:border-trek-black rounded-2xl p-4 transition-all duration-300 hover:shadow-lg flex flex-col justify-between group">
                         <a href="product.html?id=${p.id}" class="block">
                             <div class="h-40 flex items-center justify-center p-2 relative bg-trek-lightgray/50 rounded-xl mb-3">
-                                <img src="${p.image}" alt="${p.name}" class="max-h-full object-contain transition-transform duration-300 group-hover:scale-105">
+                                <img src="${p.image}" alt="${p.name}" class="max-h-full object-contain transition-transform duration-300 group-hover:scale-105" onerror="if(!this.dataset.triedBackup){this.dataset.triedBackup=1; this.src='images/bike_'+p.id+'.jpg';}">
                             </div>
                             <span class="text-[10px] font-bold text-trek-red uppercase num-font">${p.sku}</span>
                             <h3 class="text-xs font-bold text-trek-black line-clamp-2 mt-1 group-hover:text-trek-red transition">
@@ -1972,8 +1972,12 @@
             document.getElementById('product-specs-summary').innerText = currentProduct.specs || 'شاسيه ألومنيوم طيران خفيف • سرعات شيمانو ياباني • فرامل ديسك أصلية';
             
             // Image
-            document.getElementById('product-main-image').src = currentProduct.image;
-            document.getElementById('thumb-img-0').src = currentProduct.image;
+            const mainImgEl = document.getElementById('product-main-image');
+            mainImgEl.src = currentProduct.image;
+            mainImgEl.onerror = function(){ if(!this.dataset.triedBackup){ this.dataset.triedBackup=1; this.src='images/bike_'+currentProduct.id+'.jpg'; } };
+            const thumbImg0 = document.getElementById('thumb-img-0');
+            thumbImg0.src = currentProduct.image;
+            thumbImg0.onerror = function(){ if(!this.dataset.triedBackup){ this.dataset.triedBackup=1; this.src='images/bike_'+currentProduct.id+'.jpg'; } };
 
             // Pricing
             const price = Number(currentProduct.price) || 0;

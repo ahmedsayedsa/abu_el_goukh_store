@@ -688,8 +688,6 @@
                     جميع الحقوق محفوظة © 2026 شركة أبو الجوخ لتجارة الدراجات. تصميم وتنفيذ DOTS Advertising Agency.
                 </div>
                 <div class="flex items-center gap-4">
-                    <a href="admin.html" target="_blank" class="hover:text-white text-emerald-400 font-bold flex items-center gap-1">🔒 لوحة التحكم (إدارة العجل)</a>
-                    <span>•</span>
                     <a href="warranty.html#terms" class="hover:text-white">الشروط والأحكام</a>
                     <span>•</span>
                     <a href="warranty.html#privacy" class="hover:text-white">سياسة الخصوصية</a>
@@ -1586,7 +1584,7 @@
 
                             <!-- Bike Image Container with Trek Studio Shadow -->
                             <div class="h-44 sm:h-48 flex items-center justify-center my-2 p-2 relative bike-studio-shadow">
-                                <img src="${p.image}" alt="${p.name}" loading="lazy" class="max-h-full object-contain relative z-10 transition-transform duration-300 group-hover:scale-105">
+                                <img src="${p.image}" alt="${p.name}" loading="lazy" class="max-h-full object-contain relative z-10 transition-transform duration-300 group-hover:scale-105" onerror="if(!this.dataset.triedBackup){this.dataset.triedBackup=1; this.src='images/bike_'+${p.id}+'.jpg';}">
                             </div>
 
                             <!-- Colorway Swatches (Trek Style) -->
@@ -1705,6 +1703,12 @@
             document.getElementById('modal-price').innerText = Number(p.price).toLocaleString('en-US');
             document.getElementById('modal-install').innerText = Math.round(p.price / 12).toLocaleString('en-US');
             document.getElementById('modal-img').src = p.image;
+            document.getElementById('modal-img').onerror = function() {
+                if (!this.dataset.triedBackup) {
+                    this.dataset.triedBackup = 1;
+                    this.src = 'images/bike_' + p.id + '.jpg';
+                }
+            };
             document.getElementById('modal-sku').innerText = 'SKU: ' + p.sku;
             const fullPageBtn = document.getElementById('modal-full-page-btn');
             if (fullPageBtn) fullPageBtn.href = 'product.html?id=' + p.id;
@@ -1946,7 +1950,6 @@
                 <a href="warranty.html" class="block py-2.5 px-3 rounded-xl hover:bg-trek-lightgray transition">🛡️ شهادة الضمان المعتمد</a>
                 <a href="shipping.html" class="block py-2.5 px-3 rounded-xl hover:bg-trek-lightgray transition">🚚 الشحن للمحافظات</a>
                 <a href="index.html#locations" class="block py-2.5 px-3 rounded-xl hover:bg-trek-lightgray transition">📍 فروعنا ومراكز الخدمة</a>
-                <a href="admin.html" target="_blank" class="block py-2.5 px-3 rounded-xl hover:bg-trek-lightgray text-emerald-600 transition">🔒 لوحة التحكم (إدارة المتجر)</a>
             </nav>
         </div>
 

@@ -738,7 +738,8 @@
 
                 try {
                     const cartDesc = cart.map(i => i.name).join(' | ');
-                    const returnUrl = window.location.origin + '/checkout?payment=paytabs_success&order=' + orderId;
+                    localStorage.setItem('abu_last_order', JSON.stringify(orderData));
+                    const returnUrl = window.location.origin + '/order-success.html?payment=paytabs_success&order=' + orderId;
 
                     const response = await fetch('/api/paytabs-create', {
                         method: 'POST',
@@ -802,7 +803,8 @@
 
                     try {
                         const cartDesc = cart.map(i => i.name).join(' | ');
-                        const returnUrl = window.location.origin + '/checkout?payment=paymob_success&order=' + orderId;
+                        localStorage.setItem('abu_last_order', JSON.stringify(orderData));
+                        const returnUrl = window.location.origin + '/order-success.html?payment=paymob_success&order=' + orderId;
 
                         const response = await fetch('/api/paymob-create', {
                             method: 'POST',
@@ -866,7 +868,8 @@
 
                 try {
                     const cartDesc = cart.map(i => i.name).join(' | ');
-                    const returnUrl = window.location.origin + '/checkout?payment=fawry_success&order=' + orderId;
+                    localStorage.setItem('abu_last_order', JSON.stringify(orderData));
+                    const returnUrl = window.location.origin + '/order-success.html?payment=fawry_success&order=' + orderId;
 
                     const response = await fetch('/api/fawry-create', {
                         method: 'POST',
@@ -906,12 +909,15 @@
             }
 
             // ─────────────────────────────────────────────────────────────
-            // Normal flow: show success modal + WhatsApp
+            // Normal flow: Save Order & Redirect to Order Confirmation Invoice
             // ─────────────────────────────────────────────────────────────
+            // Store last order for order-success.html
+            localStorage.setItem('abu_last_order', JSON.stringify(orderData));
+
             // Clear Cart
             localStorage.removeItem('abu_el_goukh_cart');
 
-            // Format WhatsApp Message
+            // Format WhatsApp Message (saved in localStorage for convenience)
             const itemsText = cart.map(item => `• ${item.name} (${Number(item.price).toLocaleString('en-US')} ج.م)`).join('%0A');
             const waMessage = 
                 `*طلب جديد من متجر أبو الجوخ 1925 الإلكتروني*%0A` +
@@ -935,22 +941,18 @@
                 `يرجى تأكيد ميعاد الشحن والتوصيل. شكراً لكم!`;
 
             const waUrl = `https://wa.me/201202925192?text=${waMessage}`;
+            localStorage.setItem('abu_last_order_wa', waUrl);
 
-            // Show Confirmation Modal
-            document.getElementById('modal-order-id').innerText = orderId;
-            document.getElementById('modal-order-customer').innerText = `${name} (${gov})`;
-            document.getElementById('modal-order-payment').innerText = paymentMethod;
-            document.getElementById('modal-order-total').innerText = total.toLocaleString('en-US') + ' ج.م';
-            document.getElementById('modal-whatsapp-btn').href = waUrl;
+            const btn = document.getElementById('btn-submit-order');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = `<svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg> <span>جاري تسجيل طلبك وإصدار الفاتورة…</span>`;
+            }
 
-            const modal = document.getElementById('success-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-
-            // Automatically open WhatsApp in new tab after 800ms
+            // Redirect smoothly to dedicated order confirmation invoice page
             setTimeout(() => {
-                window.open(waUrl, '_blank');
-            }, 800);
+                window.location.href = `order-success.html?order=${orderId}`;
+            }, 500);
         }
 
         window.addEventListener('DOMContentLoaded', initCheckout);

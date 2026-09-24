@@ -76,7 +76,7 @@
         }
     </style>
 </head>
-<body class="antialiased min-h-screen flex flex-col text-right">
+<body class="antialiased min-h-screen flex flex-col text-right pb-20 md:pb-0">
 
     <!-- TOP ANNOUNCEMENT & UTILITY BAR -->
     <div class="bg-black text-white text-[11px] sm:text-xs py-2 px-4 border-b border-white/10">
@@ -2026,9 +2026,17 @@
             document.getElementById('inst-24').innerText = fmt(Math.round(price / 24)) + ' ج.م';
             document.getElementById('inst-36').innerText = fmt(Math.round(price / 36)) + ' ج.م';
 
+            // Sync Mobile Sticky Bottom Bar
+            const stickyPrice = document.getElementById('mobile-sticky-price');
+            if (stickyPrice) stickyPrice.innerText = fmt(price);
+            const stickyInst = document.getElementById('mobile-sticky-inst');
+            if (stickyInst) stickyInst.innerText = fmt(Math.round(price / 36));
+
             // WhatsApp Direct Inquiry Link
             const waText = encodeURIComponent("مرحباً أبو الجوخ، أود الاستفسار وحجز دراجة: " + currentProduct.name + " (كود: " + currentProduct.sku + ") بسعر " + fmt(price) + " ج.م");
             document.getElementById('product-whatsapp-btn').href = "https://wa.me/201202925192?text=" + waText;
+            const stickyWa = document.getElementById('mobile-sticky-wa');
+            if (stickyWa) stickyWa.href = "https://wa.me/201202925192?text=" + waText;
 
             // Trigger E-Commerce Pixels ViewContent Event
             if (window.trackStoreEvent) {
@@ -2058,5 +2066,31 @@
             renderRelatedProducts(currentProduct.cat_key, currentProduct.id);
         });
     </script>
+
+    <!-- MOBILE STICKY BOTTOM PURCHASE BAR (Ultra High Conversion) -->
+    <div class="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-lg border-t border-trek-border shadow-[0_-4px_25px_rgba(0,0,0,0.10)] py-2.5 px-4 flex items-center justify-between gap-3 md:hidden">
+        <div>
+            <div class="flex items-baseline gap-1">
+                <span id="mobile-sticky-price" class="text-base font-black text-trek-black num-font">7,950</span>
+                <span class="text-[10px] font-bold text-trek-gray">ج.م</span>
+            </div>
+            <div class="text-[9px] text-emerald-700 font-bold whitespace-nowrap">
+                تقسيط من <strong class="num-font" id="mobile-sticky-inst">275</strong> ج.م/ش
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2 flex-grow justify-end">
+            <button onclick="buyNowCurrentProduct()" class="py-2.5 px-4 bg-trek-red hover:bg-red-700 text-white font-black text-xs rounded-xl shadow-md flex items-center justify-center gap-1.5 flex-grow sm:flex-grow-0">
+                <span>⚡ شراء فوري</span>
+            </button>
+            <button onclick="addToCartCurrentProduct()" class="p-2.5 bg-trek-black hover:bg-neutral-800 text-white rounded-xl text-xs font-bold" title="أضف إلى السلة">
+                <span>🛒</span>
+            </button>
+            <a id="mobile-sticky-wa" href="https://wa.me/201202925192" target="_blank" class="p-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold" title="محادثة واتساب">
+                <span>💬</span>
+            </a>
+        </div>
+    </div>
+
 </body>
 </html>

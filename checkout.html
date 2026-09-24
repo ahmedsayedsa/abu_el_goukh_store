@@ -681,6 +681,15 @@
             const orderId = 'AEG-' + Math.floor(100000 + Math.random() * 900000);
             const orderDate = new Date().toLocaleString('ar-EG');
 
+            let paymentStatus = 'pending';
+            if (paymentMethod === 'الدفع عند الاستلام') {
+                paymentStatus = 'cod';
+            } else if (paymentMethod === 'instapay') {
+                paymentStatus = 'pending_verification';
+            } else {
+                paymentStatus = 'pending';
+            }
+
             const orderData = {
                 id: orderId,
                 date: orderDate,
@@ -692,6 +701,9 @@
                 address: address,
                 notes: notes,
                 payment: paymentMethod,
+                paymentStatus: paymentStatus,
+                paymentRef: '',
+                paidAt: '',
                 items: cart,
                 subtotal: subtotal,
                 shipping: shippingFee,
@@ -700,11 +712,19 @@
                 status: 'جديد (قيد المراجعة)'
             };
 
-            // Save order to localStorage for Admin Panel
+            // Save order to localStorage and Cloud Firebase DB for Admin Panel
             try {
                 let existingOrders = JSON.parse(localStorage.getItem('abu_el_goukh_orders') || '[]');
                 existingOrders.unshift(orderData);
                 localStorage.setItem('abu_el_goukh_orders', JSON.stringify(existingOrders));
+                localStorage.setItem('abu_last_order', JSON.stringify(orderData));
+
+                // Sync directly to Cloud Database so Admin sees it in real-time
+                fetch('https://abu-el-goukh-store-default-rtdb.firebaseio.com/orders/' + orderId + '.json', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(orderData)
+                }).catch(e => console.warn('Firebase order sync error:', e));
             } catch (err) {
                 console.error(err);
             }

@@ -416,20 +416,76 @@
             
             methodEl.innerText = paymentDisplay;
 
-            if (payStatus && payStatus.includes('success')) {
+            const isSuccess = (payStatus && payStatus.includes('success')) || (urlParams.get('respStatus') === 'A') || (urlParams.get('success') === 'true');
+            const isFailed = (payStatus && (payStatus.includes('fail') || payStatus.includes('cancel'))) || (urlParams.get('respStatus') === 'D') || (urlParams.get('respStatus') === 'C') || (urlParams.get('success') === 'false');
+            const txnRef = urlParams.get('tranRef') || urlParams.get('id') || urlParams.get('payment_id') || ('TXN-' + Math.floor(100000 + Math.random() * 900000));
+
+            if (isSuccess) {
+                order.paymentStatus = 'paid';
+                order.paidAt = order.paidAt || new Date().toLocaleString('ar-EG');
+                order.paymentRef = txnRef;
+
                 statusEl.innerText = '✓ تم السداد إلكترونياً بنجاح';
                 statusEl.className = 'font-bold text-emerald-700 px-2 py-0.5 bg-emerald-50 rounded border border-emerald-200';
 
                 bannerEl.classList.remove('hidden');
                 bannerEl.className = 'bg-emerald-600 text-white p-4 rounded-2xl mb-6 text-center font-bold text-xs sm:text-sm shadow-md flex items-center justify-center gap-2';
-                bannerEl.innerHTML = `<span>✓ تم استلام وتأكيد سداد دفعتك الإلكترونية بنجاح للطلب #${order.id}! جاري تجهيز دراجتك وضبطها فوراً للشحن.</span>`;
-            } else if (order.payment && (order.payment.includes('كاش') || order.payment.includes('الاستلام') || order.payment === 'الدفع عند الاستلام')) {
-                statusEl.innerText = 'قيد التحصيل عند الاستلام والمعاينة';
-                statusEl.className = 'font-bold text-amber-700 px-2 py-0.5 bg-amber-50 rounded border border-amber-200';
+                bannerEl.innerHTML = `<span>✓ تم استلام وتأكيد سداد دفعتك الإلكترونية بنجاح للطلب #${order.id}! رقم العملية البنكية: (${txnRef}).</span>`;
+
+                // Sync to Cloud DB
+                try {
+                    fetch('https://abu-el-goukh-store-default-rtdb.firebaseio.com/orders/' + order.id + '.json', {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ paymentStatus: 'paid', paidAt: order.paidAt, paymentRef: txnRef })
+                    }).catch(e => console.warn(e));
+                } catch(e) { console.warn(e); }
+
+            } else if (isFailed) {
+                order.paymentStatus = 'failed';
+                statusEl.innerText = '❌ لم يكتمل السداد (فشل / تم الإلغاء)';
+                statusEl.className = 'font-bold text-rose-700 px-2 py-0.5 bg-rose-50 rounded border border-rose-200';
+
+                bannerEl.classList.remove('hidden');
+                bannerEl.className = 'bg-rose-600 text-white p-4 rounded-2xl mb-6 text-center font-bold text-xs sm:text-sm shadow-md flex flex-col sm:flex-row items-center justify-between gap-3';
+                bannerEl.innerHTML = `
+                    <span>⚠️ لم يكتمل سداد الدفعة الإلكترونية (تم رفض أو إلغاء المعاملة من البنك). طلبك مسجل برقم #${order.id} ويمكنك إعادة المحاولة أو التحويل للدفع عند الاستلام.</span>
+                    <a href="checkout.html" class="px-4 py-1.5 bg-white text-rose-700 font-bold rounded-lg text-xs hover:bg-rose-50 transition whitespace-nowrap">إعادة المحاولة 🔄</a>
+                `;
+
+                // Sync to Cloud DB
+                try {
+                    fetch('https://abu-el-goukh-store-default-rtdb.firebaseio.com/orders/' + order.id + '.json', {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ paymentStatus: 'failed' })
+                    }).catch(e => console.warn(e));
+                } catch(e) { console.warn(e); }
+
+            } else if (order.paymentStatus === 'paid') {
+                statusEl.innerText = '✓ تم السداد إلكترونياً بنجاح';
+                statusEl.className = 'font-bold text-emerald-700 px-2 py-0.5 bg-emerald-50 rounded border border-emerald-200';
+            } else if (order.paymentStatus === 'pending_verification' || order.payment === 'instapay') {
+                statusEl.innerText = '📱 بانتظار تأكيد التحويل (إنستاباي / محفظة كاش)';
+                statusEl.className = 'font-bold text-purple-700 px-2 py-0.5 bg-purple-50 rounded border border-purple-200';
+            } else if (order.paymentStatus === 'cod' || (order.payment && (order.payment.includes('كاش') || order.payment.includes('الاستلام')))) {
+                statusEl.innerText = '💵 قيد التحصيل عند الاستلام والمعاينة';
+                statusEl.className = 'font-bold text-blue-700 px-2 py-0.5 bg-blue-50 rounded border border-blue-200';
             } else {
-                statusEl.innerText = 'بانتظار التأكيد';
-                statusEl.className = 'font-bold text-slate-700 px-2 py-0.5 bg-slate-100 rounded';
+                statusEl.innerText = '🟡 بانتظار الدفع الإلكتروني';
+                statusEl.className = 'font-bold text-amber-700 px-2 py-0.5 bg-amber-50 rounded border border-amber-200';
             }
+
+            // Update localStorage with updated order
+            try {
+                localStorage.setItem('abu_last_order', JSON.stringify(order));
+                let localOrders = JSON.parse(localStorage.getItem('abu_el_goukh_orders') || '[]');
+                const idx = localOrders.findIndex(o => o.id === order.id);
+                if (idx !== -1) {
+                    localOrders[idx] = { ...localOrders[idx], ...order };
+                    localStorage.setItem('abu_el_goukh_orders', JSON.stringify(localOrders));
+                }
+            } catch(e) { console.warn(e); }
 
             // WhatsApp Button Link
             const waMsg = 

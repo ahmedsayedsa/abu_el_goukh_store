@@ -287,20 +287,28 @@
         <!-- ORDERS VIEW -->
         <div id="view-orders" class="hidden space-y-6">
             <!-- Orders Toolbar -->
-            <div class="bg-white p-4 rounded-2xl border border-trek-border shadow-sm flex flex-col sm:flex-row justify-between items-center gap-4">
-                <div class="flex items-center gap-2">
-                    <span class="text-xs font-black text-trek-black">تصفية الطلبات:</span>
-                    <button onclick="filterOrders('all')" id="btn-ord-all" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-trek-black text-white transition">الكل</button>
-                    <button onclick="filterOrders('جديد')" id="btn-ord-new" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-trek-lightgray text-trek-black hover:bg-gray-200 transition">جديد</button>
-                    <button onclick="filterOrders('تم الشحن')" id="btn-ord-shipped" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-trek-lightgray text-trek-black hover:bg-gray-200 transition">تم الشحن</button>
-                    <button onclick="filterOrders('مكتمل')" id="btn-ord-completed" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-trek-lightgray text-trek-black hover:bg-gray-200 transition">مكتمل</button>
+            <div class="bg-white p-4 rounded-2xl border border-trek-border shadow-sm flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                    <span class="text-xs font-black text-trek-black ml-1">تصفية:</span>
+                    <button onclick="filterOrders('all')" id="btn-ord-all" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-trek-black text-white transition">الكل</button>
+                    <button onclick="filterPaymentStatus('paid')" id="btn-ord-paid" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-300 hover:bg-emerald-100 transition">🟢 مدفوع إلكترونياً</button>
+                    <button onclick="filterPaymentStatus('pending')" id="btn-ord-pending" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-50 text-amber-800 border border-amber-300 hover:bg-amber-100 transition">🟡 في الانتظار (لم يدفع)</button>
+                    <button onclick="filterPaymentStatus('failed')" id="btn-ord-failed" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-rose-50 text-rose-800 border border-rose-300 hover:bg-rose-100 transition">🔴 فشل الدفع / مرفوض</button>
+                    <button onclick="filterPaymentStatus('cod')" id="btn-ord-cod" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-50 text-blue-800 border border-blue-300 hover:bg-blue-100 transition">💵 عند الاستلام</button>
+                    <button onclick="filterPaymentStatus('pending_verification')" id="btn-ord-instapay" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-purple-50 text-purple-800 border border-purple-300 hover:bg-purple-100 transition">📱 إنستاباي</button>
+                    <span class="text-gray-300 hidden xl:inline mx-1">|</span>
+                    <button onclick="filterOrders('تم الشحن')" id="btn-ord-shipped" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-trek-lightgray text-trek-black hover:bg-gray-200 transition">🚚 تم الشحن</button>
+                    <button onclick="filterOrders('مكتمل')" id="btn-ord-completed" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-trek-lightgray text-trek-black hover:bg-gray-200 transition">✅ مكتمل</button>
                 </div>
-                <div class="flex items-center gap-3">
-                    <button onclick="addDemoOrder()" class="px-4 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold rounded-xl border border-emerald-300 transition flex items-center gap-1.5">
-                        <span>+ إضافة طلب تجريبي للاختبار</span>
+                <div class="flex items-center gap-2 flex-wrap w-full lg:w-auto justify-end">
+                    <button onclick="fetchCloudOrders(true)" class="px-3.5 py-2 bg-blue-50 hover:bg-blue-100 text-blue-800 text-xs font-bold rounded-xl border border-blue-300 transition flex items-center gap-1.5 shadow-2xs" title="مزامنة أحدث الطلبات من السحابة">
+                        <span>🔄 مزامنة سحابية</span>
                     </button>
-                    <button onclick="exportOrdersToCSV()" class="px-4 py-2 bg-trek-lightgray hover:bg-gray-200 text-trek-black text-xs font-bold rounded-xl border border-trek-border transition flex items-center gap-1.5">
-                        <span>📥 تصدير CSV / Excel</span>
+                    <button onclick="addDemoOrder()" class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold rounded-xl border border-emerald-300 transition flex items-center gap-1.5">
+                        <span>+ طلب تجريبي</span>
+                    </button>
+                    <button onclick="exportOrdersToCSV()" class="px-3.5 py-2 bg-trek-lightgray hover:bg-gray-200 text-trek-black text-xs font-bold rounded-xl border border-trek-border transition flex items-center gap-1.5">
+                        <span>📥 تصدير Excel</span>
                     </button>
                 </div>
             </div>
@@ -315,9 +323,10 @@
                                 <th class="py-3.5 px-4">العميل والموبايل</th>
                                 <th class="py-3.5 px-4">المحافظة والعنوان</th>
                                 <th class="py-3.5 px-4">المنتجات المطلوبة</th>
-                                <th class="py-3.5 px-4">الإجمالي وطريقة الدفع</th>
-                                <th class="py-3.5 px-4 text-center">حالة الطلب</th>
-                                <th class="py-3.5 px-4 text-center">إجراءات سريعة</th>
+                                <th class="py-3.5 px-4">الإجمالي والبوابة</th>
+                                <th class="py-3.5 px-4 text-center">حالة الدفع (Payment Status)</th>
+                                <th class="py-3.5 px-4 text-center">حالة الطلب والشحن</th>
+                                <th class="py-3.5 px-4 text-center">إجراءات</th>
                             </tr>
                         </thead>
                         <tbody id="orders-table-body" class="divide-y divide-trek-border">
@@ -325,9 +334,12 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="p-4 bg-trek-cardbg border-t border-trek-border flex justify-between items-center text-xs text-trek-gray">
-                    <div>الطلبات تسجل تلقائياً عند إتمام أي عميل عملية الشراء من صفحة checkout.html.</div>
-                    <div id="orders-count-label" class="font-bold">0 طلبات مسجلة</div>
+                <div class="p-4 bg-trek-cardbg border-t border-trek-border flex flex-col sm:flex-row justify-between items-center gap-2 text-xs text-trek-gray">
+                    <div class="flex items-center gap-2">
+                        <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span>مزامنة سحابية نشطة (Firebase Realtime DB) - تسجل الطلبات وحالات الدفع لحظياً من المتجر.</span>
+                    </div>
+                    <div id="orders-count-label" class="font-bold text-trek-black">0 طلبات مسجلة</div>
                 </div>
             </div>
         </div>
@@ -2280,11 +2292,22 @@
             document.getElementById('btn-call-customer').href = `tel:${ord.phone}`;
             document.getElementById('btn-wa-customer').href = `https://wa.me/2${ord.phone}`;
 
-            // Financials
+            // Financials & Payment
             document.getElementById('edit-ord-subtotal').value = ord.subtotal || ord.total || 0;
             document.getElementById('edit-ord-shipping').value = ord.shipping !== undefined ? ord.shipping : 150;
             document.getElementById('edit-ord-discount').value = ord.discount || 0;
             document.getElementById('edit-ord-payment').value = ord.payment || 'الدفع عند الاستلام والمعاينة';
+            
+            // Payment Status and Reference
+            let pStatus = ord.paymentStatus;
+            if (!pStatus) {
+                if (ord.payment && (ord.payment.includes('كاش') || ord.payment.includes('الاستلام'))) pStatus = 'cod';
+                else if (ord.payment === 'instapay') pStatus = 'pending_verification';
+                else pStatus = 'pending';
+            }
+            document.getElementById('edit-ord-payment-status').value = pStatus;
+            document.getElementById('edit-ord-payment-ref').value = ord.paymentRef || '';
+            document.getElementById('edit-ord-paid-at').value = ord.paidAt || '';
 
             // Items List
             const itemsContainer = document.getElementById('view-ord-items-container');
@@ -2337,6 +2360,9 @@
             const shipping = Number(document.getElementById('edit-ord-shipping').value) || 0;
             const discount = Number(document.getElementById('edit-ord-discount').value) || 0;
             const total = subtotal + shipping - discount;
+            const paymentStatus = document.getElementById('edit-ord-payment-status').value;
+            const paymentRef = document.getElementById('edit-ord-payment-ref').value.trim();
+            const paidAt = document.getElementById('edit-ord-paid-at').value.trim();
 
             orders[index] = {
                 ...orders[index],
@@ -2349,6 +2375,9 @@
                 notes: document.getElementById('edit-ord-notes').value.trim(),
                 status: document.getElementById('edit-ord-status').value,
                 payment: document.getElementById('edit-ord-payment').value,
+                paymentStatus: paymentStatus,
+                paymentRef: paymentRef,
+                paidAt: paidAt,
                 subtotal: subtotal,
                 shipping: shipping,
                 discount: discount,
@@ -2356,9 +2385,18 @@
             };
 
             saveStoredOrders(orders);
+
+            // Sync updated order directly to Firebase Realtime Database
+            try {
+                fetch('https://abu-el-goukh-store-default-rtdb.firebaseio.com/orders/' + orderId + '.json', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(orders[index])
+                }).catch(e => console.warn(e));
+            } catch(e) { console.warn(e); }
             renderOrdersTable();
             closeOrderModal();
-            alert('✓ تم حفظ وتحديث بيانات الطلب بنجاح في النظام!');
+            alert('✓ تم حفظ وتحديث بيانات الطلب بنجاح في النظام والسحابة!');
         }
 
         function printOrderInvoice() {
@@ -2504,6 +2542,7 @@
                 if (btnOrd) btnOrd.className = 'px-5 py-3 rounded-xl text-sm font-black bg-trek-black text-white transition flex items-center gap-2 shadow-sm';
                 if (viewOrd) viewOrd.classList.remove('hidden');
                 renderOrdersTable();
+                fetchCloudOrders();
             } else if (tab === 'payments') {
                 if (btnPay) btnPay.className = 'px-5 py-3 rounded-xl text-sm font-black bg-trek-black text-white transition flex items-center gap-2 shadow-sm';
                 if (viewPay) viewPay.classList.remove('hidden');
@@ -2882,6 +2921,60 @@
             }
         }
 
+        let currentOrderFilter = 'all';
+        let currentPaymentStatusFilter = 'all';
+
+        // Fetch Orders from Cloud Firebase DB & Merge with Local Orders
+        async function fetchCloudOrders(showNotice = false) {
+            const syncBtn = document.querySelector('button[onclick="fetchCloudOrders(true)"]');
+            if (showNotice && syncBtn) {
+                syncBtn.innerHTML = `<span>⏳ جاري المزامنة…</span>`;
+            }
+
+            try {
+                const url = 'https://abu-el-goukh-store-default-rtdb.firebaseio.com/orders.json';
+                const res = await fetch(url);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && typeof data === 'object') {
+                        const cloudOrders = Object.values(data).filter(Boolean);
+                        const localOrders = getStoredOrders();
+                        const mergedMap = new Map();
+
+                        // Cloud orders take precedence
+                        cloudOrders.forEach(o => {
+                            if (o && o.id) mergedMap.set(o.id, o);
+                        });
+
+                        // Keep local orders that haven't been pushed yet
+                        localOrders.forEach(o => {
+                            if (o && o.id && !mergedMap.has(o.id)) {
+                                mergedMap.set(o.id, o);
+                            }
+                        });
+
+                        const mergedList = Array.from(mergedMap.values()).sort((a, b) => {
+                            return (b.date || '').localeCompare(a.date || '') || (b.id || '').localeCompare(a.id || '');
+                        });
+
+                        saveStoredOrders(mergedList);
+                        renderOrdersTable();
+
+                        if (showNotice) {
+                            alert(`✓ تمت مزامنة ${mergedList.length} طلب سحابياً بنجاح من قاعدة بيانات Firebase!`);
+                        }
+                    }
+                }
+            } catch (err) {
+                console.warn('Firebase orders sync error:', err);
+                if (showNotice) alert('تعذر الاتصال بالسحابة لجلب الطلبات. يتم عرض الطلبات المحلية.');
+            } finally {
+                if (showNotice && syncBtn) {
+                    syncBtn.innerHTML = `<span>🔄 مزامنة سحابية</span>`;
+                }
+            }
+        }
+
         function renderOrdersTable() {
             const orders = getStoredOrders();
             const tbody = document.getElementById('orders-table-body');
@@ -2889,18 +2982,33 @@
             countLabel.innerText = `${orders.length} طلبات مسجلة`;
 
             let filtered = orders;
+
+            // Fulfillment Status Filter
             if (currentOrderFilter !== 'all') {
-                filtered = orders.filter(o => (o.status || '').includes(currentOrderFilter));
+                filtered = filtered.filter(o => (o.status || '').includes(currentOrderFilter));
+            }
+
+            // Payment Status Filter
+            if (currentPaymentStatusFilter !== 'all') {
+                filtered = filtered.filter(o => {
+                    let ps = o.paymentStatus;
+                    if (!ps) {
+                        if (o.payment && (o.payment.includes('كاش') || o.payment.includes('الاستلام'))) ps = 'cod';
+                        else if (o.payment === 'instapay') ps = 'pending_verification';
+                        else ps = 'pending';
+                    }
+                    return ps === currentPaymentStatusFilter;
+                });
             }
 
             if (filtered.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="7" class="py-12 text-center text-trek-gray">
+                        <td colspan="8" class="py-12 text-center text-trek-gray">
                             <div class="text-3xl mb-2">📦</div>
-                            <div class="font-bold text-sm text-trek-black">لا توجد طلبات واردة حالياً</div>
-                            <div class="text-xs text-trek-gray mt-1">عندما يقوم عميل بتأكيد طلب من صفحة checkout.html سيظهر هنا فوراً.</div>
-                            <button onclick="addDemoOrder()" class="mt-4 px-4 py-2 bg-trek-black text-white text-xs font-bold rounded-xl hover:bg-trek-charcoal transition">إضافة طلب تجريبي للمعاينة</button>
+                            <div class="font-bold text-sm text-trek-black">لا توجد طلبات مطابقة للتصفية المحددة</div>
+                            <div class="text-xs text-trek-gray mt-1">يمكنك الضغط على "الكل" لعرض جميع الطلبات الواردة.</div>
+                            <button onclick="filterOrders('all')" class="mt-4 px-4 py-2 bg-trek-black text-white text-xs font-bold rounded-xl hover:bg-trek-charcoal transition">عرض كل الطلبات</button>
                         </td>
                     </tr>
                 `;
@@ -2912,6 +3020,30 @@
                     ? ord.items.map(it => `• ${it.name} (${Number(it.price).toLocaleString('en-US')} ج.م)`).join('<br>')
                     : (ord.item_name || 'دراجة هوائية');
 
+                // Determine Payment Status Badge & Styles
+                let pStatus = ord.paymentStatus;
+                if (!pStatus) {
+                    if (ord.payment && (ord.payment.includes('كاش') || ord.payment.includes('الاستلام'))) pStatus = 'cod';
+                    else if (ord.payment === 'instapay') pStatus = 'pending_verification';
+                    else pStatus = 'pending';
+                }
+
+                let pBadgeClass = 'bg-amber-50 text-amber-800 border-amber-300 font-bold';
+                if (pStatus === 'paid') pBadgeClass = 'bg-emerald-50 text-emerald-800 border-emerald-300 font-bold';
+                else if (pStatus === 'failed') pBadgeClass = 'bg-rose-50 text-rose-800 border-rose-300 font-bold';
+                else if (pStatus === 'cod') pBadgeClass = 'bg-blue-50 text-blue-800 border-blue-300 font-bold';
+                else if (pStatus === 'pending_verification') pBadgeClass = 'bg-purple-50 text-purple-800 border-purple-300 font-bold';
+                else if (pStatus === 'refunded') pBadgeClass = 'bg-slate-100 text-slate-800 border-slate-300 font-bold';
+
+                // Gateway label
+                let payGatewayDisplay = ord.payment || 'عند الاستلام';
+                if (payGatewayDisplay === 'paytabs') payGatewayDisplay = '💳 PayTabs (فيزا/ماستر)';
+                else if (payGatewayDisplay === 'paymob') payGatewayDisplay = '💳 Paymob مصر';
+                else if (payGatewayDisplay === 'fawry') payGatewayDisplay = '🏪 فوري باي';
+                else if (payGatewayDisplay === 'instapay') payGatewayDisplay = '📱 إنستاباي / كاش';
+                else if (payGatewayDisplay === 'valu') payGatewayDisplay = '⚡ تقسيط ValU';
+
+                // Order Status Color
                 let statusBadgeColor = 'bg-blue-50 text-blue-800 border-blue-200';
                 if ((ord.status || '').includes('شحن')) statusBadgeColor = 'bg-amber-50 text-amber-800 border-amber-200';
                 if ((ord.status || '').includes('مكتمل') || (ord.status || '').includes('توصيل')) statusBadgeColor = 'bg-emerald-50 text-emerald-800 border-emerald-200';
@@ -2939,20 +3071,33 @@
                         </td>
                         <td class="py-3.5 px-4">
                             <div class="text-xs font-black text-trek-black num-font">${Number(ord.total || ord.subtotal || 0).toLocaleString('en-US')} ج.م</div>
-                            <div class="text-[10px] text-trek-gray mt-0.5">${ord.payment || 'عند الاستلام'}</div>
+                            <div class="text-[10px] text-trek-gray mt-0.5 font-medium">${payGatewayDisplay}</div>
                         </td>
                         <td class="py-3.5 px-4 text-center">
-                            <select onchange="updateOrderStatus('${ord.id}', this.value)" class="text-[10px] font-bold py-1 px-2 rounded-lg border ${statusBadgeColor} outline-none cursor-pointer">
+                            <select onchange="updateOrderPaymentStatus('${ord.id}', this.value)" class="text-[11px] py-1 px-2 rounded-lg border ${pBadgeClass} outline-none cursor-pointer">
+                                <option value="paid" ${pStatus === 'paid' ? 'selected' : ''}>🟢 مدفوع إلكترونياً</option>
+                                <option value="pending" ${pStatus === 'pending' ? 'selected' : ''}>🟡 في الانتظار (لم يدفع)</option>
+                                <option value="failed" ${pStatus === 'failed' ? 'selected' : ''}>🔴 فشل الدفع / مرفوض</option>
+                                <option value="cod" ${pStatus === 'cod' ? 'selected' : ''}>💵 عند الاستلام</option>
+                                <option value="pending_verification" ${pStatus === 'pending_verification' ? 'selected' : ''}>📱 بانتظار التحويل</option>
+                                <option value="refunded" ${pStatus === 'refunded' ? 'selected' : ''}>↩️ مسترجع</option>
+                            </select>
+                            ${ord.paymentRef ? `<div class="text-[9px] font-mono text-gray-500 mt-0.5" title="مرجع الدفع البنكي">#${ord.paymentRef}</div>` : ''}
+                        </td>
+                        <td class="py-3.5 px-4 text-center">
+                            <select onchange="updateOrderStatus('${ord.id}', this.value)" class="text-[11px] font-bold py-1 px-2 rounded-lg border ${statusBadgeColor} outline-none cursor-pointer">
                                 <option value="جديد (قيد المراجعة)" ${ord.status === 'جديد (قيد المراجعة)' ? 'selected' : ''}>جديد</option>
+                                <option value="تم تأكيد الطلب مع العميل" ${ord.status === 'تم تأكيد الطلب مع العميل' ? 'selected' : ''}>تم التأكيد</option>
+                                <option value="جاري التجهيز والضبط الفني" ${ord.status === 'جاري التجهيز والضبط الفني' ? 'selected' : ''}>جاري التجهيز</option>
                                 <option value="تم الشحن مع المندوب" ${ord.status === 'تم الشحن مع المندوب' ? 'selected' : ''}>تم الشحن</option>
-                                <option value="مكتمل وتم التوصيل" ${ord.status === 'مكتمل وتم التوصيل' ? 'selected' : ''}>مكتمل</option>
-                                <option value="ملغي" ${ord.status === 'ملغي' ? 'selected' : ''}>ملغي</option>
+                                <option value="مكتمل وتم التوصيل والاستلام" ${ord.status === 'مكتمل وتم التوصيل والاستلام' ? 'selected' : ''}>مكتمل</option>
+                                <option value="ملغي من قبل العميل" ${ord.status === 'ملغي من قبل العميل' ? 'selected' : ''}>ملغي</option>
                             </select>
                         </td>
                         <td class="py-3.5 px-4 text-center">
                             <div class="flex items-center justify-center gap-1.5">
                                 <button onclick="openOrderModal('${ord.id}')" class="px-2.5 py-1.5 rounded-lg bg-trek-black hover:bg-trek-charcoal text-white text-[11px] font-black transition flex items-center gap-1" title="عرض وتعديل بيانات الطلب">
-                                    <span>✏️ تفاصيل وتعديل</span>
+                                    <span>✏️ تفاصيل</span>
                                 </button>
                                 <a href="${waLink}" target="_blank" class="p-1.5 rounded-lg bg-emerald-100 hover:bg-emerald-600 hover:text-white text-emerald-800 transition text-[11px] font-bold" title="محادثة واتساب للعميل">
                                     💬
@@ -2967,6 +3112,28 @@
             }).join('');
         }
 
+        function updateOrderPaymentStatus(orderId, newPaymentStatus) {
+            const orders = getStoredOrders();
+            const ord = orders.find(o => o.id === orderId);
+            if (ord) {
+                ord.paymentStatus = newPaymentStatus;
+                if (newPaymentStatus === 'paid' && !ord.paidAt) {
+                    ord.paidAt = new Date().toLocaleString('ar-EG');
+                }
+                saveStoredOrders(orders);
+                renderOrdersTable();
+
+                // Sync to Firebase Cloud DB
+                try {
+                    fetch('https://abu-el-goukh-store-default-rtdb.firebaseio.com/orders/' + orderId + '.json', {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ paymentStatus: newPaymentStatus, paidAt: ord.paidAt || '' })
+                    }).catch(e => console.warn(e));
+                } catch(e) { console.warn(e); }
+            }
+        }
+
         function updateOrderStatus(orderId, newStatus) {
             const orders = getStoredOrders();
             const ord = orders.find(o => o.id === orderId);
@@ -2974,26 +3141,91 @@
                 ord.status = newStatus;
                 saveStoredOrders(orders);
                 renderOrdersTable();
+
+                // Sync to Firebase Cloud DB
+                try {
+                    fetch('https://abu-el-goukh-store-default-rtdb.firebaseio.com/orders/' + orderId + '.json', {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ status: newStatus })
+                    }).catch(e => console.warn(e));
+                } catch(e) { console.warn(e); }
             }
         }
 
         function deleteOrder(orderId) {
-            if (confirm(`هل أنت متأكد من حذف الطلب رقم ${orderId}؟`)) {
+            if (confirm(`هل أنت متأكد من حذف الطلب رقم ${orderId} نهائياً؟`)) {
                 let orders = getStoredOrders();
                 orders = orders.filter(o => o.id !== orderId);
                 saveStoredOrders(orders);
                 renderOrdersTable();
+
+                // Delete from Firebase Cloud DB
+                try {
+                    fetch('https://abu-el-goukh-store-default-rtdb.firebaseio.com/orders/' + orderId + '.json', {
+                        method: 'DELETE'
+                    }).catch(e => console.warn(e));
+                } catch(e) { console.warn(e); }
             }
+        }
+
+        function filterPaymentStatus(status) {
+            currentPaymentStatusFilter = status;
+            currentOrderFilter = 'all';
+
+            // Reset order filter buttons
+            ['all', 'shipped', 'completed'].forEach(s => {
+                const btn = document.getElementById(`btn-ord-${s}`);
+                if (btn) btn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-trek-lightgray text-trek-black hover:bg-gray-200 transition';
+            });
+            const btnAll = document.getElementById('btn-ord-all');
+            if (btnAll) btnAll.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-trek-lightgray text-trek-black hover:bg-gray-200 transition';
+
+            // Highlight payment filter button
+            ['paid', 'pending', 'failed', 'cod', 'instapay'].forEach(p => {
+                const btn = document.getElementById(`btn-ord-${p}`);
+                if (btn) {
+                    if (p === status) {
+                        btn.className = 'px-3 py-1.5 rounded-lg text-xs font-black bg-trek-black text-white shadow-sm transition';
+                    } else {
+                        btn.className = `px-3 py-1.5 rounded-lg text-xs font-bold border transition ${
+                            p === 'paid' ? 'bg-emerald-50 text-emerald-800 border-emerald-300' :
+                            p === 'pending' ? 'bg-amber-50 text-amber-800 border-amber-300' :
+                            p === 'failed' ? 'bg-rose-50 text-rose-800 border-rose-300' :
+                            p === 'cod' ? 'bg-blue-50 text-blue-800 border-blue-300' :
+                            'bg-purple-50 text-purple-800 border-purple-300'
+                        }`;
+                    }
+                }
+            });
+
+            renderOrdersTable();
         }
 
         function filterOrders(status) {
             currentOrderFilter = status;
-            ['all', 'new', 'shipped', 'completed'].forEach(s => {
-                const btn = document.getElementById(`btn-ord-${s}`);
-                if (btn) btn.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold bg-trek-lightgray text-trek-black hover:bg-gray-200 transition';
+            currentPaymentStatusFilter = 'all';
+
+            // Reset payment filter buttons
+            ['paid', 'pending', 'failed', 'cod', 'instapay'].forEach(p => {
+                const btn = document.getElementById(`btn-ord-${p}`);
+                if (btn) {
+                    btn.className = `px-3 py-1.5 rounded-lg text-xs font-bold border transition ${
+                        p === 'paid' ? 'bg-emerald-50 text-emerald-800 border-emerald-300' :
+                        p === 'pending' ? 'bg-amber-50 text-amber-800 border-amber-300' :
+                        p === 'failed' ? 'bg-rose-50 text-rose-800 border-rose-300' :
+                        p === 'cod' ? 'bg-blue-50 text-blue-800 border-blue-300' :
+                        'bg-purple-50 text-purple-800 border-purple-300'
+                    }`;
+                }
             });
-            const activeBtn = document.getElementById(`btn-ord-${status === 'جديد' ? 'new' : status === 'تم الشحن' ? 'shipped' : status === 'مكتمل' ? 'completed' : 'all'}`);
-            if (activeBtn) activeBtn.className = 'px-3.5 py-1.5 rounded-lg text-xs font-bold bg-trek-black text-white transition';
+
+            ['all', 'shipped', 'completed'].forEach(s => {
+                const btn = document.getElementById(`btn-ord-${s}`);
+                if (btn) btn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-trek-lightgray text-trek-black hover:bg-gray-200 transition';
+            });
+            const activeBtn = document.getElementById(`btn-ord-${status === 'تم الشحن' ? 'shipped' : status === 'مكتمل' ? 'completed' : 'all'}`);
+            if (activeBtn) activeBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-black bg-trek-black text-white transition';
             renderOrdersTable();
         }
 
@@ -3013,14 +3245,27 @@
                 subtotal: 11500,
                 shipping: 150,
                 total: 11650,
-                payment: 'الدفع عند الاستلام والمعاينة',
+                payment: 'paytabs',
+                paymentStatus: 'paid',
+                paymentRef: 'PT-' + Math.floor(100000 + Math.random() * 900000),
+                paidAt: new Date().toLocaleString('ar-EG'),
                 status: 'جديد (قيد المراجعة)'
             };
             const orders = getStoredOrders();
             orders.unshift(demoOrder);
             saveStoredOrders(orders);
+
+            // Sync to Firebase Cloud DB
+            try {
+                fetch('https://abu-el-goukh-store-default-rtdb.firebaseio.com/orders/' + demoId + '.json', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(demoOrder)
+                }).catch(e => console.warn(e));
+            } catch(e) { console.warn(e); }
+
             renderOrdersTable();
-            alert('تمت إضافة طلب تجريبي بنجاح!');
+            alert('✓ تمت إضافة طلب تجريبي مدفوع إلكترونياً بنجاح وسُجل في السحابة!');
         }
 
         function exportOrdersToCSV() {
@@ -3031,7 +3276,7 @@
             }
 
             let csvContent = "data:text/csv;charset=utf-8,﻿";
-            csvContent += "رقم الطلب,التاريخ,اسم العميل,الموبايل,المحافظة,المدينة,العنوان,طريقة الدفع,الإجمالي,الحالة\n";
+            csvContent += "رقم الطلب,التاريخ,اسم العميل,الموبايل,المحافظة,المدينة,العنوان,طريقة الدفع,حالة الدفع,مرجع المعاملة,الإجمالي,حالة الطلب\n";
 
             orders.forEach(o => {
                 const row = [
@@ -3043,6 +3288,8 @@
                     `"${o.city || ''}"`,
                     `"${o.address || ''}"`,
                     `"${o.payment || ''}"`,
+                    `"${o.paymentStatus || 'pending'}"`,
+                    `"${o.paymentRef || ''}"`,
                     o.total || o.subtotal || 0,
                     `"${o.status || ''}"`
                 ].join(",");
@@ -3076,6 +3323,7 @@
             }
             renderTable();
             updateOrdersBadge();
+            fetchCloudOrders();
             if (typeof updateCloudStatusUI === 'function') updateCloudStatusUI();
         });
     </script>
@@ -3104,19 +3352,31 @@
             <form id="order-edit-form" onsubmit="saveEditedOrder(event)" class="space-y-6">
                 <input type="hidden" id="edit-ord-id" value="">
 
-                <!-- 1. Order Status Bar -->
-                <div class="bg-trek-lightgray p-4 rounded-2xl border border-trek-border flex flex-col sm:flex-row justify-between items-center gap-3">
-                    <div class="text-xs font-black text-trek-black flex items-center gap-1.5">
-                        <span>🚦 حالة الطلب الحالية:</span>
+                <!-- 1. Order & Payment Status Bar -->
+                <div class="bg-trek-lightgray p-4 rounded-2xl border border-trek-border grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-black text-trek-black mb-1.5">🚦 حالة الطلب والتوصيل:</label>
+                        <select id="edit-ord-status" class="w-full text-xs font-bold py-2.5 px-3 rounded-xl border border-trek-border bg-white outline-none cursor-pointer">
+                            <option value="جديد (قيد المراجعة)">🔵 جديد (قيد المراجعة)</option>
+                            <option value="تم تأكيد الطلب مع العميل">📞 تم تأكيد الطلب مع العميل</option>
+                            <option value="جاري التجهيز والضبط الفني">🔧 جاري التجهيز والضبط الفني</option>
+                            <option value="تم الشحن مع المندوب">🚚 تم الشحن مع المندوب</option>
+                            <option value="مكتمل وتم التوصيل والاستلام">✅ مكتمل وتم التوصيل والاستلام</option>
+                            <option value="ملغي من قبل العميل">❌ ملغي من قبل العميل</option>
+                        </select>
                     </div>
-                    <select id="edit-ord-status" class="w-full sm:w-64 text-xs font-bold py-2.5 px-3 rounded-xl border border-trek-border bg-white outline-none cursor-pointer">
-                        <option value="جديد (قيد المراجعة)">🔵 جديد (قيد المراجعة)</option>
-                        <option value="تم تأكيد الطلب مع العميل">📞 تم تأكيد الطلب مع العميل</option>
-                        <option value="جاري التجهيز والضبط الفني">🔧 جاري التجهيز والضبط الفني</option>
-                        <option value="تم الشحن مع المندوب">🚚 تم الشحن مع المندوب</option>
-                        <option value="مكتمل وتم التوصيل والاستلام">✅ مكتمل وتم التوصيل والاستلام</option>
-                        <option value="ملغي من قبل العميل">❌ ملغي من قبل العميل</option>
-                    </select>
+
+                    <div>
+                        <label class="block text-xs font-black text-trek-black mb-1.5">💳 حالة الدفع (Payment Status):</label>
+                        <select id="edit-ord-payment-status" class="w-full text-xs font-bold py-2.5 px-3 rounded-xl border border-trek-border bg-white outline-none cursor-pointer">
+                            <option value="paid">🟢 مدفوع إلكترونياً بنجاح (Paid)</option>
+                            <option value="pending">🟡 في الانتظار - لم يدفع بعد (Pending)</option>
+                            <option value="failed">🔴 فشل الدفع / مرفوض من البنك (Failed / Declined)</option>
+                            <option value="cod">💵 الدفع عند الاستلام (COD)</option>
+                            <option value="pending_verification">📱 بانتظار تأكيد التحويل (InstaPay / Vodafone Cash)</option>
+                            <option value="refunded">↩️ مسترجع (Refunded)</option>
+                        </select>
+                    </div>
                 </div>
 
                 <!-- 2. Customer Information (Editable) -->
@@ -3225,19 +3485,34 @@
                         </div>
                     </div>
 
-                    <div class="p-3 bg-trek-lightgray rounded-xl flex justify-between items-center">
-                        <div>
-                            <span class="text-xs font-bold text-trek-gray block">طريقة الدفع:</span>
-                            <select id="edit-ord-payment" class="text-xs font-bold bg-white border border-trek-border rounded-lg p-1.5 mt-1 outline-none">
-                                <option value="الدفع عند الاستلام والمعاينة">💵 الدفع عند الاستلام والمعاينة</option>
-                                <option value="بطاقة بنكية / فيزا عبر Paymob">💳 بطاقة بنكية / فيزا عبر Paymob</option>
-                                <option value="تحويل إنستاباي / محفظة فودافون كاش">📱 تحويل إنستاباي / محفظة كاش</option>
-                                <option value="تقسيط فاليو ValU / أمان / سهولة">⚡ تقسيط فاليو / أمان / سهولة</option>
-                            </select>
+                    <div class="p-4 bg-trek-lightgray rounded-xl space-y-3">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <span class="text-xs font-bold text-trek-gray block mb-1">بوابة / طريقة الدفع:</span>
+                                <select id="edit-ord-payment" class="w-full text-xs font-bold bg-white border border-trek-border rounded-lg p-2 outline-none">
+                                    <option value="الدفع عند الاستلام والمعاينة">💵 الدفع عند الاستلام والمعاينة</option>
+                                    <option value="paytabs">💳 بطاقة بنكية فيزا / ماستر (PayTabs)</option>
+                                    <option value="paymob">💳 بطاقة بنكية / محفظة / تقسيط (Paymob)</option>
+                                    <option value="fawry">🏪 فوري باي كود نقدي (FawryPay)</option>
+                                    <option value="instapay">📱 تحويل إنستاباي / محفظة فودافون كاش</option>
+                                    <option value="valu">⚡ تقسيط فاليو ValU</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-xs font-bold text-trek-gray block mb-1">رقم المعاملة البنكية (Transaction Ref):</label>
+                                <input type="text" id="edit-ord-payment-ref" placeholder="مثال: PT-892109 أو TXN-492" class="w-full text-xs font-mono bg-white border border-trek-border rounded-lg p-2 outline-none">
+                            </div>
                         </div>
-                        <div class="text-left">
-                            <span class="text-xs text-trek-gray block font-semibold">المبلغ الإجمالي النهائي:</span>
-                            <span id="view-ord-total-calc" class="text-2xl font-black text-trek-red num-font">0 ج.م</span>
+
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pt-2 border-t border-trek-border gap-2">
+                            <div>
+                                <label class="text-[11px] font-bold text-trek-gray">تاريخ وساعة السداد:</label>
+                                <input type="text" id="edit-ord-paid-at" placeholder="مثال: 25/09/2026 14:30" class="text-xs font-bold text-trek-black bg-transparent outline-none border-b border-dashed border-gray-300 px-1">
+                            </div>
+                            <div class="text-left">
+                                <span class="text-xs text-trek-gray block font-semibold">المبلغ الإجمالي النهائي:</span>
+                                <span id="view-ord-total-calc" class="text-2xl font-black text-trek-red num-font">0 ج.م</span>
+                            </div>
                         </div>
                     </div>
                 </div>

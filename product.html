@@ -1886,13 +1886,24 @@
         }
 
         // Main Initialization on Page Load
-        window.addEventListener('DOMContentLoaded', () => {
-            // 1. Sync with Admin Products from LocalStorage
+        window.addEventListener('DOMContentLoaded', async () => {
+            // 1. Fetch centralized products.json from server if available
+            try {
+                const resp = await fetch('products.json?v=' + Date.now());
+                if (resp.ok) {
+                    const liveBikes = await resp.json();
+                    if (Array.isArray(liveBikes) && liveBikes.length > 0) {
+                        allLoadedProducts = liveBikes;
+                    }
+                }
+            } catch(e) { console.log('Falling back to local data', e); }
+
+            // 2. Sync with Admin Products from LocalStorage
             try {
                 const adminProducts = JSON.parse(localStorage.getItem('abu_el_goukh_admin_products'));
                 if (adminProducts && adminProducts.length > 0) {
                     const activeAdmin = adminProducts.filter(p => p.active !== false);
-                    allLoadedProducts = [...activeAdmin, ...curatedBikes.filter(cb => !activeAdmin.some(ap => ap.id === cb.id))];
+                    allLoadedProducts = [...activeAdmin, ...allLoadedProducts.filter(cb => !activeAdmin.some(ap => ap.id === cb.id))];
                 }
             } catch(e) { console.error(e); }
 

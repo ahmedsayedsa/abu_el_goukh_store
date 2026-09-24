@@ -8,6 +8,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Universal Ad Pixels & Analytics Tracking -->
+    <script src="pixels.js"></script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -533,6 +536,15 @@
             updateCalculations();
             loadLivePaymentConfig();
 
+            // Trigger InitiateCheckout E-Commerce Event across active pixels
+            if (window.trackStoreEvent && cart.length > 0) {
+                const subtotal = cart.reduce((s, i) => s + (Number(i.price) || 0), 0);
+                window.trackStoreEvent('InitiateCheckout', {
+                    total: subtotal + shippingFee,
+                    itemsCount: cart.length
+                });
+            }
+
             // Check for electronic payment return parameters
             const urlParams = new URLSearchParams(window.location.search);
             const payStatus = urlParams.get('payment');
@@ -543,6 +555,13 @@
                 banner.innerHTML = `<span>✓ تم تأكيد سداد دفعتك الإلكترونية بنجاح ${returnOrderId ? `للطلب #${returnOrderId}` : ''}! جاري ضبط دراجتك وتجهيزها للشحن فوراً.</span>`;
                 const mainEl = document.querySelector('main');
                 if (mainEl) mainEl.prepend(banner);
+
+                if (window.trackStoreEvent) {
+                    window.trackStoreEvent('Purchase', {
+                        orderId: returnOrderId || 'AEG-PAID',
+                        total: 0
+                    });
+                }
                 localStorage.removeItem('abu_el_goukh_cart');
             }
         }
@@ -688,6 +707,15 @@
                 localStorage.setItem('abu_el_goukh_orders', JSON.stringify(existingOrders));
             } catch (err) {
                 console.error(err);
+            }
+
+            // Trigger Purchase E-Commerce Event across active pixels
+            if (window.trackStoreEvent) {
+                window.trackStoreEvent('Purchase', {
+                    orderId: orderId,
+                    total: total,
+                    items: cart
+                });
             }
 
             // ─────────────────────────────────────────────────────────────

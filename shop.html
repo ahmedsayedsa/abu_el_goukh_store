@@ -69,6 +69,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Universal Ad Pixels & Analytics Tracking -->
+    <script src="pixels.js"></script>
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -1732,6 +1735,15 @@
             updateCartUI();
             closeModal();
             toggleCartDrawer();
+
+            // Track AddToCart E-Commerce Event
+            if (window.trackStoreEvent) {
+                window.trackStoreEvent('AddToCart', {
+                    id: currentModalProduct.id,
+                    name: currentModalProduct.name,
+                    price: currentModalProduct.price
+                });
+            }
         }
 
         function updateCartUI() {
@@ -1813,6 +1825,9 @@
             if (!p) return;
             cart.push(p);
             localStorage.setItem('abu_el_goukh_cart', JSON.stringify(cart));
+            if (typeof window.trackStoreEvent === 'function') {
+                window.trackStoreEvent('AddToCart', { id: p.id, name: p.name, price: p.price });
+            }
             window.location.href = 'checkout.html';
         }
 

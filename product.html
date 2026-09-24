@@ -23,6 +23,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
+    <!-- Universal Ad Pixels & Analytics Tracking -->
+    <script src="pixels.js"></script>
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -1867,6 +1870,15 @@
             localStorage.setItem('abu_el_goukh_cart', JSON.stringify(cart));
             updateCartUI();
             toggleCartDrawer();
+
+            // Track AddToCart E-Commerce Event
+            if (window.trackStoreEvent) {
+                window.trackStoreEvent('AddToCart', {
+                    id: currentProduct.id,
+                    name: currentProduct.name,
+                    price: Number(currentProduct.price) * selectedQty
+                });
+            }
         }
 
         function buyNowCurrentProduct() {
@@ -1881,6 +1893,15 @@
                 color: selectedColor
             });
             localStorage.setItem('abu_el_goukh_cart', JSON.stringify(cart));
+
+            // Track AddToCart E-Commerce Event
+            if (window.trackStoreEvent) {
+                window.trackStoreEvent('AddToCart', {
+                    id: currentProduct.id,
+                    name: currentProduct.name,
+                    price: currentProduct.price
+                });
+            }
             window.location.href = 'checkout.html';
         }
 
@@ -2008,6 +2029,16 @@
             // WhatsApp Direct Inquiry Link
             const waText = encodeURIComponent("مرحباً أبو الجوخ، أود الاستفسار وحجز دراجة: " + currentProduct.name + " (كود: " + currentProduct.sku + ") بسعر " + fmt(price) + " ج.م");
             document.getElementById('product-whatsapp-btn').href = "https://wa.me/201202925192?text=" + waText;
+
+            // Trigger E-Commerce Pixels ViewContent Event
+            if (window.trackStoreEvent) {
+                window.trackStoreEvent('ViewContent', {
+                    id: currentProduct.id,
+                    name: currentProduct.name,
+                    price: price,
+                    category: currentProduct.category || 'دراجات'
+                });
+            }
 
             // Technical Specs Table Customization
             if (currentProduct.cat_key === 'kids') {

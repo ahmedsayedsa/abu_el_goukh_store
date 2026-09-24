@@ -229,6 +229,10 @@
                 <span>💳 بوابات الدفع الإلكتروني والـ APIs</span>
                 <span id="tab-payments-badge" class="bg-emerald-600 text-white text-[10px] font-black px-2.5 py-0.5 rounded-full">جاهز للربط 🟢</span>
             </button>
+            <button id="main-tab-pixels" onclick="switchMainTab('pixels')" class="px-5 py-3 rounded-xl text-sm font-bold bg-white text-trek-black border border-trek-border hover:bg-trek-lightgray transition flex items-center gap-2">
+                <span>🎯 بيكسل الإعلانات والتتبع (Ad Pixels)</span>
+                <span id="tab-pixels-badge" class="bg-blue-600 text-white text-[10px] font-black px-2.5 py-0.5 rounded-full">تتبع المبيعات 🎯</span>
+            </button>
         </div>
 
         <!-- PRODUCTS VIEW -->
@@ -661,6 +665,300 @@
 
         </div>
         <!-- END PAYMENT GATEWAYS VIEW -->
+
+        <!-- AD PIXELS & CAMPAIGN TRACKING VIEW (لوحة ربط بيكسل الإعلانات وتتبع التحويلات) -->
+        <div id="view-pixels" class="hidden space-y-6">
+            
+            <!-- Top Controls Banner -->
+            <div class="bg-white p-6 rounded-2xl border border-trek-border shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl font-black">
+                        🎯
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-black text-trek-black">إعدادات بيكسل الإعلانات وتتبع التحويلات (Ad Pixels & Analytics)</h2>
+                        <p class="text-xs text-trek-gray mt-0.5">اربط معرفات البيكسل لفيسبوك، تيك توك، سناب شات وجوجل لقياس المبيعات وحساب العائد الإعلاني (ROAS) تلقائياً</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 w-full md:w-auto flex-wrap">
+                    <button type="button" onclick="fetchCloudPixelsSettings(true)" class="px-4 py-2.5 bg-trek-lightgray hover:bg-trek-border text-trek-black text-xs font-bold rounded-xl transition flex items-center gap-1.5 shadow-2xs">
+                        <span>🔄 استعادة من السحابة</span>
+                    </button>
+                    <button type="button" onclick="savePixelsSettings()" class="flex-grow md:flex-grow-0 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-black rounded-xl transition shadow-md flex items-center justify-center gap-2 hover:scale-[1.01]">
+                        <span>💾 حفظ وتفعيل البيكسلز سحابياً</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- E-Commerce Events Overview Banner -->
+            <div class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white p-6 rounded-2xl shadow-sm relative overflow-hidden">
+                <div class="relative z-10 space-y-2">
+                    <div class="flex items-center gap-2">
+                        <span class="bg-blue-500/30 text-blue-200 text-[11px] font-bold px-3 py-1 rounded-full border border-blue-400/20">تتبع ذكي وتلقائي 100%</span>
+                        <span class="text-xs text-blue-200">Standard E-Commerce Events Ready</span>
+                    </div>
+                    <h3 class="text-base font-black">الأحداث التي يتم إرسالها لمدراء الإعلانات فور وضعك لمعرف البيكسل:</h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 pt-2 text-xs">
+                        <div class="bg-white/10 rounded-xl p-2.5 border border-white/10 text-center">
+                            <span class="block text-lg mb-0.5">👁️</span>
+                            <strong class="block text-[11px]">PageView</strong>
+                            <span class="text-[10px] text-blue-200">زيارة أي صفحة</span>
+                        </div>
+                        <div class="bg-white/10 rounded-xl p-2.5 border border-white/10 text-center">
+                            <span class="block text-lg mb-0.5">🚲</span>
+                            <strong class="block text-[11px]">ViewContent</strong>
+                            <span class="text-[10px] text-blue-200">معاينة العجلة وسعرها</span>
+                        </div>
+                        <div class="bg-white/10 rounded-xl p-2.5 border border-white/10 text-center">
+                            <span class="block text-lg mb-0.5">🛒</span>
+                            <strong class="block text-[11px]">AddToCart</strong>
+                            <span class="text-[10px] text-blue-200">إضافة لسلة الشراء</span>
+                        </div>
+                        <div class="bg-white/10 rounded-xl p-2.5 border border-white/10 text-center">
+                            <span class="block text-lg mb-0.5">💳</span>
+                            <strong class="block text-[11px]">InitiateCheckout</strong>
+                            <span class="text-[10px] text-blue-200">دخول صفحة الشراء</span>
+                        </div>
+                        <div class="bg-white/10 rounded-xl p-2.5 border border-white/10 text-center col-span-2 sm:col-span-1">
+                            <span class="block text-lg mb-0.5">💰</span>
+                            <strong class="block text-[11px] text-emerald-400">Purchase</strong>
+                            <span class="text-[10px] text-blue-200">إتمام الشراء وقيمته ج.م</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PIXELS GRID -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                <!-- 1. META PIXEL (Facebook & Instagram) -->
+                <div class="bg-white rounded-2xl border border-trek-border shadow-sm p-6 space-y-5">
+                    <div class="flex items-center justify-between border-b border-trek-border pb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl font-bold">
+                                ♾️
+                            </div>
+                            <div>
+                                <h3 class="text-base font-black text-trek-black">Meta Pixel (فيسبوك وإنستجرام)</h3>
+                                <p class="text-[11px] text-trek-gray">تتبع إعلانات Facebook & Instagram Ads وإعادة الاستهداف (Retargeting)</p>
+                            </div>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="pixel-meta-enabled" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                            <span class="mr-2 text-xs font-bold text-trek-black">مفعل</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-bold text-trek-black mb-1">معرف البيكسل (Meta Pixel ID):</label>
+                            <input type="text" id="pixel-meta-id" placeholder="مثال: 123456789012345" class="w-full p-2.5 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white outline-none">
+                            <p class="text-[10px] text-trek-gray mt-1">تجد الـ ID المكون من 15-16 رقماً في مدير الأحداث (Events Manager) بحسابك الإعلاني.</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-trek-black mb-1">كود اختبار الأحداث التجريبي (Test Event Code - اختياري):</label>
+                            <input type="text" id="pixel-meta-test-code" placeholder="مثال: TEST12345" class="w-full p-2.5 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white outline-none">
+                            <p class="text-[10px] text-trek-gray mt-1">يُستخدم لتجربة الأحداث اللحظية من تبويب Test Events في مدير أحداث فيسبوك.</p>
+                        </div>
+                        <div class="pt-2 flex justify-between items-center text-[11px]">
+                            <a href="https://adsmanager.facebook.com/events_manager" target="_blank" class="text-blue-600 hover:underline font-bold flex items-center gap-1">
+                                <span>فتح مدير أحداث فيسبوك (Events Manager) ↗</span>
+                            </a>
+                            <span class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-bold">PageView • ViewContent • Purchase</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. TIKTOK PIXEL -->
+                <div class="bg-white rounded-2xl border border-trek-border shadow-sm p-6 space-y-5">
+                    <div class="flex items-center justify-between border-b border-trek-border pb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-black text-white flex items-center justify-center text-xl font-bold">
+                                🎵
+                            </div>
+                            <div>
+                                <h3 class="text-base font-black text-trek-black">TikTok Pixel (تيك توك)</h3>
+                                <p class="text-[11px] text-trek-gray">تتبع مبيعات إعلانات تيك توك وحساب تكلفة الشراء CPA بدقة</p>
+                            </div>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="pixel-tiktok-enabled" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-black"></div>
+                            <span class="mr-2 text-xs font-bold text-trek-black">مفعل</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-bold text-trek-black mb-1">معرف بيكسل تيك توك (TikTok Pixel ID):</label>
+                            <input type="text" id="pixel-tiktok-id" placeholder="مثال: C9ABCDEF1234567890" class="w-full p-2.5 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white outline-none">
+                            <p class="text-[10px] text-trek-gray mt-1">تجد الكود من TikTok Ads Manager > Assets > Events > Web Events.</p>
+                        </div>
+                        <div class="pt-2 flex justify-between items-center text-[11px]">
+                            <a href="https://ads.tiktok.com/i18n/events_manager" target="_blank" class="text-black hover:underline font-bold flex items-center gap-1">
+                                <span>فتح مدير أحداث تيك توك (TikTok Events) ↗</span>
+                            </a>
+                            <span class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-bold">CompletePayment • PlaceAnOrder</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. SNAPCHAT PIXEL -->
+                <div class="bg-white rounded-2xl border border-trek-border shadow-sm p-6 space-y-5">
+                    <div class="flex items-center justify-between border-b border-trek-border pb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-amber-400 text-black flex items-center justify-center text-xl font-bold">
+                                👻
+                            </div>
+                            <div>
+                                <h3 class="text-base font-black text-trek-black">Snapchat Pixel (سناب شات)</h3>
+                                <p class="text-[11px] text-trek-gray">تتبع إعلانات سناب شات وحملات التحويل والشراء</p>
+                            </div>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="pixel-snapchat-enabled" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-400"></div>
+                            <span class="mr-2 text-xs font-bold text-trek-black">مفعل</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-bold text-trek-black mb-1">معرف بيكسل سناب شات (Snapchat Pixel ID):</label>
+                            <input type="text" id="pixel-snapchat-id" placeholder="مثال: 12345678-abcd-1234-abcd-1234567890ab" class="w-full p-2.5 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white outline-none">
+                            <p class="text-[10px] text-trek-gray mt-1">من لوحة تحكم Snapchat Ads Manager > Events Manager > View Pixel Details.</p>
+                        </div>
+                        <div class="pt-2 flex justify-between items-center text-[11px]">
+                            <a href="https://ads.snapchat.com/" target="_blank" class="text-amber-600 hover:underline font-bold flex items-center gap-1">
+                                <span>لوحة إعلانات سناب شات (Snapchat Ads) ↗</span>
+                            </a>
+                            <span class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-bold">PURCHASE • VIEW_CONTENT</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. GOOGLE ANALYTICS 4 & GOOGLE ADS -->
+                <div class="bg-white rounded-2xl border border-trek-border shadow-sm p-6 space-y-5">
+                    <div class="flex items-center justify-between border-b border-trek-border pb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl font-bold">
+                                📊
+                            </div>
+                            <div>
+                                <h3 class="text-base font-black text-trek-black">Google Analytics 4 & Google Ads</h3>
+                                <p class="text-[11px] text-trek-gray">إحصائيات جوجل وتحويلات إعلانات محرك البحث ويوتيوب (Google Ads)</p>
+                            </div>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="pixel-google-enabled" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
+                            <span class="mr-2 text-xs font-bold text-trek-black">مفعل</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-trek-black mb-1">معرف قياس GA4 (Measurement ID):</label>
+                                <input type="text" id="pixel-ga4-id" placeholder="مثال: G-ABC123XYZ" class="w-full p-2.5 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-trek-black mb-1">معرف إعلانات جوجل (Google Ads ID):</label>
+                                <input type="text" id="pixel-google-ads-id" placeholder="مثال: AW-123456789" class="w-full p-2.5 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white outline-none">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-trek-black mb-1">تسمية تحويل الشراء (Purchase Conversion Label - اختياري):</label>
+                            <input type="text" id="pixel-google-purchase-label" placeholder="مثال: AbCdEfGhIjKlMnOp" class="w-full p-2.5 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white outline-none">
+                            <p class="text-[10px] text-trek-gray mt-1">تجد التسمية من Google Ads > Goals > Conversions > Purchase tag details.</p>
+                        </div>
+                        <div class="pt-2 flex justify-between items-center text-[11px]">
+                            <a href="https://analytics.google.com/" target="_blank" class="text-amber-700 hover:underline font-bold flex items-center gap-1">
+                                <span>لوحة Google Analytics ↗</span>
+                            </a>
+                            <span class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-bold">E-Commerce Purchase Enhanced</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. GOOGLE TAG MANAGER (GTM) -->
+                <div class="bg-white rounded-2xl border border-trek-border shadow-sm p-6 space-y-5">
+                    <div class="flex items-center justify-between border-b border-trek-border pb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl font-bold">
+                                🏷️
+                            </div>
+                            <div>
+                                <h3 class="text-base font-black text-trek-black">Google Tag Manager (GTM)</h3>
+                                <p class="text-[11px] text-trek-gray">إدارة كافة وسوم التتبع والأكواد المتقدمة عبر حاوية GTM واحدة</p>
+                            </div>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="pixel-gtm-enabled" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                            <span class="mr-2 text-xs font-bold text-trek-black">مفعل</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-bold text-trek-black mb-1">معرف حاوية GTM (Container ID):</label>
+                            <input type="text" id="pixel-gtm-id" placeholder="مثال: GTM-XXXXXXX" class="w-full p-2.5 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white outline-none">
+                            <p class="text-[10px] text-trek-gray mt-1">يتم حقن حاوية GTM تلقائياً في كافة صفحات المتجر عند التفعيل.</p>
+                        </div>
+                        <div class="pt-2 flex justify-between items-center text-[11px]">
+                            <a href="https://tagmanager.google.com/" target="_blank" class="text-blue-600 hover:underline font-bold flex items-center gap-1">
+                                <span>لوحة Google Tag Manager ↗</span>
+                            </a>
+                            <span class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-bold">DataLayer Ready</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. CUSTOM SCRIPTS (أكواد تتبع مخصصة) -->
+                <div class="bg-white rounded-2xl border border-trek-border shadow-sm p-6 space-y-5">
+                    <div class="flex items-center justify-between border-b border-trek-border pb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl font-bold">
+                                🧩
+                            </div>
+                            <div>
+                                <h3 class="text-base font-black text-trek-black">أكواد تتبع مخصصة (Custom Scripts)</h3>
+                                <p class="text-[11px] text-trek-gray">إضافة كود Microsoft Clarity، Hotjar، Twitter/X، Pinterest أو شات الدعم</p>
+                            </div>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="pixel-custom-enabled" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-600"></div>
+                            <span class="mr-2 text-xs font-bold text-trek-black">مفعل</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-bold text-trek-black mb-1">كود التتبع للرأس (&lt;head&gt; Scripts):</label>
+                            <textarea id="pixel-custom-head" rows="3" placeholder="<!-- الصق كود التتبع هنا e.g. Clarity, Hotjar, X Pixel -->" class="w-full p-2.5 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white outline-none leading-relaxed"></textarea>
+                        </div>
+                        <p class="text-[10px] text-trek-gray">يتم حقن هذه الأكواد تلقائياً داخل رأس الصفحة في كامل المتجر.</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Bottom Save Action Bar -->
+            <div class="bg-white p-4 rounded-2xl border border-trek-border shadow-sm flex flex-col sm:flex-row justify-between items-center gap-3">
+                <span class="text-xs text-trek-gray">
+                    يتم حفظ ومزامنة كافة معرفات البيكسل تلقائياً في سحابة Google Firebase المشفرة لتفعيل التتبع فوراً لجميع الزوار.
+                </span>
+                <button type="button" onclick="savePixelsSettings()" class="w-full sm:w-auto px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white text-xs font-black rounded-xl transition shadow-md flex items-center justify-center gap-2 hover:scale-[1.01]">
+                    <span>💾 حفظ وتفعيل كافة البيكسلز سحابياً</span>
+                </button>
+            </div>
+
+        </div>
+        <!-- END AD PIXELS VIEW -->
 
 
     </main>
@@ -2182,12 +2480,14 @@
             const btnProd = document.getElementById('main-tab-products');
             const btnOrd = document.getElementById('main-tab-orders');
             const btnPay = document.getElementById('main-tab-payments');
+            const btnPix = document.getElementById('main-tab-pixels');
             const viewProd = document.getElementById('view-products');
             const viewOrd = document.getElementById('view-orders');
             const viewPay = document.getElementById('view-payments');
+            const viewPix = document.getElementById('view-pixels');
 
             // Reset buttons to inactive style
-            [btnProd, btnOrd, btnPay].forEach(b => {
+            [btnProd, btnOrd, btnPay, btnPix].forEach(b => {
                 if (b) b.className = 'px-5 py-3 rounded-xl text-sm font-bold bg-white text-trek-black border border-trek-border hover:bg-trek-lightgray transition flex items-center gap-2';
             });
 
@@ -2195,6 +2495,7 @@
             if (viewProd) viewProd.classList.add('hidden');
             if (viewOrd) viewOrd.classList.add('hidden');
             if (viewPay) viewPay.classList.add('hidden');
+            if (viewPix) viewPix.classList.add('hidden');
 
             if (tab === 'products') {
                 if (btnProd) btnProd.className = 'px-5 py-3 rounded-xl text-sm font-black bg-trek-black text-white transition flex items-center gap-2 shadow-sm';
@@ -2207,6 +2508,10 @@
                 if (btnPay) btnPay.className = 'px-5 py-3 rounded-xl text-sm font-black bg-trek-black text-white transition flex items-center gap-2 shadow-sm';
                 if (viewPay) viewPay.classList.remove('hidden');
                 loadPaymentSettingsToUI();
+            } else if (tab === 'pixels') {
+                if (btnPix) btnPix.className = 'px-5 py-3 rounded-xl text-sm font-black bg-blue-600 text-white transition flex items-center gap-2 shadow-sm';
+                if (viewPix) viewPix.classList.remove('hidden');
+                loadPixelsSettingsToUI();
             }
         }
 
@@ -2417,6 +2722,139 @@
             input.setSelectionRange(0, 99999);
             navigator.clipboard.writeText(input.value);
             alert('✓ تم نسخ الرابط إلى الحافظة بنجاح!');
+        }
+
+        // --- AD PIXELS & CAMPAIGN TRACKING CONFIGURATION LOGIC ---
+        const DEFAULT_PIXELS_CONFIG = {
+            meta: { enabled: false, pixelId: '', testEventCode: '' },
+            tiktok: { enabled: false, pixelId: '' },
+            snapchat: { enabled: false, pixelId: '' },
+            google: { enabled: false, ga4Id: '', adsId: '', adsPurchaseLabel: '' },
+            gtm: { enabled: false, containerId: '' },
+            custom: { enabled: false, headScript: '' },
+            updatedAt: new Date().toISOString()
+        };
+
+        let currentPixelsConfig = { ...DEFAULT_PIXELS_CONFIG };
+
+        function loadPixelsSettingsToUI(config = currentPixelsConfig) {
+            const cfg = config || DEFAULT_PIXELS_CONFIG;
+
+            // Meta
+            if (document.getElementById('pixel-meta-enabled')) document.getElementById('pixel-meta-enabled').checked = cfg.meta?.enabled || false;
+            if (document.getElementById('pixel-meta-id')) document.getElementById('pixel-meta-id').value = cfg.meta?.pixelId || '';
+            if (document.getElementById('pixel-meta-test-code')) document.getElementById('pixel-meta-test-code').value = cfg.meta?.testEventCode || '';
+
+            // TikTok
+            if (document.getElementById('pixel-tiktok-enabled')) document.getElementById('pixel-tiktok-enabled').checked = cfg.tiktok?.enabled || false;
+            if (document.getElementById('pixel-tiktok-id')) document.getElementById('pixel-tiktok-id').value = cfg.tiktok?.pixelId || '';
+
+            // Snapchat
+            if (document.getElementById('pixel-snapchat-enabled')) document.getElementById('pixel-snapchat-enabled').checked = cfg.snapchat?.enabled || false;
+            if (document.getElementById('pixel-snapchat-id')) document.getElementById('pixel-snapchat-id').value = cfg.snapchat?.pixelId || '';
+
+            // Google
+            if (document.getElementById('pixel-google-enabled')) document.getElementById('pixel-google-enabled').checked = cfg.google?.enabled || false;
+            if (document.getElementById('pixel-ga4-id')) document.getElementById('pixel-ga4-id').value = cfg.google?.ga4Id || '';
+            if (document.getElementById('pixel-google-ads-id')) document.getElementById('pixel-google-ads-id').value = cfg.google?.adsId || '';
+            if (document.getElementById('pixel-google-purchase-label')) document.getElementById('pixel-google-purchase-label').value = cfg.google?.adsPurchaseLabel || '';
+
+            // GTM
+            if (document.getElementById('pixel-gtm-enabled')) document.getElementById('pixel-gtm-enabled').checked = cfg.gtm?.enabled || false;
+            if (document.getElementById('pixel-gtm-id')) document.getElementById('pixel-gtm-id').value = cfg.gtm?.containerId || '';
+
+            // Custom
+            if (document.getElementById('pixel-custom-enabled')) document.getElementById('pixel-custom-enabled').checked = cfg.custom?.enabled || false;
+            if (document.getElementById('pixel-custom-head')) document.getElementById('pixel-custom-head').value = cfg.custom?.headScript || '';
+        }
+
+        function collectPixelsSettingsFromUI() {
+            return {
+                meta: {
+                    enabled: document.getElementById('pixel-meta-enabled') ? document.getElementById('pixel-meta-enabled').checked : false,
+                    pixelId: document.getElementById('pixel-meta-id') ? document.getElementById('pixel-meta-id').value.trim() : '',
+                    testEventCode: document.getElementById('pixel-meta-test-code') ? document.getElementById('pixel-meta-test-code').value.trim() : ''
+                },
+                tiktok: {
+                    enabled: document.getElementById('pixel-tiktok-enabled') ? document.getElementById('pixel-tiktok-enabled').checked : false,
+                    pixelId: document.getElementById('pixel-tiktok-id') ? document.getElementById('pixel-tiktok-id').value.trim() : ''
+                },
+                snapchat: {
+                    enabled: document.getElementById('pixel-snapchat-enabled') ? document.getElementById('pixel-snapchat-enabled').checked : false,
+                    pixelId: document.getElementById('pixel-snapchat-id') ? document.getElementById('pixel-snapchat-id').value.trim() : ''
+                },
+                google: {
+                    enabled: document.getElementById('pixel-google-enabled') ? document.getElementById('pixel-google-enabled').checked : false,
+                    ga4Id: document.getElementById('pixel-ga4-id') ? document.getElementById('pixel-ga4-id').value.trim() : '',
+                    adsId: document.getElementById('pixel-google-ads-id') ? document.getElementById('pixel-google-ads-id').value.trim() : '',
+                    adsPurchaseLabel: document.getElementById('pixel-google-purchase-label') ? document.getElementById('pixel-google-purchase-label').value.trim() : ''
+                },
+                gtm: {
+                    enabled: document.getElementById('pixel-gtm-enabled') ? document.getElementById('pixel-gtm-enabled').checked : false,
+                    containerId: document.getElementById('pixel-gtm-id') ? document.getElementById('pixel-gtm-id').value.trim() : ''
+                },
+                custom: {
+                    enabled: document.getElementById('pixel-custom-enabled') ? document.getElementById('pixel-custom-enabled').checked : false,
+                    headScript: document.getElementById('pixel-custom-head') ? document.getElementById('pixel-custom-head').value.trim() : ''
+                },
+                updatedAt: new Date().toISOString()
+            };
+        }
+
+        async function savePixelsSettings() {
+            const config = collectPixelsSettingsFromUI();
+            currentPixelsConfig = config;
+            localStorage.setItem('abu_pixels_settings', JSON.stringify(config));
+
+            if (firebaseDbUrl) {
+                try {
+                    const endpoint = firebaseDbUrl.replace(/\/+$/, '') + '/pixels_settings.json';
+                    const res = await fetch(endpoint, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(config)
+                    });
+                    if (res.ok) {
+                        alert('✓ تم حفظ إعدادات ومعرفات بيكسل الإعلانات بنجاح ومزامنتها سحابياً على Firebase!');
+                        return;
+                    }
+                } catch(e) {
+                    console.error('Firebase pixels save error:', e);
+                }
+            }
+            alert('✓ تم حفظ إعدادات بيكسل الإعلانات محلياً على هذا الجهاز بنجاح!');
+        }
+
+        async function fetchCloudPixelsSettings(showNotice = false) {
+            try {
+                const cached = localStorage.getItem('abu_pixels_settings');
+                if (cached) {
+                    currentPixelsConfig = JSON.parse(cached);
+                    loadPixelsSettingsToUI(currentPixelsConfig);
+                }
+            } catch(e) {}
+
+            if (firebaseDbUrl) {
+                try {
+                    const endpoint = firebaseDbUrl.replace(/\/+$/, '') + '/pixels_settings.json';
+                    const res = await fetch(endpoint);
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data && typeof data === 'object') {
+                            currentPixelsConfig = data;
+                            localStorage.setItem('abu_pixels_settings', JSON.stringify(data));
+                            loadPixelsSettingsToUI(currentPixelsConfig);
+                            if (showNotice) {
+                                alert('✓ تم استرجاع وتحديث كافة إعدادات البيكسل من السحابة بنجاح!');
+                            }
+                            return;
+                        }
+                    }
+                } catch(e) {
+                    console.warn('Could not fetch cloud pixels settings:', e);
+                }
+            }
+            if (showNotice) alert('تم تحميل إعدادات البيكسل المحفوظة محلياً.');
         }
 
         function getStoredOrders() {
@@ -3086,6 +3524,7 @@
             checkAdminAuth();
             fetchCloudCredentials();
             fetchCloudPaymentSettings();
+            fetchCloudPixelsSettings();
             updateCloudStatusUI();
 
             // Check URL parameter or hash for direct tab navigation
@@ -3095,6 +3534,8 @@
                 switchMainTab('payments');
             } else if (tabParam === 'orders') {
                 switchMainTab('orders');
+            } else if (tabParam === 'pixels' || tabParam === 'pixel') {
+                switchMainTab('pixels');
             }
         });
     </script>

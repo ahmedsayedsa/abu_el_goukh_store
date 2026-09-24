@@ -499,6 +499,9 @@
                 <button onclick="filterCategory('fat')" id="btn-cat-fat" class="cat-pill bg-trek-lightgray hover:bg-trek-border text-trek-black text-xs font-semibold px-4 py-2 rounded-full transition">
                     دبابات (Fat)
                 </button>
+                <button onclick="filterCategory('accessories')" id="btn-cat-accessories" class="cat-pill bg-trek-lightgray hover:bg-trek-border text-trek-black text-xs font-semibold px-4 py-2 rounded-full transition">
+                    إكسسوارات وقطع غيار
+                </button>
             </div>
         </div>
 
@@ -1542,7 +1545,7 @@
                 "badge": "ORIGINAL",
                 "specs": "خامات صحية خالية من BPA • ثبات عالي حتى في الطرق الوعرة • سعة 750 مل"
         }
-]];
+];
 
         let cart = [];
         let currentModalProduct = null;
@@ -1629,9 +1632,10 @@
                 activeBtn.className = 'cat-pill bg-trek-black text-white text-xs font-bold px-4 py-2 rounded-full transition shadow-sm';
             }
 
-            let filtered = curatedBikes;
+            const sourceList = (typeof allLoadedProducts !== 'undefined' && allLoadedProducts.length > 0) ? allLoadedProducts : curatedBikes;
+            let filtered = sourceList;
             if (cat !== 'all') {
-                filtered = curatedBikes.filter(p => p.cat_key === cat);
+                filtered = sourceList.filter(p => p.cat_key === cat);
             }
             renderProducts(filtered);
         }
@@ -1642,10 +1646,12 @@
                 filterCategory(currentCategory);
                 return;
             }
-            const filtered = curatedBikes.filter(p => 
-                p.name.toLowerCase().includes(q) || 
-                p.sku.toLowerCase().includes(q) ||
-                p.specs.toLowerCase().includes(q)
+            const sourceList = (typeof allLoadedProducts !== 'undefined' && allLoadedProducts.length > 0) ? allLoadedProducts : curatedBikes;
+            const filtered = sourceList.filter(p => 
+                (p.name && p.name.toLowerCase().includes(q)) || 
+                (p.sku && p.sku.toLowerCase().includes(q)) ||
+                (p.specs && p.specs.toLowerCase().includes(q)) ||
+                (p.category && p.category.toLowerCase().includes(q))
             );
             renderProducts(filtered);
         }
@@ -1655,7 +1661,8 @@
             const u = document.getElementById('finder-use').value;
             const b = document.getElementById('finder-budget').value;
 
-            let filtered = curatedBikes;
+            const sourceList = (typeof allLoadedProducts !== 'undefined' && allLoadedProducts.length > 0) ? allLoadedProducts : curatedBikes;
+            let filtered = sourceList;
 
             if (h === 'kids' || u === 'kids') {
                 filtered = filtered.filter(p => p.cat_key === 'kids' || p.price < 4200);
@@ -1676,7 +1683,8 @@
         }
 
         function openProductQuickview(productId) {
-            const p = curatedBikes.find(item => item.id === productId);
+            const sourceList = (typeof allLoadedProducts !== 'undefined' && allLoadedProducts.length > 0) ? allLoadedProducts : curatedBikes;
+            const p = sourceList.find(item => item.id === productId);
             if (!p) return;
             currentModalProduct = p;
 
@@ -1841,7 +1849,28 @@
                 }
             } catch(e) { console.error(e); }
 
-            renderProducts(allLoadedProducts);
+            // Check URL parameters for category or search filter
+            const urlParams = new URLSearchParams(window.location.search);
+            const catParam = urlParams.get('cat');
+            const searchParam = urlParams.get('q');
+
+            if (searchParam) {
+                const searchInput = document.getElementById('search-input');
+                if (searchInput) searchInput.value = searchParam;
+                searchBikes(searchParam);
+            } else if (catParam) {
+                filterCategory(catParam);
+            } else {
+                renderProducts(allLoadedProducts);
+            }
+
+            // Smooth scroll to bikes grid if cat or bikes-grid anchor requested
+            if (catParam || window.location.hash === '#bikes-grid') {
+                setTimeout(() => {
+                    const grid = document.getElementById('bikes-grid');
+                    if (grid) grid.scrollIntoView({ behavior: 'smooth' });
+                }, 150);
+            }
         });
     </script>
 

@@ -1663,7 +1663,7 @@
         let selectedQty = 1;
         let cart = [];
                 // Cloud Database Configuration (Google Firebase Realtime Database)
-        window.ABU_FIREBASE_URL = window.ABU_FIREBASE_URL || localStorage.getItem('abu_el_goukh_firebase_url') || '';
+        window.ABU_FIREBASE_URL = 'https://abu-el-goukh-store-default-rtdb.firebaseio.com';
 
         async function getLiveCatalog() {
             // 1. Try Google Firebase Cloud DB if URL configured

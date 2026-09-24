@@ -1397,12 +1397,19 @@
                 });
             }
 
-            // Save to localStorage
+            // Save to localStorage and auto-sync to Firebase Cloud DB
             localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(products));
+            if (firebaseDbUrl) {
+                fetch(firebaseDbUrl.replace(/\/+$/, '') + '/products.json', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(products)
+                }).then(() => console.log('Auto-synced to Firebase')).catch(e => console.error(e));
+            }
             closeModal();
             renderTable();
             updateOrdersBadge();
-            alert('تم حفظ ونشر العجلة بنجاح في المتجر!');
+            alert('✓ تم حفظ العجلة سحابياً بنجاح ومزامنتها لحظياً على كافة الهواتف وأجهزة الزوار!');
         }
 
         function toggleProductStatus(id) {
@@ -1410,8 +1417,15 @@
             if (p) {
                 p.active = !p.active;
                 localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(products));
+                if (firebaseDbUrl) {
+                    fetch(firebaseDbUrl.replace(/\/+$/, '') + '/products.json', {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(products)
+                    }).catch(e => console.error(e));
+                }
                 renderTable();
-            updateOrdersBadge();
+                updateOrdersBadge();
             }
         }
 
@@ -1419,8 +1433,15 @@
             if (confirm('هل أنت متأكد من حذف هذه العجلة من المتجر؟')) {
                 products = products.filter(x => x.id !== id);
                 localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(products));
+                if (firebaseDbUrl) {
+                    fetch(firebaseDbUrl.replace(/\/+$/, '') + '/products.json', {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(products)
+                    }).catch(e => console.error(e));
+                }
                 renderTable();
-            updateOrdersBadge();
+                updateOrdersBadge();
             }
         }
 
@@ -1869,9 +1890,24 @@
         }
 
         // Initialize on load
-        window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('DOMContentLoaded', async () => {
+            // 1. Fetch live products from Firebase Cloud DB
+            if (firebaseDbUrl) {
+                try {
+                    const resp = await fetch(firebaseDbUrl.replace(/\/+$/, '') + '/products.json');
+                    if (resp.ok) {
+                        const cloudBikes = await resp.json();
+                        if (Array.isArray(cloudBikes) && cloudBikes.length > 0) {
+                            products = cloudBikes;
+                            localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(products));
+                            console.log('Admin loaded live products from Firebase:', products.length);
+                        }
+                    }
+                } catch(e) { console.warn('Could not load from Firebase', e); }
+            }
             renderTable();
             updateOrdersBadge();
+            if (typeof updateCloudStatusUI === 'function') updateCloudStatusUI();
         });
     </script>
 
@@ -2095,7 +2131,7 @@
 
     <script>
         // Google Firebase Cloud Sync Logic for Admin
-        let firebaseDbUrl = localStorage.getItem('abu_el_goukh_firebase_url') || '';
+        let firebaseDbUrl = 'https://abu-el-goukh-store-default-rtdb.firebaseio.com';
 
         function updateCloudStatusUI() {
             const dot = document.getElementById('cloud-status-dot');

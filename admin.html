@@ -736,6 +736,27 @@
                     </div>
                 </div>
 
+                <!-- SEO & Meta Description for Search Engines -->
+                <div class="border border-blue-200 rounded-2xl p-4 bg-gradient-to-r from-blue-50/50 to-indigo-50/30 space-y-2.5">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="text-base">🔍</span>
+                            <div>
+                                <label class="block text-xs font-black text-trek-black">وصف الميتا لمحركات البحث (SEO Meta Description)</label>
+                                <span class="text-[10px] text-trek-gray">الوصف الترويجي الذي يظهر تحت اسم العجلة في نتائج بحث Google</span>
+                            </div>
+                        </div>
+                        <span id="meta-desc-counter" class="text-[10px] font-bold text-trek-gray num-font px-2 py-0.5 bg-white rounded-md border border-trek-border">0 / 160 حرف</span>
+                    </div>
+                    <textarea id="input-meta-desc" rows="2" maxlength="170" oninput="updateMetaCounter(this.value)" placeholder="مثال: اشتري دراجة ترنكس 136 برو أصلية من أبو الجوخ 1925 بأفضل سعر في مصر، شاسيه ألومنيوم وسرعات شيمانو مع تقسيط وشحن سريع لكافة المحافظات." class="w-full bg-white border border-trek-border focus:border-blue-600 text-xs rounded-xl p-3 outline-none transition font-medium leading-relaxed"></textarea>
+                    <div class="flex justify-between items-center text-[10px] text-trek-gray">
+                        <span>💡 النص المثالي بين 120 إلى 160 حرفاً، يتضمن اسم العجلة وأهم مميزاتها.</span>
+                        <button type="button" onclick="autoGenerateMetaDesc()" class="text-blue-600 hover:text-blue-800 font-bold transition flex items-center gap-1">
+                            <span>✨ توليد تلقائي ذكي</span>
+                        </button>
+                    </div>
+                </div>
+
                 <!-- Image Upload / Link -->
                 <div class="border border-dashed border-trek-border rounded-2xl p-4 bg-trek-cardbg">
                     <label class="block text-xs font-bold text-trek-black mb-2">صورة العجلة (رابط مباشر أو رفع ملف)</label>
@@ -1730,6 +1751,35 @@
 
 
 
+        function updateMetaCounter(val) {
+            const counter = document.getElementById('meta-desc-counter');
+            if (counter) {
+                const len = (val || '').length;
+                counter.innerText = `${len} / 160 حرف`;
+                if (len >= 120 && len <= 160) {
+                    counter.className = 'text-[10px] font-bold text-emerald-700 num-font px-2 py-0.5 bg-emerald-50 rounded-md border border-emerald-300';
+                } else if (len > 160) {
+                    counter.className = 'text-[10px] font-bold text-amber-700 num-font px-2 py-0.5 bg-amber-50 rounded-md border border-amber-300';
+                } else {
+                    counter.className = 'text-[10px] font-bold text-trek-gray num-font px-2 py-0.5 bg-white rounded-md border border-trek-border';
+                }
+            }
+        }
+
+        function autoGenerateMetaDesc() {
+            const name = document.getElementById('input-name').value.trim() || 'دراجة هوائية';
+            const price = document.getElementById('input-price').value.trim();
+            const gears = document.getElementById('input-gears').value.trim() || 'سرعات شيمانو أصلية';
+            const frame = document.getElementById('input-frame').value.trim() || 'شاسيه ألومنيوم خفيف';
+            const priceText = price ? `بسعر ${Number(price).toLocaleString('en-US')} ج.م` : '';
+            const gen = `اشتري ${name} الأصلية من توكيل أبو الجوخ 1925 ${priceText}. ${frame} ومجموعة ${gears} مع فحص ومعاينة قبل الدفع وشحن سريع لجميع المحافظات.`.trim();
+            const input = document.getElementById('input-meta-desc');
+            if (input) {
+                input.value = gen.substring(0, 160);
+                updateMetaCounter(input.value);
+            }
+        }
+
         function openAddModal() {
             document.getElementById('edit-product-id').value = '';
             document.getElementById('modal-heading').innerText = 'إضافة عجلة جديدة للمتجر';
@@ -1740,6 +1790,8 @@
             document.getElementById('input-size').value = '29';
             document.getElementById('input-gears').value = 'شيمانو تورني 21 سرعة ياباني أصلي';
             document.getElementById('input-frame').value = 'شاسيه ألومنيوم 6061 هيدروفورم خفيف';
+            document.getElementById('input-meta-desc').value = '';
+            updateMetaCounter('');
             document.getElementById('input-img').value = 'https://media.zbooni.com/merchants/media/products/109246/1735216982659_croppedImg.jpg';
             document.getElementById('img-preview').src = 'https://media.zbooni.com/merchants/media/products/109246/1735216982659_croppedImg.jpg';
 
@@ -1759,6 +1811,8 @@
             document.getElementById('input-size').value = p.size || '26';
             document.getElementById('input-gears').value = p.gears || '';
             document.getElementById('input-frame').value = p.frame || '';
+            document.getElementById('input-meta-desc').value = p.metaDescription || p.meta_desc || '';
+            updateMetaCounter(p.metaDescription || p.meta_desc || '');
             document.getElementById('input-img').value = p.image;
             document.getElementById('img-preview').src = p.image;
 
@@ -1831,6 +1885,7 @@
             const size = document.getElementById('input-size').value;
             const gears = document.getElementById('input-gears').value;
             const frame = document.getElementById('input-frame').value;
+            const metaDescription = document.getElementById('input-meta-desc').value.trim();
             const image = document.getElementById('input-img').value;
 
             if (editId) {
@@ -1839,7 +1894,7 @@
                 if (index !== -1) {
                     products[index] = {
                         ...products[index],
-                        name, price, category, size, gears, frame, image
+                        name, price, category, size, gears, frame, metaDescription, image
                     };
                 }
             } else {
@@ -1847,7 +1902,7 @@
                 const newId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
                 products.unshift({
                     id: newId,
-                    name, price, category, size, gears, frame, image,
+                    name, price, category, size, gears, frame, metaDescription, image,
                     active: true
                 });
             }

@@ -1956,9 +1956,21 @@
             }
 
             // 4. Populate Page Content Dynamically
-            document.title = currentProduct.name + ' | أبو الجوخ 1925';
-            document.getElementById('page-meta-title').innerText = currentProduct.name + ' | أبو الجوخ 1925';
-            document.getElementById('page-meta-desc').setAttribute('content', currentProduct.specs || currentProduct.name);
+            const pageTitle = currentProduct.name + ' | أبو الجوخ 1925';
+            document.title = pageTitle;
+            const metaTitleEl = document.getElementById('page-meta-title');
+            if (metaTitleEl) metaTitleEl.innerText = pageTitle;
+
+            const seoDesc = currentProduct.metaDescription || currentProduct.meta_desc || `اشتري ${currentProduct.name} الأصلية من توكيل أبو الجوخ 1925 بسعر ${fmt(currentProduct.price)} ج.م. شحن لجميع المحافظات وضمان معتمد.`;
+            const metaDescEl = document.getElementById('page-meta-desc');
+            if (metaDescEl) metaDescEl.setAttribute('content', seoDesc);
+
+            const ogTitle = document.getElementById('og-title');
+            if (ogTitle) ogTitle.setAttribute('content', pageTitle);
+            const ogDesc = document.getElementById('og-desc');
+            if (ogDesc) ogDesc.setAttribute('content', seoDesc);
+            const ogImage = document.getElementById('og-image');
+            if (ogImage && currentProduct.image) ogImage.setAttribute('content', currentProduct.image);
 
             // Breadcrumbs
             document.getElementById('breadcrumb-category').innerText = currentProduct.category || 'دراجات هوائية';

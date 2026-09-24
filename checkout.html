@@ -204,26 +204,58 @@
 
                         <!-- Option 2: Paymob Card / Meeza -->
                         <div id="paymob-payment-option" style="display:none">
-                        <label class="flex items-start gap-4 p-4 rounded-xl border border-trek-border bg-trek-cardbg cursor-pointer transition hover:bg-white hover:border-trek-black">
-                            <input type="radio" name="payment_method" value="بطاقة بنكية / فيزا عبر Paymob" class="mt-1 text-trek-red focus:ring-trek-red w-4 h-4">
+                        <label class="flex items-start gap-4 p-4 rounded-xl border border-trek-border bg-trek-cardbg cursor-pointer transition hover:bg-white hover:border-blue-600">
+                            <input type="radio" name="payment_method" value="paymob" class="mt-1 text-blue-600 focus:ring-blue-600 w-4 h-4">
                             <div class="flex-1">
                                 <div class="flex items-center justify-between">
-                                    <span class="text-sm font-bold text-trek-black">بطاقة ائتمان / ميزة / كارت بنكي (Paymob)</span>
+                                    <span class="text-sm font-bold text-trek-black">⚡ بطاقة بنكية / فيزا / ميزة (Paymob)</span>
                                     <div class="flex items-center gap-1.5 opacity-80 text-[10px] font-bold">
                                         <span class="bg-white px-2 py-0.5 border border-trek-border rounded">Visa</span>
                                         <span class="bg-white px-2 py-0.5 border border-trek-border rounded">Mastercard</span>
                                         <span class="bg-white px-2 py-0.5 border border-trek-border rounded">Meeza</span>
                                     </div>
                                 </div>
-                                <p class="text-xs text-trek-gray mt-1">دفع إلكتروني فوري وآمن 100% بتشفير بنكي 256-bit عبر بوابة Paymob المعتمدة بدون رسوم إضافية.</p>
+                                <p class="text-xs text-trek-gray mt-1">ستُحوَّل مباشرة لصفحة دفع Paymob الرسمية والمؤمنة 100% لإتمام الدفع بالبطاقة البنكية بدون رسوم إضافية.</p>
                             </div>
                         </label>
                         </div>
 
-                        <!-- Option 3: InstaPay / Vodafone Cash -->
-                        <label class="flex flex-col p-4 rounded-xl border border-trek-border bg-trek-cardbg cursor-pointer transition hover:bg-white hover:border-trek-black">
+                        <!-- Option 3: FawryPay (فوري باي) -->
+                        <div id="fawry-payment-option" style="display:none">
+                        <label class="flex items-start gap-4 p-4 rounded-xl border border-trek-border bg-trek-cardbg cursor-pointer transition hover:bg-white hover:border-amber-500">
+                            <input type="radio" name="payment_method" value="fawry" class="mt-1 text-amber-600 focus:ring-amber-500 w-4 h-4">
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm font-bold text-trek-black">🟡 كود دفع فوري باي (FawryPay)</span>
+                                    <span class="bg-amber-100 text-amber-900 text-[10px] font-black px-2 py-0.5 rounded">فوري / أمان / المحافظ</span>
+                                </div>
+                                <p class="text-xs text-trek-gray mt-1">ستُحوَّل لبوابة فوري باي الرسمية لإصدار كود دفع فوري والسداد نقداً عبر أي منفذ أو تطبيق فوري في مصر.</p>
+                            </div>
+                        </label>
+                        </div>
+
+                        <!-- Option 4: PayTabs (باي تابس) -->
+                        <div id="paytabs-payment-option" style="display:none">
+                        <label class="flex items-start gap-4 p-4 rounded-xl border border-trek-border bg-trek-cardbg cursor-pointer transition hover:bg-white hover:border-blue-500">
+                            <input type="radio" name="payment_method" value="paytabs" class="mt-1 text-blue-600 focus:ring-blue-500 w-4 h-4">
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm font-bold text-trek-black">🟦 دفع إلكتروني آمن عبر PayTabs</span>
+                                    <div class="flex items-center gap-1.5 opacity-80 text-[10px] font-bold">
+                                        <span class="bg-white px-2 py-0.5 border border-trek-border rounded">Visa</span>
+                                        <span class="bg-white px-2 py-0.5 border border-trek-border rounded">Mastercard</span>
+                                        <span class="bg-white px-2 py-0.5 border border-trek-border rounded">Mada</span>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-trek-gray mt-1">ستُحوَّل لصفحة دفع PayTabs المؤمنة بتشفير 3D Secure. بعد الدفع ترجع للموقع تلقائياً.</p>
+                            </div>
+                        </label>
+                        </div>
+
+                        <!-- Option 5: InstaPay / Vodafone Cash -->
+                        <label class="flex flex-col p-4 rounded-xl border border-trek-border bg-trek-cardbg cursor-pointer transition hover:bg-white hover:border-purple-600">
                             <div class="flex items-start gap-4">
-                                <input type="radio" name="payment_method" value="تحويل إنستاباي / محفظة فودافون كاش" class="mt-1 text-trek-red focus:ring-trek-red w-4 h-4">
+                                <input type="radio" name="payment_method" value="instapay" class="mt-1 text-purple-600 focus:ring-purple-600 w-4 h-4">
                                 <div class="flex-1">
                                     <div class="flex items-center justify-between">
                                         <span class="text-sm font-bold text-trek-black">تحويل فوري عبر إنستاباي (InstaPay) أو محفظة كاش</span>
@@ -255,9 +287,9 @@
                             </div>
                         </label>
 
-                        <!-- Option 4: ValU / Aman Installments -->
-                        <label class="flex items-start gap-4 p-4 rounded-xl border border-trek-border bg-trek-cardbg cursor-pointer transition hover:bg-white hover:border-trek-black">
-                            <input type="radio" name="payment_method" value="تقسيط فاليو ValU / أمان / سهولة" class="mt-1 text-trek-red focus:ring-trek-red w-4 h-4">
+                        <!-- Option 6: ValU / Aman Installments -->
+                        <label class="flex items-start gap-4 p-4 rounded-xl border border-trek-border bg-trek-cardbg cursor-pointer transition hover:bg-white hover:border-amber-600">
+                            <input type="radio" name="payment_method" value="valu" class="mt-1 text-amber-600 focus:ring-amber-600 w-4 h-4">
                             <div class="flex-1">
                                 <div class="flex items-center justify-between">
                                     <span class="text-sm font-bold text-trek-black">تقسيط فوري حتى 36 شهراً (ValU • أمان • سهولة)</span>
@@ -266,24 +298,6 @@
                                 <p class="text-xs text-trek-gray mt-1">اختر مدة التقسيط من 6 إلى 36 شهراً عبر حسابك المفعل في تطبيق فاليو أو سهولة، وسيتم تأكيد القسط فورياً.</p>
                             </div>
                         </label>
-
-                        <!-- Option 5: PayTabs (Online Card / 3D Secure) -->
-                        <div id="paytabs-payment-option" style="display:none">
-                        <label class="flex items-start gap-4 p-4 rounded-xl border border-trek-border bg-trek-cardbg cursor-pointer transition hover:bg-white hover:border-blue-500">
-                            <input type="radio" name="payment_method" value="paytabs" class="mt-1 text-blue-600 focus:ring-blue-500 w-4 h-4">
-                            <div class="flex-1">
-                                <div class="flex items-center justify-between">
-                                    <span class="text-sm font-bold text-trek-black">🟦 دفع إلكتروني آمن عبر PayTabs</span>
-                                    <div class="flex items-center gap-1.5 opacity-80 text-[10px] font-bold">
-                                        <span class="bg-white px-2 py-0.5 border border-trek-border rounded">Visa</span>
-                                        <span class="bg-white px-2 py-0.5 border border-trek-border rounded">Mastercard</span>
-                                        <span class="bg-white px-2 py-0.5 border border-trek-border rounded">Mada</span>
-                                    </div>
-                                </div>
-                                <p class="text-xs text-trek-gray mt-1">ستُحوَّل لصفحة دفع PayTabs المؤمنة بتشفير 3D Secure. بعد الدفع ترجع للموقع تلقائياً.</p>
-                            </div>
-                        </label>
-                        </div>
 
                     </div>
                 </div>
@@ -479,13 +493,19 @@
                         // Show/hide PayTabs option based on enabled flag
                         const paytabsOpt = document.getElementById('paytabs-payment-option');
                         if (paytabsOpt) {
-                            paytabsOpt.style.display = (cfg.paytabs && cfg.paytabs.enabled && cfg.paytabs.profileId) ? '' : 'none';
+                            paytabsOpt.style.display = (cfg.paytabs && cfg.paytabs.enabled !== false && cfg.paytabs.profileId) ? '' : 'none';
                         }
 
                         // Show/hide Paymob option
                         const paymobOpt = document.getElementById('paymob-payment-option');
                         if (paymobOpt) {
-                            paymobOpt.style.display = (cfg.paymob && cfg.paymob.enabled && cfg.paymob.apiKey) ? '' : 'none';
+                            paymobOpt.style.display = (cfg.paymob && cfg.paymob.enabled !== false && (cfg.paymob.apiKey || cfg.paymob.secretKey)) ? '' : 'none';
+                        }
+
+                        // Show/hide Fawry option
+                        const fawryOpt = document.getElementById('fawry-payment-option');
+                        if (fawryOpt) {
+                            fawryOpt.style.display = (cfg.fawry && cfg.fawry.enabled !== false && cfg.fawry.merchantCode) ? '' : 'none';
                         }
                     }
                 }
@@ -512,6 +532,19 @@
             renderCheckoutItems();
             updateCalculations();
             loadLivePaymentConfig();
+
+            // Check for electronic payment return parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const payStatus = urlParams.get('payment');
+            const returnOrderId = urlParams.get('order');
+            if (payStatus && payStatus.includes('success')) {
+                const banner = document.createElement('div');
+                banner.className = 'bg-emerald-600 text-white p-4 rounded-2xl mb-6 text-center font-bold text-xs sm:text-sm shadow-md flex items-center justify-center gap-2';
+                banner.innerHTML = `<span>✓ تم تأكيد سداد دفعتك الإلكترونية بنجاح ${returnOrderId ? `للطلب #${returnOrderId}` : ''}! جاري ضبط دراجتك وتجهيزها للشحن فوراً.</span>`;
+                const mainEl = document.querySelector('main');
+                if (mainEl) mainEl.prepend(banner);
+                localStorage.removeItem('abu_el_goukh_cart');
+            }
         }
 
         function renderCheckoutItems() {
@@ -658,7 +691,7 @@
             }
 
             // ─────────────────────────────────────────────────────────────
-            // PayTabs Hosted Payment Page – redirect to secure payment page
+            // 1. PayTabs Hosted Payment Page
             // ─────────────────────────────────────────────────────────────
             if (paymentMethod === 'paytabs') {
                 const pt = livePaymentCfg.paytabs || {};
@@ -667,27 +700,18 @@
                 const ptMode = pt.mode || 'live';
 
                 if (!profileId || !serverKey) {
-                    alert('⚠️ بوابة PayTabs غير مضبوطة بشكل صحيح. برجاء التواصل مع الإدارة.');
+                    alert('⚠️ بوابة PayTabs غير مضبوطة بشكل كامل في لوحة الإدارة. برجاء إدخال Profile ID و Server Key.');
                     return;
                 }
 
-                // PayTabs Egypt endpoint
-                const ptEndpoint = ptMode === 'test'
-                    ? 'https://secure-egypt.paytabs.com/payment/request'
-                    : 'https://secure-egypt.paytabs.com/payment/request';
-
-                const returnUrl = window.location.origin + '/checkout.html?payment=success&order=' + orderId;
-                const callbackUrl = window.location.origin + '/checkout.html?payment=callback';
-
                 const btn = document.getElementById('btn-submit-order');
                 btn.disabled = true;
-                btn.innerHTML = `<svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg> <span>جاري التحويل لبوابة الدفع…</span>`;
+                btn.innerHTML = `<svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg> <span>جاري التحويل لبوابة PayTabs…</span>`;
 
                 try {
                     const cartDesc = cart.map(i => i.name).join(' | ');
-                    const returnUrl = window.location.origin + '/checkout?payment=success&order=' + orderId;
+                    const returnUrl = window.location.origin + '/checkout?payment=paytabs_success&order=' + orderId;
 
-                    // Call our Vercel serverless proxy (solves CORS issue)
                     const response = await fetch('/api/paytabs-create', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -714,7 +738,7 @@
                         window.location.href = data.redirect_url;
                         return;
                     } else {
-                        const errMsg = (data && (data.message || data.error)) ? JSON.stringify(data) : 'لم يتم استلام رابط الدفع';
+                        const errMsg = (data && (data.message || data.error || data.details)) ? JSON.stringify(data) : 'لم يتم استلام رابط الدفع من PayTabs';
                         throw new Error(errMsg);
                     }
                 } catch (err) {
@@ -722,6 +746,133 @@
                     btn.disabled = false;
                     btn.innerHTML = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> <span>تأكيد الطلب وشحن الدراجة الآن</span>`;
                     alert('⚠️ تعذر التحويل لبوابة PayTabs:\n' + err.message + '\n\nتأكد من صحة البيانات في إعدادات الأدمن.');
+                    return;
+                }
+            }
+
+            // ─────────────────────────────────────────────────────────────
+            // 2. Paymob (Cards, Meeza, Wallets, ValU)
+            // ─────────────────────────────────────────────────────────────
+            if (paymentMethod === 'paymob' || paymentMethod === 'valu') {
+                const pm = livePaymentCfg.paymob || {};
+                const apiKey = pm.apiKey;
+                const secretKey = pm.secretKey;
+                const publicKey = pm.publicKey;
+                const integrationId = (paymentMethod === 'valu' && pm.intValu) ? pm.intValu : (pm.intCards || pm.intWallets || '');
+                const iframeId = pm.iframeId;
+
+                // Proceed with Paymob online redirect if configured
+                if (paymentMethod === 'paymob' || (paymentMethod === 'valu' && pm.intValu)) {
+                    if (!apiKey && !secretKey) {
+                        alert('⚠️ بوابة Paymob غير مضبوطة. يرجى إدخال الـ API Key أو Secret Key في لوحة تحكم الأدمن.');
+                        return;
+                    }
+
+                    const btn = document.getElementById('btn-submit-order');
+                    btn.disabled = true;
+                    btn.innerHTML = `<svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg> <span>جاري التحويل لبوابة Paymob…</span>`;
+
+                    try {
+                        const cartDesc = cart.map(i => i.name).join(' | ');
+                        const returnUrl = window.location.origin + '/checkout?payment=paymob_success&order=' + orderId;
+
+                        const response = await fetch('/api/paymob-create', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                apiKey,
+                                secretKey,
+                                publicKey,
+                                integrationId,
+                                iframeId,
+                                orderId,
+                                total,
+                                cartDescription: 'أبو الجوخ 1925 – ' + cartDesc,
+                                customerName: name,
+                                customerPhone: phone,
+                                customerCity: city || gov,
+                                customerState: gov,
+                                customerAddress: address,
+                                returnUrl
+                            })
+                        });
+
+                        const data = await response.json();
+
+                        if (data && data.redirect_url) {
+                            localStorage.removeItem('abu_el_goukh_cart');
+                            window.location.href = data.redirect_url;
+                            return;
+                        } else {
+                            const errMsg = (data && (data.error || data.details)) ? JSON.stringify(data) : 'تعذر الحصول على رابط دفع Paymob';
+                            throw new Error(errMsg);
+                        }
+                    } catch (err) {
+                        console.error('Paymob error:', err);
+                        btn.disabled = false;
+                        btn.innerHTML = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> <span>تأكيد الطلب وشحن الدراجة الآن</span>`;
+                        alert('⚠️ تعذر التحويل لبوابة Paymob:\n' + err.message + '\n\nتأكد من صحة المفاتيح (API Key أو Secret Key) في لوحة تحكم الأدمن.');
+                        return;
+                    }
+                }
+            }
+
+            // ─────────────────────────────────────────────────────────────
+            // 3. FawryPay (فوري باي)
+            // ─────────────────────────────────────────────────────────────
+            if (paymentMethod === 'fawry') {
+                const fw = livePaymentCfg.fawry || {};
+                const merchantCode = fw.merchantCode;
+                const securityKey = fw.securityKey;
+                const mode = fw.mode || 'sandbox';
+                const expiry = fw.expiry || 48;
+
+                if (!merchantCode || !securityKey) {
+                    alert('⚠️ بوابة فوري باي غير مضبوطة. يرجى إدخال Merchant Code و Security Key في لوحة تحكم الأدمن.');
+                    return;
+                }
+
+                const btn = document.getElementById('btn-submit-order');
+                btn.disabled = true;
+                btn.innerHTML = `<svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg> <span>جاري إصدار كود فوري باي…</span>`;
+
+                try {
+                    const cartDesc = cart.map(i => i.name).join(' | ');
+                    const returnUrl = window.location.origin + '/checkout?payment=fawry_success&order=' + orderId;
+
+                    const response = await fetch('/api/fawry-create', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            merchantCode,
+                            securityKey,
+                            mode,
+                            expiry,
+                            orderId,
+                            total,
+                            cartDescription: 'أبو الجوخ 1925 – ' + cartDesc,
+                            customerName: name,
+                            customerPhone: phone,
+                            customerEmail: 'customer@abu-el-goukh.com',
+                            returnUrl
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (data && data.redirect_url) {
+                        localStorage.removeItem('abu_el_goukh_cart');
+                        window.location.href = data.redirect_url;
+                        return;
+                    } else {
+                        const errMsg = (data && (data.error || data.details)) ? JSON.stringify(data) : 'تعذر الحصول على رابط فوري باي';
+                        throw new Error(errMsg);
+                    }
+                } catch (err) {
+                    console.error('Fawry error:', err);
+                    btn.disabled = false;
+                    btn.innerHTML = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> <span>تأكيد الطلب وشحن الدراجة الآن</span>`;
+                    alert('⚠️ تعذر التحويل لبوابة فوري:\n' + err.message + '\n\nتأكد من صحة كود التاجر وكود الأمان في لوحة الأدمن.');
                     return;
                 }
             }

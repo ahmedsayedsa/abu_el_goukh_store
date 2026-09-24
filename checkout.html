@@ -219,14 +219,37 @@
                         </label>
 
                         <!-- Option 3: InstaPay / Vodafone Cash -->
-                        <label class="flex items-start gap-4 p-4 rounded-xl border border-trek-border bg-trek-cardbg cursor-pointer transition hover:bg-white hover:border-trek-black">
-                            <input type="radio" name="payment_method" value="تحويل إنستاباي / محفظة فودافون كاش" class="mt-1 text-trek-red focus:ring-trek-red w-4 h-4">
-                            <div class="flex-1">
-                                <div class="flex items-center justify-between">
-                                    <span class="text-sm font-bold text-trek-black">تحويل فوري عبر إنستاباي (InstaPay) أو محفظة كاش</span>
-                                    <span class="bg-purple-100 text-purple-800 text-[10px] font-black px-2 py-0.5 rounded">فوري وسريع</span>
+                        <label class="flex flex-col p-4 rounded-xl border border-trek-border bg-trek-cardbg cursor-pointer transition hover:bg-white hover:border-trek-black">
+                            <div class="flex items-start gap-4">
+                                <input type="radio" name="payment_method" value="تحويل إنستاباي / محفظة فودافون كاش" class="mt-1 text-trek-red focus:ring-trek-red w-4 h-4">
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-sm font-bold text-trek-black">تحويل فوري عبر إنستاباي (InstaPay) أو محفظة كاش</span>
+                                        <span class="bg-purple-100 text-purple-800 text-[10px] font-black px-2 py-0.5 rounded">فوري وسريع</span>
+                                    </div>
+                                    <p class="text-xs text-trek-gray mt-1">تحويل لحظي على حساب إنستاباي الرسمي للشركة أو محفظة فودافون كاش الرسمية، مع إرسال إيصال التحويل على واتساب لتسريع الشحن فوراً.</p>
                                 </div>
-                                <p class="text-xs text-trek-gray mt-1">تحويل لحظي على حساب إنستاباي الرسمي للشركة أو محفظة فودافون كاش الرسمية، مع إرسال إيصال التحويل على واتساب لتسريع الشحن فوراً.</p>
+                            </div>
+
+                            <!-- Expandable Dynamic Details Box -->
+                            <div id="instapay-info-box" class="mt-3 pt-3 border-t border-purple-200/80 space-y-2 text-xs bg-purple-50/70 p-3.5 rounded-xl">
+                                <div class="flex justify-between items-center flex-wrap gap-2">
+                                    <span class="font-bold text-trek-black">🟣 عنوان إنستاباي الرسمي (IPA):</span>
+                                    <div class="flex items-center gap-1.5">
+                                        <span id="chk-instapay-ipa" class="font-mono font-black text-purple-950 bg-white px-2.5 py-1 rounded-lg border border-purple-200 dir-ltr select-all text-xs">aboelgoukh1925@instapay</span>
+                                        <button type="button" onclick="navigator.clipboard.writeText(document.getElementById('chk-instapay-ipa').innerText); alert('✓ تم نسخ عنوان إنستاباي!');" class="p-1 px-2 rounded-md bg-purple-600 hover:bg-purple-700 text-white font-bold text-[10px] transition">نسخ 📋</button>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center flex-wrap gap-2">
+                                    <span class="font-bold text-trek-black">📱 محفظة فودافون كاش الرسمية:</span>
+                                    <div class="flex items-center gap-1.5">
+                                        <span id="chk-vodafone-cash" class="font-mono font-black text-purple-950 bg-white px-2.5 py-1 rounded-lg border border-purple-200 dir-ltr select-all text-xs">01202925192</span>
+                                        <button type="button" onclick="navigator.clipboard.writeText(document.getElementById('chk-vodafone-cash').innerText); alert('✓ تم نسخ رقم المحفظة!');" class="p-1 px-2 rounded-md bg-purple-600 hover:bg-purple-700 text-white font-bold text-[10px] transition">نسخ 📋</button>
+                                    </div>
+                                </div>
+                                <p id="chk-instapay-notes" class="text-[11px] text-purple-900 font-medium pt-1 border-t border-purple-200/50">
+                                    يرجى تحويل قيمة الطلب، ثم إرسال سكرين شوت التحويل عبر الواتساب لتأكيد شحن الدراجة فوراً.
+                                </p>
                             </div>
                         </label>
 
@@ -411,6 +434,27 @@
         let appliedDiscountPercent = 0;
         let shippingFee = 150;
 
+        // Fetch Live Payment Gateway Configurations from Firebase Cloud DB
+        async function loadLivePaymentConfig() {
+            try {
+                const fbUrl = 'https://abu-el-goukh-store-default-rtdb.firebaseio.com/payment_gateway_settings.json';
+                const res = await fetch(fbUrl);
+                if (res.ok) {
+                    const cfg = await res.json();
+                    if (cfg && cfg.instapay) {
+                        const ipaEl = document.getElementById('chk-instapay-ipa');
+                        const phoneEl = document.getElementById('chk-vodafone-cash');
+                        const notesEl = document.getElementById('chk-instapay-notes');
+                        if (ipaEl && cfg.instapay.ipa) ipaEl.innerText = cfg.instapay.ipa;
+                        if (phoneEl && cfg.instapay.vodafoneCash) phoneEl.innerText = cfg.instapay.vodafoneCash;
+                        if (notesEl && cfg.instapay.instructions) notesEl.innerText = cfg.instapay.instructions;
+                    }
+                }
+            } catch(e) {
+                console.warn('Using cached payment settings', e);
+            }
+        }
+
         // Load cart from localStorage or fallback
         function initCheckout() {
             try {
@@ -428,6 +472,7 @@
 
             renderCheckoutItems();
             updateCalculations();
+            loadLivePaymentConfig();
         }
 
         function renderCheckoutItems() {

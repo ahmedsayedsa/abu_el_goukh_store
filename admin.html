@@ -215,15 +215,19 @@
 
         </div>
 
-        <!-- Main Mode Tabs: Products vs Orders -->
-        <div class="flex items-center gap-3 mb-6 border-b border-trek-border pb-3">
+        <!-- Main Mode Tabs: Products vs Orders vs Payment Gateways -->
+        <div class="flex items-center gap-3 mb-6 border-b border-trek-border pb-3 flex-wrap">
             <button id="main-tab-products" onclick="switchMainTab('products')" class="px-5 py-3 rounded-xl text-sm font-black bg-trek-black text-white transition flex items-center gap-2 shadow-sm">
                 <span>🚲 المنتجات والمخزون</span>
-                <span class="bg-white/20 text-white text-xs px-2 py-0.5 rounded-full num-font" id="tab-products-badge">62</span>
+                <span class="bg-white/20 text-white text-xs px-2 py-0.5 rounded-full num-font" id="tab-products-badge">67</span>
             </button>
             <button id="main-tab-orders" onclick="switchMainTab('orders')" class="px-5 py-3 rounded-xl text-sm font-bold bg-white text-trek-black border border-trek-border hover:bg-trek-lightgray transition flex items-center gap-2">
                 <span>📦 الطلبات الواردة (E-Commerce Orders)</span>
                 <span class="bg-trek-red text-white text-xs font-black px-2 py-0.5 rounded-full num-font" id="tab-orders-badge">0</span>
+            </button>
+            <button id="main-tab-payments" onclick="switchMainTab('payments')" class="px-5 py-3 rounded-xl text-sm font-bold bg-white text-trek-black border border-trek-border hover:bg-trek-lightgray transition flex items-center gap-2">
+                <span>💳 بوابات الدفع الإلكتروني والـ APIs</span>
+                <span id="tab-payments-badge" class="bg-emerald-600 text-white text-[10px] font-black px-2.5 py-0.5 rounded-full">جاهز للربط 🟢</span>
             </button>
         </div>
 
@@ -324,6 +328,297 @@
             </div>
         </div>
         <!-- END ORDERS VIEW -->
+
+        <!-- PAYMENT GATEWAYS & APIS VIEW (لوحة ربط بوابات الدفع الإلكتروني) -->
+        <div id="view-payments" class="hidden space-y-6">
+            
+            <!-- Top Controls Banner -->
+            <div class="bg-white p-6 rounded-2xl border border-trek-border shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl bg-trek-red/10 text-trek-red flex items-center justify-center text-2xl font-black">
+                        💳
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-black text-trek-black">إعدادات بوابات الدفع الإلكتروني وربط الـ APIs</h2>
+                        <p class="text-xs text-trek-gray mt-0.5">اربط حساباتك في Paymob، فوري، إنستاباي والمحافظ الإلكترونية لاستقبال المدفوعات أونلاين وتحويلها لحسابك البنكي</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 w-full md:w-auto flex-wrap">
+                    <button type="button" onclick="fetchCloudPaymentSettings(true)" class="px-4 py-2.5 bg-trek-lightgray hover:bg-trek-border text-trek-black text-xs font-bold rounded-xl transition flex items-center gap-1.5 shadow-2xs">
+                        <span>🔄 استعادة من السحابة</span>
+                    </button>
+                    <button type="button" onclick="savePaymentGatewaySettings()" class="flex-grow md:flex-grow-0 px-6 py-2.5 bg-trek-red hover:bg-red-700 text-white text-xs font-black rounded-xl transition shadow-md flex items-center justify-center gap-2 hover:scale-[1.01]">
+                        <span>💾 حفظ وتفعيل الإعدادات سحابياً</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- GATEWAYS GRID -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                <!-- 1. PAYMOB (باي موب) -->
+                <div class="bg-white rounded-2xl border border-trek-border shadow-sm p-6 space-y-5">
+                    <div class="flex items-center justify-between border-b border-trek-border pb-4">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl font-black text-[#1F51FF]">⚡</span>
+                            <div>
+                                <h3 class="text-base font-black text-trek-black">Paymob (باي موب مصر)</h3>
+                                <p class="text-[11px] text-trek-gray">فيزا، ماستركارد، ميزة، تقسيط فاليو، المحافظ الذكية، وأمان</p>
+                            </div>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="paymob-enabled" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                            <span class="mr-2 text-xs font-bold text-trek-black">مفعل</span>
+                        </label>
+                    </div>
+
+                    <!-- Environment Mode Selector -->
+                    <div class="bg-trek-lightgray/70 p-3 rounded-xl flex items-center justify-between text-xs">
+                        <span class="font-bold text-trek-black">بيئة التشغيل (Environment):</span>
+                        <select id="paymob-mode" class="p-1.5 px-3 rounded-lg border border-trek-border bg-white text-xs font-bold outline-none">
+                            <option value="live">🚀 بيئة الإنتاج الحقيقية (Live Production)</option>
+                            <option value="test">🧪 بيئة الاختبار التجريبية (Sandbox / Test)</option>
+                        </select>
+                    </div>
+
+                    <!-- Keys Inputs -->
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="text-xs font-bold text-trek-black">المفتاح البرمجي العام (API Key):</label>
+                                <span class="text-[10px] text-trek-gray">من لوحة تحكم Paymob > Settings</span>
+                            </div>
+                            <input type="password" id="paymob-api-key" placeholder="ZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJ..." class="w-full p-2.5 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white outline-none">
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-trek-black mb-1">المفتاح العام (Public Key):</label>
+                                <input type="text" id="paymob-public-key" placeholder="egy_pk_live_..." class="w-full p-2.5 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-trek-black mb-1">المفتاح السري (Secret Key):</label>
+                                <input type="password" id="paymob-secret-key" placeholder="egy_sk_live_..." class="w-full p-2.5 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white outline-none">
+                            </div>
+                        </div>
+
+                        <!-- Integration IDs -->
+                        <div class="pt-2 border-t border-trek-border/60">
+                            <span class="block text-xs font-black text-trek-black mb-2">أكواد التكامل (Integration IDs):</span>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-[11px] font-bold text-trek-gray mb-1">💳 بطاقات بنكية (Cards):</label>
+                                    <input type="text" id="paymob-int-cards" placeholder="مثال: 456789" class="w-full p-2 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-trek-gray mb-1">📱 محافظ ذكية (Wallets):</label>
+                                    <input type="text" id="paymob-int-wallets" placeholder="مثال: 456790" class="w-full p-2 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-trek-gray mb-1">🏷️ تقسيط فاليو (ValU):</label>
+                                    <input type="text" id="paymob-int-valu" placeholder="مثال: 456791" class="w-full p-2 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-trek-gray mb-1">🏪 كشك أمان ومصاري:</label>
+                                    <input type="text" id="paymob-int-kiosk" placeholder="مثال: 456792" class="w-full p-2 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white outline-none">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                            <div>
+                                <label class="block text-xs font-bold text-trek-black mb-1">رقم قالب الدفع (Iframe ID):</label>
+                                <input type="text" id="paymob-iframe-id" placeholder="مثال: 812345" class="w-full p-2.5 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-trek-black mb-1">المفتاح المشفر (HMAC Secret):</label>
+                                <input type="password" id="paymob-hmac" placeholder="A1B2C3D4E5F6..." class="w-full p-2.5 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white outline-none">
+                            </div>
+                        </div>
+
+                        <div class="pt-2 flex justify-between items-center text-[11px] text-trek-gray">
+                            <a href="https://accept.paymob.com/portal2/en/home" target="_blank" class="text-blue-600 hover:underline font-bold flex items-center gap-1">
+                                <span>لوحة تحكم Paymob الرسمية ↗</span>
+                            </a>
+                            <span class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-bold">✓ تشفير SSL آمن</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. INSTAPAY & MOBILE WALLETS (إنستاباي ومحافظ الكاش) -->
+                <div class="bg-white rounded-2xl border border-trek-border shadow-sm p-6 space-y-5">
+                    <div class="flex items-center justify-between border-b border-trek-border pb-4">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl font-black text-purple-600">🟣</span>
+                            <div>
+                                <h3 class="text-base font-black text-trek-black">InstaPay ومحافظ الكاش المباشرة</h3>
+                                <p class="text-[11px] text-trek-gray">تحويل لحظي لحسابك البنكي ومحفظة فودافون كاش بدون خصم عمولات</p>
+                            </div>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="instapay-enabled" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                            <span class="mr-2 text-xs font-bold text-trek-black">مفعل</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-bold text-trek-black mb-1">عنوان الدفع اللحظي الرسمي (InstaPay IPA / Username):</label>
+                            <input type="text" id="instapay-ipa" value="aboelgoukh1925@instapay" placeholder="yourname@instapay" class="w-full p-2.5 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white outline-none">
+                            <p class="text-[10px] text-trek-gray mt-1">يظهر للعميل في صفحة الدفع لنسخه والتحويل عليه مباشرة</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-trek-black mb-1">رقم هاتف إنستاباي المسجل:</label>
+                                <input type="text" id="instapay-phone" value="01202925192" placeholder="01202925192" class="w-full p-2.5 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-trek-black mb-1">رقم محفظة فودافون كاش:</label>
+                                <input type="text" id="vodafone-cash" value="01202925192" placeholder="010XXXXXXXX" class="w-full p-2.5 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white outline-none">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-trek-black mb-1">أرقام محافظ أخرى (أورانج / وي / اتصالات كاش):</label>
+                            <input type="text" id="other-cash" placeholder="اختياري - أرقام إضافية لاستقبال التحويلات" class="w-full p-2.5 rounded-xl border border-trek-border text-xs bg-trek-cardbg focus:bg-white outline-none">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-trek-black mb-1">رسالة التعليمات للعميل في صفحة الدفع:</label>
+                            <textarea id="instapay-notes" rows="3" class="w-full p-2.5 rounded-xl border border-trek-border text-xs bg-trek-cardbg focus:bg-white outline-none leading-relaxed">يرجى تحويل قيمة الطلب إلى عنوان إنستاباي أو محفظة فودافون كاش الموضحة، ثم إرسال سكرين شوت التحويل عبر الواتساب لتأكيد شحن الدراجة فوراً.</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. FAWRY PAY (فوري باي) -->
+                <div class="bg-white rounded-2xl border border-trek-border shadow-sm p-6 space-y-5">
+                    <div class="flex items-center justify-between border-b border-trek-border pb-4">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl font-black text-amber-500">🟡</span>
+                            <div>
+                                <h3 class="text-base font-black text-trek-black">FawryPay (فوري باي)</h3>
+                                <p class="text-[11px] text-trek-gray">إصدار كود دفع فوري للسداد عبر منافذ فوري في مصر</p>
+                            </div>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="fawry-enabled" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                            <span class="mr-2 text-xs font-bold text-trek-black">مفعل</span>
+                        </label>
+                    </div>
+
+                    <div class="bg-trek-lightgray/70 p-3 rounded-xl flex items-center justify-between text-xs">
+                        <span class="font-bold text-trek-black">بيئة فوري (Environment):</span>
+                        <select id="fawry-mode" class="p-1.5 px-3 rounded-lg border border-trek-border bg-white text-xs font-bold outline-none">
+                            <option value="sandbox">🧪 بيئة الاختبار (Sandbox)</option>
+                            <option value="live">🚀 بيئة الإنتاج المباشرة (Production)</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-bold text-trek-black mb-1">كود التاجر (Merchant Code):</label>
+                            <input type="text" id="fawry-merchant-code" placeholder="مثال: 10145678" class="w-full p-2.5 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-trek-black mb-1">كود الأمان السري (Security Key):</label>
+                            <input type="password" id="fawry-security-key" placeholder="2a1b3c4d-5e6f-7a8b-9c0d..." class="w-full p-2.5 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-trek-black mb-1">مهلة صلاحية كود السداد (بالساعات):</label>
+                            <input type="number" id="fawry-expiry" value="48" class="w-full p-2.5 rounded-xl border border-trek-border text-xs num-font bg-trek-cardbg focus:bg-white outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. CASH ON DELIVERY (الدفع عند الاستلام) -->
+                <div class="bg-white rounded-2xl border border-trek-border shadow-sm p-6 space-y-5">
+                    <div class="flex items-center justify-between border-b border-trek-border pb-4">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl font-black text-emerald-600">💵</span>
+                            <div>
+                                <h3 class="text-base font-black text-trek-black">الدفع عند الاستلام والمعاينة (COD)</h3>
+                                <p class="text-[11px] text-trek-gray">التحصيل نقداً عند باب البيت بعد فحص الدراجة وتجربتها</p>
+                            </div>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="cod-enabled" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
+                            <span class="mr-2 text-xs font-bold text-trek-black">مفعل</span>
+                        </label>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-trek-black mb-1">رسوم إضافية للدفع عند الاستلام (ج.م):</label>
+                                <input type="number" id="cod-fee" value="0" placeholder="0" class="w-full p-2.5 rounded-xl border border-trek-border text-xs num-font bg-trek-cardbg focus:bg-white outline-none">
+                                <p class="text-[10px] text-trek-gray mt-1">اتركها 0 إذا كان الدفع عند الاستلام بدون رسوم إضافية</p>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-trek-black mb-1">الحد الأقصى للطلب نقداً (ج.م):</label>
+                                <input type="number" id="cod-max" value="35000" class="w-full p-2.5 rounded-xl border border-trek-border text-xs num-font bg-trek-cardbg focus:bg-white outline-none">
+                                <p class="text-[10px] text-trek-gray mt-1">الطلبات الأعلى تتطلب دفعاً إلكترونياً أو عربوناً</p>
+                            </div>
+                        </div>
+
+                        <div class="pt-2">
+                            <label class="flex items-center gap-2 cursor-pointer select-none">
+                                <input type="checkbox" id="cod-inspection" checked class="rounded border-gray-300 text-trek-red focus:ring-trek-red w-4 h-4">
+                                <span class="text-xs font-bold text-trek-black">إبراز ميزة "السماح بالمعاينة والتجربة قبل الدفع للمندوب" في صفحة الشراء</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 5. WEBHOOK & CALLBACK URLS -->
+            <div class="bg-white rounded-2xl border border-trek-border shadow-sm p-6 space-y-4">
+                <div class="flex items-center gap-2 text-trek-black">
+                    <span class="text-xl">🔗</span>
+                    <h3 class="text-base font-black">عناوين الـ Callbacks والـ Webhooks الرسمية</h3>
+                </div>
+                <p class="text-xs text-trek-gray leading-relaxed">
+                    ضع هذه الروابط في لوحة تحكم Paymob أو Fawry لتلقي إشعارات الدفع وتحديث حالة الطلبات تلقائياً إلى "مدفوع":
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                    <div class="bg-trek-cardbg p-4 rounded-xl border border-trek-border">
+                        <div class="flex justify-between items-center mb-1.5">
+                            <span class="text-xs font-bold text-trek-black">1. Transaction Response Callback (توجيه العميل):</span>
+                            <button type="button" onclick="copyCallbackUrl('cb-response')" class="text-[11px] font-bold text-blue-600 hover:text-blue-800">نسخ 📋</button>
+                        </div>
+                        <input id="cb-response" readonly value="https://abu-el-goukh-store.vercel.app/checkout.html?status=processed" class="w-full p-2 bg-white rounded-lg border border-trek-border text-xs font-mono dir-ltr select-all">
+                    </div>
+
+                    <div class="bg-trek-cardbg p-4 rounded-xl border border-trek-border">
+                        <div class="flex justify-between items-center mb-1.5">
+                            <span class="text-xs font-bold text-trek-black">2. Transaction Processed Webhook (إشعار السيرفر):</span>
+                            <button type="button" onclick="copyCallbackUrl('cb-webhook')" class="text-[11px] font-bold text-blue-600 hover:text-blue-800">نسخ 📋</button>
+                        </div>
+                        <input id="cb-webhook" readonly value="https://abu-el-goukh-store.vercel.app/api/payment-webhook" class="w-full p-2 bg-white rounded-lg border border-trek-border text-xs font-mono dir-ltr select-all">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Save Action Bar -->
+            <div class="bg-white p-4 rounded-2xl border border-trek-border shadow-sm flex flex-col sm:flex-row justify-between items-center gap-3">
+                <span class="text-xs text-trek-gray">
+                    يتم حفظ ومزامنة كافة المفاتيح والإعدادات تلقائياً في سحابة Google Firebase المشفرة.
+                </span>
+                <button type="button" onclick="savePaymentGatewaySettings()" class="w-full sm:w-auto px-8 py-3 bg-trek-red hover:bg-red-700 text-white text-xs font-black rounded-xl transition shadow-md flex items-center justify-center gap-2 hover:scale-[1.01]">
+                    <span>💾 حفظ وتفعيل كافة الإعدادات والـ APIs سحابياً</span>
+                </button>
+            </div>
+
+        </div>
+        <!-- END PAYMENT GATEWAYS VIEW -->
+
 
     </main>
 
@@ -1788,21 +2083,220 @@
             currentMainTab = tab;
             const btnProd = document.getElementById('main-tab-products');
             const btnOrd = document.getElementById('main-tab-orders');
+            const btnPay = document.getElementById('main-tab-payments');
             const viewProd = document.getElementById('view-products');
             const viewOrd = document.getElementById('view-orders');
+            const viewPay = document.getElementById('view-payments');
+
+            // Reset buttons to inactive style
+            [btnProd, btnOrd, btnPay].forEach(b => {
+                if (b) b.className = 'px-5 py-3 rounded-xl text-sm font-bold bg-white text-trek-black border border-trek-border hover:bg-trek-lightgray transition flex items-center gap-2';
+            });
+
+            // Hide all views
+            if (viewProd) viewProd.classList.add('hidden');
+            if (viewOrd) viewOrd.classList.add('hidden');
+            if (viewPay) viewPay.classList.add('hidden');
 
             if (tab === 'products') {
-                btnProd.className = 'px-5 py-3 rounded-xl text-sm font-black bg-trek-black text-white transition flex items-center gap-2 shadow-sm';
-                btnOrd.className = 'px-5 py-3 rounded-xl text-sm font-bold bg-white text-trek-black border border-trek-border hover:bg-trek-lightgray transition flex items-center gap-2';
-                viewProd.classList.remove('hidden');
-                viewOrd.classList.add('hidden');
-            } else {
-                btnOrd.className = 'px-5 py-3 rounded-xl text-sm font-black bg-trek-black text-white transition flex items-center gap-2 shadow-sm';
-                btnProd.className = 'px-5 py-3 rounded-xl text-sm font-bold bg-white text-trek-black border border-trek-border hover:bg-trek-lightgray transition flex items-center gap-2';
-                viewOrd.classList.remove('hidden');
-                viewProd.classList.add('hidden');
+                if (btnProd) btnProd.className = 'px-5 py-3 rounded-xl text-sm font-black bg-trek-black text-white transition flex items-center gap-2 shadow-sm';
+                if (viewProd) viewProd.classList.remove('hidden');
+            } else if (tab === 'orders') {
+                if (btnOrd) btnOrd.className = 'px-5 py-3 rounded-xl text-sm font-black bg-trek-black text-white transition flex items-center gap-2 shadow-sm';
+                if (viewOrd) viewOrd.classList.remove('hidden');
                 renderOrdersTable();
+            } else if (tab === 'payments') {
+                if (btnPay) btnPay.className = 'px-5 py-3 rounded-xl text-sm font-black bg-trek-black text-white transition flex items-center gap-2 shadow-sm';
+                if (viewPay) viewPay.classList.remove('hidden');
+                loadPaymentSettingsToUI();
             }
+        }
+
+        // --- PAYMENT GATEWAYS & API CONFIGURATION LOGIC ---
+        const DEFAULT_PAYMENT_CONFIG = {
+            paymob: {
+                enabled: true,
+                mode: 'live',
+                apiKey: '',
+                publicKey: '',
+                secretKey: '',
+                intCards: '',
+                intWallets: '',
+                intValu: '',
+                intKiosk: '',
+                iframeId: '',
+                hmac: ''
+            },
+            instapay: {
+                enabled: true,
+                ipa: 'aboelgoukh1925@instapay',
+                phone: '01202925192',
+                vodafoneCash: '01202925192',
+                otherCash: '',
+                instructions: 'يرجى تحويل قيمة الطلب إلى عنوان إنستاباي أو محفظة فودافون كاش الموضحة، ثم إرسال سكرين شوت التحويل عبر الواتساب لتأكيد شحن الدراجة فوراً.'
+            },
+            fawry: {
+                enabled: false,
+                mode: 'sandbox',
+                merchantCode: '',
+                securityKey: '',
+                expiry: 48
+            },
+            cod: {
+                enabled: true,
+                fee: 0,
+                maxLimit: 35000,
+                allowInspection: true
+            }
+        };
+
+        let currentPaymentConfig = { ...DEFAULT_PAYMENT_CONFIG };
+
+        function loadPaymentSettingsToUI(cfg) {
+            if (!cfg) cfg = currentPaymentConfig;
+
+            // Paymob
+            const pm = cfg.paymob || {};
+            if (document.getElementById('paymob-enabled')) document.getElementById('paymob-enabled').checked = pm.enabled !== false;
+            if (document.getElementById('paymob-mode')) document.getElementById('paymob-mode').value = pm.mode || 'live';
+            if (document.getElementById('paymob-api-key')) document.getElementById('paymob-api-key').value = pm.apiKey || '';
+            if (document.getElementById('paymob-public-key')) document.getElementById('paymob-public-key').value = pm.publicKey || '';
+            if (document.getElementById('paymob-secret-key')) document.getElementById('paymob-secret-key').value = pm.secretKey || '';
+            if (document.getElementById('paymob-int-cards')) document.getElementById('paymob-int-cards').value = pm.intCards || '';
+            if (document.getElementById('paymob-int-wallets')) document.getElementById('paymob-int-wallets').value = pm.intWallets || '';
+            if (document.getElementById('paymob-int-valu')) document.getElementById('paymob-int-valu').value = pm.intValu || '';
+            if (document.getElementById('paymob-int-kiosk')) document.getElementById('paymob-int-kiosk').value = pm.intKiosk || '';
+            if (document.getElementById('paymob-iframe-id')) document.getElementById('paymob-iframe-id').value = pm.iframeId || '';
+            if (document.getElementById('paymob-hmac')) document.getElementById('paymob-hmac').value = pm.hmac || '';
+
+            // InstaPay
+            const ip = cfg.instapay || {};
+            if (document.getElementById('instapay-enabled')) document.getElementById('instapay-enabled').checked = ip.enabled !== false;
+            if (document.getElementById('instapay-ipa')) document.getElementById('instapay-ipa').value = ip.ipa || 'aboelgoukh1925@instapay';
+            if (document.getElementById('instapay-phone')) document.getElementById('instapay-phone').value = ip.phone || '01202925192';
+            if (document.getElementById('vodafone-cash')) document.getElementById('vodafone-cash').value = ip.vodafoneCash || '01202925192';
+            if (document.getElementById('other-cash')) document.getElementById('other-cash').value = ip.otherCash || '';
+            if (document.getElementById('instapay-notes')) document.getElementById('instapay-notes').value = ip.instructions || '';
+
+            // Fawry
+            const fw = cfg.fawry || {};
+            if (document.getElementById('fawry-enabled')) document.getElementById('fawry-enabled').checked = fw.enabled === true;
+            if (document.getElementById('fawry-mode')) document.getElementById('fawry-mode').value = fw.mode || 'sandbox';
+            if (document.getElementById('fawry-merchant-code')) document.getElementById('fawry-merchant-code').value = fw.merchantCode || '';
+            if (document.getElementById('fawry-security-key')) document.getElementById('fawry-security-key').value = fw.securityKey || '';
+            if (document.getElementById('fawry-expiry')) document.getElementById('fawry-expiry').value = fw.expiry || 48;
+
+            // COD
+            const cd = cfg.cod || {};
+            if (document.getElementById('cod-enabled')) document.getElementById('cod-enabled').checked = cd.enabled !== false;
+            if (document.getElementById('cod-fee')) document.getElementById('cod-fee').value = cd.fee || 0;
+            if (document.getElementById('cod-max')) document.getElementById('cod-max').value = cd.maxLimit || 35000;
+            if (document.getElementById('cod-inspection')) document.getElementById('cod-inspection').checked = cd.allowInspection !== false;
+        }
+
+        function collectPaymentSettingsFromUI() {
+            return {
+                paymob: {
+                    enabled: document.getElementById('paymob-enabled') ? document.getElementById('paymob-enabled').checked : true,
+                    mode: document.getElementById('paymob-mode') ? document.getElementById('paymob-mode').value : 'live',
+                    apiKey: document.getElementById('paymob-api-key') ? document.getElementById('paymob-api-key').value.trim() : '',
+                    publicKey: document.getElementById('paymob-public-key') ? document.getElementById('paymob-public-key').value.trim() : '',
+                    secretKey: document.getElementById('paymob-secret-key') ? document.getElementById('paymob-secret-key').value.trim() : '',
+                    intCards: document.getElementById('paymob-int-cards') ? document.getElementById('paymob-int-cards').value.trim() : '',
+                    intWallets: document.getElementById('paymob-int-wallets') ? document.getElementById('paymob-int-wallets').value.trim() : '',
+                    intValu: document.getElementById('paymob-int-valu') ? document.getElementById('paymob-int-valu').value.trim() : '',
+                    intKiosk: document.getElementById('paymob-int-kiosk') ? document.getElementById('paymob-int-kiosk').value.trim() : '',
+                    iframeId: document.getElementById('paymob-iframe-id') ? document.getElementById('paymob-iframe-id').value.trim() : '',
+                    hmac: document.getElementById('paymob-hmac') ? document.getElementById('paymob-hmac').value.trim() : ''
+                },
+                instapay: {
+                    enabled: document.getElementById('instapay-enabled') ? document.getElementById('instapay-enabled').checked : true,
+                    ipa: document.getElementById('instapay-ipa') ? document.getElementById('instapay-ipa').value.trim() : 'aboelgoukh1925@instapay',
+                    phone: document.getElementById('instapay-phone') ? document.getElementById('instapay-phone').value.trim() : '01202925192',
+                    vodafoneCash: document.getElementById('vodafone-cash') ? document.getElementById('vodafone-cash').value.trim() : '01202925192',
+                    otherCash: document.getElementById('other-cash') ? document.getElementById('other-cash').value.trim() : '',
+                    instructions: document.getElementById('instapay-notes') ? document.getElementById('instapay-notes').value.trim() : ''
+                },
+                fawry: {
+                    enabled: document.getElementById('fawry-enabled') ? document.getElementById('fawry-enabled').checked : false,
+                    mode: document.getElementById('fawry-mode') ? document.getElementById('fawry-mode').value : 'sandbox',
+                    merchantCode: document.getElementById('fawry-merchant-code') ? document.getElementById('fawry-merchant-code').value.trim() : '',
+                    securityKey: document.getElementById('fawry-security-key') ? document.getElementById('fawry-security-key').value.trim() : '',
+                    expiry: Number(document.getElementById('fawry-expiry') ? document.getElementById('fawry-expiry').value : 48)
+                },
+                cod: {
+                    enabled: document.getElementById('cod-enabled') ? document.getElementById('cod-enabled').checked : true,
+                    fee: Number(document.getElementById('cod-fee') ? document.getElementById('cod-fee').value : 0),
+                    maxLimit: Number(document.getElementById('cod-max') ? document.getElementById('cod-max').value : 35000),
+                    allowInspection: document.getElementById('cod-inspection') ? document.getElementById('cod-inspection').checked : true
+                },
+                updatedAt: new Date().toISOString()
+            };
+        }
+
+        async function savePaymentGatewaySettings() {
+            const config = collectPaymentSettingsFromUI();
+            currentPaymentConfig = config;
+            localStorage.setItem('abu_payment_gateway_settings', JSON.stringify(config));
+
+            if (firebaseDbUrl) {
+                try {
+                    const endpoint = firebaseDbUrl.replace(/\/+$/, '') + '/payment_gateway_settings.json';
+                    const res = await fetch(endpoint, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(config)
+                    });
+                    if (res.ok) {
+                        alert('✓ تم حفظ إعدادات ومفاتيح بوابات الدفع الإلكتروني بنجاح ومزامنتها سحابياً على Firebase!');
+                        return;
+                    }
+                } catch(e) {
+                    console.error('Firebase payment settings save error:', e);
+                }
+            }
+            alert('✓ تم حفظ إعدادات بوابات الدفع محلياً على هذا الجهاز بنجاح!');
+        }
+
+        async function fetchCloudPaymentSettings(showNotice = false) {
+            try {
+                const cached = localStorage.getItem('abu_payment_gateway_settings');
+                if (cached) {
+                    currentPaymentConfig = JSON.parse(cached);
+                    loadPaymentSettingsToUI(currentPaymentConfig);
+                }
+            } catch(e) {}
+
+            if (firebaseDbUrl) {
+                try {
+                    const endpoint = firebaseDbUrl.replace(/\/+$/, '') + '/payment_gateway_settings.json';
+                    const res = await fetch(endpoint);
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data && typeof data === 'object') {
+                            currentPaymentConfig = { ...DEFAULT_PAYMENT_CONFIG, ...data };
+                            localStorage.setItem('abu_payment_gateway_settings', JSON.stringify(currentPaymentConfig));
+                            loadPaymentSettingsToUI(currentPaymentConfig);
+                            if (showNotice) {
+                                alert('✓ تم استرجاع وتحديث كافة إعدادات بوابات الدفع من السحابة بنجاح!');
+                            }
+                            return;
+                        }
+                    }
+                } catch(e) {
+                    console.warn('Could not fetch cloud payment settings:', e);
+                }
+            }
+            if (showNotice) alert('تم تحميل الإعدادات المحفوظة محلياً.');
+        }
+
+        function copyCallbackUrl(id) {
+            const input = document.getElementById(id);
+            if (!input) return;
+            input.select();
+            input.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(input.value);
+            alert('✓ تم نسخ الرابط إلى الحافظة بنجاح!');
         }
 
         function getStoredOrders() {
@@ -2471,7 +2965,17 @@
         window.addEventListener('DOMContentLoaded', () => {
             checkAdminAuth();
             fetchCloudCredentials();
+            fetchCloudPaymentSettings();
             updateCloudStatusUI();
+
+            // Check URL parameter or hash for direct tab navigation
+            const urlParams = new URLSearchParams(window.location.search);
+            const tabParam = urlParams.get('tab') || window.location.hash.replace('#', '');
+            if (tabParam === 'payments' || tabParam === 'payment') {
+                switchMainTab('payments');
+            } else if (tabParam === 'orders') {
+                switchMainTab('orders');
+            }
         });
     </script>
 

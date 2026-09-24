@@ -1662,6 +1662,39 @@
         let selectedColor = 'red';
         let selectedQty = 1;
         let cart = [];
+                // Cloud Database Configuration (Google Firebase Realtime Database)
+        window.ABU_FIREBASE_URL = window.ABU_FIREBASE_URL || localStorage.getItem('abu_el_goukh_firebase_url') || '';
+
+        async function getLiveCatalog() {
+            // 1. Try Google Firebase Cloud DB if URL configured
+            if (window.ABU_FIREBASE_URL) {
+                try {
+                    const fbEndpoint = window.ABU_FIREBASE_URL.replace(/\/+$/, '') + '/products.json';
+                    const res = await fetch(fbEndpoint);
+                    if (res.ok) {
+                        const cloudData = await res.json();
+                        if (Array.isArray(cloudData) && cloudData.length > 0) {
+                            return cloudData;
+                        }
+                    }
+                } catch(e) { console.warn('Cloud DB fetch failed, using fallback', e); }
+            }
+
+            // 2. Try Centralized Server products.json
+            try {
+                const resp = await fetch('products.json?v=' + Date.now());
+                if (resp.ok) {
+                    const liveBikes = await resp.json();
+                    if (Array.isArray(liveBikes) && liveBikes.length > 0) {
+                        return liveBikes;
+                    }
+                }
+            } catch(e) { console.log('Falling back to static data', e); }
+
+            // 3. Fallback to embedded curatedBikes
+            return curatedBikes;
+        }
+
         let allLoadedProducts = [...curatedBikes];
 
         // Format Numbers
@@ -1887,16 +1920,10 @@
 
         // Main Initialization on Page Load
         window.addEventListener('DOMContentLoaded', async () => {
-            // 1. Fetch centralized products.json from server if available
+            // 1. Fetch live catalog from Cloud DB or server products.json
             try {
-                const resp = await fetch('products.json?v=' + Date.now());
-                if (resp.ok) {
-                    const liveBikes = await resp.json();
-                    if (Array.isArray(liveBikes) && liveBikes.length > 0) {
-                        allLoadedProducts = liveBikes;
-                    }
-                }
-            } catch(e) { console.log('Falling back to local data', e); }
+                allLoadedProducts = await getLiveCatalog();
+            } catch(e) { console.error('Catalog load error', e); }
 
             // 2. Sync with Admin Products from LocalStorage
             try {

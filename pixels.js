@@ -124,19 +124,8 @@
             } catch(e) { console.error('[Pixels] GTM init error:', e); }
         }
 
-        // 6. Custom Header Scripts (Restricted to safe verified external script URLs only to prevent XSS)
-        if (cfg.custom && cfg.custom.enabled && cfg.custom.scriptUrl) {
-            try {
-                const url = String(cfg.custom.scriptUrl).trim();
-                // Strictly enforce HTTPS and prevent inline/data URI attacks
-                if (url.startsWith('https://')) {
-                    const script = document.createElement('script');
-                    script.async = true;
-                    script.src = url;
-                    document.head.appendChild(script);
-                }
-            } catch(e) { console.error('[Pixels] Custom script loader error:', e); }
-        }
+        // SECURITY FIX: Custom dynamic script execution disabled to prevent Stored XSS / Supply Chain attacks.
+        // Tracking is strictly limited to verified official providers (Meta, TikTok, Snapchat, Google Tag, GTM).
     }
 
     // Universal E-Commerce Event Tracker

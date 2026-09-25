@@ -43,23 +43,6 @@
 </head>
 <body class="min-h-screen flex flex-col bg-[#FAFAFA] text-trek-black">
 
-        <!-- Top Utility Bar (Clean, Unified & Balanced) -->
-    <div class="bg-[#111111] text-white text-[11px] sm:text-[12px] font-bold py-2 sm:py-2.5 px-3 sm:px-4 border-b border-white/10">
-        <div class="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
-            <div class="flex items-center gap-2 overflow-hidden text-ellipsis whitespace-nowrap">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse flex-shrink-0"></span>
-                <span class="text-white text-[10px] sm:text-xs">شحن سريع لكافة محافظات مصر • معاينة وفحص العجلة قبل الدفع • تجميع وضبط مجاني 100%</span>
-            </div>
-            <div class="hidden md:flex items-center gap-5 text-white/90 text-xs font-semibold flex-shrink-0">
-                <a href="index.html#locations" class="hover:text-white transition">فرعنا: ألف مسكن - جسر السويس</a>
-                <span class="text-white/30">•</span>
-                <a href="tel:01202925192" class="hover:text-white text-emerald-400 font-black num-font flex items-center gap-1">
-                    <span>📞 الخط الساخن:</span>
-                    <span>01202925192</span>
-                </a>
-            </div>
-        </div>
-    </div>
 
     <!-- Header -->
     <header class="bg-white border-b border-trek-border sticky top-0 z-40">
@@ -460,11 +443,12 @@
     <script>
         // Sample default bike if cart was opened directly without adding items
         const defaultSampleBike = {
-            id: 'sample-trinx-m100',
-            name: 'دراجة ترنكس M100 برو ألومنيوم 2026 (Trinx M100 Pro) - سرعات شيمانو 21',
-            price: 7850,
-            image: 'https://media.zbooni.com/merchants/media/products/109246/1735153530582_croppedImg.jpg',
-            specs: 'مقاس 26/29 • شاسيه ألومنيوم • فرامل ديسك'
+            id: 1189653,
+            sku: 'ABU-1189653',
+            name: 'M136 Pro',
+            price: 11000,
+            image: 'https://media.zbooni.com/merchants/media/products/109246/1735216982659_croppedImg.jpg',
+            specs: 'شاسيه ألومنيوم طيران خفيف • سرعات شيمانو ياباني • فرامل ديسك أصلية'
         };
 
         let cart = [];
@@ -473,48 +457,55 @@
 
         let livePaymentCfg = {};
 
-        // Fetch Live Payment Gateway Configurations from Firebase Cloud DB
+        // Load non-sensitive payment gateway display preferences safely
         async function loadLivePaymentConfig() {
             try {
-                const fbUrl = 'https://abu-el-goukh-store-default-rtdb.firebaseio.com/payment_gateway_settings.json';
-                const res = await fetch(fbUrl);
+                const res = await fetch('/api/payment-settings?public=1');
                 if (res.ok) {
-                    const cfg = await res.json();
-                    if (cfg && typeof cfg === 'object') {
-                        livePaymentCfg = cfg;
-
-                        // Update InstaPay placeholders
-                        if (cfg.instapay) {
+                    const data = await res.json();
+                    if (data && data.success) {
+                        if (data.instapay) {
                             const ipaEl = document.getElementById('chk-instapay-ipa');
                             const phoneEl = document.getElementById('chk-vodafone-cash');
                             const notesEl = document.getElementById('chk-instapay-notes');
-                            if (ipaEl && cfg.instapay.ipa) ipaEl.innerText = cfg.instapay.ipa;
-                            if (phoneEl && cfg.instapay.vodafoneCash) phoneEl.innerText = cfg.instapay.vodafoneCash;
-                            if (notesEl && cfg.instapay.instructions) notesEl.innerText = cfg.instapay.instructions;
+                            if (ipaEl && data.instapay.ipa) ipaEl.innerText = data.instapay.ipa;
+                            if (phoneEl && data.instapay.vodafoneCash) phoneEl.innerText = data.instapay.vodafoneCash;
+                            if (notesEl && data.instapay.instructions) notesEl.innerText = data.instapay.instructions;
                         }
-
-                        // Show/hide PayTabs option based on enabled flag
-                        const paytabsOpt = document.getElementById('paytabs-payment-option');
-                        if (paytabsOpt) {
-                            paytabsOpt.style.display = (cfg.paytabs && cfg.paytabs.enabled !== false && cfg.paytabs.profileId) ? '' : 'none';
+                        if (data.gateways) {
+                            const paytabsOpt = document.getElementById('paytabs-payment-option');
+                            if (paytabsOpt && data.gateways.paytabs !== undefined) {
+                                paytabsOpt.style.display = data.gateways.paytabs ? '' : 'none';
+                            }
+                            const paymobOpt = document.getElementById('paymob-payment-option');
+                            if (paymobOpt && data.gateways.paymob !== undefined) {
+                                paymobOpt.style.display = data.gateways.paymob ? '' : 'none';
+                            }
+                            const fawryOpt = document.getElementById('fawry-payment-option');
+                            if (fawryOpt && data.gateways.fawry !== undefined) {
+                                fawryOpt.style.display = data.gateways.fawry ? '' : 'none';
+                            }
                         }
-
-                        // Show/hide Paymob option
-                        const paymobOpt = document.getElementById('paymob-payment-option');
-                        if (paymobOpt) {
-                            paymobOpt.style.display = (cfg.paymob && cfg.paymob.enabled !== false && (cfg.paymob.apiKey || cfg.paymob.secretKey)) ? '' : 'none';
-                        }
-
-                        // Show/hide Fawry option
-                        const fawryOpt = document.getElementById('fawry-payment-option');
-                        if (fawryOpt) {
-                            fawryOpt.style.display = (cfg.fawry && cfg.fawry.enabled !== false && cfg.fawry.merchantCode) ? '' : 'none';
-                        }
+                        return;
                     }
                 }
-            } catch(e) {
-                console.warn('Using cached payment settings', e);
-            }
+            } catch(e) {}
+
+            // Fallback to local cache if offline
+            try {
+                const cached = localStorage.getItem('abu_payment_gateway_settings');
+                if (cached) {
+                    const cfg = JSON.parse(cached);
+                    if (cfg && typeof cfg === 'object' && cfg.instapay) {
+                        const ipaEl = document.getElementById('chk-instapay-ipa');
+                        const phoneEl = document.getElementById('chk-vodafone-cash');
+                        const notesEl = document.getElementById('chk-instapay-notes');
+                        if (ipaEl && cfg.instapay.ipa) ipaEl.innerText = cfg.instapay.ipa;
+                        if (phoneEl && cfg.instapay.vodafoneCash) phoneEl.innerText = cfg.instapay.vodafoneCash;
+                        if (notesEl && cfg.instapay.instructions) notesEl.innerText = cfg.instapay.instructions;
+                    }
+                }
+            } catch(e) {}
         }
 
         // Load cart from localStorage or fallback
@@ -663,6 +654,13 @@
                 return;
             }
 
+            const btn = document.getElementById('btn-submit-order');
+            const originalBtnContent = btn ? btn.innerHTML : '';
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = `<svg class="animate-spin w-5 h-5 inline-block ml-2" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg> <span>جاري تأكيد وتوثيق طلبك…</span>`;
+            }
+
             const name = document.getElementById('cust-name').value.trim();
             const phone = document.getElementById('cust-phone').value.trim();
             const altPhone = document.getElementById('cust-alt-phone').value.trim();
@@ -673,67 +671,74 @@
 
             const paymentRadio = document.querySelector('input[name="payment_method"]:checked');
             const paymentMethod = paymentRadio ? paymentRadio.value : 'الدفع عند الاستلام';
+            const promoInput = document.getElementById('promo-input');
+            const promoCode = promoInput ? promoInput.value.trim().toUpperCase() : '';
 
-            const subtotal = cart.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
-            const discountAmount = Math.round(subtotal * (appliedDiscountPercent / 100));
-            const total = subtotal - discountAmount + shippingFee;
+            // Clean cart payload with valid numbers
+            const itemsPayload = cart.map(i => ({
+                id: i.id || i.sku,
+                sku: i.sku || i.id,
+                name: i.name,
+                price: Number(i.price) || 0,
+                quantity: Math.max(1, parseInt(i.quantity || 1, 10))
+            }));
 
-            const orderId = 'AEG-' + Math.floor(100000 + Math.random() * 900000);
-            const orderDate = new Date().toLocaleString('ar-EG');
+            let createdOrderData = null;
+            let orderId = '';
+            let verifiedTotal = 0;
 
-            let paymentStatus = 'pending';
-            if (paymentMethod === 'الدفع عند الاستلام') {
-                paymentStatus = 'cod';
-            } else if (paymentMethod === 'instapay') {
-                paymentStatus = 'pending_verification';
-            } else {
-                paymentStatus = 'pending';
-            }
-
-            const orderData = {
-                id: orderId,
-                date: orderDate,
-                customer: name,
-                phone: phone,
-                altPhone: altPhone,
-                gov: gov,
-                city: city,
-                address: address,
-                notes: notes,
-                payment: paymentMethod,
-                paymentStatus: paymentStatus,
-                paymentRef: '',
-                paidAt: '',
-                items: cart,
-                subtotal: subtotal,
-                shipping: shippingFee,
-                discount: discountAmount,
-                total: total,
-                status: 'جديد (قيد المراجعة)'
-            };
-
-            // Save order to localStorage and Cloud Firebase DB for Admin Panel
             try {
-                let existingOrders = JSON.parse(localStorage.getItem('abu_el_goukh_orders') || '[]');
-                existingOrders.unshift(orderData);
-                localStorage.setItem('abu_el_goukh_orders', JSON.stringify(existingOrders));
-                localStorage.setItem('abu_last_order', JSON.stringify(orderData));
-
-                // Sync directly to Cloud Database so Admin sees it in real-time
-                fetch('https://abu-el-goukh-store-default-rtdb.firebaseio.com/orders/' + orderId + '.json', {
-                    method: 'PUT',
+                // SECURITY FIX: Central authoritative order creation & server-side price check
+                const createRes = await fetch('/api/orders', {
+                    method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(orderData)
-                }).catch(e => console.warn('Firebase order sync error:', e));
-            } catch (err) {
-                console.error(err);
+                    body: JSON.stringify({
+                        customer: name,
+                        phone: phone,
+                        altPhone: altPhone,
+                        gov: gov,
+                        city: city,
+                        address: address,
+                        notes: notes,
+                        payment: paymentMethod,
+                        items: itemsPayload,
+                        discountCode: promoCode,
+                        shippingFee: shippingFee
+                    })
+                });
+
+                const createJson = await createRes.json();
+                if (!createRes.ok || !createJson.success) {
+                    throw new Error(createJson.error || 'تعذر تسجيل الطلب على الخادم. يرجى المحاولة لاحقاً.');
+                }
+
+                createdOrderData = createJson.order;
+                orderId = createJson.orderId;
+                verifiedTotal = createJson.total;
+
+                // Store verified order locally for user invoice display
+                localStorage.setItem('abu_last_order', JSON.stringify(createdOrderData));
+                try {
+                    let existingOrders = JSON.parse(localStorage.getItem('abu_el_goukh_orders') || '[]');
+                    existingOrders.unshift(createdOrderData);
+                    localStorage.setItem('abu_el_goukh_orders', JSON.stringify(existingOrders));
+                } catch (e) {}
+
+            } catch (createErr) {
+                console.error('Order creation error:', createErr);
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = originalBtnContent;
+                }
+                alert('⚠️ تعذر إتمام الطلب:\n' + createErr.message);
+                return;
             }
 
             // Trigger Purchase E-Commerce Event across active pixels
             if (window.trackStoreEvent) {
                 window.trackStoreEvent('Purchase', {
                     orderId: orderId,
-                    total: total,
+                    total: verifiedTotal,
                     items: cart
                 });
             }
@@ -742,34 +747,21 @@
             // 1. PayTabs Hosted Payment Page
             // ─────────────────────────────────────────────────────────────
             if (paymentMethod === 'paytabs') {
-                const pt = livePaymentCfg.paytabs || {};
-                const profileId = pt.profileId;
-                const serverKey = pt.serverKey;
-                const ptMode = pt.mode || 'live';
-
-                if (!profileId || !serverKey) {
-                    alert('⚠️ بوابة PayTabs غير مضبوطة بشكل كامل في لوحة الإدارة. برجاء إدخال Profile ID و Server Key.');
-                    return;
-                }
-
-                const btn = document.getElementById('btn-submit-order');
-                btn.disabled = true;
-                btn.innerHTML = `<svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg> <span>جاري التحويل لبوابة PayTabs…</span>`;
+                if (btn) btn.innerHTML = `<svg class="animate-spin w-5 h-5 inline-block ml-2" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg> <span>جاري التحويل لبوابة PayTabs…</span>`;
 
                 try {
                     const cartDesc = cart.map(i => i.name).join(' | ');
-                    localStorage.setItem('abu_last_order', JSON.stringify(orderData));
-                    const returnUrl = window.location.origin + '/order-success.html?payment=paytabs_success&order=' + orderId;
+                    const returnUrl = window.location.origin + '/order-success.html?gateway=paytabs&order=' + encodeURIComponent(orderId);
 
                     const response = await fetch('/api/paytabs-create', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                            profileId,
-                            serverKey,
-                            mode: ptMode,
                             orderId,
-                            total,
+                            total: verifiedTotal,
+                            items: itemsPayload,
+                            promoCode: promoCode,
+                            shippingFee: shippingFee,
                             cartDescription: 'أبو الجوخ 1925 – ' + cartDesc,
                             customerName: name,
                             customerPhone: phone,
@@ -781,20 +773,21 @@
                     });
 
                     const data = await response.json();
-
                     if (data && data.redirect_url) {
                         localStorage.removeItem('abu_el_goukh_cart');
                         window.location.href = data.redirect_url;
                         return;
                     } else {
-                        const errMsg = (data && (data.message || data.error || data.details)) ? JSON.stringify(data) : 'لم يتم استلام رابط الدفع من PayTabs';
+                        const errMsg = (data && (data.error || data.message || data.details)) ? (data.error || data.message || data.details) : 'لم يتم استلام رابط الدفع من PayTabs';
                         throw new Error(errMsg);
                     }
                 } catch (err) {
                     console.error('PayTabs error:', err);
-                    btn.disabled = false;
-                    btn.innerHTML = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> <span>تأكيد الطلب وشحن الدراجة الآن</span>`;
-                    alert('⚠️ تعذر التحويل لبوابة PayTabs:\n' + err.message + '\n\nتأكد من صحة البيانات في إعدادات الأدمن.');
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerHTML = originalBtnContent;
+                    }
+                    alert('⚠️ تعذر التحويل لبوابة PayTabs:\n' + err.message + '\n\nتم حفظ طلبك كرقم مرجعي: ' + orderId);
                     return;
                 }
             }
@@ -803,67 +796,48 @@
             // 2. Paymob (Cards, Meeza, Wallets, ValU)
             // ─────────────────────────────────────────────────────────────
             if (paymentMethod === 'paymob' || paymentMethod === 'valu') {
-                const pm = livePaymentCfg.paymob || {};
-                const apiKey = pm.apiKey;
-                const secretKey = pm.secretKey;
-                const publicKey = pm.publicKey;
-                const integrationId = (paymentMethod === 'valu' && pm.intValu) ? pm.intValu : (pm.intCards || pm.intWallets || '');
-                const iframeId = pm.iframeId;
+                if (btn) btn.innerHTML = `<svg class="animate-spin w-5 h-5 inline-block ml-2" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg> <span>جاري التحويل لبوابة Paymob…</span>`;
 
-                // Proceed with Paymob online redirect if configured
-                if (paymentMethod === 'paymob' || (paymentMethod === 'valu' && pm.intValu)) {
-                    if (!apiKey && !secretKey) {
-                        alert('⚠️ بوابة Paymob غير مضبوطة. يرجى إدخال الـ API Key أو Secret Key في لوحة تحكم الأدمن.');
+                try {
+                    const cartDesc = cart.map(i => i.name).join(' | ');
+                    const returnUrl = window.location.origin + '/order-success.html?gateway=paymob&order=' + encodeURIComponent(orderId);
+
+                    const response = await fetch('/api/paymob-create', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            orderId,
+                            total: verifiedTotal,
+                            items: itemsPayload,
+                            promoCode: promoCode,
+                            shippingFee: shippingFee,
+                            cartDescription: 'أبو الجوخ 1925 – ' + cartDesc,
+                            customerName: name,
+                            customerPhone: phone,
+                            customerCity: city || gov,
+                            customerState: gov,
+                            customerAddress: address,
+                            returnUrl
+                        })
+                    });
+
+                    const data = await response.json();
+                    if (data && data.redirect_url) {
+                        localStorage.removeItem('abu_el_goukh_cart');
+                        window.location.href = data.redirect_url;
                         return;
+                    } else {
+                        const errMsg = (data && (data.error || data.details)) ? (data.error || data.details) : 'تعذر الحصول على رابط دفع Paymob';
+                        throw new Error(errMsg);
                     }
-
-                    const btn = document.getElementById('btn-submit-order');
-                    btn.disabled = true;
-                    btn.innerHTML = `<svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg> <span>جاري التحويل لبوابة Paymob…</span>`;
-
-                    try {
-                        const cartDesc = cart.map(i => i.name).join(' | ');
-                        localStorage.setItem('abu_last_order', JSON.stringify(orderData));
-                        const returnUrl = window.location.origin + '/order-success.html?payment=paymob_success&order=' + orderId;
-
-                        const response = await fetch('/api/paymob-create', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                apiKey,
-                                secretKey,
-                                publicKey,
-                                integrationId,
-                                iframeId,
-                                orderId,
-                                total,
-                                cartDescription: 'أبو الجوخ 1925 – ' + cartDesc,
-                                customerName: name,
-                                customerPhone: phone,
-                                customerCity: city || gov,
-                                customerState: gov,
-                                customerAddress: address,
-                                returnUrl
-                            })
-                        });
-
-                        const data = await response.json();
-
-                        if (data && data.redirect_url) {
-                            localStorage.removeItem('abu_el_goukh_cart');
-                            window.location.href = data.redirect_url;
-                            return;
-                        } else {
-                            const errMsg = (data && (data.error || data.details)) ? JSON.stringify(data) : 'تعذر الحصول على رابط دفع Paymob';
-                            throw new Error(errMsg);
-                        }
-                    } catch (err) {
-                        console.error('Paymob error:', err);
+                } catch (err) {
+                    console.error('Paymob error:', err);
+                    if (btn) {
                         btn.disabled = false;
-                        btn.innerHTML = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> <span>تأكيد الطلب وشحن الدراجة الآن</span>`;
-                        alert('⚠️ تعذر التحويل لبوابة Paymob:\n' + err.message + '\n\nتأكد من صحة المفاتيح (API Key أو Secret Key) في لوحة تحكم الأدمن.');
-                        return;
+                        btn.innerHTML = originalBtnContent;
                     }
+                    alert('⚠️ تعذر التحويل لبوابة Paymob:\n' + err.message + '\n\nتم حفظ طلبك برقم مرجعي: ' + orderId);
+                    return;
                 }
             }
 
@@ -871,36 +845,21 @@
             // 3. FawryPay (فوري باي)
             // ─────────────────────────────────────────────────────────────
             if (paymentMethod === 'fawry') {
-                const fw = livePaymentCfg.fawry || {};
-                const merchantCode = fw.merchantCode;
-                const securityKey = fw.securityKey;
-                const mode = fw.mode || 'sandbox';
-                const expiry = fw.expiry || 48;
-
-                if (!merchantCode || !securityKey) {
-                    alert('⚠️ بوابة فوري باي غير مضبوطة. يرجى إدخال Merchant Code و Security Key في لوحة تحكم الأدمن.');
-                    return;
-                }
-
-                const btn = document.getElementById('btn-submit-order');
-                btn.disabled = true;
-                btn.innerHTML = `<svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg> <span>جاري إصدار كود فوري باي…</span>`;
+                if (btn) btn.innerHTML = `<svg class="animate-spin w-5 h-5 inline-block ml-2" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg> <span>جاري إصدار كود فوري باي…</span>`;
 
                 try {
                     const cartDesc = cart.map(i => i.name).join(' | ');
-                    localStorage.setItem('abu_last_order', JSON.stringify(orderData));
-                    const returnUrl = window.location.origin + '/order-success.html?payment=fawry_success&order=' + orderId;
+                    const returnUrl = window.location.origin + '/order-success.html?gateway=fawry&order=' + encodeURIComponent(orderId);
 
                     const response = await fetch('/api/fawry-create', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
-                            merchantCode,
-                            securityKey,
-                            mode,
-                            expiry,
                             orderId,
-                            total,
+                            total: verifiedTotal,
+                            items: itemsPayload,
+                            promoCode: promoCode,
+                            shippingFee: shippingFee,
                             cartDescription: 'أبو الجوخ 1925 – ' + cartDesc,
                             customerName: name,
                             customerPhone: phone,
@@ -910,34 +869,30 @@
                     });
 
                     const data = await response.json();
-
                     if (data && data.redirect_url) {
                         localStorage.removeItem('abu_el_goukh_cart');
                         window.location.href = data.redirect_url;
                         return;
                     } else {
-                        const errMsg = (data && (data.error || data.details)) ? JSON.stringify(data) : 'تعذر الحصول على رابط فوري باي';
+                        const errMsg = (data && (data.error || data.details)) ? (data.error || data.details) : 'تعذر الحصول على رابط فوري باي';
                         throw new Error(errMsg);
                     }
                 } catch (err) {
                     console.error('Fawry error:', err);
-                    btn.disabled = false;
-                    btn.innerHTML = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> <span>تأكيد الطلب وشحن الدراجة الآن</span>`;
-                    alert('⚠️ تعذر التحويل لبوابة فوري:\n' + err.message + '\n\nتأكد من صحة كود التاجر وكود الأمان في لوحة الأدمن.');
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerHTML = originalBtnContent;
+                    }
+                    alert('⚠️ تعذر إصدار كود فوري:\n' + err.message + '\n\nتم حفظ طلبك برقم مرجعي: ' + orderId);
                     return;
                 }
             }
 
             // ─────────────────────────────────────────────────────────────
-            // Normal flow: Save Order & Redirect to Order Confirmation Invoice
+            // Normal flow: Cash on Delivery or InstaPay -> Redirect to Order Confirmation
             // ─────────────────────────────────────────────────────────────
-            // Store last order for order-success.html
-            localStorage.setItem('abu_last_order', JSON.stringify(orderData));
-
-            // Clear Cart
             localStorage.removeItem('abu_el_goukh_cart');
 
-            // Format WhatsApp Message (saved in localStorage for convenience)
             const itemsText = cart.map(item => `• ${item.name} (${Number(item.price).toLocaleString('en-US')} ج.م)`).join('%0A');
             const waMessage = 
                 `*طلب جديد من متجر أبو الجوخ 1925 الإلكتروني*%0A` +
@@ -952,10 +907,10 @@
                 `----------------------------------%0A` +
                 `*المنتجات المطلوبة:*%0A${itemsText}%0A` +
                 `----------------------------------%0A` +
-                `*المجموع الفرعي:* ${subtotal.toLocaleString('en-US')} ج.م%0A` +
-                `*تكلفة الشحن:* ${shippingFee.toLocaleString('en-US')} ج.م%0A` +
-                (discountAmount > 0 ? `*الخصم:* -${discountAmount.toLocaleString('en-US')} ج.م%0A` : '') +
-                `*الإجمالي النهائي:* ${total.toLocaleString('en-US')} ج.م%0A` +
+                `*المجموع الفرعي:* ${createdOrderData.subtotal.toLocaleString('en-US')} ج.م%0A` +
+                `*تكلفة الشحن:* ${createdOrderData.shipping.toLocaleString('en-US')} ج.م%0A` +
+                (createdOrderData.discount > 0 ? `*الخصم:* -${createdOrderData.discount.toLocaleString('en-US')} ج.م%0A` : '') +
+                `*الإجمالي النهائي:* ${verifiedTotal.toLocaleString('en-US')} ج.م%0A` +
                 `*طريقة الدفع:* ${paymentMethod}%0A` +
                 `----------------------------------%0A` +
                 `يرجى تأكيد ميعاد الشحن والتوصيل. شكراً لكم!`;
@@ -963,16 +918,7 @@
             const waUrl = `https://wa.me/201202925192?text=${waMessage}`;
             localStorage.setItem('abu_last_order_wa', waUrl);
 
-            const btn = document.getElementById('btn-submit-order');
-            if (btn) {
-                btn.disabled = true;
-                btn.innerHTML = `<svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg> <span>جاري تسجيل طلبك وإصدار الفاتورة…</span>`;
-            }
-
-            // Redirect smoothly to dedicated order confirmation invoice page
-            setTimeout(() => {
-                window.location.href = `order-success.html?order=${orderId}`;
-            }, 500);
+            window.location.href = `order-success.html?order=${encodeURIComponent(orderId)}`;
         }
 
         window.addEventListener('DOMContentLoaded', initCheckout);

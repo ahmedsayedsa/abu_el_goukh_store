@@ -1,11 +1,14 @@
 import crypto from 'crypto';
 import { verifyOrderPrice } from './_verify-price.js';
+import { getGatewayConfig } from './_gateway-config.js';
 
 /**
  * Vercel Serverless Function - FawryPay Payment Request Proxy
- * 1. Reads merchantCode and securityKey from process.env (Vercel Environment Variables)
- * 2. Validates order total server-side against catalog
- * 3. Computes cryptographic SHA-256 signature server-side
+ * SECURITY:
+ * 1. Resolves merchantCode and securityKey securely from Admin Database or process.env.
+ * 2. Rejects client-provided security keys.
+ * 3. Enforces authoritative server-side price validation (Fail-Closed).
+ * 4. Computes cryptographic SHA-256 signature server-side only.
  */
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
@@ -13,37 +16,53 @@ export default async function handler(req, res) {
     }
 
     const {
-        expiry,
-        orderId,
-        total,
-        items,
-        promoCode,
-        shippingFee,
-        cartDescription,
-        customerName,
-        customerPhone,
-        customerEmail,
-        returnUrl
-    } = req.body;
+        expiry, orderId, total, items, promoCode,
+        shippingFee, cartDescription, customerName,
+        customerPhone, customerEmail, returnUrl
+    } = req.body || {};
 
-    // Securely resolve Fawry credentials from Server Environment Variables first
-    const mCode = (process.env.FAWRY_MERCHANT_CODE || req.body.merchantCode || '').trim();
-    const secKey = (process.env.FAWRY_SECURITY_KEY || req.body.securityKey || '').trim();
-    const effectiveMode = (process.env.FAWRY_MODE || req.body.mode || 'live').trim();
+    if (!orderId) {
+        return res.status(400).json({ error: 'Order ID is required' });
+    }
 
-    if (!mCode || !secKey || !orderId) {
-        return res.status(400).json({
-            error: 'Missing Fawry credentials. Please configure FAWRY_MERCHANT_CODE and FAWRY_SECURITY_KEY in Vercel Environment Variables.'
+    // Resolve credentials dynamically from Admin-configured DB or Server Environment Variables
+    const dynamicCfg = await getGatewayConfig();
+    const fwCfg = dynamicCfg.fawry || {};
+
+    const mCode = (fwCfg.merchantCode || process.env.FAWRY_MERCHANT_CODE || '').trim();
+    const secKey = (fwCfg.securityKey || process.env.FAWRY_SECURITY_KEY || '').trim();
+    const effectiveMode = (fwCfg.mode || process.env.FAWRY_MODE || 'live').trim();
+
+    if (!mCode || !secKey) {
+        console.error('[SECURITY ERROR] Fawry credentials missing in Database and Environment Variables!');
+        return res.status(500).json({
+            error: 'Fawry gateway is not configured. Please set Merchant Code and Security Key in the Admin Dashboard or Vercel Environment Variables.'
         });
     }
 
-    // Authoritative Server-side price validation
-    const { verifiedTotal, isTampered } = verifyOrderPrice(items, total, promoCode, shippingFee);
+    // SECURITY FIX: Authoritative Server-side price validation (Fail-Closed)
+    let priceResult;
+    try {
+        priceResult = verifyOrderPrice(items, total, promoCode, shippingFee);
+    } catch (verErr) {
+        console.error('[Fawry Price Check Failed]', verErr.message);
+        return res.status(400).json({ error: verErr.message });
+    }
+
+    const { verifiedTotal, isTampered } = priceResult;
     const formattedPrice = Number(verifiedTotal).toFixed(2);
 
-    const itemId = `BIKE-${orderId}`;
-    const custProfileId = (customerPhone || '01202925192').trim();
-    const retUrl = returnUrl || 'https://abu-el-goukh-store.vercel.app/order-success.html?payment=fawry_success';
+    if (Number(formattedPrice) <= 0) {
+        return res.status(400).json({ error: 'Invalid verified order total.' });
+    }
+
+    const host = req.headers['host'] || 'abu-el-goukh-store.vercel.app';
+    const protocol = host.includes('localhost') ? 'http' : 'https';
+    const baseUrl = `${protocol}://${host}`;
+
+    const itemId = `BIKE-${String(orderId).replace(/[^a-zA-Z0-9_-]/g, '')}`;
+    const custProfileId = String(customerPhone || '01202925192').trim();
+    const retUrl = returnUrl || `${baseUrl}/order-success.html?gateway=fawry&order=${encodeURIComponent(orderId)}`;
 
     // Fawry standard SHA-256 signature for charge init:
     // merchantCode + merchantRefNum + customerProfileId + returnUrl + itemId + quantity + price + securityKey
@@ -58,16 +77,16 @@ export default async function handler(req, res) {
 
     const fawryPayload = {
         merchantCode: mCode,
-        merchantRefNum: orderId,
+        merchantRefNum: String(orderId),
         customerProfileId: custProfileId,
-        customerName: customerName || 'عميل أبو الجوخ',
+        customerName: String(customerName || 'عميل أبو الجوخ').substring(0, 50),
         customerMobile: custProfileId,
         customerEmail: customerEmail || 'customer@abu-el-goukh.com',
         paymentExpiry: expiryTime,
         chargeItems: [
             {
                 itemId: itemId,
-                description: (cartDescription || 'طلب دراجة من متجر أبو الجوخ 1925').substring(0, 100),
+                description: String(cartDescription || 'طلب دراجة من متجر أبو الجوخ 1925').substring(0, 100),
                 price: Number(formattedPrice),
                 quantity: 1
             }
@@ -109,13 +128,7 @@ export default async function handler(req, res) {
         });
 
     } catch (err) {
-        console.error('Fawry error');
-        const hostedCheckoutUrl = `${fawryBase}/ECommerceWeb/Fawry/payments/checkout?merchantCode=${mCode}&merchantRefNum=${orderId}&paymentExpiry=${expiryTime}&signature=${signature}`;
-        return res.status(200).json({
-            redirect_url: hostedCheckoutUrl,
-            fallback: true,
-            priceVerified: true,
-            isTampered
-        });
+        console.error('Fawry initiation error');
+        return res.status(502).json({ error: 'Failed to initiate Fawry payment session' });
     }
 }

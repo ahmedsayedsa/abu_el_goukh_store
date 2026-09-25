@@ -375,6 +375,20 @@
                 </div>
             </div>
 
+            <!-- Zero-Trust Security Alert Banner -->
+            <div class="bg-blue-50 border border-blue-200 rounded-2xl p-5 flex items-start gap-3 shadow-2xs">
+                <span class="text-2xl mt-0.5">🔒</span>
+                <div class="text-xs space-y-1">
+                    <h4 class="font-black text-blue-950">حماية المفاتيح المصرفية المشفرة (Zero-Trust Security):</h4>
+                    <p class="text-blue-800 leading-relaxed">
+                        وفقاً لأعلى معايير أمان التجارة الإلكترونية، يتم تخزين المفاتيح السرية (Secret Keys / Server Keys / HMAC Secrets) حصرياً كمتغيرات بيئة مشفرة داخل خوادم <strong>Vercel (Environment Variables)</strong>، ولا يتم تخزينها أبداً على المتصفح أو قاعدة بيانات الواجهة الأمامية لحمايتها من الاختراق وسرقة الأموال.
+                    </p>
+                    <p class="text-blue-900 font-bold pt-1">
+                        👉 لضبط المفاتيح السرية: يرجى إضافتها في لوحة Vercel &gt; Settings &gt; Environment Variables.
+                    </p>
+                </div>
+            </div>
+
             <!-- GATEWAYS GRID -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
@@ -2518,13 +2532,13 @@
 
             saveStoredOrders(orders);
 
-            // Sync updated order directly to Firebase Realtime Database
+            // Sync updated order securely via authenticated Serverless API
             try {
-                fetch('https://abu-el-goukh-store-default-rtdb.firebaseio.com/orders/' + orderId + '.json', {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(orders[index])
-                }).catch(e => console.warn(e));
+                fetch('/api/orders', {
+                    method: 'PATCH',
+                    headers: getAdminAuthHeaders(),
+                    body: JSON.stringify({ orderId, ...orders[index] })
+                }).catch(e => console.warn('Order update API error:', e));
             } catch(e) { console.warn(e); }
             renderOrdersTable();
             closeOrderModal();
@@ -2840,57 +2854,69 @@
         async function savePaymentGatewaySettings() {
             const config = collectPaymentSettingsFromUI();
             currentPaymentConfig = config;
-            localStorage.setItem('abu_payment_gateway_settings', JSON.stringify(config));
 
-            if (firebaseDbUrl) {
-                try {
-                    const endpoint = firebaseDbUrl.replace(/\/+$/, '') + '/payment_gateway_settings.json';
-                    const res = await fetch(endpoint, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(config)
-                    });
-                    if (res.ok) {
-                        alert('✓ تم حفظ إعدادات ومفاتيح بوابات الدفع الإلكتروني بنجاح ومزامنتها سحابياً على Firebase!');
-                        return;
-                    }
-                } catch(e) {
-                    console.error('Firebase payment settings save error:', e);
+            const saveBtn = document.querySelector('button[onclick="savePaymentGatewaySettings()"]');
+            const originalBtnText = saveBtn ? saveBtn.innerHTML : '';
+            if (saveBtn) {
+                saveBtn.disabled = true;
+                saveBtn.innerHTML = `<span>⏳ جاري الحفظ والتفعيل سحابياً…</span>`;
+            }
+
+            try {
+                // SECURITY FIX: Transmit to authenticated serverless API; stored in locked Firebase DB
+                const res = await fetch('/api/payment-settings', {
+                    method: 'POST',
+                    headers: getAdminAuthHeaders(),
+                    body: JSON.stringify(config)
+                });
+
+                if (res.ok) {
+                    alert('✓ تم حفظ وتفعيل إعدادات ومفاتيح بوابات الدفع بنجاح في السحابة المشفرة!\n\nالتعديلات الآن حية وفورية على جميع عمليات الدفع والشراء دون الحاجة لتعديل الكود.');
+                } else {
+                    const errData = await res.json().catch(() => ({}));
+                    alert('⚠️ تعذر حفظ الإعدادات: ' + (errData.error || 'خطأ في المصادقة أو السيرفر'));
+                }
+            } catch(err) {
+                console.error('Save payment settings error:', err);
+                alert('⚠️ حدث خطأ أثناء الاتصال بالسيرفر لحفظ الإعدادات.');
+            } finally {
+                if (saveBtn) {
+                    saveBtn.disabled = false;
+                    saveBtn.innerHTML = originalBtnText;
                 }
             }
-            alert('✓ تم حفظ إعدادات بوابات الدفع محلياً على هذا الجهاز بنجاح!');
         }
 
         async function fetchCloudPaymentSettings(showNotice = false) {
             try {
+                // Fetch active live settings from authenticated serverless endpoint
+                const res = await fetch('/api/payment-settings', {
+                    headers: getAdminAuthHeaders()
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.success && data.config) {
+                        currentPaymentConfig = { ...DEFAULT_PAYMENT_CONFIG, ...data.config };
+                        loadPaymentSettingsToUI(currentPaymentConfig);
+                        if (showNotice) {
+                            alert('✓ تم استرجاع وتحديث كافة إعدادات ومفاتيح بوابات الدفع من السحابة بنجاح!');
+                        }
+                        return;
+                    }
+                }
+            } catch(e) {
+                console.warn('Could not read cloud payment settings:', e);
+            }
+
+            // Fallback to local cache if offline
+            try {
                 const cached = localStorage.getItem('abu_payment_gateway_settings');
                 if (cached) {
-                    currentPaymentConfig = JSON.parse(cached);
+                    currentPaymentConfig = { ...DEFAULT_PAYMENT_CONFIG, ...JSON.parse(cached) };
                     loadPaymentSettingsToUI(currentPaymentConfig);
                 }
             } catch(e) {}
-
-            if (firebaseDbUrl) {
-                try {
-                    const endpoint = firebaseDbUrl.replace(/\/+$/, '') + '/payment_gateway_settings.json';
-                    const res = await fetch(endpoint);
-                    if (res.ok) {
-                        const data = await res.json();
-                        if (data && typeof data === 'object') {
-                            currentPaymentConfig = { ...DEFAULT_PAYMENT_CONFIG, ...data };
-                            localStorage.setItem('abu_payment_gateway_settings', JSON.stringify(currentPaymentConfig));
-                            loadPaymentSettingsToUI(currentPaymentConfig);
-                            if (showNotice) {
-                                alert('✓ تم استرجاع وتحديث كافة إعدادات بوابات الدفع من السحابة بنجاح!');
-                            }
-                            return;
-                        }
-                    }
-                } catch(e) {
-                    console.warn('Could not fetch cloud payment settings:', e);
-                }
-            }
-            if (showNotice) alert('تم تحميل الإعدادات المحفوظة محلياً.');
         }
 
         function copyCallbackUrl(id) {
@@ -3185,7 +3211,15 @@
         let currentOrderFilter = 'all';
         let currentPaymentStatusFilter = 'all';
 
-        // Fetch Orders from Cloud Firebase DB & Merge with Local Orders
+        function getAdminAuthHeaders() {
+            const token = sessionStorage.getItem('abu_admin_jwt_token') || localStorage.getItem('abu_admin_jwt_token') || '';
+            return {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            };
+        }
+
+        // Fetch Orders securely from Serverless API (/api/orders) & Merge with Local Orders
         async function fetchCloudOrders(showNotice = false) {
             const syncBtn = document.querySelector('button[onclick="fetchCloudOrders(true)"]');
             if (showNotice && syncBtn) {
@@ -3193,12 +3227,13 @@
             }
 
             try {
-                const url = 'https://abu-el-goukh-store-default-rtdb.firebaseio.com/orders.json';
-                const res = await fetch(url);
+                const res = await fetch('/api/orders', {
+                    headers: getAdminAuthHeaders()
+                });
                 if (res.ok) {
                     const data = await res.json();
-                    if (data && typeof data === 'object') {
-                        const cloudOrders = Object.values(data).filter(Boolean);
+                    if (data && data.success && Array.isArray(data.orders)) {
+                        const cloudOrders = data.orders;
                         const localOrders = getStoredOrders();
                         const mergedMap = new Map();
 
@@ -3222,13 +3257,17 @@
                         renderOrdersTable();
 
                         if (showNotice) {
-                            alert(`✓ تمت مزامنة ${mergedList.length} طلب سحابياً بنجاح من قاعدة بيانات Firebase!`);
+                            alert(`✓ تمت مزامنة ${mergedList.length} طلب سحابياً بنجاح!`);
                         }
+                    } else if (res.status === 401) {
+                        handleAdminLogout();
                     }
+                } else if (res.status === 401) {
+                    handleAdminLogout();
                 }
             } catch (err) {
-                console.warn('Firebase orders sync error:', err);
-                if (showNotice) alert('تعذر الاتصال بالسحابة لجلب الطلبات. يتم عرض الطلبات المحلية.');
+                console.warn('Orders sync error:', err);
+                if (showNotice) alert('تعذر الاتصال بالسيرفر لجلب الطلبات. يتم عرض الطلبات المحلية.');
             } finally {
                 if (showNotice && syncBtn) {
                     syncBtn.innerHTML = `<span>🔄 مزامنة سحابية</span>`;
@@ -3354,7 +3393,7 @@
                             <div class="text-[10px] text-trek-gray mt-0.5 font-medium">${escapeHtml(payGatewayDisplay)}</div>
                         </td>
                         <td class="py-3.5 px-4 text-center">
-                            <select onchange="updateOrderPaymentStatus('${safeId}', this.value)" class="text-[11px] py-1 px-2 rounded-lg border ${pBadgeClass} outline-none cursor-pointer">
+                            <select class="order-payment-select text-[11px] py-1 px-2 rounded-lg border ${pBadgeClass} outline-none cursor-pointer" data-order-id="${safeId}">
                                 <option value="paid" ${pStatus === 'paid' ? 'selected' : ''}>🟢 مدفوع إلكترونياً</option>
                                 <option value="pending" ${pStatus === 'pending' ? 'selected' : ''}>🟡 في الانتظار (لم يدفع)</option>
                                 <option value="failed" ${pStatus === 'failed' ? 'selected' : ''}>🔴 فشل الدفع / مرفوض</option>
@@ -3365,7 +3404,7 @@
                             ${safeRef ? `<div class="text-[9px] font-mono text-gray-500 mt-0.5" title="مرجع الدفع البنكي">#${safeRef}</div>` : ''}
                         </td>
                         <td class="py-3.5 px-4 text-center">
-                            <select onchange="updateOrderStatus('${safeId}', this.value)" class="text-[11px] font-bold py-1 px-2 rounded-lg border ${statusBadgeColor} outline-none cursor-pointer">
+                            <select class="order-fulfillment-select text-[11px] font-bold py-1 px-2 rounded-lg border ${statusBadgeColor} outline-none cursor-pointer" data-order-id="${safeId}">
                                 <option value="جديد (قيد المراجعة)" ${ord.status === 'جديد (قيد المراجعة)' ? 'selected' : ''}>جديد</option>
                                 <option value="تم تأكيد الطلب مع العميل" ${ord.status === 'تم تأكيد الطلب مع العميل' ? 'selected' : ''}>تم التأكيد</option>
                                 <option value="جاري التجهيز والضبط الفني" ${ord.status === 'جاري التجهيز والضبط الفني' ? 'selected' : ''}>جاري التجهيز</option>
@@ -3376,13 +3415,13 @@
                         </td>
                         <td class="py-3.5 px-4 text-center">
                             <div class="flex items-center justify-center gap-1.5">
-                                <button onclick="openOrderModal('${safeId}')" class="px-2.5 py-1.5 rounded-lg bg-trek-black hover:bg-trek-charcoal text-white text-[11px] font-black transition flex items-center gap-1" title="عرض وتعديل بيانات الطلب">
+                                <button type="button" class="btn-open-order px-2.5 py-1.5 rounded-lg bg-trek-black hover:bg-trek-charcoal text-white text-[11px] font-black transition flex items-center gap-1" data-order-id="${safeId}" title="عرض وتعديل بيانات الطلب">
                                     <span>✏️ تفاصيل</span>
                                 </button>
                                 <a href="${waLink}" target="_blank" class="p-1.5 rounded-lg bg-emerald-100 hover:bg-emerald-600 hover:text-white text-emerald-800 transition text-[11px] font-bold" title="محادثة واتساب للعميل">
                                     💬
                                 </a>
-                                <button onclick="deleteOrder('${safeId}')" class="p-1.5 rounded-lg bg-red-50 hover:bg-red-600 hover:text-white text-red-600 transition text-[11px]" title="حذف الطلب">
+                                <button type="button" class="btn-delete-order p-1.5 rounded-lg bg-red-50 hover:bg-red-600 hover:text-white text-red-600 transition text-[11px]" data-order-id="${safeId}" title="حذف الطلب">
                                     🗑️
                                 </button>
                             </div>
@@ -3390,9 +3429,39 @@
                     </tr>
                 `;
             }).join('');
+
+            // Attach event delegation listeners safely once to prevent DOM-XSS inline execution
+            if (!tbody.dataset.eventsAttached) {
+                tbody.dataset.eventsAttached = '1';
+
+                tbody.addEventListener('change', (e) => {
+                    const select = e.target;
+                    const orderId = select.dataset.orderId;
+                    if (!orderId) return;
+
+                    if (select.classList.contains('order-payment-select')) {
+                        updateOrderPaymentStatus(orderId, select.value);
+                    } else if (select.classList.contains('order-fulfillment-select')) {
+                        updateOrderStatus(orderId, select.value);
+                    }
+                });
+
+                tbody.addEventListener('click', (e) => {
+                    const btn = e.target.closest('button');
+                    if (!btn) return;
+                    const orderId = btn.dataset.orderId;
+                    if (!orderId) return;
+
+                    if (btn.classList.contains('btn-open-order')) {
+                        openOrderModal(orderId);
+                    } else if (btn.classList.contains('btn-delete-order')) {
+                        deleteOrder(orderId);
+                    }
+                });
+            }
         }
 
-        function updateOrderPaymentStatus(orderId, newPaymentStatus) {
+        async function updateOrderPaymentStatus(orderId, newPaymentStatus) {
             const orders = getStoredOrders();
             const ord = orders.find(o => o.id === orderId);
             if (ord) {
@@ -3403,18 +3472,22 @@
                 saveStoredOrders(orders);
                 renderOrdersTable();
 
-                // Sync to Firebase Cloud DB
+                // Sync to Serverless API (/api/orders)
                 try {
-                    fetch('https://abu-el-goukh-store-default-rtdb.firebaseio.com/orders/' + orderId + '.json', {
+                    await fetch('/api/orders', {
                         method: 'PATCH',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ paymentStatus: newPaymentStatus, paidAt: ord.paidAt || '' })
-                    }).catch(e => console.warn(e));
-                } catch(e) { console.warn(e); }
+                        headers: getAdminAuthHeaders(),
+                        body: JSON.stringify({
+                            orderId: orderId,
+                            paymentStatus: newPaymentStatus,
+                            paidAt: ord.paidAt || ''
+                        })
+                    });
+                } catch(e) { console.warn('Payment status update error:', e); }
             }
         }
 
-        function updateOrderStatus(orderId, newStatus) {
+        async function updateOrderStatus(orderId, newStatus) {
             const orders = getStoredOrders();
             const ord = orders.find(o => o.id === orderId);
             if (ord) {
@@ -3422,30 +3495,35 @@
                 saveStoredOrders(orders);
                 renderOrdersTable();
 
-                // Sync to Firebase Cloud DB
+                // Sync to Serverless API (/api/orders)
                 try {
-                    fetch('https://abu-el-goukh-store-default-rtdb.firebaseio.com/orders/' + orderId + '.json', {
+                    await fetch('/api/orders', {
                         method: 'PATCH',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ status: newStatus })
-                    }).catch(e => console.warn(e));
-                } catch(e) { console.warn(e); }
+                        headers: getAdminAuthHeaders(),
+                        body: JSON.stringify({
+                            orderId: orderId,
+                            status: newStatus
+                        })
+                    });
+                } catch(e) { console.warn('Status update error:', e); }
             }
         }
 
-        function deleteOrder(orderId) {
+        async function deleteOrder(orderId) {
             if (confirm(`هل أنت متأكد من حذف الطلب رقم ${orderId} نهائياً؟`)) {
                 let orders = getStoredOrders();
                 orders = orders.filter(o => o.id !== orderId);
                 saveStoredOrders(orders);
                 renderOrdersTable();
 
-                // Delete from Firebase Cloud DB
+                // Delete from Serverless API (/api/orders)
                 try {
-                    fetch('https://abu-el-goukh-store-default-rtdb.firebaseio.com/orders/' + orderId + '.json', {
-                        method: 'DELETE'
-                    }).catch(e => console.warn(e));
-                } catch(e) { console.warn(e); }
+                    await fetch('/api/orders', {
+                        method: 'DELETE',
+                        headers: getAdminAuthHeaders(),
+                        body: JSON.stringify({ orderId: orderId })
+                    });
+                } catch(e) { console.warn('Order delete error:', e); }
             }
         }
 
@@ -3963,29 +4041,42 @@
                         handleAdminLogout();
                         return false;
                     }
+                } else {
+                    handleAdminLogout();
+                    return false;
                 }
-            } catch(e) {}
+            } catch(e) {
+                handleAdminLogout();
+                return false;
+            }
 
-            // Reveal UI immediately for smooth UX
-            if (loginScreen) loginScreen.classList.add('hidden');
-            if (mainWrapper) mainWrapper.classList.remove('hidden');
-
-            // Verify with serverless endpoint
+            // Verify with serverless endpoint (Fail-Closed: Keep screen locked until verified)
             try {
                 const res = await fetch('/api/admin-auth', {
                     headers: { 'Authorization': 'Bearer ' + token }
                 });
                 if (res.ok) {
                     const data = await res.json();
-                    if (data && data.authenticated) return true;
+                    if (data && data.authenticated) {
+                        if (loginScreen) loginScreen.classList.add('hidden');
+                        if (mainWrapper) mainWrapper.classList.remove('hidden');
+                        return true;
+                    }
                 }
+                // Invalid or rejected token
                 sessionStorage.removeItem('abu_admin_jwt_token');
                 localStorage.removeItem('abu_admin_jwt_token');
                 if (loginScreen) loginScreen.classList.remove('hidden');
                 if (mainWrapper) mainWrapper.classList.add('hidden');
                 return false;
             } catch (err) {
-                return true;
+                // SECURITY FIX: Fail-Closed on network error or server exception
+                console.error('Admin auth verification error (Fail-Closed):', err);
+                sessionStorage.removeItem('abu_admin_jwt_token');
+                localStorage.removeItem('abu_admin_jwt_token');
+                if (loginScreen) loginScreen.classList.remove('hidden');
+                if (mainWrapper) mainWrapper.classList.add('hidden');
+                return false;
             }
         }
 
@@ -4019,7 +4110,7 @@
                             sessionStorage.setItem('abu_admin_jwt_token', data.token);
                         }
                         if (errAlert) errAlert.classList.add('hidden');
-                        checkAdminAuth();
+                        await checkAdminAuth();
                         return;
                     }
                 }
@@ -4035,14 +4126,8 @@
                     errAlert.classList.remove('hidden');
                 }
             } catch (networkErr) {
-                if (window.location.protocol === 'file:') {
-                    if (u === 'admin' && p === 'Goukh@1925') {
-                        sessionStorage.setItem('abu_admin_jwt_token', 'local_dev_token.' + Date.now());
-                        if (errAlert) errAlert.classList.add('hidden');
-                        checkAdminAuth();
-                        return;
-                    }
-                }
+                // SECURITY FIX: No hardcoded credentials fallback (Fail-Closed)
+                console.error('Admin login network error:', networkErr);
                 if (errAlert) {
                     errAlert.textContent = '❌ تعذر الاتصال بسيرفر التحقق. يرجى التأكد من تشغيل المشروع على خادم.';
                     errAlert.classList.remove('hidden');

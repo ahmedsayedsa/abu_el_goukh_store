@@ -1,0 +1,30 @@
+{
+  "rules": {
+    "orders": {
+      ".read": false,
+      ".write": false
+    },
+    "payment_gateway_settings": {
+      ".read": false,
+      ".write": false
+    },
+    "admin_auth": {
+      ".read": false,
+      ".write": false
+    },
+    "pixels_settings": {
+      ".read": "auth != null",
+      ".write": false
+    },
+    "products": {
+      ".read": true,
+      ".write": false
+    },
+    "hero_video": {
+      ".read": true,
+      ".write": false
+    },
+    ".read": false,
+    ".write": false
+  }
+}

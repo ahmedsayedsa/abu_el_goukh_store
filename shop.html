@@ -1784,7 +1784,18 @@
         window.ABU_FIREBASE_URL = 'https://abu-el-goukh-store-default-rtdb.firebaseio.com';
 
         async function getLiveCatalog() {
-            // 1. Try Google Firebase Cloud DB if URL configured
+            // 1. Try Serverless API /api/products (authoritative cloud catalog)
+            try {
+                const apiRes = await fetch('/api/products');
+                if (apiRes.ok) {
+                    const data = await apiRes.json();
+                    if (Array.isArray(data) && data.length > 0) {
+                        return data;
+                    }
+                }
+            } catch(e) { console.warn('API products fetch failed, attempting fallbacks', e); }
+
+            // 2. Try Google Firebase Cloud DB if URL configured
             if (window.ABU_FIREBASE_URL) {
                 try {
                     const fbEndpoint = window.ABU_FIREBASE_URL.replace(/\/+$/, '') + '/products.json';
@@ -1798,7 +1809,7 @@
                 } catch(e) { console.warn('Cloud DB fetch failed, using fallback', e); }
             }
 
-            // 2. Try Centralized Server products.json
+            // 3. Try Centralized Server products.json
             try {
                 const resp = await fetch('products.json?v=' + Date.now());
                 if (resp.ok) {
@@ -1809,7 +1820,7 @@
                 }
             } catch(e) { console.log('Falling back to static data', e); }
 
-            // 3. Fallback to embedded curatedBikes
+            // 4. Fallback to embedded curatedBikes
             return curatedBikes;
         }
 

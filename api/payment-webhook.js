@@ -72,7 +72,12 @@ export default async function handler(req, res) {
             return res.status(500).json({ error: 'Server webhook unconfigured' });
         }
 
-        const queryHmac = req.query?.hmac || req.headers['x-paymob-hmac'] || '';
+        const queryHmac = req.query?.hmac || req.headers['x-paymob-hmac'] || (typeof req.body === 'object' && req.body?.hmac) || '';
+        if (!queryHmac) {
+            console.warn('[SECURITY ALERT] Paymob webhook received with no HMAC signature - rejected.');
+            return res.status(403).json({ error: 'Missing HMAC signature' });
+        }
+
         const obj = body.obj || body;
 
         // Paymob concatenated keys in exact standard order
@@ -99,7 +104,7 @@ export default async function handler(req, res) {
 
         const calculatedHmac = crypto.createHmac('sha512', hmacSecret).update(concatenated).digest('hex');
 
-        if (!queryHmac || !safeCompare(queryHmac, calculatedHmac)) {
+        if (!safeCompare(queryHmac, calculatedHmac)) {
             console.warn('[SECURITY ALERT] Invalid Paymob HMAC Signature attempt!');
             return res.status(403).json({ error: 'Invalid HMAC signature' });
         }
@@ -123,13 +128,17 @@ export default async function handler(req, res) {
         }
 
         const signatureHeader = req.headers['signature'] || '';
-        if (signatureHeader) {
-            const rawBody = typeof req.body === 'string' ? req.body : JSON.stringify(req.body);
-            const calculatedSig = crypto.createHmac('sha256', serverKey).update(rawBody).digest('hex');
-            if (!safeCompare(signatureHeader, calculatedSig)) {
-                console.warn('[SECURITY ALERT] Invalid PayTabs Signature attempt!');
-                return res.status(403).json({ error: 'Invalid signature' });
-            }
+        // SECURITY FIX (Issue 5): Fail-Closed if signature header is missing or empty
+        if (!signatureHeader) {
+            console.warn('[SECURITY ALERT] PayTabs webhook received with no signature header - rejected.');
+            return res.status(403).json({ error: 'Missing signature header' });
+        }
+
+        const rawBody = typeof req.body === 'string' ? req.body : JSON.stringify(req.body);
+        const calculatedSig = crypto.createHmac('sha256', serverKey).update(rawBody).digest('hex');
+        if (!safeCompare(signatureHeader, calculatedSig)) {
+            console.warn('[SECURITY ALERT] Invalid PayTabs Signature attempt!');
+            return res.status(403).json({ error: 'Invalid signature' });
         }
 
         const orderId = body.cart_id || body.merchant_order_id;
@@ -152,13 +161,19 @@ export default async function handler(req, res) {
         }
 
         const { fawryRefNum, merchantRefNum, orderAmount, orderStatus, messageSignature } = body;
+        // SECURITY FIX: Fail-Closed if messageSignature is missing or empty
+        if (!messageSignature) {
+            console.warn('[SECURITY ALERT] Fawry webhook received with no signature - rejected.');
+            return res.status(403).json({ error: 'Missing signature' });
+        }
+
         const formattedAmount = Number(orderAmount).toFixed(2);
 
         // Fawry signature: fawryRefNum + merchantRefNum + amount + orderStatus + securityKey
         const rawString = `${fawryRefNum}${merchantRefNum}${formattedAmount}${orderStatus}${secKey}`;
         const calculatedSig = crypto.createHash('sha256').update(rawString).digest('hex');
 
-        if (!messageSignature || !safeCompare(messageSignature, calculatedSig)) {
+        if (!safeCompare(messageSignature, calculatedSig)) {
             console.warn('[SECURITY ALERT] Invalid Fawry Signature attempt!');
             return res.status(403).json({ error: 'Invalid signature' });
         }

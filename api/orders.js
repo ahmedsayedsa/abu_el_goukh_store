@@ -53,7 +53,7 @@ export default async function handler(req, res) {
         // SECURITY FIX: Authoritative Server-side price calculation (Fail-Closed)
         let priceResult;
         try {
-            priceResult = verifyOrderPrice(items, total, discountCode, shippingFee);
+            priceResult = await verifyOrderPrice(items, total, discountCode, shippingFee);
         } catch (err) {
             console.error('[Order Create Price Check Failed]', err.message);
             return res.status(400).json({ error: err.message });

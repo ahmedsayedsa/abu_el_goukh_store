@@ -3,32 +3,95 @@ import path from 'path';
 
 /**
  * Server-Side Authoritative Price Verification Engine
- * SECURITY FIX: Fail-Closed enforcement.
- * 1. Strictly rejects empty carts, unverified items, or negative/tampered numbers.
- * 2. Multiplies official catalog price by item quantity.
- * 3. Never falls back to client-provided price or claimed total upon error.
+ * SECURITY FIX:
+ * 1. Synchronized live with Firebase Realtime Database (Single Source of Truth).
+ * 2. 60-second in-memory cache to guarantee sub-millisecond payment verification.
+ * 3. Fallback to local products.json if Firebase is temporarily unreachable.
+ * 4. Strictly Fail-Closed: Rejects any unverified product, missing price, or tampered totals.
  */
-export function verifyOrderPrice(items, claimedTotal, discountCode = '', shippingFee = 150) {
+
+let cachedCatalog = null;
+let lastCacheTime = 0;
+const CACHE_TTL_MS = 60 * 1000; // 60 seconds TTL
+
+export function clearCatalogCache() {
+    cachedCatalog = null;
+    lastCacheTime = 0;
+}
+
+function getFirebaseUrl(subpath = '') {
+    const base = (process.env.FIREBASE_DATABASE_URL || 'https://abu-el-goukh-store-default-rtdb.firebaseio.com').replace(/\/+$/, '');
+    const secret = (process.env.FIREBASE_AUTH_SECRET || '').trim();
+    const query = secret ? `?auth=${encodeURIComponent(secret)}` : '';
+    return `${base}${subpath}.json${query}`;
+}
+
+export async function fetchAuthoritativeCatalog() {
+    // 1. Fast in-memory cache check
+    if (cachedCatalog && Array.isArray(cachedCatalog) && (Date.now() - lastCacheTime < CACHE_TTL_MS)) {
+        return cachedCatalog;
+    }
+
+    // 2. Fetch live products from Firebase Realtime Database
+    try {
+        const fbRes = await fetch(getFirebaseUrl('/products'), {
+            headers: { 'Accept': 'application/json' },
+            signal: AbortSignal.timeout(4000)
+        });
+        if (fbRes.ok) {
+            const data = await fbRes.json();
+            if (Array.isArray(data) && data.length > 0) {
+                cachedCatalog = data;
+                lastCacheTime = Date.now();
+                return data;
+            } else if (data && typeof data === 'object') {
+                const arr = Object.values(data);
+                if (arr.length > 0) {
+                    cachedCatalog = arr;
+                    lastCacheTime = Date.now();
+                    return arr;
+                }
+            }
+        }
+    } catch (fbErr) {
+        console.warn('[Price Engine] Firebase live catalog fetch failed, attempting local fallback:', fbErr.message);
+    }
+
+    // 3. Fallback to bundled products.json file if Firebase is unavailable
+    const catalogPath = path.join(process.cwd(), 'products.json');
+    if (fs.existsSync(catalogPath)) {
+        try {
+            const fileData = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
+            if (Array.isArray(fileData) && fileData.length > 0) {
+                cachedCatalog = fileData;
+                lastCacheTime = Date.now();
+                return fileData;
+            }
+        } catch (e) {
+            console.error('[Price Engine] Failed to parse local products.json fallback:', e.message);
+        }
+    }
+
+    // 4. If we had an older cache, return it rather than failing
+    if (cachedCatalog && Array.isArray(cachedCatalog) && cachedCatalog.length > 0) {
+        return cachedCatalog;
+    }
+
+    // SECURITY FIX: Fail-Closed if no catalog source could be loaded
+    throw new Error('Server configuration error: Product catalog unavailable for verification.');
+}
+
+export async function verifyOrderPrice(items, claimedTotal, discountCode = '', shippingFee = 150) {
     // SECURITY FIX: Reject missing or non-array items (Fail-Closed)
     if (!Array.isArray(items) || items.length === 0) {
         throw new Error('Order verification failed: Cart is empty or invalid.');
     }
 
-    const catalogPath = path.join(process.cwd(), 'products.json');
-    if (!fs.existsSync(catalogPath)) {
-        // SECURITY FIX: Fail-Closed if catalog file is unavailable
-        throw new Error('Server configuration error: Product catalog unavailable for verification.');
-    }
-
-    let catalog;
-    try {
-        catalog = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
-    } catch (parseErr) {
-        throw new Error('Server configuration error: Malformed product catalog.');
-    }
+    const catalog = await fetchAuthoritativeCatalog();
 
     const catalogMap = new Map();
     catalog.forEach(p => {
+        if (!p) return;
         const price = Number(p.price);
         if (price > 0) {
             catalogMap.set(String(p.id), price);

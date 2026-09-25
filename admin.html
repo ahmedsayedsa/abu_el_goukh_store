@@ -2332,10 +2332,25 @@
             reader.readAsDataURL(file);
         }
 
-        function saveProduct(e) {
+        function getAdminAuthHeaders() {
+            const token = sessionStorage.getItem('abu_admin_jwt_token') || localStorage.getItem('abu_admin_jwt_token') || '';
+            return {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            };
+        }
+
+        async function saveProduct(e) {
             e.preventDefault();
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn ? submitBtn.innerText : '';
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerText = '⏳ جاري الحفظ سحابياً...';
+            }
+
             const editId = document.getElementById('edit-product-id').value;
-            const name = document.getElementById('input-name').value;
+            const name = document.getElementById('input-name').value.trim();
             const price = Number(document.getElementById('input-price').value);
             const category = document.getElementById('input-category').value;
             const size = document.getElementById('input-size').value;
@@ -2344,70 +2359,116 @@
             const metaDescription = document.getElementById('input-meta-desc').value.trim();
             const image = document.getElementById('input-img').value;
 
+            // Clone current products array
+            let updatedProducts = [...products];
+
             if (editId) {
                 // Edit existing
-                const index = products.findIndex(x => x.id == editId);
+                const index = updatedProducts.findIndex(x => String(x.id) === String(editId));
                 if (index !== -1) {
-                    products[index] = {
-                        ...products[index],
+                    updatedProducts[index] = {
+                        ...updatedProducts[index],
                         name, price, category, size, gears, frame, metaDescription, image
                     };
                 }
             } else {
                 // Add new
-                const newId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
-                products.unshift({
+                const newId = updatedProducts.length > 0 ? Math.max(...updatedProducts.map(p => Number(p.id) || 0)) + 1 : 1;
+                updatedProducts.unshift({
                     id: newId,
                     name, price, category, size, gears, frame, metaDescription, image,
                     active: true
                 });
             }
 
-            // Save to localStorage and auto-sync to Firebase Cloud DB
-            localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(products));
-            if (firebaseDbUrl) {
-                fetch(firebaseDbUrl.replace(/\/+$/, '') + '/products.json', {
+            try {
+                // SECURITY FIX (Issue 1): Route write operations through authenticated Serverless API /api/products
+                const response = await fetch('/api/products', {
                     method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(products)
-                }).then(() => console.log('Auto-synced to Firebase')).catch(e => console.error(e));
-            }
-            closeModal();
-            renderTable();
-            updateOrdersBadge();
-            alert('✓ تم حفظ العجلة سحابياً بنجاح ومزامنتها لحظياً على كافة الهواتف وأجهزة الزوار!');
-        }
+                    headers: getAdminAuthHeaders(),
+                    body: JSON.stringify({ products: updatedProducts })
+                });
 
-        function toggleProductStatus(id) {
-            const p = products.find(x => x.id === id);
-            if (p) {
-                p.active = !p.active;
-                localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(products));
-                if (firebaseDbUrl) {
-                    fetch(firebaseDbUrl.replace(/\/+$/, '') + '/products.json', {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(products)
-                    }).catch(e => console.error(e));
+                const data = await response.json();
+
+                // SECURITY FIX: Strictly check response.ok before claiming success to the Admin
+                if (!response.ok) {
+                    console.error('[Product Save Error]', data);
+                    alert('❌ فشل حفظ المنتج سحابياً: ' + (data.error || 'يرجى التأكد من صلاحيات تسجيل الدخول'));
+                    return;
                 }
+
+                // Update local state ONLY after verified server confirmation
+                products = updatedProducts;
+                localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(products));
+
+                closeModal();
                 renderTable();
                 updateOrdersBadge();
+                alert('✓ تم حفظ العجلة سحابياً بنجاح وتحديث محرك الأسعار في المتجر فورياً!');
+            } catch (networkErr) {
+                console.error('[Network Error on Product Save]', networkErr);
+                alert('❌ تعذر الاتصال بالسيرفر لحفظ المنتج. يرجى التحقق من اتصال الإنترنت.');
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = originalText;
+                }
             }
         }
 
-        function deleteProduct(id) {
-            if (confirm('هل أنت متأكد من حذف هذه العجلة من المتجر؟')) {
+        async function toggleProductStatus(id) {
+            const p = products.find(x => x.id === id);
+            if (!p) return;
+
+            const updatedProducts = products.map(item => item.id === id ? { ...item, active: !item.active } : item);
+
+            try {
+                const response = await fetch('/api/products', {
+                    method: 'PUT',
+                    headers: getAdminAuthHeaders(),
+                    body: JSON.stringify({ products: updatedProducts })
+                });
+
+                if (!response.ok) {
+                    const err = await response.json();
+                    alert('❌ فشل تغيير حالة المنتج في السحابة: ' + (err.error || 'خطأ غير مصرح'));
+                    return;
+                }
+
+                products = updatedProducts;
+                localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(products));
+                renderTable();
+                updateOrdersBadge();
+            } catch (e) {
+                console.error('Failed to toggle status:', e);
+                alert('❌ تعذر الاتصال بالسيرفر لتحديث حالة العجلة.');
+            }
+        }
+
+        async function deleteProduct(id) {
+            if (!confirm('هل أنت متأكد من حذف هذه العجلة من المتجر نهائياً؟')) return;
+
+            try {
+                const response = await fetch(`/api/products?id=${encodeURIComponent(id)}`, {
+                    method: 'DELETE',
+                    headers: getAdminAuthHeaders()
+                });
+
+                if (!response.ok) {
+                    const err = await response.json();
+                    alert('❌ فشل حذف العجلة من السحابة: ' + (err.error || 'خطأ غير مصرح'));
+                    return;
+                }
+
                 products = products.filter(x => x.id !== id);
                 localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(products));
-                if (firebaseDbUrl) {
-                    fetch(firebaseDbUrl.replace(/\/+$/, '') + '/products.json', {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(products)
-                    }).catch(e => console.error(e));
-                }
                 renderTable();
                 updateOrdersBadge();
+                alert('✓ تم حذف العجلة من المتجر وقاعدة البيانات السحابية بنجاح.');
+            } catch (e) {
+                console.error('Failed to delete product:', e);
+                alert('❌ تعذر الاتصال بالسيرفر لإتمام عملية الحذف.');
             }
         }
 
@@ -3665,20 +3726,18 @@
 
         // Initialize on load
         window.addEventListener('DOMContentLoaded', async () => {
-            // 1. Fetch live products from Firebase Cloud DB
-            if (firebaseDbUrl) {
-                try {
-                    const resp = await fetch(firebaseDbUrl.replace(/\/+$/, '') + '/products.json');
-                    if (resp.ok) {
-                        const cloudBikes = await resp.json();
-                        if (Array.isArray(cloudBikes) && cloudBikes.length > 0) {
-                            products = cloudBikes;
-                            localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(products));
-                            console.log('Admin loaded live products from Firebase:', products.length);
-                        }
+            // 1. Fetch live products from /api/products (Serverless API)
+            try {
+                const resp = await fetch('/api/products');
+                if (resp.ok) {
+                    const cloudBikes = await resp.json();
+                    if (Array.isArray(cloudBikes) && cloudBikes.length > 0) {
+                        products = cloudBikes;
+                        localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(products));
+                        console.log('Admin loaded live products from /api/products:', products.length);
                     }
-                } catch(e) { console.warn('Could not load from Firebase', e); }
-            }
+                }
+            } catch(e) { console.warn('Could not load from API', e); }
             renderTable();
             updateOrdersBadge();
             fetchCloudOrders();
@@ -3990,30 +4049,27 @@
         }
 
         async function syncAllToCloud() {
-            if (!firebaseDbUrl) {
-                openFirebaseSettingsModal();
-                return;
-            }
-
             const btn = document.getElementById('btn-sync-cloud');
-            if (btn) btn.innerText = '⏳ جاري المزامنة...';
+            if (btn) btn.innerText = '⏳ جاري المزامنة مع السحابة...';
 
             try {
-                const endpoint = firebaseDbUrl.replace(/\/+$/, '') + '/products.json';
-                const response = await fetch(endpoint, {
+                // SECURITY FIX: Route through /api/products with Admin JWT
+                const response = await fetch('/api/products', {
                     method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(products)
+                    headers: getAdminAuthHeaders(),
+                    body: JSON.stringify({ products })
                 });
 
+                const data = await response.json();
+
                 if (response.ok) {
-                    alert('🎉 تم رفع ومزامنة كافة المنتجات (' + products.length + ' دراجة) إلى سحابة Google Firebase بنجاح! التعديلات الآن حية على كل هواتف وأجهزة العالم.');
+                    alert('🎉 تم رفع ومزامنة كافة المنتجات (' + products.length + ' دراجة) إلى السحابة ومحرك الأسعار بنجاح! التعديلات الآن حية على كل هواتف وأجهزة الزوار.');
                 } else {
-                    alert('حدث خطأ أثناء الاتصال بقاعدة البيانات. تأكد من إعدادات القواعد (Rules) في Firebase.');
+                    alert('❌ حدث خطأ أثناء المزامنة السحابية: ' + (data.error || 'تأكد من صلاحيات المسؤول في الجلسة.'));
                 }
             } catch(e) {
                 console.error(e);
-                alert('فشل الاتصال برابط قاعدة البيانات. تأكد من صحة الرابط.');
+                alert('❌ فشل الاتصال بالسيرفر للمزامنة السحابية. يرجى التحقق من اتصال الإنترنت.');
             } finally {
                 if (btn) btn.innerText = '☁️ رفع كل المنتجات للسحابة الآن';
             }

@@ -43,7 +43,7 @@ export default async function handler(req, res) {
     // SECURITY FIX: Authoritative Server-side price validation (Fail-Closed)
     let priceResult;
     try {
-        priceResult = verifyOrderPrice(items, total, promoCode, shippingFee);
+        priceResult = await verifyOrderPrice(items, total, promoCode, shippingFee);
     } catch (verErr) {
         console.error('[Fawry Price Check Failed]', verErr.message);
         return res.status(400).json({ error: verErr.message });
@@ -92,6 +92,8 @@ export default async function handler(req, res) {
             }
         ],
         returnUrl: retUrl,
+        notifyUrl: `${baseUrl}/api/payment-webhook?gateway=fawry`,
+        notificationUrl: `${baseUrl}/api/payment-webhook?gateway=fawry`,
         signature: signature
     };
 

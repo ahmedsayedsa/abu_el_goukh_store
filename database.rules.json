@@ -13,7 +13,7 @@
       ".write": false
     },
     "pixels_settings": {
-      ".read": "auth != null",
+      ".read": true,
       ".write": false
     },
     "products": {

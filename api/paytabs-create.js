@@ -41,7 +41,7 @@ export default async function handler(req, res) {
     // SECURITY FIX: Authoritative Server-side price validation (Fail-Closed)
     let priceResult;
     try {
-        priceResult = verifyOrderPrice(items, total, promoCode, shippingFee);
+        priceResult = await verifyOrderPrice(items, total, promoCode, shippingFee);
     } catch (verErr) {
         console.error('[PayTabs Price Check Failed]', verErr.message);
         return res.status(400).json({ error: verErr.message });

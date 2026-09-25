@@ -47,7 +47,7 @@ export default async function handler(req, res) {
     // SECURITY FIX: Authoritative Server-side price validation (Fail-Closed)
     let priceResult;
     try {
-        priceResult = verifyOrderPrice(items, total, promoCode, shippingFee);
+        priceResult = await verifyOrderPrice(items, total, promoCode, shippingFee);
     } catch (verErr) {
         console.error('[Paymob Price Check Failed]', verErr.message);
         return res.status(400).json({ error: verErr.message });
@@ -70,6 +70,10 @@ export default async function handler(req, res) {
     // ─────────────────────────────────────────────────────────────
     if (secretKey && secretKey.length > 10) {
         try {
+            const host = req.headers['host'] || 'abu-el-goukh-store.vercel.app';
+            const protocol = host.includes('localhost') ? 'http' : 'https';
+            const baseUrl = `${protocol}://${host}`;
+
             const intMethods = [];
             if (integrationId && !isNaN(Number(integrationId))) {
                 intMethods.push(Number(integrationId));
@@ -108,7 +112,9 @@ export default async function handler(req, res) {
                 },
                 extras: {
                     order_id: String(orderId)
-                }
+                },
+                notification_url: `${baseUrl}/api/payment-webhook?gateway=paymob`,
+                redirection_url: returnUrl || `${baseUrl}/order-success.html?gateway=paymob&order=${encodeURIComponent(orderId)}`
             };
 
             const intentionRes = await fetch('https://accept.paymob.com/v1/intention/', {

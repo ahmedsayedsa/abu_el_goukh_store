@@ -1,75 +1,110 @@
 # تقرير الإصلاحات الأمنية الشاملة لمتجر أبو الجوخ 1925
-## Comprehensive Security Remediation Report
+## Comprehensive Security & Architecture Remediation Report
 
-تم فحص ومعالجة كافة الثغرات الأمنية المحددة في تقرير الفحص والتدقيق الأمني (Security Audit) لمتجر **أبو الجوخ 1925**. جميع الإصلاحات تم تنفيذها وفقاً لمعايير الأمان العالمية (OWASP Top 10) مع الالتزام بمبدأ **Fail-Closed** ومبدأ **Zero Client Trust**.
+تم فحص ومعالجة كافة الثغرات والعيوب التشغيلية المحددة في المراجعة الأمنية والوظيفية لمتجر **أبو الجوخ 1925**. جميع الإصلاحات تم تنفيذها وفقاً لأعلى معايير الأمان (OWASP Top 10) مع الالتزام التام بمبدأي **Fail-Closed دائماً** و **Zero Client Trust**.
 
 ---
 
-### جدول ملخص الثغرات والإصلاحات المنفذة
+### جدول ملخص المشاكل والإصلاحات المنفذة حديثاً (الجولة الثانية)
 
-| # | مستوى الخطورة | اسم الثغرة | الملفات المتأثرة | ملخص الإصلاح الفعلي |
+| # | مستوى الخطورة | اسم المشكلة / الثغرة | الملفات المعدلة | تفاصيل الإصلاح المنفذ |
 |---|---|---|---|---|
-| 1 | 🔴 **حرج جداً** | قاعدة بيانات Firebase مكشوفة للقراءة والكتابة للعامة بدون مصادقة | `database.rules.json`, `api/orders.js`, `api/payment-webhook.js` | إنشاء ملف قواعد Firebase وقفل المسارات الحساسة (`/orders`, `/payment_gateway_settings`, `/admin_auth`) بحظر القراءة والكتابة المباشرة (`.read: false, .write: false`). أصبحت جميع العمليات تتم عبر دوال Vercel Serverless Function المؤمنة بمفتاح `FIREBASE_AUTH_SECRET`. |
-| 2 | 🔴 **حرج جداً** | تلاعب بالأسعار والمبالغ من المتصفح (Price Tampering) | `api/_verify-price.js`, `api/orders.js`, `api/paymob-create.js`, `api/paytabs-create.js`, `api/fawry-create.js`, `checkout.html` | إلغاء الاعتماد على الأسعار أو الإجمالي القادم من المتصفح. أنشئ محرك تحقق سيرفر `_verify-price.js` يعيد حساب التكلفة بناءً على الكتالوج المعتمد `products.json`، ويحسب كمية كل صنف، ويطبق كود الخصم المعتمد والشحن، ويرفض أي طلب يحتوي منتجاً غير معروف أو كمية غير صالحة. |
-| 3 | 🔴 **حرج جداً** | تسريب مفاتيح بوابات الدفع السرية وتمريرها في المتصفح | `checkout.html`, `admin.html`, `api/paymob-create.js`, `api/paytabs-create.js`, `api/fawry-create.js` | سحب جميع المفاتيح السرية (`PAYMOB_SECRET_KEY`, `PAYTABS_SERVER_KEY`, `FAWRY_SECURITY_KEY`) من كود المتصفح والـ LocalStorage وقاعدة البيانات، وإلزام السيرفر بقراءتها حصرياً من متغيرات بيئة Vercel (`process.env`). رفض أي مفتاح سري مرسل في الـ Request Body. |
-| 4 | 🔴 **حرج جداً** | تزييف حالة الدفع من المتصفح (Payment Status Forgery) | `order-success.html`, `api/payment-webhook.js` | إزالة كود الـ PATCH المباشر الذي كان يغير حالة الطلب إلى "مدفوع" بناءً على باراميتر في رابط الصفحة (`?payment=paytabs_success`). إنشاء Webhook سيرفر موثق يتحقق من توقيع HMAC لكل بوابة بنكية (Paymob HMAC SHA-512, PayTabs HMAC-SHA256, Fawry SHA-256) قبل تحديث حالة الدفع. |
-| 5 | 🔴 **حرج** | كلمات مرور وأسرار مشفرة ثابتة في الكود (Hardcoded Secrets / Backdoor) | `api/admin-auth.js`, `admin.html` | إزالة بيانات الدخول الثابتة (`admin` / `Goukh@1925`) ومفتاح JWT الثابت. نقل كلمة المرور واسم المستخدم ومفتاح التوقيع لمتغيرات بيئة Vercel (`ADMIN_USERNAME`, `ADMIN_PASSWORD_HASH`, `ADMIN_JWT_SECRET`). استخدام مقارنة ثابتة الوقت `crypto.timingSafeEqual` لمنع هجمات Timing Attacks. |
-| 6 | 🔴 **حرج** | ثغرة تجاوز المصادقة بالسماح التلقائي (Fail-Open in Admin Auth) | `admin.html` | تم تصحيح دالة `checkAdminAuth()` بحيث تتبع مبدأ **Fail-Closed**: في حال حدوث أي خطأ في الشبكة أو استجابة غير متوقعة، يتم قفل اللوحة وإلغاء صلاحيات الجلسة فوراً ومنع الدخول. |
-| 7 | 🟠 **عالي** | ثغرة حقن نصوص برمجية مخزنة عبر إعدادات البيكسل (Stored XSS) | `pixels.js` | تم إزالة كود تحميل الـ Script الديناميكي الخارجي (`cfg.custom.scriptUrl`) لمنع هجمات حقن الـ JavaScript وسلاسل الإمداد. |
-| 8 | 🟠 **عالي** | ثغرة حقن داخل وسوم HTML وجدول الطلبات (DOM-XSS via Inline Handlers) | `admin.html`, `order-success.html` | استبدال معالجات الأحداث النصية المضمنة (`onclick="...${id}..."` و `onchange="..."`) بروابط آمنة عبر `data-order-id` وتقنية **Event Delegation** على مستوى الـ Table Body، مع تعقيم وتشفير كافة المخرجات باستخدام `escapeHtml()`. |
-| 9 | 🟠 **عالي** | معرفات طلبات سهلة التخمين والتوقع (Predictable Order IDs) | `api/orders.js`, `checkout.html` | استبدال `Math.random()` العشوائية الضعيفة بمعرفات طلبات مشفرة غير قابلة للتخمين تعتمد على `crypto.randomBytes(3)` وتوقيت زمني دقيق بنظام Base36 (مثال: `AEG-M28K9Q-F4A1C9`). |
-| 10 | 🟡 **متوسط** | كشف بيانات العملاء الشخصية لأي زائر (PII / IDOR) | `api/orders.js`, `order-success.html` | تخصيص مخرجات فحص حالة الطلب العام للعميل بحيث لا تُظهر رقم الهاتف أو العنوان التفصيلي، وحصر كشف السجلات الكاملة لمسؤولي المتجر المسجلين فقط عبر JWT Token. |
-| 11 | 🟡 **متوسط** | هجمات التخمين المستمر على لوحة الإدارة (Brute-Force Attack) | `api/admin-auth.js` | إضافة نظام قفل وحظر آلي بعد 5 محاولات تسجيل دخول فاشلة من نفس الـ IP لمدة 15 دقيقة مع إرجاع كود HTTP 429 Too Many Requests. |
-| 12 | 🟡 **متوسط** | غياب سياسة أمان المحتوى (Content Security Policy - CSP) | `vercel.json` | إضافة ترويسة `Content-Security-Policy` متكاملة وصارمة لمنع هجمات XSS والتحميل الخارجي غير المصرح به. |
+| 1 | 🔴 **حرج** | إدارة المنتجات مكسورة في لوحة الإدارة (Silent Write Failure 403) | `api/products.js`, `admin.html`, `shop.html` | أنشئت نقطة نهاية سحابية `/api/products.js` تتولى إضافة وتعديل وحذف المنتجات عبر السيرفر مستخدمة `FIREBASE_AUTH_SECRET` بعد التحقق من `verifyAdminToken()`. تم ربط دوال `saveProduct`, `toggleProductStatus`, `deleteProduct`, `syncAllToCloud` بها مع التحقق الإجباري الصارم من `response.ok` قبل إظهار أي رسالة نجاح. |
+| 2 | 🔴 **حرج** | محرك التحقق من السعر يقرأ كتالوجاً ثابتاً قديماً غير متزامن مع لوحة الأدمن | `api/_verify-price.js`, `api/orders.js`, `api/paymob-create.js`, `api/paytabs-create.js`, `api/fawry-create.js` | تم تحويل محرك التحقق `verifyOrderPrice()` ليقرأ كتالوج المنتجات والأسعار حياً من عقدة `products` في Firebase Realtime Database (Single Source of Truth) مع تخزين مؤقت خفيف (60s In-Memory Cache) ودعم الإلغاء الفوري للـ Cache عند قيام المشرف بتعديل المنتجات من اللوحة، مع الحفاظ على مبدأ Fail-Closed ورفض أي تلاعب. |
+| 3 | 🟠 **عالي** | قواعد Firebase تحجب إعدادات البيكسل عن الزوار الحقيقيين | `database.rules.json` | تم تعديل قاعدة مسار `pixels_settings` في Firebase لتصبح `{".read": true, ".write": false}` بما يسمح لمتصفحات الزوار بقراءة معرّفات التتبع الإعلاني (Meta, TikTok, Google) بنجاح بعد أن تم سحب كود حقن السكربت الديناميكي الخطير سابقاً. |
+| 4 | 🟠 **عالي** | بوابتا Paymob و Fawry غير موصولتين بالـ Webhook الجديد | `api/paymob-create.js`, `api/fawry-create.js` | تمت إضافة `notification_url` في الـ Intention Payload لـ Paymob، وإضافة `notifyUrl` و `notificationUrl` لـ Fawry، مع توثيق الخطوات اليدوية الإلزامية المطلوبة على لوحات التحكم الخارجية للمزودين لضمان وصول إشعارات السداد وتحديث حالة الطلبات. |
+| 5 | 🔴 **حرج جداً** | ثغرة تجاوز التحقق من توقيع PayTabs (Fail-Open Signature Bypass) | `api/payment-webhook.js` | تم تصحيح الثغرة بصرامة: إذا كان هيدر `signature` مفقوداً أو فارغاً، يتم رفض الطلب فوراً بكود `403 Forbidden` (`Missing signature header`). كما تم فحص وتأكيد نفس المنطق الصارم لبوابتي Paymob و Fawry لمنع أي تحديث لحالة الطلب بدون توقيع رقمي سليم. |
 
 ---
 
-### الملفات التي تم إنشاؤها وتعديلها
+### ⚠️ إجراء يدوي إجباري خارج الكود (Mandatory External Dashboard Setup)
 
-#### 1. الملفات الجديدة:
-1. **`api/_verify-price.js`**: محرك التحقق الصارم من أسعار المنتجات والكميات وقيم الشحن وأكواد الخصم بناءً على الكتالوج المعتمد.
-2. **`api/orders.js`**: نقطة النهاية (Endpoint) لإدارة الطلبات: إنشاء الطلب مع التحقق من السعر، استعراض حالة طلب العميل (Anti-IDOR)، استعراض كافة الطلبات للمشرف (JWT)، وتعديل وحذف الطلبات بصلاحية الأدمن.
-3. **`api/payment-settings.js`**: نقطة نهاية سيرفر آمنة تتيح لمدير المتجر تعديل وتحديث مفاتيح بوابات الدفع وحسابات الشركات من لوحة التحكم مباشرة بضغطة زر مع حمايتها من المتلصصين.
-4. **`api/_gateway-config.js`**: محرك استرجاع الإعدادات الحية للبوابات من قاعدة البيانات المحمية مع Fallback تلقائي لمتغيرات البيئة.
-5. **`api/payment-webhook.js`**: نقطة نهاية آمنة وموحدة لاستقبال إشعارات السداد اللحظية (Webhooks / IPN) من بوابات PayTabs و Paymob و Fawry مع التحقق التشفيري الصارم من توقيع HMAC لكل عملية قبل اعتمادها.
-6. **`database.rules.json`**: قواعد الأمان السحابية لـ Firebase لمنع القراءة والكتابة المباشرة من المتصفح على الجداول الحساسة.
-7. **`.env.example`**: نموذج إرشادي لجميع متغيرات البيئة السرية المطلوب إضافتها في Vercel.
-8. **`SECURITY-CHANGES.md`**: هذا التقرير الشامل.
+> [!CAUTION]
+> **تنبيه هام جداً لمالك المتجر والمسؤول التقني:**
+> هذه الخطوات تتم حصرياً من داخل حساباتكم في لوحات التحكم الخارجية للشركات، ولا يمكن لأي كود برمجي تطبيقها نيابة عنكم. **بدون تطبيق هذه الإعدادات، ستظل الطلبات المدفوعة إلكترونياً تظهر بحالة "قيد الانتظار" (Pending) ولن تتحدث تلقائياً.**
 
-#### 2. الملفات المعدلة:
-1. **`api/admin-auth.js`**: سحب بيانات الدخول لمتغيرات البيئة، تشفير المقارنة الآمنة ضد Timing Attacks، ومكافحة التخمين Brute-Force Rate Limiting.
-2. **`api/paymob-create.js`**: قراءة المفاتيح حصرياً من السيرفر، تطبيق فحص الأسعار الصارم، ورفض المفاتيح القادمة من المتصفح.
-3. **`api/paytabs-create.js`**: قراءة المفاتيح حصرياً من السيرفر، تطبيق فحص الأسعار، وضبط عنوان الإشعار التلقائي للـ Webhook.
-4. **`api/fawry-create.js`**: قراءة المفاتيح من السيرفر، حساب توقيع SHA-256 على السيرفر فقط، وتطبيق فحص الأسعار.
-5. **`checkout.html`**: إرسال الطلبات عبر `/api/orders` السحابي، إزالة إرسال المفاتيح السرية للبوابات، استخدام المعرف المشفر، وتحديث العجلة الافتراضية للكتالوج.
-6. **`admin.html`**: تصحيح الـ Fail-Open، إزالة كود كلمة المرور الثابتة والـ Backdoor، توجيه عمليات الطلبات لـ `/api/orders` بـ JWT، تحويل الجدول لـ Event Delegation منعاً للـ DOM-XSS، ومنع تخزين المفاتيح في LocalStorage أو Firebase.
-7. **`order-success.html`**: إزالة تعديل الدفع المباشر من المتصفح، الاستعلام عن الحالة الموثقة من السيرفر، وتعقيم كافة مدخلات الروابط والجداول.
-8. **`pixels.js`**: إزالة الحقن الديناميكي للروابط الخارجية لحماية المتجر من سلاسل الإمداد الخبيثة.
-9. **`vercel.json`**: إضافة ترويسة Content-Security-Policy المتقدمة.
+#### 1. لوحة تحكم بايموب (Paymob Merchant Dashboard):
+1. سجل الدخول إلى [Paymob Dashboard](https://accept.paymob.com/portal2/en/login).
+2. من القائمة الجانبية، اختر **Developers** ثم **Integration Settings**.
+3. توجه إلى إعدادات التكامل (Integrations) الخاصة بـ (Online Card / Wallets / ValU).
+4. في خانة **Transaction Processed Callback (Server to Server)**، ضع الرابط التالي:
+   ```text
+   https://<your-domain>/api/payment-webhook?gateway=paymob
+   ```
+5. في خانة **Transaction Response Callback (URL)**، ضع الرابط التالي لعودة الزائر بعد الدفع:
+   ```text
+   https://<your-domain>/order-success.html?gateway=paymob
+   ```
+6. احفظ التغييرات، وتأكد من نسخ الـ **HMAC Secret** ووضعه في متغيرات بيئة Vercel باسم `PAYMOB_HMAC_SECRET` أو في تبويب البوابات بلوحة الإدارة.
+
+#### 2. لوحة تحكم فوري باي (Fawry Merchant Portal):
+1. سجل الدخول إلى بوابة تاجر فوري [Fawry Plus / Merchant Portal](https://www.atfawry.com).
+2. انتقل إلى **Integration Settings** أو **Notification Settings / IPN Configuration**.
+3. قم بتفعيل ميزة **Payment Notification (IPN)**.
+4. سجّل رابط الإشعار السحابي الخاص بمتجرك:
+   ```text
+   https://<your-domain>/api/payment-webhook?gateway=fawry
+   ```
+5. اختر صيغة الإشعار `JSON` أو `HTTP POST`، واحفظ التغييرات.
+
+#### 3. قواعد أمان Firebase Console:
+1. ادخل إلى [Firebase Console](https://console.firebase.google.com/).
+2. اختر مشروع المتجر > **Realtime Database** > تبويب **Rules (القواعد)**.
+3. انسخ محتوى الملف `database.rules.json` المعدل كاملاً والصقه هناك.
+4. اضغط زر **Publish (نشر)** لتأمين البيانات وحماية المنتجات وإتاحة قراءة البيكسلات للزوار.
+
+#### 4. إعداد متغيرات بيئة Vercel:
+تأكد من إدخال المتغيرات التالية في **Vercel Project Settings > Environment Variables**:
+- `FIREBASE_DATABASE_URL`
+- `FIREBASE_AUTH_SECRET`
+- `ADMIN_USERNAME`
+- `ADMIN_PASSWORD` (أو `ADMIN_PASSWORD_HASH`)
+- `ADMIN_JWT_SECRET`
+- `PAYTABS_SERVER_KEY` و `PAYTABS_PROFILE_ID`
+- `PAYMOB_API_KEY` و `PAYMOB_SECRET_KEY` و `PAYMOB_HMAC_SECRET`
+- `FAWRY_MERCHANT_CODE` و `FAWRY_SECURITY_KEY`
 
 ---
 
-### الخطوات المطلوبة من مدير المتجر (Operator Action Items)
+### دليل الاختبار العملي اليدوي (Verification & Testing Guide)
 
-لتفعيل المنظومة الجديدة بشكل كامل، يرجى اتباع الخطوات التالية:
+يمكنك التأكد بنفسك من نجاح جميع الإصلاحات بعد رفع الكود عبر الاختبارات التالية:
 
-#### 1. إضافة متغيرات البيئة في لوحة Vercel
-ادخل إلى مشروعك على **Vercel Dashboard** > **Project Settings** > **Environment Variables** وأضف المتغيرات التالية (يمكنك مراجعة `.env.example`):
-- `FIREBASE_DATABASE_URL`: رابط قاعدة البيانات (مثال: `https://abu-el-goukh-store-default-rtdb.firebaseio.com`)
-- `FIREBASE_AUTH_SECRET`: مفتاح Database Secret من Firebase Console > Project Settings > Service Accounts > Database Secrets.
-- `ADMIN_USERNAME`: اسم مستخدم لوحة الإدارة (افتراضي مقترح: `admin`).
-- `ADMIN_PASSWORD_HASH`: هاش SHA-256 لكلمة مرور الأدمن، أو `ADMIN_PASSWORD` لكلمة المرور النصية القوية.
-- `ADMIN_JWT_SECRET`: مفتاح تشفير عشوائي قوي لتوقيع جلسات الأدمن (مثل: 64 حرف عشوائي).
-- `PAYTABS_PROFILE_ID` و `PAYTABS_SERVER_KEY`: بيانات حساب PayTabs الخاص بك.
-- `PAYMOB_API_KEY` و `PAYMOB_SECRET_KEY` و `PAYMOB_INTEGRATION_ID` و `PAYMOB_HMAC_SECRET`: بيانات Paymob ومفتاح HMAC من لوحة Paymob.
-- `FAWRY_MERCHANT_CODE` و `FAWRY_SECURITY_KEY`: بيانات حساب فوري باي.
+#### اختبار 1: التحقق من رفض PayTabs Webhook غير الموقع (ثغرة 5)
+افتح موجه الأوامر (Terminal أو Postman أو cURL) ونفذ الطلب التالي **بدون إرسال هيدر `signature`**:
+```bash
+curl -X POST "https://<your-domain>/api/payment-webhook?gateway=paytabs" \
+  -H "Content-Type: application/json" \
+  -d '{"cart_id": "AEG-TEST-123", "payment_result": {"response_status": "A"}}'
+```
+* **النتيجة المتوقعة:** يجب أن يرجع السيرفر كود `HTTP 403 Forbidden` مع رسالة `{"error":"Missing signature header"}`، ولا يتم تغيير حالة أي طلب.
 
-#### 2. تطبيق قواعد أمان Firebase Realtime Database
-1. افتح **Firebase Console** > **Realtime Database** > تبويب **Rules (القواعد)**.
-2. انسخ محتوى الملف [database.rules.json](file:///C:/GAMES/abu_el_goukh_store/database.rules.json) والصقه هناك.
-3. اضغط **Publish (نشر)**.
-> سيؤدي ذلك فوراً لإغلاق قاعدة البيانات في وجه أي متطفل أو برنامج خارجي، مع استمرار عمل الموقع وتطبيقات الـ API بكل سلاسة عبر الـ Auth Secret.
+#### اختبار 2: التحقق من رفض التلاعب بتوقيع Paymob أو Fawry
+أرسل طلباً لـ Paymob مع توقيع HMAC مزيف:
+```bash
+curl -X POST "https://<your-domain>/api/payment-webhook?gateway=paymob&hmac=fake123456" \
+  -H "Content-Type: application/json" \
+  -d '{"obj": {"id": 99999, "success": true, "order": {"merchant_order_id": "AEG-TEST-123"}}}'
+```
+* **النتيجة المتوقعة:** الرد بكود `HTTP 403 Forbidden` ورسالة `{"error":"Invalid HMAC signature"}`.
 
-#### 3. تدوير المفاتيح (Key Rotation)
-نظراً لأن المفاتيح السابقة كانت موجودة في كود المتصفح والـ Git History:
-- يُنصح بالدخول إلى بوابات PayTabs و Paymob وفوري وإعادة توليد (Regenerate / Rotate) المفاتيح السرية واستبدالها في Vercel Environment Variables.
+#### اختبار 3: التحقق من حماية لوحة الإدارة ومزامنة المنتجات (مشكلة 1)
+1. افتح صفحة `admin.html` في المتصفح.
+2. قم بتعديل سعر عجلة أو إضافة عجلة جديدة، ثم اضغط حفظ.
+3. راقب تبويب Network في أدوات المطور (F12):
+   - ستجد أن الطلب يذهب إلى `PUT /api/products` مع ترويسة `Authorization: Bearer <token>`.
+   - يستجيب السيرفر بكود `200 OK` ورسالة تأكيد الحفظ السحابي.
+   - في حال مسح التوكن أو إرسال طلب بدون صلاحية، يرفض السيرفر بكود `401 Unauthorized` وتظهر رسالة خطأ واضحة تمنع تضليل المشرف.
+
+#### اختبار 4: التحقق من انعكاس السعر الجديد على محرك الدفع حياً (مشكلة 2)
+1. من لوحة الإدارة، غيّر سعر أحد الموديلات (مثلاً عجلة سعرها 10,000 ج.م اجعلها 12,000 ج.م).
+2. افتح نافذة متصفح خاصة (Incognito)، وأضف العجلة للسلة وتوجه لصفحة الشراء `checkout.html`.
+3. افحص طلب إنشاء الجلسة في Network tab:
+   - ستجد أن `/api/orders` أو `/api/paymob-create` قام بالتحقق وحساب السعر الجديد (12,000 ج.م) بناءً على قاعدة بيانات Firebase مباشرة دون الحاجة لعمل Redeploy للموقع.
+4. إذا حاول أي مستخدم تزييف السعر في المتصفح، يرفض السيرفر الطلب فوراً بكود `400 Price tampering rejected`.
+
+#### اختبار 5: التحقق من قراءة إعدادات البيكسل للزوار (مشكلة 3)
+1. افتح صفحة رئيسية `index.html` في نافذة متصفح خاصة بدون تسجيل دخول كأدمن.
+2. افتح وحدة التحكم (Console):
+   - لن يظهر أي خطأ `403 Permission Denied` خاص بمسار `pixels_settings`.
+   - يتم تحميل معرفات البيكسل بسلاسة لبدء التتبع الإعلاني دون أي مشاكل أمنية.

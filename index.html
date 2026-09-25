@@ -366,17 +366,12 @@
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20 w-full">
             <div class="text-center max-w-4xl mx-auto space-y-5 sm:space-y-6">
                 
-                <!-- Category Badge & Live Video Sound Button -->
-                <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-                    <div class="inline-flex items-center gap-2 bg-black/60 border border-white/20 px-3.5 py-1.5 rounded-full text-xs font-bold text-white shadow-lg backdrop-blur-md">
+                <!-- Category Badge -->
+                <div class="flex items-center justify-center">
+                    <div class="inline-flex items-center gap-2 bg-black/60 border border-white/20 px-4 py-1.5 rounded-full text-xs font-bold text-white shadow-lg backdrop-blur-md">
                         <span class="w-2 h-2 rounded-full bg-trek-red animate-pulse"></span>
                         <span class="num-font uppercase tracking-wider text-[10px] sm:text-[11px]">ABO EL GOUKH • OFFICIAL FLEET 2026</span>
                     </div>
-
-                    <button onclick="toggleHeroVideoSound()" id="btn-hero-sound" class="inline-flex items-center gap-1.5 sm:gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-1.5 rounded-full text-xs font-bold transition shadow-lg hover:scale-105 backdrop-blur-md">
-                        <span id="sound-icon">🔊</span>
-                        <span id="sound-text">تشغيل صوت الإعلان</span>
-                    </button>
                 </div>
 
                 <!-- Main Hero Headline (Optimized line-height for Arabic) -->
@@ -1164,26 +1159,90 @@
             }, 150);
         }
 
-        // Background Video Sound Toggle
-        let isHeroVideoMuted = true;
+        // Firebase Cloud Hero Video Synchronization
+        const DEFAULT_HERO_YT_ID = 'QuLgTeymJUI';
+        const FIREBASE_HERO_VIDEO_URL = 'https://abu-el-goukh-store-default-rtdb.firebaseio.com/site_settings/hero_video.json';
 
-        function toggleHeroVideoSound() {
-            const iframe = document.getElementById('hero-bg-yt-video');
-            const soundIcon = document.getElementById('sound-icon');
-            const soundText = document.getElementById('sound-text');
+        function extractYouTubeId(urlOrId) {
+            if (!urlOrId) return DEFAULT_HERO_YT_ID;
+            const str = String(urlOrId).trim();
+            if (/^[a-zA-Z0-9_-]{11}$/.test(str)) return str;
+            const m = str.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+            return m ? m[1] : str;
+        }
 
-            if (isHeroVideoMuted) {
-                // Unmute
-                iframe.src = 'https://www.youtube-nocookie.com/embed/QuLgTeymJUI?autoplay=1&mute=0&loop=1&playlist=QuLgTeymJUI&controls=0&showinfo=0&rel=0&iv_load_policy=3&disablekb=1&modestbranding=1&playsinline=1&enablejsapi=1';
-                isHeroVideoMuted = false;
-                soundIcon.innerText = '🔇';
-                soundText.innerText = 'كتم الصوت';
+        function applyHeroVideo(videoConfig) {
+            const wrapper = document.querySelector('.hero-bg-video-wrapper');
+            if (!wrapper) return;
+
+            let videoId = DEFAULT_HERO_YT_ID;
+            let isDirectMp4 = false;
+            let mp4Url = '';
+
+            if (typeof videoConfig === 'string') {
+                if (videoConfig.endsWith('.mp4') || videoConfig.includes('.mp4?')) {
+                    isDirectMp4 = true;
+                    mp4Url = videoConfig;
+                } else {
+                    videoId = extractYouTubeId(videoConfig);
+                }
+            } else if (videoConfig && typeof videoConfig === 'object') {
+                if (videoConfig.type === 'mp4' || (videoConfig.videoUrl && (videoConfig.videoUrl.endsWith('.mp4') || videoConfig.videoUrl.includes('.mp4?')))) {
+                    isDirectMp4 = true;
+                    mp4Url = videoConfig.videoUrl || videoConfig.url;
+                } else {
+                    videoId = extractYouTubeId(videoConfig.videoId || videoConfig.videoUrl || videoConfig.url || DEFAULT_HERO_YT_ID);
+                }
+            }
+
+            if (isDirectMp4 && mp4Url) {
+                wrapper.innerHTML = `
+                    <video id="hero-bg-yt-video" class="pointer-events-none w-full h-full object-cover" autoplay muted loop playsinline>
+                        <source src="${mp4Url}" type="video/mp4">
+                    </video>
+                `;
             } else {
-                // Mute
-                iframe.src = 'https://www.youtube-nocookie.com/embed/QuLgTeymJUI?autoplay=1&mute=1&loop=1&playlist=QuLgTeymJUI&controls=0&showinfo=0&rel=0&iv_load_policy=3&disablekb=1&modestbranding=1&playsinline=1&enablejsapi=1';
-                isHeroVideoMuted = true;
-                soundIcon.innerText = '🔊';
-                soundText.innerText = 'تشغيل صوت الإعلان';
+                const currentIframe = document.getElementById('hero-bg-yt-video');
+                const targetSrc = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&iv_load_policy=3&disablekb=1&modestbranding=1&playsinline=1&enablejsapi=1`;
+                if (!currentIframe || currentIframe.tagName !== 'IFRAME') {
+                    wrapper.innerHTML = `
+                        <iframe 
+                            id="hero-bg-yt-video"
+                            class="pointer-events-none"
+                            src="${targetSrc}" 
+                            title="Abo El Goukh Background Cycling Film" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+                        </iframe>
+                    `;
+                } else if (currentIframe.src !== targetSrc) {
+                    currentIframe.src = targetSrc;
+                }
+                resizeHeroBgVideo();
+            }
+        }
+
+        async function loadCloudHeroVideo() {
+            // 1. Instant load from local cache for 0ms delay
+            try {
+                const cached = localStorage.getItem('abu_hero_video_config');
+                if (cached) {
+                    applyHeroVideo(JSON.parse(cached));
+                }
+            } catch(e) {}
+
+            // 2. Fetch live from Firebase Realtime Database
+            try {
+                const res = await fetch(FIREBASE_HERO_VIDEO_URL);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data) {
+                        localStorage.setItem('abu_hero_video_config', JSON.stringify(data));
+                        applyHeroVideo(data);
+                    }
+                }
+            } catch(e) {
+                console.warn('[HeroVideo] Cloud fallback active:', e);
             }
         }
 
@@ -1235,6 +1294,7 @@
         window.addEventListener('resize', resizeHeroBgVideo);
         window.addEventListener('orientationchange', resizeHeroBgVideo);
         window.addEventListener('DOMContentLoaded', () => {
+            loadCloudHeroVideo();
             resizeHeroBgVideo();
             updateNavCartBadge();
             setTimeout(resizeHeroBgVideo, 300);

@@ -234,6 +234,10 @@
                 <span>🎯 بيكسل الإعلانات والتتبع (Ad Pixels)</span>
                 <span id="tab-pixels-badge" class="bg-blue-600 text-white text-[10px] font-black px-2.5 py-0.5 rounded-full">تتبع المبيعات 🎯</span>
             </button>
+            <button id="main-tab-video" onclick="switchMainTab('video')" class="px-5 py-3 rounded-xl text-sm font-bold bg-white text-trek-black border border-trek-border hover:bg-trek-lightgray transition flex items-center gap-2">
+                <span>🎬 فيديو الهيدر (Hero Video)</span>
+                <span id="tab-video-badge" class="bg-purple-600 text-white text-[10px] font-black px-2.5 py-0.5 rounded-full">سحابي ⚡</span>
+            </button>
         </div>
 
         <!-- PRODUCTS VIEW -->
@@ -972,6 +976,133 @@
 
         </div>
         <!-- END AD PIXELS VIEW -->
+
+        <!-- HERO VIDEO VIEW (إدارة فيديو الهيدر في الواجهة) -->
+        <div id="view-video" class="hidden space-y-6">
+
+            <!-- Hero Video Banner & Information -->
+            <div class="bg-gradient-to-r from-[#111111] via-[#1A1A1A] to-[#252528] rounded-3xl p-6 sm:p-8 text-white relative overflow-hidden border border-white/10 shadow-xl">
+                <div class="relative z-10 max-w-2xl space-y-2">
+                    <div class="inline-flex items-center gap-2 bg-purple-500/20 text-purple-300 border border-purple-500/30 px-3 py-1 rounded-full text-[11px] font-bold">
+                        <span>🎬</span>
+                        <span>فيديو الهيدر السينمائي التفاعلي</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-black">إدارة وتغيير فيديو الواجهة الرئيسية</h2>
+                    <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">
+                        يمكنك تغيير الفيديو المعروض في خلفية الصفحة الرئيسية بكل سهولة عبر وضع رابط YouTube أو معرّف الفيديو أو رابط فيديو مباشر MP4. سيتم حفظ التعديل في قاعدة البيانات السحابية وتطبيقه فوراً لجميع الزوار.
+                    </p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+                <!-- Left Column: Video Configuration Form -->
+                <div class="lg:col-span-7 bg-white rounded-3xl border border-trek-border shadow-sm p-6 sm:p-8 space-y-6">
+                    <div class="border-b border-trek-border pb-4 flex items-center justify-between">
+                        <div>
+                            <h3 class="text-base font-black text-trek-black">إعدادات مصدر الفيديو</h3>
+                            <p class="text-xs text-trek-gray mt-0.5">اختر مصدر الفيديو من يوتيوب أو ملف MP4 مباشر</p>
+                        </div>
+                        <span class="text-xs font-bold px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">
+                            مُزامن سحابياً ⚡
+                        </span>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-trek-black mb-1.5">
+                                رابط يوتيوب أو كود الفيديو (YouTube URL or ID):
+                            </label>
+                            <input 
+                                type="text" 
+                                id="hero-video-url-input" 
+                                placeholder="مثال: https://www.youtube.com/watch?v=QuLgTeymJUI أو QuLgTeymJUI" 
+                                class="w-full p-3 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white focus:border-trek-black outline-none transition"
+                                oninput="updateHeroVideoPreview()"
+                            >
+                            <p class="text-[11px] text-trek-gray mt-1.5">
+                                يمكنك نسخ الرابط بالكامل من المتصفح، أو وضع كود الفيديو المكون من 11 حرفاً.
+                            </p>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-trek-black mb-1.5">
+                                أو رابط مباشر لملف فيديو MP4 (اختياري):
+                            </label>
+                            <input 
+                                type="text" 
+                                id="hero-video-mp4-input" 
+                                placeholder="مثال: https://mycdn.com/videos/bicycle-intro.mp4" 
+                                class="w-full p-3 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white focus:border-trek-black outline-none transition"
+                                oninput="updateHeroVideoPreview()"
+                            >
+                            <p class="text-[11px] text-trek-gray mt-1.5">
+                                إذا تم وضع رابط MP4 مباشر فسيتم تشغيله مباشرة دون استخدام مشغل يوتيوب.
+                            </p>
+                        </div>
+
+                        <!-- Status Alert -->
+                        <div id="hero-video-save-alert" class="hidden p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold text-center">
+                            ✓ تم حفظ إعدادات الفيديو وتحديثها في قاعدة البيانات السحابية بنجاح!
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="pt-4 border-t border-trek-border flex flex-col sm:flex-row items-center gap-3">
+                            <button 
+                                type="button" 
+                                onclick="saveHeroVideoSettings()" 
+                                class="w-full sm:w-auto flex-1 py-3 px-6 bg-trek-black hover:bg-neutral-800 text-white rounded-xl text-xs font-black transition flex items-center justify-center gap-2 shadow-md hover:scale-[1.01]"
+                            >
+                                <span>🚀 نشر الفيديو فوراً على المتجر</span>
+                            </button>
+                            <button 
+                                type="button" 
+                                onclick="resetHeroVideoToDefault()" 
+                                class="w-full sm:w-auto py-3 px-5 bg-trek-lightgray hover:bg-gray-200 text-trek-black rounded-xl text-xs font-bold transition border border-trek-border flex items-center justify-center gap-2"
+                            >
+                                <span>🔄 استعادة الفيديو الأصلي</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Live Responsive Preview -->
+                <div class="lg:col-span-5 bg-white rounded-3xl border border-trek-border shadow-sm p-6 sm:p-8 space-y-4">
+                    <div class="border-b border-trek-border pb-3 flex items-center justify-between">
+                        <h3 class="text-sm font-black text-trek-black">معاينة مباشرة للفيديو</h3>
+                        <span class="text-[10px] text-trek-gray">16:9 Aspect Ratio</span>
+                    </div>
+
+                    <!-- Video Preview Container -->
+                    <div class="relative w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-inner border border-gray-200">
+                        <iframe 
+                            id="admin-video-preview-iframe" 
+                            class="w-full h-full object-cover" 
+                            src="https://www.youtube-nocookie.com/embed/QuLgTeymJUI" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                        <video 
+                            id="admin-video-preview-mp4" 
+                            class="hidden w-full h-full object-cover" 
+                            controls 
+                            muted 
+                            loop>
+                        </video>
+                    </div>
+
+                    <div class="bg-gray-50 rounded-xl p-3 text-[11px] text-trek-gray space-y-1">
+                        <div class="font-bold text-trek-black">💡 معلومات عن الفيديو في المتجر:</div>
+                        <p>• يعمل الفيديو في المتجر كخلفية سينمائية كاملة الشاشة مع كتم الصوت تلقائياً لتوافق كل المتصفحات والموبايل.</p>
+                        <p>• في حالة عدم توفر إنترنت لدى الزائر، يعود النظام تلقائياً للفيديو الافتراضي المحفوظ محلياً.</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        <!-- END HERO VIDEO VIEW -->
 
 
     </main>
@@ -2520,13 +2651,15 @@
             const btnOrd = document.getElementById('main-tab-orders');
             const btnPay = document.getElementById('main-tab-payments');
             const btnPix = document.getElementById('main-tab-pixels');
+            const btnVid = document.getElementById('main-tab-video');
             const viewProd = document.getElementById('view-products');
             const viewOrd = document.getElementById('view-orders');
             const viewPay = document.getElementById('view-payments');
             const viewPix = document.getElementById('view-pixels');
+            const viewVid = document.getElementById('view-video');
 
             // Reset buttons to inactive style
-            [btnProd, btnOrd, btnPay, btnPix].forEach(b => {
+            [btnProd, btnOrd, btnPay, btnPix, btnVid].forEach(b => {
                 if (b) b.className = 'px-5 py-3 rounded-xl text-sm font-bold bg-white text-trek-black border border-trek-border hover:bg-trek-lightgray transition flex items-center gap-2';
             });
 
@@ -2535,6 +2668,7 @@
             if (viewOrd) viewOrd.classList.add('hidden');
             if (viewPay) viewPay.classList.add('hidden');
             if (viewPix) viewPix.classList.add('hidden');
+            if (viewVid) viewVid.classList.add('hidden');
 
             if (tab === 'products') {
                 if (btnProd) btnProd.className = 'px-5 py-3 rounded-xl text-sm font-black bg-trek-black text-white transition flex items-center gap-2 shadow-sm';
@@ -2552,6 +2686,10 @@
                 if (btnPix) btnPix.className = 'px-5 py-3 rounded-xl text-sm font-black bg-blue-600 text-white transition flex items-center gap-2 shadow-sm';
                 if (viewPix) viewPix.classList.remove('hidden');
                 loadPixelsSettingsToUI();
+            } else if (tab === 'video') {
+                if (btnVid) btnVid.className = 'px-5 py-3 rounded-xl text-sm font-black bg-purple-600 text-white transition flex items-center gap-2 shadow-sm';
+                if (viewVid) viewVid.classList.remove('hidden');
+                loadHeroVideoSettingsToUI();
             }
         }
 
@@ -2895,6 +3033,128 @@
                 }
             }
             if (showNotice) alert('تم تحميل إعدادات البيكسل المحفوظة محلياً.');
+        }
+
+        // --- HERO VIDEO CONFIGURATION LOGIC ---
+        const DEFAULT_HERO_VIDEO_ID = 'QuLgTeymJUI';
+        let heroVideoSettings = {
+            videoId: DEFAULT_HERO_VIDEO_ID,
+            videoUrl: 'https://www.youtube.com/watch?v=' + DEFAULT_HERO_VIDEO_ID,
+            mp4Url: '',
+            updatedAt: null
+        };
+
+        function extractYTId(urlOrId) {
+            if (!urlOrId) return DEFAULT_HERO_VIDEO_ID;
+            const str = String(urlOrId).trim();
+            if (/^[a-zA-Z0-9_-]{11}$/.test(str)) return str;
+            const m = str.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+            return m ? m[1] : str;
+        }
+
+        async function fetchCloudHeroVideoSettings() {
+            try {
+                const cached = localStorage.getItem('abu_hero_video_config');
+                if (cached) {
+                    heroVideoSettings = { ...heroVideoSettings, ...JSON.parse(cached) };
+                    loadHeroVideoSettingsToUI();
+                }
+            } catch(e) {}
+
+            if (firebaseDbUrl) {
+                try {
+                    const endpoint = firebaseDbUrl.replace(/\/+$/, '') + '/site_settings/hero_video.json';
+                    const res = await fetch(endpoint);
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data) {
+                            heroVideoSettings = { ...heroVideoSettings, ...data };
+                            localStorage.setItem('abu_hero_video_config', JSON.stringify(heroVideoSettings));
+                            loadHeroVideoSettingsToUI();
+                        }
+                    }
+                } catch(e) {
+                    console.warn('[Admin] Could not fetch hero video settings from cloud:', e);
+                }
+            }
+        }
+
+        function loadHeroVideoSettingsToUI() {
+            const ytInput = document.getElementById('hero-video-url-input');
+            const mp4Input = document.getElementById('hero-video-mp4-input');
+            if (ytInput) ytInput.value = heroVideoSettings.videoUrl || heroVideoSettings.videoId || '';
+            if (mp4Input) mp4Input.value = heroVideoSettings.mp4Url || '';
+            updateHeroVideoPreview();
+        }
+
+        function updateHeroVideoPreview() {
+            const ytInput = document.getElementById('hero-video-url-input');
+            const mp4Input = document.getElementById('hero-video-mp4-input');
+            const iframe = document.getElementById('admin-video-preview-iframe');
+            const videoMp4 = document.getElementById('admin-video-preview-mp4');
+            if (!iframe || !videoMp4) return;
+
+            const mp4Val = mp4Input ? mp4Input.value.trim() : '';
+            const ytVal = ytInput ? ytInput.value.trim() : '';
+
+            if (mp4Val && (mp4Val.endsWith('.mp4') || mp4Val.includes('.mp4?'))) {
+                iframe.classList.add('hidden');
+                videoMp4.classList.remove('hidden');
+                videoMp4.src = mp4Val;
+            } else {
+                videoMp4.classList.add('hidden');
+                iframe.classList.remove('hidden');
+                const id = extractYTId(ytVal) || DEFAULT_HERO_VIDEO_ID;
+                iframe.src = `https://www.youtube-nocookie.com/embed/${id}`;
+            }
+        }
+
+        async function saveHeroVideoSettings() {
+            const ytInput = document.getElementById('hero-video-url-input');
+            const mp4Input = document.getElementById('hero-video-mp4-input');
+            const alertBox = document.getElementById('hero-video-save-alert');
+
+            const mp4Val = mp4Input ? mp4Input.value.trim() : '';
+            const ytVal = ytInput ? ytInput.value.trim() : '';
+            const id = extractYTId(ytVal) || DEFAULT_HERO_VIDEO_ID;
+
+            heroVideoSettings = {
+                type: mp4Val ? 'mp4' : 'youtube',
+                videoId: id,
+                videoUrl: ytVal || `https://www.youtube.com/watch?v=${id}`,
+                mp4Url: mp4Val,
+                updatedAt: new Date().toISOString()
+            };
+
+            localStorage.setItem('abu_hero_video_config', JSON.stringify(heroVideoSettings));
+
+            if (firebaseDbUrl) {
+                try {
+                    const endpoint = firebaseDbUrl.replace(/\/+$/, '') + '/site_settings/hero_video.json';
+                    await fetch(endpoint, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(heroVideoSettings)
+                    });
+                } catch(e) {
+                    console.error('[Admin] Error saving video settings to Firebase:', e);
+                }
+            }
+
+            if (alertBox) {
+                alertBox.classList.remove('hidden');
+                setTimeout(() => alertBox.classList.add('hidden'), 4000);
+            }
+            updateHeroVideoPreview();
+        }
+
+        async function resetHeroVideoToDefault() {
+            if (!confirm('هل تريد استعادة الفيديو الترويجي الافتراضي لأبو الجوخ؟')) return;
+            const ytInput = document.getElementById('hero-video-url-input');
+            const mp4Input = document.getElementById('hero-video-mp4-input');
+            if (ytInput) ytInput.value = 'https://www.youtube.com/watch?v=' + DEFAULT_HERO_VIDEO_ID;
+            if (mp4Input) mp4Input.value = '';
+            await saveHeroVideoSettings();
         }
 
         function getStoredOrders() {
@@ -3830,6 +4090,7 @@
             checkAdminAuth();
             fetchCloudPaymentSettings();
             fetchCloudPixelsSettings();
+            fetchCloudHeroVideoSettings();
             updateCloudStatusUI();
 
             // Check URL parameter or hash for direct tab navigation
@@ -3841,6 +4102,8 @@
                 switchMainTab('orders');
             } else if (tabParam === 'pixels' || tabParam === 'pixel') {
                 switchMainTab('pixels');
+            } else if (tabParam === 'video') {
+                switchMainTab('video');
             }
         });
     </script>

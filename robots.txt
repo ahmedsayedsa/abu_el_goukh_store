@@ -1,17 +1,5 @@
 # Abu El Goukh 1925 Cycles - Official Robots.txt
 User-agent: *
 Allow: /
-Allow: /index.html
-Allow: /shop.html
-Allow: /product.html
-Allow: /warranty.html
-Allow: /shipping.html
-Allow: /checkout.html
-
-# Disallow Private Admin Panel & APIs
-Disallow: /admin.html
-Disallow: /admin_payments.html
-Disallow: /order-success.html
-Disallow: /api/
 
 Sitemap: https://abu-el-goukh-store.vercel.app/sitemap.xml

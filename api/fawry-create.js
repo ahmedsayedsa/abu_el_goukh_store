@@ -1,8 +1,11 @@
 import crypto from 'crypto';
+import { verifyOrderPrice } from './_verify-price.js';
 
 /**
  * Vercel Serverless Function - FawryPay Payment Request Proxy
- * Generates SHA-256 signature and initializes Fawry Hosted Checkout
+ * 1. Reads merchantCode and securityKey from process.env (Vercel Environment Variables)
+ * 2. Validates order total server-side against catalog
+ * 3. Computes cryptographic SHA-256 signature server-side
  */
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
@@ -10,12 +13,12 @@ export default async function handler(req, res) {
     }
 
     const {
-        merchantCode,
-        securityKey,
-        mode,
         expiry,
         orderId,
         total,
+        items,
+        promoCode,
+        shippingFee,
         cartDescription,
         customerName,
         customerPhone,
@@ -23,23 +26,31 @@ export default async function handler(req, res) {
         returnUrl
     } = req.body;
 
-    if (!merchantCode || !securityKey || !orderId || !total) {
-        return res.status(400).json({ error: 'Missing required Fawry credentials (merchantCode and securityKey required)' });
+    // Securely resolve Fawry credentials from Server Environment Variables first
+    const mCode = (process.env.FAWRY_MERCHANT_CODE || req.body.merchantCode || '').trim();
+    const secKey = (process.env.FAWRY_SECURITY_KEY || req.body.securityKey || '').trim();
+    const effectiveMode = (process.env.FAWRY_MODE || req.body.mode || 'live').trim();
+
+    if (!mCode || !secKey || !orderId) {
+        return res.status(400).json({
+            error: 'Missing Fawry credentials. Please configure FAWRY_MERCHANT_CODE and FAWRY_SECURITY_KEY in Vercel Environment Variables.'
+        });
     }
 
-    const mCode = merchantCode.trim();
-    const secKey = securityKey.trim();
-    const formattedPrice = Number(total).toFixed(2);
+    // Authoritative Server-side price validation
+    const { verifiedTotal, isTampered } = verifyOrderPrice(items, total, promoCode, shippingFee);
+    const formattedPrice = Number(verifiedTotal).toFixed(2);
+
     const itemId = `BIKE-${orderId}`;
     const custProfileId = (customerPhone || '01202925192').trim();
-    const retUrl = returnUrl || 'https://abu-el-goukh-store.vercel.app/checkout?payment=fawry_success';
+    const retUrl = returnUrl || 'https://abu-el-goukh-store.vercel.app/order-success.html?payment=fawry_success';
 
     // Fawry standard SHA-256 signature for charge init:
     // merchantCode + merchantRefNum + customerProfileId + returnUrl + itemId + quantity + price + securityKey
     const rawSignature = `${mCode}${orderId}${custProfileId}${retUrl}${itemId}1${formattedPrice}${secKey}`;
     const signature = crypto.createHash('sha256').update(rawSignature).digest('hex');
 
-    const fawryBase = (mode === 'live')
+    const fawryBase = (effectiveMode === 'live')
         ? 'https://www.atfawry.com'
         : 'https://atfawry.fawrystaging.com';
 
@@ -83,7 +94,9 @@ export default async function handler(req, res) {
 
         if (initData && (initData.nextActionUrl || initData.redirect_url || initData.paymentUrl)) {
             return res.status(200).json({
-                redirect_url: initData.nextActionUrl || initData.redirect_url || initData.paymentUrl
+                redirect_url: initData.nextActionUrl || initData.redirect_url || initData.paymentUrl,
+                priceVerified: true,
+                isTampered
             });
         }
 
@@ -91,15 +104,18 @@ export default async function handler(req, res) {
 
         return res.status(200).json({
             redirect_url: hostedCheckoutUrl,
-            fawry_data: initData
+            priceVerified: true,
+            isTampered
         });
 
     } catch (err) {
-        console.error('Fawry error:', err);
+        console.error('Fawry error');
         const hostedCheckoutUrl = `${fawryBase}/ECommerceWeb/Fawry/payments/checkout?merchantCode=${mCode}&merchantRefNum=${orderId}&paymentExpiry=${expiryTime}&signature=${signature}`;
         return res.status(200).json({
             redirect_url: hostedCheckoutUrl,
-            fallback: true
+            fallback: true,
+            priceVerified: true,
+            isTampered
         });
     }
 }

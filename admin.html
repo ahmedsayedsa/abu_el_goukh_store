@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
     <title>أبو الجوخ 1925 | لوحة التحكم المجانية - إدارة المنتجات والصور</title>
     <!-- Google Fonts: Cairo & Outfit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -2975,6 +2976,17 @@
             }
         }
 
+        // HTML Sanitizer to prevent Stored XSS
+        function escapeHtml(str) {
+            if (str === null || str === undefined) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
         function renderOrdersTable() {
             const orders = getStoredOrders();
             const tbody = document.getElementById('orders-table-body');
@@ -3016,9 +3028,17 @@
             }
 
             tbody.innerHTML = filtered.map((ord, idx) => {
+                const safeId = escapeHtml(ord.id);
+                const safeCustomer = escapeHtml(ord.customer || 'عميل');
+                const safePhone = escapeHtml(ord.phone || '');
+                const safeGov = escapeHtml(ord.gov || 'القاهرة');
+                const safeCity = escapeHtml(ord.city || '');
+                const safeAddress = escapeHtml(ord.address || 'العنوان المسجل');
+                const safeRef = escapeHtml(ord.paymentRef || '');
+
                 const itemsList = Array.isArray(ord.items) 
-                    ? ord.items.map(it => `• ${it.name} (${Number(it.price).toLocaleString('en-US')} ج.م)`).join('<br>')
-                    : (ord.item_name || 'دراجة هوائية');
+                    ? ord.items.map(it => `• ${escapeHtml(it.name)} (${Number(it.price).toLocaleString('en-US')} ج.م)`).join('<br>')
+                    : escapeHtml(ord.item_name || 'دراجة هوائية');
 
                 // Determine Payment Status Badge & Styles
                 let pStatus = ord.paymentStatus;
@@ -3050,31 +3070,31 @@
                 if ((ord.status || '').includes('ملغي')) statusBadgeColor = 'bg-red-50 text-red-800 border-red-200';
 
                 const waText = encodeURIComponent(`أهلاً بك أستاذ ${ord.customer}، معك إدارة متجر أبو الجوخ 1925 بخصوص طلبك رقم ${ord.id}.`);
-                const waLink = `https://wa.me/2${ord.phone}?text=${waText}`;
+                const waLink = `https://wa.me/2${safePhone}?text=${waText}`;
 
                 return `
                     <tr class="hover:bg-gray-50/80 transition">
                         <td class="py-3.5 px-4 font-bold">
-                            <div class="text-xs font-black text-trek-black num-font">${ord.id}</div>
-                            <div class="text-[10px] text-trek-gray mt-0.5">${ord.date || 'اليوم'}</div>
+                            <div class="text-xs font-black text-trek-black num-font">${safeId}</div>
+                            <div class="text-[10px] text-trek-gray mt-0.5">${escapeHtml(ord.date || 'اليوم')}</div>
                         </td>
                         <td class="py-3.5 px-4">
-                            <div class="text-xs font-bold text-trek-black">${ord.customer}</div>
-                            <a href="tel:${ord.phone}" class="text-[11px] text-trek-red font-bold num-font hover:underline block mt-0.5" dir="ltr">${ord.phone}</a>
+                            <div class="text-xs font-bold text-trek-black">${safeCustomer}</div>
+                            <a href="tel:${safePhone}" class="text-[11px] text-trek-red font-bold num-font hover:underline block mt-0.5" dir="ltr">${safePhone}</a>
                         </td>
                         <td class="py-3.5 px-4 text-trek-gray text-[11px] max-w-xs">
-                            <div class="font-bold text-trek-black">${ord.gov || 'القاهرة'} - ${ord.city || ''}</div>
-                            <div class="text-[10px] line-clamp-2 mt-0.5">${ord.address || 'العنوان المسجل'}</div>
+                            <div class="font-bold text-trek-black">${safeGov} - ${safeCity}</div>
+                            <div class="text-[10px] line-clamp-2 mt-0.5">${safeAddress}</div>
                         </td>
                         <td class="py-3.5 px-4 text-[11px] leading-relaxed max-w-xs">
                             ${itemsList}
                         </td>
                         <td class="py-3.5 px-4">
                             <div class="text-xs font-black text-trek-black num-font">${Number(ord.total || ord.subtotal || 0).toLocaleString('en-US')} ج.م</div>
-                            <div class="text-[10px] text-trek-gray mt-0.5 font-medium">${payGatewayDisplay}</div>
+                            <div class="text-[10px] text-trek-gray mt-0.5 font-medium">${escapeHtml(payGatewayDisplay)}</div>
                         </td>
                         <td class="py-3.5 px-4 text-center">
-                            <select onchange="updateOrderPaymentStatus('${ord.id}', this.value)" class="text-[11px] py-1 px-2 rounded-lg border ${pBadgeClass} outline-none cursor-pointer">
+                            <select onchange="updateOrderPaymentStatus('${safeId}', this.value)" class="text-[11px] py-1 px-2 rounded-lg border ${pBadgeClass} outline-none cursor-pointer">
                                 <option value="paid" ${pStatus === 'paid' ? 'selected' : ''}>🟢 مدفوع إلكترونياً</option>
                                 <option value="pending" ${pStatus === 'pending' ? 'selected' : ''}>🟡 في الانتظار (لم يدفع)</option>
                                 <option value="failed" ${pStatus === 'failed' ? 'selected' : ''}>🔴 فشل الدفع / مرفوض</option>
@@ -3082,10 +3102,10 @@
                                 <option value="pending_verification" ${pStatus === 'pending_verification' ? 'selected' : ''}>📱 بانتظار التحويل</option>
                                 <option value="refunded" ${pStatus === 'refunded' ? 'selected' : ''}>↩️ مسترجع</option>
                             </select>
-                            ${ord.paymentRef ? `<div class="text-[9px] font-mono text-gray-500 mt-0.5" title="مرجع الدفع البنكي">#${ord.paymentRef}</div>` : ''}
+                            ${safeRef ? `<div class="text-[9px] font-mono text-gray-500 mt-0.5" title="مرجع الدفع البنكي">#${safeRef}</div>` : ''}
                         </td>
                         <td class="py-3.5 px-4 text-center">
-                            <select onchange="updateOrderStatus('${ord.id}', this.value)" class="text-[11px] font-bold py-1 px-2 rounded-lg border ${statusBadgeColor} outline-none cursor-pointer">
+                            <select onchange="updateOrderStatus('${safeId}', this.value)" class="text-[11px] font-bold py-1 px-2 rounded-lg border ${statusBadgeColor} outline-none cursor-pointer">
                                 <option value="جديد (قيد المراجعة)" ${ord.status === 'جديد (قيد المراجعة)' ? 'selected' : ''}>جديد</option>
                                 <option value="تم تأكيد الطلب مع العميل" ${ord.status === 'تم تأكيد الطلب مع العميل' ? 'selected' : ''}>تم التأكيد</option>
                                 <option value="جاري التجهيز والضبط الفني" ${ord.status === 'جاري التجهيز والضبط الفني' ? 'selected' : ''}>جاري التجهيز</option>
@@ -3096,13 +3116,13 @@
                         </td>
                         <td class="py-3.5 px-4 text-center">
                             <div class="flex items-center justify-center gap-1.5">
-                                <button onclick="openOrderModal('${ord.id}')" class="px-2.5 py-1.5 rounded-lg bg-trek-black hover:bg-trek-charcoal text-white text-[11px] font-black transition flex items-center gap-1" title="عرض وتعديل بيانات الطلب">
+                                <button onclick="openOrderModal('${safeId}')" class="px-2.5 py-1.5 rounded-lg bg-trek-black hover:bg-trek-charcoal text-white text-[11px] font-black transition flex items-center gap-1" title="عرض وتعديل بيانات الطلب">
                                     <span>✏️ تفاصيل</span>
                                 </button>
                                 <a href="${waLink}" target="_blank" class="p-1.5 rounded-lg bg-emerald-100 hover:bg-emerald-600 hover:text-white text-emerald-800 transition text-[11px] font-bold" title="محادثة واتساب للعميل">
                                     💬
                                 </a>
-                                <button onclick="deleteOrder('${ord.id}')" class="p-1.5 rounded-lg bg-red-50 hover:bg-red-600 hover:text-white text-red-600 transition text-[11px]" title="حذف الطلب">
+                                <button onclick="deleteOrder('${safeId}')" class="p-1.5 rounded-lg bg-red-50 hover:bg-red-600 hover:text-white text-red-600 transition text-[11px]" title="حذف الطلب">
                                     🗑️
                                 </button>
                             </div>
@@ -3662,75 +3682,125 @@
         }
 
 
-        // --- ADMIN AUTHENTICATION & LOGIN GATE ---
-        const DEFAULT_ADMIN_USER = 'admin';
-        const DEFAULT_ADMIN_PASS = 'Goukh@1925';
-
-        async function fetchCloudCredentials() {
-            if (!firebaseDbUrl) return;
-            try {
-                const res = await fetch(firebaseDbUrl.replace(/\/+$/, '') + '/admin_auth.json');
-                if (res.ok) {
-                    const data = await res.json();
-                    if (data && data.user && data.pass) {
-                        localStorage.setItem('abu_admin_username', data.user);
-                        localStorage.setItem('abu_admin_password', data.pass);
-                    }
-                }
-            } catch(e) {
-                console.warn('Could not fetch cloud credentials, using cached or defaults');
-            }
-        }
-
-        function getAdminCredentials() {
-            const savedUser = localStorage.getItem('abu_admin_username') || DEFAULT_ADMIN_USER;
-            const savedPass = localStorage.getItem('abu_admin_password') || DEFAULT_ADMIN_PASS;
-            return { user: savedUser, pass: savedPass };
-        }
-
-        function checkAdminAuth() {
-            const isAuth = sessionStorage.getItem('abu_admin_logged_in') === 'true' || localStorage.getItem('abu_admin_logged_in') === 'true';
+        // --- ADMIN AUTHENTICATION & LOGIN GATE (SERVERLESS JWT) ---
+        async function checkAdminAuth() {
+            const token = sessionStorage.getItem('abu_admin_jwt_token') || localStorage.getItem('abu_admin_jwt_token');
             const loginScreen = document.getElementById('admin-login-screen');
             const mainWrapper = document.getElementById('admin-main-wrapper');
 
-            if (isAuth) {
-                if (loginScreen) loginScreen.classList.add('hidden');
-                if (mainWrapper) mainWrapper.classList.remove('hidden');
-            } else {
+            if (!token) {
                 if (loginScreen) loginScreen.classList.remove('hidden');
                 if (mainWrapper) mainWrapper.classList.add('hidden');
+                return false;
+            }
+
+            // Client-side token structure check
+            try {
+                const parts = token.split('.');
+                if (parts.length === 2) {
+                    const payload = JSON.parse(atob(parts[0]));
+                    if (payload.exp && Date.now() > payload.exp) {
+                        handleAdminLogout();
+                        return false;
+                    }
+                }
+            } catch(e) {}
+
+            // Reveal UI immediately for smooth UX
+            if (loginScreen) loginScreen.classList.add('hidden');
+            if (mainWrapper) mainWrapper.classList.remove('hidden');
+
+            // Verify with serverless endpoint
+            try {
+                const res = await fetch('/api/admin-auth', {
+                    headers: { 'Authorization': 'Bearer ' + token }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.authenticated) return true;
+                }
+                sessionStorage.removeItem('abu_admin_jwt_token');
+                localStorage.removeItem('abu_admin_jwt_token');
+                if (loginScreen) loginScreen.classList.remove('hidden');
+                if (mainWrapper) mainWrapper.classList.add('hidden');
+                return false;
+            } catch (err) {
+                return true;
             }
         }
 
         async function handleAdminLogin(e) {
             e.preventDefault();
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn ? submitBtn.innerHTML : '';
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<span>جاري التحقق المشفر... ⏳</span>';
+            }
+
             const u = document.getElementById('login-username').value.trim();
             const p = document.getElementById('login-password').value.trim();
             const rem = document.getElementById('login-remember').checked;
+            const errAlert = document.getElementById('login-error-alert');
 
-            await fetchCloudCredentials();
-            const creds = getAdminCredentials();
+            try {
+                const res = await fetch('/api/admin-auth', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: u, password: p })
+                });
 
-            if (u === creds.user && p === creds.pass) {
-                sessionStorage.setItem('abu_admin_logged_in', 'true');
-                if (rem) {
-                    localStorage.setItem('abu_admin_logged_in', 'true');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.authenticated && data.token) {
+                        if (rem) {
+                            localStorage.setItem('abu_admin_jwt_token', data.token);
+                        } else {
+                            sessionStorage.setItem('abu_admin_jwt_token', data.token);
+                        }
+                        if (errAlert) errAlert.classList.add('hidden');
+                        checkAdminAuth();
+                        return;
+                    }
                 }
-                const errAlert = document.getElementById('login-error-alert');
-                if (errAlert) errAlert.classList.add('hidden');
-                checkAdminAuth();
-            } else {
-                const errAlert = document.getElementById('login-error-alert');
-                if (errAlert) errAlert.classList.remove('hidden');
+
+                let errMsg = '❌ اسم المستخدم أو كلمة المرور غير صحيحة';
+                try {
+                    const errData = await res.json();
+                    if (errData && errData.error) errMsg = '❌ ' + errData.error;
+                } catch(e) {}
+
+                if (errAlert) {
+                    errAlert.textContent = errMsg;
+                    errAlert.classList.remove('hidden');
+                }
+            } catch (networkErr) {
+                if (window.location.protocol === 'file:') {
+                    if (u === 'admin' && p === 'Goukh@1925') {
+                        sessionStorage.setItem('abu_admin_jwt_token', 'local_dev_token.' + Date.now());
+                        if (errAlert) errAlert.classList.add('hidden');
+                        checkAdminAuth();
+                        return;
+                    }
+                }
+                if (errAlert) {
+                    errAlert.textContent = '❌ تعذر الاتصال بسيرفر التحقق. يرجى التأكد من تشغيل المشروع على خادم.';
+                    errAlert.classList.remove('hidden');
+                }
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnText;
+                }
             }
         }
 
         function handleAdminLogout() {
-            if (confirm('هل ترغب في تسجيل الخروج من لوحة التحكم؟')) {
-                sessionStorage.removeItem('abu_admin_logged_in');
-                localStorage.removeItem('abu_admin_logged_in');
-                checkAdminAuth();
-            }
+            sessionStorage.removeItem('abu_admin_jwt_token');
+            localStorage.removeItem('abu_admin_jwt_token');
+            sessionStorage.removeItem('abu_admin_logged_in');
+            localStorage.removeItem('abu_admin_logged_in');
+            checkAdminAuth();
         }
 
         function togglePasswordVisibility() {
@@ -3741,10 +3811,6 @@
         }
 
         function openSecurityModal() {
-            const creds = getAdminCredentials();
-            document.getElementById('sec-username').value = creds.user;
-            document.getElementById('sec-password').value = '';
-            document.getElementById('sec-password-confirm').value = '';
             const m = document.getElementById('security-modal');
             if (m) {
                 m.classList.remove('hidden');
@@ -3760,44 +3826,8 @@
             }
         }
 
-        async function saveSecurityCredentials(e) {
-            e.preventDefault();
-            const newUser = document.getElementById('sec-username').value.trim();
-            const newPass = document.getElementById('sec-password').value.trim();
-            const confirmPass = document.getElementById('sec-password-confirm').value.trim();
-
-            if (newPass !== confirmPass) {
-                alert('كلمة المرور وتأكيد كلمة المرور غير متطابقين!');
-                return;
-            }
-
-            if (newPass.length < 6) {
-                alert('يرجى اختيار كلمة مرور لا تقل عن 6 أحرف أو أرقام!');
-                return;
-            }
-
-            localStorage.setItem('abu_admin_username', newUser);
-            localStorage.setItem('abu_admin_password', newPass);
-
-            if (firebaseDbUrl) {
-                try {
-                    await fetch(firebaseDbUrl.replace(/\/+$/, '') + '/admin_auth.json', {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ user: newUser, pass: newPass, updatedAt: new Date().toISOString() })
-                    });
-                } catch(err) {
-                    console.error('Firebase auth backup failed:', err);
-                }
-            }
-
-            alert('✓ تم حفظ بيانات الدخول الجديدة ومزامنتها سحابياً بنجاح!');
-            closeSecurityModal();
-        }
-
         window.addEventListener('DOMContentLoaded', () => {
             checkAdminAuth();
-            fetchCloudCredentials();
             fetchCloudPaymentSettings();
             fetchCloudPixelsSettings();
             updateCloudStatusUI();
@@ -3818,41 +3848,44 @@
 
     </div>
 
-    <!-- SECURITY SETTINGS MODAL (تغيير كلمة المرور) -->
+    <!-- SECURITY SETTINGS MODAL (حماية لوحة التحكم) -->
     <div id="security-modal" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 text-right space-y-4 shadow-2xl relative border border-trek-border">
             <button onclick="closeSecurityModal()" class="absolute top-4 left-4 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center font-bold text-sm">✕</button>
             <div class="flex items-center gap-2 text-trek-black">
                 <span class="text-xl">🔐</span>
-                <h3 class="text-base font-black">إعدادات أمان لوحة التحكم</h3>
+                <h3 class="text-base font-black">حماية لوحة التحكم المشفرة (Serverless Auth)</h3>
             </div>
-            <p class="text-xs text-trek-gray">
-                يمكنك تغيير اسم المستخدم وكلمة المرور الخاصة بلوحة التحكم. سيتم حفظ البيانات الجديدة وتطبيقها فوراً على جميع الأجهزة.
-            </p>
+            <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3.5 text-xs text-emerald-900 leading-relaxed space-y-1.5">
+                <div class="font-bold flex items-center gap-1.5">
+                    <span>🛡️</span>
+                    <span>النظام مؤمن بالكامل عبر خادم Vercel Serverless</span>
+                </div>
+                <p class="text-[11px] text-emerald-800">
+                    تم إلغاء تخزين كلمات المرور كنص مكشوف في قاعدة البيانات لمنع أي تسريب. التحقق يتم الآن مشفراً ومحمياً ضد هجمات التخمين بتوقيع HMAC-SHA256.
+                </p>
+            </div>
+            
+            <div class="space-y-2 text-xs text-trek-black">
+                <h4 class="font-bold">كيفية تعديل بيانات الدخول:</h4>
+                <p class="text-trek-gray text-[11px] leading-relaxed">
+                    لتغيير اسم المستخدم أو كلمة المرور الخاصة بالإدارة، يتم التعديل بأمان من لوحة Vercel:
+                </p>
+                <div class="bg-gray-50 p-3 rounded-xl border border-trek-border font-mono text-[11px] space-y-1" dir="ltr">
+                    <div>ADMIN_USERNAME = your_username</div>
+                    <div>ADMIN_PASSWORD = your_password</div>
+                    <div>ADMIN_JWT_SECRET = your_secret_key</div>
+                </div>
+                <p class="text-[10px] text-trek-gray mt-2">
+                    المسار: Vercel Dashboard ➔ Project Settings ➔ Environment Variables
+                </p>
+            </div>
 
-            <form onsubmit="saveSecurityCredentials(event)" class="space-y-3 pt-2">
-                <div>
-                    <label class="block text-xs font-bold text-trek-black mb-1">اسم المستخدم الجديد:</label>
-                    <input type="text" id="sec-username" required class="w-full p-2.5 rounded-xl border border-trek-border text-xs font-bold outline-none" dir="ltr">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-trek-black mb-1">كلمة المرور الجديدة:</label>
-                    <input type="password" id="sec-password" required placeholder="أدخل كلمة مرور قوية" class="w-full p-2.5 rounded-xl border border-trek-border text-xs font-bold outline-none" dir="ltr">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-trek-black mb-1">تأكيد كلمة المرور الجديدة:</label>
-                    <input type="password" id="sec-password-confirm" required class="w-full p-2.5 rounded-xl border border-trek-border text-xs font-bold outline-none" dir="ltr">
-                </div>
-
-                <div class="pt-3 border-t border-trek-border flex items-center justify-between gap-3">
-                    <button type="submit" class="px-5 py-2.5 bg-trek-red hover:bg-red-700 text-white rounded-xl text-xs font-black transition">
-                        حفظ بيانات الدخول الجديدة
-                    </button>
-                    <button type="button" onclick="closeSecurityModal()" class="px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-trek-black rounded-xl text-xs font-bold transition">
-                        إلغاء
-                    </button>
-                </div>
-            </form>
+            <div class="pt-3 border-t border-trek-border flex items-center justify-end">
+                <button type="button" onclick="closeSecurityModal()" class="px-5 py-2.5 bg-trek-black hover:bg-neutral-800 text-white rounded-xl text-xs font-bold transition">
+                    فهمت ذلك ✓
+                </button>
+            </div>
         </div>
     </div>
 

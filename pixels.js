@@ -124,18 +124,18 @@
             } catch(e) { console.error('[Pixels] GTM init error:', e); }
         }
 
-        // 6. Custom Header Scripts
-        if (cfg.custom && cfg.custom.enabled && cfg.custom.headScript) {
+        // 6. Custom Header Scripts (Restricted to safe verified external script URLs only to prevent XSS)
+        if (cfg.custom && cfg.custom.enabled && cfg.custom.scriptUrl) {
             try {
-                const div = document.createElement('div');
-                div.innerHTML = cfg.custom.headScript;
-                Array.from(div.querySelectorAll('script')).forEach(oldScript => {
-                    const newScript = document.createElement('script');
-                    Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
-                    newScript.appendChild(document.createTextNode(oldScript.innerHTML));
-                    document.head.appendChild(newScript);
-                });
-            } catch(e) { console.error('[Pixels] Custom script error:', e); }
+                const url = String(cfg.custom.scriptUrl).trim();
+                // Strictly enforce HTTPS and prevent inline/data URI attacks
+                if (url.startsWith('https://')) {
+                    const script = document.createElement('script');
+                    script.async = true;
+                    script.src = url;
+                    document.head.appendChild(script);
+                }
+            } catch(e) { console.error('[Pixels] Custom script loader error:', e); }
         }
     }
 

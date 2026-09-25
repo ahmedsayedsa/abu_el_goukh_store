@@ -1,6 +1,10 @@
-﻿/**
+import { verifyOrderPrice } from './_verify-price.js';
+
+/**
  * Vercel Serverless Function - PayTabs Payment Request Proxy
- * Solves CORS: browser -> this function -> PayTabs API
+ * 1. Reads Server Key securely from process.env (Vercel Environment Variables)
+ * 2. Validates order total server-side against catalog to prevent price tampering
+ * 3. Never leaks server secrets to client browser
  */
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
@@ -8,26 +12,36 @@ export default async function handler(req, res) {
     }
 
     const {
-        profileId, serverKey, orderId, total,
+        orderId, total, items, promoCode, shippingFee,
         cartDescription, customerName, customerPhone,
         customerCity, customerState, customerAddress, returnUrl
     } = req.body;
 
-    if (!profileId || !serverKey || !orderId || !total) {
-        return res.status(400).json({ error: 'Missing required fields' });
+    // Securely resolve credentials: Server Environment Variables take precedence
+    const serverKey = (process.env.PAYTABS_SERVER_KEY || req.body.serverKey || '').trim();
+    const profileId = (process.env.PAYTABS_PROFILE_ID || req.body.profileId || '').toString().trim();
+
+    if (!serverKey || !profileId || !orderId) {
+        return res.status(400).json({
+            error: 'Missing PayTabs configuration. Please configure PAYTABS_SERVER_KEY and PAYTABS_PROFILE_ID in Vercel Environment Variables.'
+        });
     }
+
+    // Server-side authoritative price verification
+    const { verifiedTotal, isTampered } = verifyOrderPrice(items, total, promoCode, shippingFee);
+    const finalAmount = verifiedTotal;
 
     const ptEndpoint = 'https://secure-egypt.paytabs.com/payment/request';
 
     try {
         const ptBody = {
-            profile_id: parseInt(profileId),
+            profile_id: parseInt(profileId, 10),
             tran_type: 'sale',
             tran_class: 'ecom',
             cart_id: orderId,
             cart_currency: 'EGP',
-            cart_amount: Number(total),
-            cart_description: (cartDescription || 'Abu El Goukh Bikes').substring(0, 127),
+            cart_amount: Number(finalAmount),
+            cart_description: (cartDescription || 'Abu El Goukh Bikes 1925').substring(0, 127),
             customer_details: {
                 name: customerName || 'Customer',
                 phone: customerPhone || '01000000000',
@@ -48,8 +62,8 @@ export default async function handler(req, res) {
                 country: 'EG',
                 zip: '12345'
             },
-            return: returnUrl || 'https://abu-el-goukh-store.vercel.app/checkout?payment=success',
-            callback: 'https://abu-el-goukh-store.vercel.app/checkout?payment=callback'
+            return: returnUrl || 'https://abu-el-goukh-store.vercel.app/order-success.html?payment=paytabs_success',
+            callback: 'https://abu-el-goukh-store.vercel.app/order-success.html?payment=paytabs_callback'
         };
 
         const ptResponse = await fetch(ptEndpoint, {
@@ -64,13 +78,18 @@ export default async function handler(req, res) {
         const ptData = await ptResponse.json();
 
         if (!ptResponse.ok) {
-            return res.status(ptResponse.status).json({ error: 'PayTabs Error', details: ptData });
+            console.error('PayTabs gateway error response');
+            return res.status(ptResponse.status).json({ error: 'PayTabs Error', message: ptData.message || 'Payment initiation failed' });
         }
 
-        return res.status(200).json(ptData);
+        return res.status(200).json({
+            ...ptData,
+            priceVerified: true,
+            isTampered
+        });
 
     } catch (error) {
-        console.error('PayTabs proxy error:', error);
+        console.error('PayTabs proxy internal error');
         return res.status(500).json({ error: 'Server Error', message: error.message });
     }
 }

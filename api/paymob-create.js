@@ -1,6 +1,10 @@
-﻿/**
+import { verifyOrderPrice } from './_verify-price.js';
+
+/**
  * Vercel Serverless Function - Paymob Payment Request Proxy
- * Supports both Modern Unified Checkout (Intention API) and Classic Accept (3-step API)
+ * 1. Reads API Key, Secret Key, Public Key securely from process.env (Vercel Environment Variables)
+ * 2. Validates order total server-side against catalog to prevent price tampering
+ * 3. Never leaks server secrets to client browser
  */
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
@@ -8,36 +12,37 @@ export default async function handler(req, res) {
     }
 
     const {
-        apiKey,
-        secretKey,
-        publicKey,
-        integrationId,
-        iframeId,
-        orderId,
-        total,
-        cartDescription,
-        customerName,
-        customerPhone,
-        customerCity,
-        customerState,
-        customerAddress,
-        returnUrl
+        orderId, total, items, promoCode, shippingFee,
+        cartDescription, customerName, customerPhone,
+        customerCity, customerState, customerAddress, returnUrl
     } = req.body;
 
-    if ((!apiKey && !secretKey) || !orderId || !total) {
-        return res.status(400).json({ error: 'Missing required Paymob credentials (API Key or Secret Key required)' });
+    // Securely resolve credentials from Server Environment Variables first
+    const apiKey = (process.env.PAYMOB_API_KEY || req.body.apiKey || '').trim();
+    const secretKey = (process.env.PAYMOB_SECRET_KEY || req.body.secretKey || '').trim();
+    const publicKey = (process.env.PAYMOB_PUBLIC_KEY || req.body.publicKey || '').trim();
+    const integrationId = (process.env.PAYMOB_INTEGRATION_ID || req.body.integrationId || '').toString().trim();
+    const iframeId = (process.env.PAYMOB_IFRAME_ID || req.body.iframeId || '').toString().trim();
+
+    if ((!apiKey && !secretKey) || !orderId) {
+        return res.status(400).json({
+            error: 'Missing Paymob credentials. Please set PAYMOB_API_KEY or PAYMOB_SECRET_KEY in Vercel Environment Variables.'
+        });
     }
+
+    // Authoritative Server-side price validation
+    const { verifiedTotal, isTampered } = verifyOrderPrice(items, total, promoCode, shippingFee);
+    const amountCents = Math.round(Number(verifiedTotal) * 100);
 
     const nameParts = (customerName || 'عميل أبو الجوخ').trim().split(/\s+/);
     const firstName = nameParts[0] || 'عميل';
     const lastName = nameParts.slice(1).join(' ') || 'أبو الجوخ';
     const phone = customerPhone || '01202925192';
-    const amountCents = Math.round(Number(total) * 100);
 
     // ─────────────────────────────────────────────────────────────
     // Method 1: Modern Paymob Unified Checkout (Intention API)
     // ─────────────────────────────────────────────────────────────
-    if (secretKey && secretKey.trim().length > 10) {
+    if (secretKey && secretKey.length > 10) {
         try {
             const intMethods = [];
             if (integrationId && !isNaN(Number(integrationId))) {
@@ -83,7 +88,7 @@ export default async function handler(req, res) {
             const intentionRes = await fetch('https://accept.paymob.com/v1/intention/', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Token ${secretKey.trim()}`,
+                    'Authorization': `Token ${secretKey}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(intentionPayload)
@@ -97,19 +102,20 @@ export default async function handler(req, res) {
                 const redirectUrl = `https://accept.paymob.com/unifiedcheckout/?publicKey=${pk || ''}&clientSecret=${clientSecret}`;
                 return res.status(200).json({
                     redirect_url: redirectUrl,
-                    client_secret: clientSecret
+                    client_secret: clientSecret,
+                    priceVerified: true,
+                    isTampered
                 });
             }
         } catch (intErr) {
-            console.warn('Paymob intention API failed, trying classic accept flow...', intErr);
+            console.warn('Paymob intention API error, falling back to classic accept flow');
         }
     }
 
     // ─────────────────────────────────────────────────────────────
     // Method 2: Classic 3-Step Paymob Accept Flow (API Key)
     // ─────────────────────────────────────────────────────────────
-    const effectiveApiKey = apiKey ? apiKey.trim() : '';
-    if (!effectiveApiKey) {
+    if (!apiKey) {
         return res.status(400).json({ error: 'Paymob API Key is required for classic checkout' });
     }
 
@@ -118,11 +124,11 @@ export default async function handler(req, res) {
         const authRes = await fetch('https://accept.paymob.com/api/auth/tokens', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ api_key: effectiveApiKey })
+            body: JSON.stringify({ api_key: apiKey })
         });
         const authData = await authRes.json();
         if (!authRes.ok || !authData.token) {
-            return res.status(400).json({ error: 'Paymob Auth Token Failed', details: authData });
+            return res.status(400).json({ error: 'Paymob Authentication Failed' });
         }
         const authToken = authData.token;
 
@@ -148,7 +154,7 @@ export default async function handler(req, res) {
         });
         const orderData = await orderRes.json();
         if (!orderRes.ok || !orderData.id) {
-            return res.status(400).json({ error: 'Paymob Order Registration Failed', details: orderData });
+            return res.status(400).json({ error: 'Paymob Order Registration Failed' });
         }
         const paymobOrderId = orderData.id;
 
@@ -184,21 +190,23 @@ export default async function handler(req, res) {
         });
         const keyData = await keyRes.json();
         if (!keyRes.ok || !keyData.token) {
-            return res.status(400).json({ error: 'Paymob Payment Key Failed', details: keyData });
+            return res.status(400).json({ error: 'Paymob Payment Key Failed' });
         }
         const paymentToken = keyData.token;
 
-        // Step 4: Standalone Hosted Iframe URL
+        // Step 4: Hosted Iframe URL
         const effectiveIframeId = (iframeId && iframeId.trim()) ? iframeId.trim() : '812345';
         const finalRedirectUrl = `https://accept.paymob.com/api/acceptance/iframes/${effectiveIframeId}?payment_token=${paymentToken}`;
 
         return res.status(200).json({
             redirect_url: finalRedirectUrl,
-            payment_token: paymentToken
+            payment_token: paymentToken,
+            priceVerified: true,
+            isTampered
         });
 
     } catch (err) {
-        console.error('Paymob proxy error:', err);
+        console.error('Paymob proxy error');
         return res.status(500).json({ error: 'Server Error connecting to Paymob', message: err.message });
     }
 }

@@ -1197,10 +1197,12 @@
 
             if (isDirectMp4 && mp4Url) {
                 wrapper.innerHTML = `
-                    <video id="hero-bg-yt-video" class="pointer-events-none w-full h-full object-cover" autoplay muted loop playsinline>
+                    <video id="hero-bg-yt-video" class="pointer-events-none w-full h-full object-cover" autoplay muted loop playsinline volume="0">
                         <source src="${mp4Url}" type="video/mp4">
                     </video>
                 `;
+                const v = document.getElementById('hero-bg-yt-video');
+                if (v) { v.muted = true; v.volume = 0; }
             } else {
                 const currentIframe = document.getElementById('hero-bg-yt-video');
                 const targetSrc = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&iv_load_policy=3&disablekb=1&modestbranding=1&playsinline=1&enablejsapi=1`;
@@ -1218,7 +1220,24 @@
                 } else if (currentIframe.src !== targetSrc) {
                     currentIframe.src = targetSrc;
                 }
+                const newIframe = document.getElementById('hero-bg-yt-video');
+                if (newIframe) {
+                    newIframe.onload = enforceVideoSilence;
+                }
                 resizeHeroBgVideo();
+            }
+        }
+
+        function enforceVideoSilence() {
+            const iframe = document.getElementById('hero-bg-yt-video');
+            if (iframe && iframe.tagName === 'IFRAME' && iframe.contentWindow) {
+                try {
+                    iframe.contentWindow.postMessage('{"event":"command","func":"mute","args":""}', '*');
+                    iframe.contentWindow.postMessage('{"event":"command","func":"setVolume","args":[0]}', '*');
+                } catch(e) {}
+            } else if (iframe && iframe.tagName === 'VIDEO') {
+                iframe.muted = true;
+                iframe.volume = 0;
             }
         }
 
@@ -1297,6 +1316,10 @@
             loadCloudHeroVideo();
             resizeHeroBgVideo();
             updateNavCartBadge();
+            enforceVideoSilence();
+            setTimeout(enforceVideoSilence, 500);
+            setTimeout(enforceVideoSilence, 1500);
+            setTimeout(enforceVideoSilence, 3000);
             setTimeout(resizeHeroBgVideo, 300);
             setTimeout(resizeHeroBgVideo, 1000);
         });
@@ -1304,7 +1327,7 @@
         function openVideoModal() {
             const modal = document.getElementById('video-modal');
             const player = document.getElementById('modal-yt-player');
-            player.src = 'https://www.youtube-nocookie.com/embed/QuLgTeymJUI?autoplay=1&mute=0&rel=0&modestbranding=1';
+            player.src = 'https://www.youtube-nocookie.com/embed/QuLgTeymJUI?autoplay=1&mute=1&rel=0&modestbranding=1';
             modal.classList.remove('hidden');
             modal.classList.add('flex');
         }

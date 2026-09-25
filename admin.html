@@ -1078,7 +1078,7 @@
                         <iframe 
                             id="admin-video-preview-iframe" 
                             class="w-full h-full object-cover" 
-                            src="https://www.youtube-nocookie.com/embed/QuLgTeymJUI" 
+                            src="https://www.youtube-nocookie.com/embed/QuLgTeymJUI?mute=1" 
                             frameborder="0" 
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                             allowfullscreen>
@@ -3105,7 +3105,7 @@
                 videoMp4.classList.add('hidden');
                 iframe.classList.remove('hidden');
                 const id = extractYTId(ytVal) || DEFAULT_HERO_VIDEO_ID;
-                iframe.src = `https://www.youtube-nocookie.com/embed/${id}`;
+                iframe.src = `https://www.youtube-nocookie.com/embed/${id}?mute=1`;
             }
         }
 

@@ -1,12 +1,16 @@
 import crypto from 'crypto';
 import { getGatewayConfig } from './_gateway-config.js';
+import { rollbackStock } from './orders.js';
+import { clearCatalogCache } from './_verify-price.js';
 
 /**
  * Server-to-Server Payment Webhook Handler
  * SECURITY FIX:
  * 1. ONLY authoritative endpoint permitted to mark orders as 'paid' or 'failed'.
  * 2. Cryptographically validates HMAC / SHA-256 signatures for Paymob, PayTabs, and Fawry.
- * 3. Completely eliminates client-side payment forgery.
+ * 3. Enforces authoritative server-to-order binding: verifies order existence in DB, currency is EGP,
+ *    and paid amount matches order.total within tolerance.
+ * 4. Automatically restores reserved inventory if payment fails (Anti-depletion).
  */
 
 function getFirebaseUrl(path = '') {
@@ -22,32 +26,115 @@ function safeCompare(a, b) {
     return crypto.timingSafeEqual(hashA, hashB);
 }
 
-async function updateOrderPayment(orderId, paymentStatus, paymentRef, gateway) {
+async function updateOrderPayment(orderId, paymentStatus, paymentRef, gateway, paidAmount = null, paidCurrency = 'EGP') {
     if (!orderId) return false;
 
+    const cleanOrderId = String(orderId).trim();
+    const orderUrl = getFirebaseUrl(`/orders/${cleanOrderId}`);
+
+    let currentOrder = null;
+    try {
+        const orderRes = await fetch(orderUrl, {
+            headers: { 'Accept': 'application/json' },
+            signal: AbortSignal.timeout(5000)
+        });
+        if (orderRes.ok) {
+            currentOrder = await orderRes.json();
+        }
+    } catch (fetchErr) {
+        console.error(`[Webhook Order Fetch Error for ${cleanOrderId}]:`, fetchErr.message);
+    }
+
+    if (!currentOrder) {
+        console.error(`[SECURITY ALERT] Webhook received for non-existent order: "${cleanOrderId}". Update rejected.`);
+        return false;
+    }
+
+    // Idempotency: if already marked as paid, ignore duplicate webhooks safely
+    if (currentOrder.paymentStatus === 'paid') {
+        console.log(`[Webhook Notice] Order ${cleanOrderId} is already paid. Ignoring duplicate webhook.`);
+        return true;
+    }
+
     const updates = {
-        paymentStatus,
         paymentRef: String(paymentRef || ''),
         paymentGateway: gateway,
         paymentUpdatedAt: new Date().toISOString()
     };
 
     if (paymentStatus === 'paid') {
+        // SECURITY VERIFICATION (Issue 2):
+        // 1. Currency Verification
+        const normalizedCurrency = String(paidCurrency || 'EGP').trim().toUpperCase();
+        if (normalizedCurrency !== 'EGP') {
+            console.error(`[SECURITY ALERT] Currency mismatch for order ${cleanOrderId}: Received "${normalizedCurrency}", Expected "EGP"!`);
+            updates.paymentStatus = 'currency_mismatch';
+            updates.status = 'خطأ في عملة الدفع (غير مطابقة للجنيه المصري)';
+            updates.flaggedReason = `currency_mismatch_${normalizedCurrency}`;
+            try {
+                await fetch(orderUrl, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updates)
+                });
+            } catch (pErr) {}
+            return false;
+        }
+
+        // 2. Amount Verification
+        const expectedTotal = Number(currentOrder.total);
+        const actualPaid = paidAmount !== null && paidAmount !== undefined ? Number(paidAmount) : NaN;
+
+        if (isNaN(actualPaid) || Math.abs(expectedTotal - actualPaid) > 1.0) {
+            console.error(`[SECURITY ALERT] Payment amount mismatch for order ${cleanOrderId}! Expected: ${expectedTotal} EGP, Received: ${actualPaid} EGP.`);
+            updates.paymentStatus = 'amount_mismatch';
+            updates.status = 'فشل التحقق: قيمة السداد لا تطابق إجمالي الطلب';
+            updates.flaggedReason = `amount_mismatch_expected_${expectedTotal}_received_${actualPaid}`;
+            try {
+                await fetch(orderUrl, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updates)
+                });
+            } catch (pErr) {}
+            return false;
+        }
+
+        // Both currency and amount verified authoritatively
+        updates.paymentStatus = 'paid';
         updates.paidAt = new Date().toLocaleString('ar-EG');
         updates.status = 'تم تأكيد الطلب والسداد بنجاح';
-    } else if (paymentStatus === 'failed') {
+        updates.verifiedPaidAmount = actualPaid;
+        updates.verifiedCurrency = normalizedCurrency;
+    } else {
+        // Payment failed or cancelled
+        updates.paymentStatus = 'failed';
         updates.status = 'فشل السداد الإلكتروني';
+
+        // ISSUE 4 FIX: Automatically restore inventory for failed webhook transactions
+        if (currentOrder.stockDeducted && !currentOrder.stockRestored && Array.isArray(currentOrder.items)) {
+            console.log(`[Stock Restoration] Order ${cleanOrderId} payment failed via webhook, restoring stock...`);
+            try {
+                await rollbackStock(currentOrder.items);
+                clearCatalogCache();
+                updates.stockRestored = true;
+                updates.stockRestoredAt = new Date().toISOString();
+                updates.stockRestoredReason = 'payment_failed_webhook';
+            } catch (rErr) {
+                console.error(`[Stock Restoration Error for ${cleanOrderId}]:`, rErr.message);
+            }
+        }
     }
 
     try {
-        const res = await fetch(getFirebaseUrl(`/orders/${orderId}`), {
+        const res = await fetch(orderUrl, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(updates)
         });
         return res.ok;
     } catch (e) {
-        console.error(`[Webhook Update Error for ${orderId}]:`, e);
+        console.error(`[Webhook Update Error for ${cleanOrderId}]:`, e);
         return false;
     }
 }
@@ -109,11 +196,16 @@ export default async function handler(req, res) {
             return res.status(403).json({ error: 'Invalid HMAC signature' });
         }
 
-        const orderId = obj.order?.merchant_order_id || obj.order_id || obj.order?.id;
+        const orderId = obj.order?.merchant_order_id || obj.extra?.order_id || obj.extras?.order_id || obj.special_reference || obj.order_id || obj.order?.id;
         const txnId = obj.id;
         const isSuccess = obj.success === true || obj.success === 'true';
+        const paidAmount = Number(obj.amount_cents) / 100;
+        const paidCurrency = obj.currency;
 
-        await updateOrderPayment(orderId, isSuccess ? 'paid' : 'failed', txnId, 'paymob');
+        const updateOk = await updateOrderPayment(orderId, isSuccess ? 'paid' : 'failed', txnId, 'paymob', paidAmount, paidCurrency);
+        if (!updateOk && isSuccess) {
+            return res.status(400).json({ error: 'Order validation failed or mismatch' });
+        }
         return res.status(200).json({ received: true });
     }
 
@@ -145,8 +237,13 @@ export default async function handler(req, res) {
         const tranRef = body.tran_ref;
         const status = body.payment_result?.response_status || body.respStatus;
         const isSuccess = status === 'A'; // 'A' = Authorized / Completed
+        const paidAmount = Number(body.cart_amount ?? body.tran_total ?? 0);
+        const paidCurrency = body.cart_currency || body.tran_currency || 'EGP';
 
-        await updateOrderPayment(orderId, isSuccess ? 'paid' : 'failed', tranRef, 'paytabs');
+        const updateOk = await updateOrderPayment(orderId, isSuccess ? 'paid' : 'failed', tranRef, 'paytabs', paidAmount, paidCurrency);
+        if (!updateOk && isSuccess) {
+            return res.status(400).json({ error: 'Order validation failed or mismatch' });
+        }
         return res.status(200).json({ received: true });
     }
 
@@ -206,7 +303,13 @@ export default async function handler(req, res) {
         }
 
         const isSuccess = status.toUpperCase() === 'PAID';
-        await updateOrderPayment(merchantOrder, isSuccess ? 'paid' : 'failed', refNumber, 'fawry');
+        const paidAmount = Number(pAmount);
+        const paidCurrency = body.currency || 'EGP';
+
+        const updateOk = await updateOrderPayment(merchantOrder, isSuccess ? 'paid' : 'failed', refNumber, 'fawry', paidAmount, paidCurrency);
+        if (!updateOk && isSuccess) {
+            return res.status(400).json({ error: 'Order validation failed or mismatch' });
+        }
         return res.status(200).json({ received: true });
     }
 

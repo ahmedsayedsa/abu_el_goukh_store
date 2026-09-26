@@ -441,13 +441,18 @@
             async function verifyServerPaymentStatus() {
                 if (!order || !order.id) return;
                 try {
-                    const res = await fetch('/api/orders?id=' + encodeURIComponent(order.id));
+                    let url = '/api/orders?id=' + encodeURIComponent(order.id);
+                    if (order.phone) {
+                        url += '&phone=' + encodeURIComponent(order.phone);
+                    }
+                    const res = await fetch(url);
                     if (res.ok) {
                         const data = await res.json();
                         if (data && data.order && data.order.paymentStatus) {
                             order.paymentStatus = data.order.paymentStatus;
                             order.status = data.order.status;
                             updateStatusBadge(data.order.paymentStatus, data.order.paymentRef || txnRef);
+                            checkAndTrackPurchase();
                         }
                     }
                 } catch (e) {
@@ -523,14 +528,24 @@
             const waBtn = document.getElementById('btn-whatsapp-follow');
             if (waBtn) waBtn.href = waUrl;
 
-            // Trigger Purchase E-Commerce Event if pixel is present
-            if (window.trackStoreEvent) {
-                window.trackStoreEvent('Purchase', {
-                    orderId: order.id,
-                    total: total,
-                    items: items
-                });
+            // ISSUE 7 FIX: Trigger Purchase E-Commerce Event only if confirmed (paid/cod) and deduplicated per session
+            function checkAndTrackPurchase() {
+                if (!window.trackStoreEvent || !order || !order.id) return;
+                const storageKey = 'abu_tracked_purchase_' + order.id;
+                if (sessionStorage.getItem(storageKey)) return;
+
+                const isConfirmed = order.paymentStatus === 'paid' || order.paymentStatus === 'cod' || (!order.paymentStatus && order.payment && (order.payment.includes('كاش') || order.payment.includes('الاستلام')));
+                if (isConfirmed) {
+                    sessionStorage.setItem(storageKey, 'true');
+                    window.trackStoreEvent('Purchase', {
+                        orderId: order.id,
+                        total: total,
+                        items: items
+                    });
+                }
             }
+
+            checkAndTrackPurchase();
         }
 
         window.addEventListener('DOMContentLoaded', loadOrderData);

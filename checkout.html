@@ -553,12 +553,7 @@
                 const mainEl = document.querySelector('main');
                 if (mainEl) mainEl.prepend(banner);
 
-                if (window.trackStoreEvent) {
-                    window.trackStoreEvent('Purchase', {
-                        orderId: returnOrderId || 'AEG-PAID',
-                        total: 0
-                    });
-                }
+                // Note: Authoritative Purchase event with full cart items & verified total is tracked on order-success.html
                 localStorage.removeItem('abu_el_goukh_cart');
             }
         }

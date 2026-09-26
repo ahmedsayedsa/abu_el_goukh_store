@@ -2780,20 +2780,34 @@
             const items = Array.isArray(ord.items) && ord.items.length > 0 ? ord.items : [{ name: ord.item_name || 'دراجة هوائية من أبو الجوخ', price: ord.subtotal || ord.total || 0 }];
             document.getElementById('view-ord-items-count').innerText = `${items.length} منتجات`;
 
-            itemsContainer.innerHTML = items.map(item => `
+            function sanitizeItemImg(url) {
+                const s = String(url || '').trim();
+                if (/^https?:\/\//i.test(s) || /^data:image\/(png|jpe?g|webp|gif);base64,/i.test(s)) {
+                    return escapeHtml(s);
+                }
+                return 'https://media.zbooni.com/merchants/media/products/109246/1735216982659_croppedImg.jpg';
+            }
+
+            itemsContainer.innerHTML = items.map(item => {
+                const safeName = escapeHtml(item.name || 'دراجة هوائية من أبو الجوخ');
+                const safeSpecs = escapeHtml(item.specs || 'أصلي معتمد');
+                const safeImg = sanitizeItemImg(item.image);
+                const safePrice = Number(item.price || 0).toLocaleString('en-US');
+                return `
                 <div class="flex items-center justify-between p-3 bg-trek-lightgray rounded-xl border border-trek-border">
                     <div class="flex items-center gap-3">
-                        <img src="${item.image || 'https://media.zbooni.com/merchants/media/products/109246/1735216982659_croppedImg.jpg'}" class="w-12 h-12 object-contain bg-white rounded-lg p-1 border border-trek-border">
+                        <img src="${safeImg}" alt="${safeName}" class="w-12 h-12 object-contain bg-white rounded-lg p-1 border border-trek-border">
                         <div>
-                            <div class="text-xs font-bold text-trek-black">${item.name}</div>
-                            <div class="text-[10px] text-trek-gray">${item.specs || 'أصلي معتمد'}</div>
+                            <div class="text-xs font-bold text-trek-black">${safeName}</div>
+                            <div class="text-[10px] text-trek-gray">${safeSpecs}</div>
                         </div>
                     </div>
                     <div class="text-xs font-black text-trek-black num-font">
-                        ${Number(item.price || 0).toLocaleString('en-US')} ج.م
+                        ${safePrice} ج.م
                     </div>
                 </div>
-            `).join('');
+            `;
+            }).join('');
 
             recalcOrderTotal();
 

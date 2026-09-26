@@ -81,7 +81,35 @@ export async function fetchAuthoritativeCatalog() {
     throw new Error('Server configuration error: Product catalog unavailable for verification.');
 }
 
-export async function verifyOrderPrice(items, claimedTotal, discountCode = '', shippingFee = 150) {
+export const OFFICIAL_GOV_SHIPPING = {
+    'القاهرة': 150,
+    'الجيزة': 150,
+    'القليوبية': 200,
+    'الإسكندرية': 250,
+    'الشرقية': 250,
+    'الدقهلية': 250,
+    'الغربية': 250,
+    'المنوفية': 250,
+    'البحيرة': 250,
+    'كفر الشيخ': 250,
+    'دمياط': 250,
+    'بورسعيد': 250,
+    'الإسماعيلية': 250,
+    'السويس': 250,
+    'الفيوم': 280,
+    'بني سويف': 300,
+    'المنيا': 320,
+    'أسيوط': 350,
+    'سوهاج': 350,
+    'قنا': 350,
+    'مطروح': 350,
+    'الأقصر': 380,
+    'أسوان': 400,
+    'البحر الأحمر': 400,
+    'جنوب سيناء': 400
+};
+
+export async function verifyOrderPrice(items, claimedTotal, discountCode = '', shippingFee = null, gov = '') {
     // SECURITY FIX: Reject missing or non-array items (Fail-Closed)
     if (!Array.isArray(items) || items.length === 0) {
         throw new Error('Order verification failed: Cart is empty or invalid.');
@@ -150,12 +178,24 @@ export async function verifyOrderPrice(items, claimedTotal, discountCode = '', s
         });
     }
 
-    // SECURITY FIX: Strictly validate shipping fee (reasonable bounds: 0 to 500 EGP)
-    const parsedShipping = Number(shippingFee);
-    let verifiedShipping = (!isNaN(parsedShipping) && parsedShipping >= 0 && parsedShipping <= 500)
-        ? parsedShipping
-        : 150;
+    // ISSUE 3 FIX: Authoritative Server-side shipping fee calculation based on Egyptian governorates
+    // Prevent client manipulation of shipping fees
+    const cleanGov = String(gov || '').trim();
+    let verifiedShipping = OFFICIAL_GOV_SHIPPING[cleanGov];
+    if (verifiedShipping === undefined) {
+        // If gov was not passed or unrecognized, check if shippingFee matches a known governorate or valid bound
+        if (typeof shippingFee === 'string' && OFFICIAL_GOV_SHIPPING[shippingFee.trim()]) {
+            verifiedShipping = OFFICIAL_GOV_SHIPPING[shippingFee.trim()];
+        } else {
+            const parsedNum = Number(shippingFee);
+            // Default to Cairo/Giza baseline (150 EGP) if invalid or omitted
+            verifiedShipping = (!isNaN(parsedNum) && parsedNum >= 100 && parsedNum <= 450)
+                ? parsedNum
+                : 150;
+        }
+    }
 
+    // ISSUE 6 FIX: Universal discount schema parser (Supports both Admin format & legacy format, plus minSubtotal)
     let verifiedDiscount = 0;
     if (discountCode) {
         const code = String(discountCode).trim().toUpperCase();
@@ -174,15 +214,26 @@ export async function verifyOrderPrice(items, claimedTotal, discountCode = '', s
                     if (rule.active !== false) {
                         const isExpired = rule.expiresAt && (new Date(rule.expiresAt).getTime() < Date.now());
                         if (!isExpired) {
-                            matched = true;
-                            if (rule.type === 'percentage') {
-                                const pct = Math.min(100, Math.max(0, Number(rule.value) || 0));
-                                verifiedDiscount = Math.round(verifiedSubtotal * (pct / 100));
-                            } else if (rule.type === 'fixed') {
-                                const amt = Math.max(0, Number(rule.value) || 0);
-                                verifiedDiscount = Math.min(verifiedSubtotal, amt);
-                            } else if (rule.type === 'freeship') {
-                                verifiedShipping = 0;
+                            // Enforce minimum subtotal rule
+                            const minSub = Number(rule.minSubtotal || rule.minOrder || 0);
+                            if (minSub > 0 && verifiedSubtotal < minSub) {
+                                console.warn(`[Discount Engine] Code "${code}" requires minimum subtotal of ${minSub} EGP (current: ${verifiedSubtotal})`);
+                            } else {
+                                matched = true;
+                                // Support percent from admin schema OR type === 'percentage'
+                                const pct = Number(rule.percent ?? (rule.type === 'percentage' ? rule.value : 0));
+                                if (pct > 0) {
+                                    const validPct = Math.min(100, Math.max(0, pct));
+                                    verifiedDiscount = Math.round(verifiedSubtotal * (validPct / 100));
+                                } else if (rule.type === 'fixed' || rule.amount) {
+                                    const amt = Math.max(0, Number(rule.value || rule.amount || 0));
+                                    verifiedDiscount = Math.min(verifiedSubtotal, amt);
+                                }
+
+                                // Support freeShipping flag from admin schema OR type === 'freeship'
+                                if (rule.freeShipping === true || rule.freeShipping === 'true' || rule.type === 'freeship') {
+                                    verifiedShipping = 0;
+                                }
                             }
                         }
                     }
@@ -199,7 +250,7 @@ export async function verifyOrderPrice(items, claimedTotal, discountCode = '', s
             } else if (code === 'FREESHIP') {
                 verifiedShipping = 0;
             } else {
-                console.warn(`[Discount Engine] Unrecognized or expired discount code "${code}" - no discount applied.`);
+                console.warn(`[Discount Engine] Unrecognized, expired or inactive discount code "${code}".`);
             }
         }
     }

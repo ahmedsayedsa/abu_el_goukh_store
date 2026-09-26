@@ -20,12 +20,50 @@ function getFirebaseUrl(path = '') {
 }
 
 /**
- * Rollback decremented stock for items if order creation fails or a subsequent item is out of stock.
+ * Rollback decremented stock for items if order creation fails or payment fails/cancels.
  */
-async function rollbackStock(items) {
+export async function rollbackStock(items) {
     if (!Array.isArray(items) || items.length === 0) return;
+
+    let indexMap = null;
+    const needsIndexLookup = items.some(it => (it.targetIndex === undefined || it.targetIndex === null) && (it.catalogIndex === undefined || it.catalogIndex === null));
+    if (needsIndexLookup) {
+        try {
+            const catRes = await fetch(getFirebaseUrl('/products'), {
+                headers: { 'Accept': 'application/json' },
+                signal: AbortSignal.timeout(4000)
+            });
+            if (catRes.ok) {
+                const catData = await catRes.json();
+                indexMap = new Map();
+                if (Array.isArray(catData)) {
+                    catData.forEach((p, idx) => {
+                        if (p) {
+                            if (p.id) indexMap.set(String(p.id), idx);
+                            if (p.sku) indexMap.set(String(p.sku), idx);
+                        }
+                    });
+                } else if (catData && typeof catData === 'object') {
+                    Object.keys(catData).forEach(k => {
+                        const p = catData[k];
+                        if (p) {
+                            if (p.id) indexMap.set(String(p.id), k);
+                            if (p.sku) indexMap.set(String(p.sku), k);
+                        }
+                    });
+                }
+            }
+        } catch (mapErr) {
+            console.warn('[Rollback] Index lookup error:', mapErr.message);
+        }
+    }
+
     for (const item of items) {
-        const targetIndex = item.targetIndex !== undefined ? item.targetIndex : item.catalogIndex;
+        let targetIndex = item.targetIndex !== undefined ? item.targetIndex : item.catalogIndex;
+        if ((targetIndex === undefined || targetIndex === null) && indexMap) {
+            const idKey = String(item.id || item.sku || '');
+            targetIndex = indexMap.get(idKey);
+        }
         if (targetIndex === undefined || targetIndex === null) continue;
         const qty = Number(item.qty || item.quantity || 1);
         if (qty <= 0) continue;
@@ -273,7 +311,7 @@ export default async function handler(req, res) {
         // SECURITY FIX: Authoritative Server-side price calculation (Fail-Closed)
         let priceResult;
         try {
-            priceResult = await verifyOrderPrice(items, total, discountCode, shippingFee);
+            priceResult = await verifyOrderPrice(items, total, discountCode, shippingFee, gov);
         } catch (err) {
             console.error('[Order Create Price Check Failed]', err.message);
             return res.status(400).json({ error: err.message });
@@ -311,7 +349,9 @@ export default async function handler(req, res) {
             subtotal: verifiedSubtotal,
             shipping: verifiedShipping,
             discount: verifiedDiscount,
-            total: verifiedTotal
+            total: verifiedTotal,
+            stockDeducted: true,
+            stockRestored: false
         };
 
         // 1. Decrement stock atomically with ETag concurrency BEFORE saving the order
@@ -380,8 +420,12 @@ export default async function handler(req, res) {
                     return res.status(404).json({ error: 'بيانات الطلب غير متطابقة' });
                 }
 
-                // If customer requested order tracking with phone verification (Anti-Enumeration / Anti-IDOR):
-                if (queryPhone) {
+                // ISSUE 5 FIX: Require phone verification for all non-admin public queries (Anti-Enumeration / Anti-IDOR)
+                const authCheck = verifyAdminToken(req);
+                if (!authCheck.valid) {
+                    if (!queryPhone) {
+                        return res.status(400).json({ error: 'يرجى إدخال رقم الهاتف المسجل مع الطلب للتحقق' });
+                    }
                     const cleanQueryPhone = queryPhone.replace(/[\s\-_]/g, '').replace(/^\+?2/, '');
                     const cleanOrderPhone = String(orderData.phone || '').replace(/[\s\-_]/g, '').replace(/^\+?2/, '');
                     if (cleanQueryPhone !== cleanOrderPhone) {
@@ -469,7 +513,24 @@ export default async function handler(req, res) {
         if (req.body.shipping !== undefined) updates.shipping = Number(req.body.shipping);
         if (req.body.discount !== undefined) updates.discount = Number(req.body.discount);
         if (req.body.total !== undefined) updates.total = Number(req.body.total);
-        if (req.body.payment) updates.payment = String(req.body.payment).trim().substring(0, 50);
+        // ISSUE 4 FIX: Automatically restore inventory if admin marks order as cancelled (ملغي)
+        if (updates.status && updates.status.includes('ملغي')) {
+            try {
+                const existingRes = await fetch(getFirebaseUrl(`/orders/${orderId}`));
+                if (existingRes.ok) {
+                    const existingOrder = await existingRes.json();
+                    if (existingOrder && existingOrder.stockDeducted && !existingOrder.stockRestored && Array.isArray(existingOrder.items)) {
+                        console.log(`[Stock Restoration] Order ${orderId} cancelled by admin, restoring stock...`);
+                        await rollbackStock(existingOrder.items);
+                        updates.stockRestored = true;
+                        updates.stockRestoredAt = new Date().toISOString();
+                        clearCatalogCache();
+                    }
+                }
+            } catch (restoreErr) {
+                console.warn('[Stock Restoration Notice]', restoreErr.message);
+            }
+        }
 
         try {
             const fbRes = await fetch(getFirebaseUrl(`/orders/${orderId}`), {

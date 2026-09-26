@@ -1,56 +1,129 @@
 import crypto from 'crypto';
 
 /**
- * In-memory IP tracking for Rate Limiting / Brute Force Protection
- * Limits consecutive failed login attempts to 5 per 15 minutes.
+ * Serverless Helper - Firebase Realtime Database URL builder
  */
-const loginAttempts = new Map(); // ip -> { count, lockedUntil }
+function getFirebaseUrl(path = '') {
+    const base = (process.env.FIREBASE_DATABASE_URL || 'https://abu-el-goukh-store-default-rtdb.firebaseio.com').replace(/\/+$/, '');
+    const secret = (process.env.FIREBASE_AUTH_SECRET || process.env.FIREBASE_DATABASE_SECRET || process.env.FIREBASE_SECRET || '').trim();
+    const query = secret ? `?auth=${encodeURIComponent(secret)}` : '';
+    return `${base}${path}.json${query}`;
+}
+
+/**
+ * Sanitize client IP for safe use as a Firebase path key
+ * Firebase prohibits '.', '#', '$', '[', ']' in key names.
+ */
+function sanitizeIp(ip) {
+    return String(ip || '127_0_0_1').replace(/[^a-zA-Z0-9_-]/g, '_');
+}
 
 function getClientIp(req) {
-    const forwarded = req.headers['x-forwarded-for'];
+    const forwarded = req.headers?.['x-forwarded-for'];
     if (forwarded) {
         return forwarded.split(',')[0].trim();
     }
     return req.socket?.remoteAddress || '127.0.0.1';
 }
 
-function checkRateLimit(ip) {
-    const record = loginAttempts.get(ip);
-    if (!record) return { allowed: true };
+/**
+ * Persistent Rate Limiting stored in Firebase Realtime Database (/login_attempts/{sanitized_ip})
+ * Fail-Closed: If Firebase cannot be reached, reject the request to prevent brute-force attacks.
+ */
+async function checkRateLimit(ip) {
+    const cleanIp = sanitizeIp(ip);
+    try {
+        const res = await fetch(getFirebaseUrl(`/login_attempts/${cleanIp}`), {
+            headers: { 'Accept': 'application/json' },
+            signal: AbortSignal.timeout(3000)
+        });
 
-    if (record.lockedUntil && Date.now() < record.lockedUntil) {
-        const remainingMinutes = Math.ceil((record.lockedUntil - Date.now()) / (60 * 1000));
+        if (!res.ok) {
+            console.error('[RateLimit Error] Failed to read login attempts, HTTP status:', res.status);
+            return {
+                allowed: false,
+                statusCode: 500,
+                message: 'خطأ في التحقق من أمان الخادم. يرجى المحاولة لاحقاً.'
+            };
+        }
+
+        const record = await res.json();
+        if (record && record.lockedUntil && Date.now() < record.lockedUntil) {
+            const remainingMinutes = Math.max(1, Math.ceil((record.lockedUntil - Date.now()) / (60 * 1000)));
+            return {
+                allowed: false,
+                statusCode: 429,
+                message: `تم قفل محاولات تسجيل الدخول مؤقتاً لتكرار المحاولات الفاشلة. يرجى المحاولة بعد ${remainingMinutes} دقيقة.`,
+                record
+            };
+        }
+
+        return { allowed: true, record };
+    } catch (e) {
+        // Fail-Closed on network or connection errors
+        console.error('[RateLimit Error] Firebase connection failed (Fail-Closed enforced):', e.message);
         return {
             allowed: false,
-            message: `تم قفل محاولات تسجيل الدخول مؤقتاً لتكرار المحاولات الفاشلة. يرجى المحاولة بعد ${remainingMinutes} دقيقة.`
+            statusCode: 503,
+            message: 'تعذر الاتصال بخادم الحماية. يرجى المحاولة لاحقاً.'
         };
     }
-
-    // Reset if window expired
-    if (record.lockedUntil && Date.now() >= record.lockedUntil) {
-        loginAttempts.delete(ip);
-        return { allowed: true };
-    }
-
-    return { allowed: true };
-}
-
-function recordFailedAttempt(ip) {
-    const record = loginAttempts.get(ip) || { count: 0, lockedUntil: null };
-    record.count += 1;
-    if (record.count >= 5) {
-        record.lockedUntil = Date.now() + (15 * 60 * 1000); // 15-minute lock
-    }
-    loginAttempts.set(ip, record);
-}
-
-function resetLoginAttempts(ip) {
-    loginAttempts.delete(ip);
 }
 
 /**
- * Constant-time comparison using fixed 32-byte SHA-256 hashes
- * SECURITY FIX: Prevents RangeError / buffer length mismatch bugs & timing attacks
+ * Record a failed login attempt in Firebase Realtime Database
+ * Locks out IP for 15 minutes after 5 consecutive failed attempts.
+ */
+async function recordFailedAttempt(ip, existingRecord = null) {
+    const cleanIp = sanitizeIp(ip);
+    try {
+        let record = existingRecord;
+        if (!record) {
+            const getRes = await fetch(getFirebaseUrl(`/login_attempts/${cleanIp}`), {
+                headers: { 'Accept': 'application/json' },
+                signal: AbortSignal.timeout(3000)
+            });
+            if (getRes.ok) {
+                record = await getRes.json();
+            }
+        }
+
+        const currentCount = ((record && typeof record === 'object' && record.count) || 0) + 1;
+        const newRecord = {
+            count: currentCount,
+            lastAttempt: new Date().toISOString(),
+            lockedUntil: currentCount >= 5 ? Date.now() + (15 * 60 * 1000) : null
+        };
+
+        await fetch(getFirebaseUrl(`/login_attempts/${cleanIp}`), {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newRecord),
+            signal: AbortSignal.timeout(3000)
+        });
+    } catch (e) {
+        console.error('[RateLimit Error] Failed to record attempt in Firebase:', e.message);
+    }
+}
+
+/**
+ * Reset failed login attempts in Firebase upon successful login (DELETE /login_attempts/{sanitized_ip})
+ */
+async function resetLoginAttempts(ip) {
+    const cleanIp = sanitizeIp(ip);
+    try {
+        await fetch(getFirebaseUrl(`/login_attempts/${cleanIp}`), {
+            method: 'DELETE',
+            signal: AbortSignal.timeout(3000)
+        });
+    } catch (e) {
+        console.warn('[RateLimit Error] Failed to delete attempt record from Firebase:', e.message);
+    }
+}
+
+/**
+ * Constant-time string comparison using fixed 32-byte SHA-256 hashes
+ * Prevents timing attacks and RangeError / buffer length mismatch bugs
  */
 function safeCompare(a, b) {
     const hashA = crypto.createHash('sha256').update(String(a || '')).digest();
@@ -60,6 +133,7 @@ function safeCompare(a, b) {
 
 /**
  * Helper to verify Admin JWT Token across Serverless Functions
+ * Reads from HttpOnly cookie `abu_admin_session` first, with fallback to `Authorization: Bearer <token>`
  */
 export function verifyAdminToken(req) {
     const adminSecret = process.env.ADMIN_JWT_SECRET;
@@ -68,8 +142,23 @@ export function verifyAdminToken(req) {
         return { valid: false, error: 'Server auth secret not configured' };
     }
 
-    const authHeader = req.headers.authorization || '';
-    const token = authHeader.replace(/^Bearer\s+/i, '').trim();
+    let token = '';
+
+    // 1. Try reading from HttpOnly cookie first (abu_admin_session)
+    const cookieHeader = req.headers?.cookie || '';
+    if (cookieHeader) {
+        const match = cookieHeader.match(/(?:^|;\s*)abu_admin_session=([^;]+)/);
+        if (match && match[1]) {
+            token = decodeURIComponent(match[1]).trim();
+        }
+    }
+
+    // 2. Fallback to Authorization header if cookie not present
+    if (!token) {
+        const authHeader = req.headers?.authorization || '';
+        token = authHeader.replace(/^Bearer\s+/i, '').trim();
+    }
+
     if (!token) {
         return { valid: false, error: 'Missing authorization token' };
     }
@@ -98,9 +187,15 @@ export function verifyAdminToken(req) {
 }
 
 /**
- * Admin Authentication Endpoint (GET: Verify, POST: Login)
+ * Admin Authentication Endpoint (GET: Verify, POST: Login / Logout, DELETE: Logout)
  */
 export default async function handler(req, res) {
+    // ─── Logout handler ───
+    if (req.method === 'DELETE' || (req.method === 'POST' && (req.query?.action === 'logout' || req.body?.action === 'logout'))) {
+        res.setHeader('Set-Cookie', 'abu_admin_session=; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=0');
+        return res.status(200).json({ success: true, message: 'Logged out successfully' });
+    }
+
     // SECURITY FIX: Strictly require environment variables, NO HARDCODED FALLBACK CREDENTIALS
     const adminSecret = process.env.ADMIN_JWT_SECRET;
     const validUser = process.env.ADMIN_USERNAME;
@@ -126,10 +221,10 @@ export default async function handler(req, res) {
     if (req.method === 'POST') {
         const clientIp = getClientIp(req);
 
-        // SECURITY FIX: Brute-force rate limiting check
-        const rateCheck = checkRateLimit(clientIp);
+        // SECURITY FIX: Brute-force rate limiting check in Firebase (Fail-Closed)
+        const rateCheck = await checkRateLimit(clientIp);
         if (!rateCheck.allowed) {
-            return res.status(429).json({
+            return res.status(rateCheck.statusCode || 429).json({
                 authenticated: false,
                 error: rateCheck.message
             });
@@ -148,7 +243,8 @@ export default async function handler(req, res) {
         const passMatches = safeCompare(inputPass, validPass.trim());
 
         if (userMatches && passMatches) {
-            resetLoginAttempts(clientIp);
+            // Clear failed attempts upon successful login
+            await resetLoginAttempts(clientIp);
 
             const payload = {
                 user: validUser.trim(),
@@ -159,15 +255,17 @@ export default async function handler(req, res) {
             const signature = crypto.createHmac('sha256', adminSecret).update(payloadB64).digest('hex');
             const token = `${payloadB64}.${signature}`;
 
+            // Set HttpOnly Secure SameSite cookie (12 hours = 43200 seconds)
+            res.setHeader('Set-Cookie', `abu_admin_session=${token}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=43200`);
+
             return res.status(200).json({
                 authenticated: true,
-                token,
                 expiresAt: payload.exp
             });
         }
 
-        // SECURITY FIX: Record failed attempt and throttle attacker
-        recordFailedAttempt(clientIp);
+        // SECURITY FIX: Record failed attempt in Firebase and throttle attacker
+        await recordFailedAttempt(clientIp, rateCheck.record);
 
         return res.status(401).json({
             authenticated: false,

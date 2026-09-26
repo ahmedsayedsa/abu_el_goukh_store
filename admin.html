@@ -2570,11 +2570,14 @@
         }
 
         function getAdminAuthHeaders() {
-            const token = sessionStorage.getItem('abu_admin_jwt_token') || localStorage.getItem('abu_admin_jwt_token') || '';
-            return {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+            const headers = {
+                'Content-Type': 'application/json'
             };
+            const token = sessionStorage.getItem('abu_admin_jwt_token') || localStorage.getItem('abu_admin_jwt_token');
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+            return headers;
         }
 
         async function saveProduct(e) {
@@ -2638,6 +2641,7 @@
                 // SECURITY FIX (Issue 1): Route write operations through authenticated Serverless API /api/products
                 const response = await fetch('/api/products', {
                     method: 'PUT',
+                    credentials: 'same-origin',
                     headers: getAdminAuthHeaders(),
                     body: JSON.stringify({ products: updatedProducts })
                 });
@@ -2679,6 +2683,7 @@
             try {
                 const response = await fetch('/api/products', {
                     method: 'PUT',
+                    credentials: 'same-origin',
                     headers: getAdminAuthHeaders(),
                     body: JSON.stringify({ products: updatedProducts })
                 });
@@ -2705,6 +2710,7 @@
             try {
                 const response = await fetch(`/api/products?id=${encodeURIComponent(id)}`, {
                     method: 'DELETE',
+                    credentials: 'same-origin',
                     headers: getAdminAuthHeaders()
                 });
 
@@ -2850,6 +2856,7 @@
             try {
                 fetch('/api/orders', {
                     method: 'PATCH',
+                    credentials: 'same-origin',
                     headers: getAdminAuthHeaders(),
                     body: JSON.stringify({ orderId, ...orders[index] })
                 }).catch(e => console.warn('Order update API error:', e));
@@ -3191,6 +3198,7 @@
                 // SECURITY FIX: Transmit to authenticated serverless API; stored in locked Firebase DB
                 const res = await fetch('/api/payment-settings', {
                     method: 'POST',
+                    credentials: 'same-origin',
                     headers: getAdminAuthHeaders(),
                     body: JSON.stringify(config)
                 });
@@ -3216,6 +3224,7 @@
             try {
                 // Fetch active live settings from authenticated serverless endpoint
                 const res = await fetch('/api/payment-settings', {
+                    credentials: 'same-origin',
                     headers: getAdminAuthHeaders()
                 });
 
@@ -3575,11 +3584,14 @@
         let currentPaymentStatusFilter = 'all';
 
         function getAdminAuthHeaders() {
-            const token = sessionStorage.getItem('abu_admin_jwt_token') || localStorage.getItem('abu_admin_jwt_token') || '';
-            return {
-                'Authorization': 'Bearer ' + token,
+            const headers = {
                 'Content-Type': 'application/json'
             };
+            const token = sessionStorage.getItem('abu_admin_jwt_token') || localStorage.getItem('abu_admin_jwt_token');
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+            return headers;
         }
 
         // Fetch Orders securely from Serverless API (/api/orders) & Merge with Local Orders
@@ -3591,6 +3603,7 @@
 
             try {
                 const res = await fetch('/api/orders', {
+                    credentials: 'same-origin',
                     headers: getAdminAuthHeaders()
                 });
                 if (res.ok) {
@@ -3839,6 +3852,7 @@
                 try {
                     await fetch('/api/orders', {
                         method: 'PATCH',
+                        credentials: 'same-origin',
                         headers: getAdminAuthHeaders(),
                         body: JSON.stringify({
                             orderId: orderId,
@@ -3862,6 +3876,7 @@
                 try {
                     await fetch('/api/orders', {
                         method: 'PATCH',
+                        credentials: 'same-origin',
                         headers: getAdminAuthHeaders(),
                         body: JSON.stringify({
                             orderId: orderId,
@@ -3883,6 +3898,7 @@
                 try {
                     await fetch('/api/orders', {
                         method: 'DELETE',
+                        credentials: 'same-origin',
                         headers: getAdminAuthHeaders(),
                         body: JSON.stringify({ orderId: orderId })
                     });
@@ -4358,6 +4374,7 @@
                 // SECURITY FIX: Route through /api/products with Admin JWT
                 const response = await fetch('/api/products', {
                     method: 'PUT',
+                    credentials: 'same-origin',
                     headers: getAdminAuthHeaders(),
                     body: JSON.stringify({ products })
                 });
@@ -4378,40 +4395,16 @@
         }
 
 
-        // --- ADMIN AUTHENTICATION & LOGIN GATE (SERVERLESS JWT) ---
+        // --- ADMIN AUTHENTICATION & LOGIN GATE (SERVERLESS HTTPONLY COOKIE AUTH) ---
         async function checkAdminAuth() {
-            const token = sessionStorage.getItem('abu_admin_jwt_token') || localStorage.getItem('abu_admin_jwt_token');
             const loginScreen = document.getElementById('admin-login-screen');
             const mainWrapper = document.getElementById('admin-main-wrapper');
 
-            if (!token) {
-                if (loginScreen) loginScreen.classList.remove('hidden');
-                if (mainWrapper) mainWrapper.classList.add('hidden');
-                return false;
-            }
-
-            // Client-side token structure check
-            try {
-                const parts = token.split('.');
-                if (parts.length === 2) {
-                    const payload = JSON.parse(atob(parts[0]));
-                    if (payload.exp && Date.now() > payload.exp) {
-                        handleAdminLogout();
-                        return false;
-                    }
-                } else {
-                    handleAdminLogout();
-                    return false;
-                }
-            } catch(e) {
-                handleAdminLogout();
-                return false;
-            }
-
-            // Verify with serverless endpoint (Fail-Closed: Keep screen locked until verified)
+            // Verify with serverless endpoint via HttpOnly cookie (Fail-Closed: Keep screen locked until verified)
             try {
                 const res = await fetch('/api/admin-auth', {
-                    headers: { 'Authorization': 'Bearer ' + token }
+                    method: 'GET',
+                    credentials: 'same-origin'
                 });
                 if (res.ok) {
                     const data = await res.json();
@@ -4421,9 +4414,11 @@
                         return true;
                     }
                 }
-                // Invalid or rejected token
+                // Invalid or rejected session
                 sessionStorage.removeItem('abu_admin_jwt_token');
                 localStorage.removeItem('abu_admin_jwt_token');
+                sessionStorage.removeItem('abu_admin_logged_in');
+                localStorage.removeItem('abu_admin_logged_in');
                 if (loginScreen) loginScreen.classList.remove('hidden');
                 if (mainWrapper) mainWrapper.classList.add('hidden');
                 return false;
@@ -4449,24 +4444,23 @@
 
             const u = document.getElementById('login-username').value.trim();
             const p = document.getElementById('login-password').value.trim();
-            const rem = document.getElementById('login-remember').checked;
             const errAlert = document.getElementById('login-error-alert');
 
             try {
+                // Post credentials; Server sets HttpOnly cookie (abu_admin_session)
                 const res = await fetch('/api/admin-auth', {
                     method: 'POST',
+                    credentials: 'same-origin',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username: u, password: p })
                 });
 
                 if (res.ok) {
                     const data = await res.json();
-                    if (data && data.authenticated && data.token) {
-                        if (rem) {
-                            localStorage.setItem('abu_admin_jwt_token', data.token);
-                        } else {
-                            sessionStorage.setItem('abu_admin_jwt_token', data.token);
-                        }
+                    if (data && data.authenticated) {
+                        // Purge legacy storage to enforce HttpOnly cookie security
+                        sessionStorage.removeItem('abu_admin_jwt_token');
+                        localStorage.removeItem('abu_admin_jwt_token');
                         if (errAlert) errAlert.classList.add('hidden');
                         await checkAdminAuth();
                         return;
@@ -4498,7 +4492,16 @@
             }
         }
 
-        function handleAdminLogout() {
+        async function handleAdminLogout() {
+            try {
+                // Server zeroes out the HttpOnly cookie (Max-Age=0)
+                await fetch('/api/admin-auth?action=logout', {
+                    method: 'POST',
+                    credentials: 'same-origin'
+                });
+            } catch (e) {
+                console.warn('Logout API error:', e);
+            }
             sessionStorage.removeItem('abu_admin_jwt_token');
             localStorage.removeItem('abu_admin_jwt_token');
             sessionStorage.removeItem('abu_admin_logged_in');
@@ -4540,6 +4543,7 @@
 
             try {
                 const res = await fetch('/api/discounts', {
+                    credentials: 'same-origin',
                     headers: getAdminAuthHeaders()
                 });
 
@@ -4699,6 +4703,7 @@
             try {
                 const res = await fetch('/api/discounts', {
                     method: 'POST',
+                    credentials: 'same-origin',
                     headers: getAdminAuthHeaders(),
                     body: JSON.stringify({ code, percent, minSubtotal, freeShipping, description, active })
                 });
@@ -4731,6 +4736,7 @@
             try {
                 const res = await fetch('/api/discounts', {
                     method: 'PUT',
+                    credentials: 'same-origin',
                     headers: getAdminAuthHeaders(),
                     body: JSON.stringify({ ...item, active: updatedActive })
                 });
@@ -4760,6 +4766,7 @@
             try {
                 const res = await fetch(`/api/discounts?code=${encodeURIComponent(code)}`, {
                     method: 'DELETE',
+                    credentials: 'same-origin',
                     headers: getAdminAuthHeaders()
                 });
 
@@ -4794,6 +4801,7 @@
 
             try {
                 const res = await fetch('/api/abandoned-cart', {
+                    credentials: 'same-origin',
                     headers: getAdminAuthHeaders()
                 });
 
@@ -4914,6 +4922,7 @@
             try {
                 const res = await fetch(`/api/abandoned-cart?phone=${encodeURIComponent(phone)}`, {
                     method: 'DELETE',
+                    credentials: 'same-origin',
                     headers: getAdminAuthHeaders()
                 });
 

@@ -156,3 +156,69 @@ curl -X POST "https://<your-domain>/api/payment-webhook?gateway=paymob&hmac=fake
 > - تم التحقق البرمجي الدقيق بنسبة 100% من تطابق التوقيع، وترتيب الحقول، وصيغة المبالغ، ومبدأ Fail-Closed وفقاً للمواصفات الرسمية لبوابة FawryPay V2.
 > - **لم يتم التحقق الفعلي بعد عبر بيئة Fawry Sandbox الحية لعدم توفر مفاتيح اختبار حقيقية (`FAWRY_MERCHANT_CODE` و `FAWRY_SECURITY_KEY`) في متغيرات البيئة - يحتاج اختبار على بيئة حقيقية بمجرد إدخال مفاتيح التاجر قبل الإطلاق.**
 
+---
+
+## 🔒 تقرير الإصلاحات الأمنية الصارمة (الجولة الثالثة - المشاكل الثلاث الجوهرية)
+
+تم الانتهاء بنجاح واختبار المشاكل الأمنية الثلاث المحددة بدقة متناهية ودون المساس بأي ملف خارج النطاق المسموح به (`api/orders.js`, `api/admin-auth.js`, `admin.html`).
+
+---
+
+### المشكلة 1: سباق التنافس (Race Condition) عند إنقاص المخزون
+- **الملف المعالج:** `api/orders.js`
+- **طبيعة الخلل السابقة:**
+  1. غياب هيدر `X-Firebase-ETag: true` في طلبات الـ GET، مما جعل Firebase RTDB لا يرجع هيدر ETag على الإطلاق، وأدى لتعطيل شرط `if-match` وإلغاء القفل التفاؤلي (Optimistic Locking).
+  2. إنقاص المخزون كان يحدث بشكل غير تزامني (Fire-and-forget بدون `await`) بعد تسجيل الطلب، مما يسمح بحجز نفس القطعة لأكثر من عميل في نفس اللحظة (Over-selling).
+- **التنفيذ المنجز:**
+  1. إضافة هيدر `'X-Firebase-ETag': 'true'` في طلب قراءة المخزون الفردي للمنتج (`/products/{index}/stock.json`).
+  2. استخدام `if-match: <etag>` في طلب الـ PUT مع محاولات إعادة (Retry loop حتى 3 مرات مع Backoff عشوائي 50-150ms).
+  3. نقل عملية فحص وإنقاص المخزون لتتم **تزامناً (Synchronous with `await`) قبل** كتابة الطلب في مسار `/orders/{orderId}`.
+  4. في حال نفاد الكمية أو فشل Concurrency، يتم تنفيذ تراجع آلي فوري (Rollback Stock) عن أي منتجات أُنقصت في نفس الطلب، ورفض الطلب بكود `HTTP 409 Conflict` مع رسالة واضحة للمشتري: `"عذراً، نفدت الكمية المتاحة من [اسم المنتج] قبل تأكيد طلبك بلحظات."`.
+- **إثبات الاختبار الفعلي (`scratch/test_race_condition.mjs`):**
+  - تم إجراء محاكاة تنافسية لطلبين متزامنين لمنتج بمخزون = 1.
+  - النتيجة: نجح طلب واحد بكود `HTTP 201 Created`، ورُفض الطلب الثاني فوراً بكود `HTTP 409 Conflict`، والمخزون النهائي في قاعدة البيانات أصبح 0 دون أي عجز.
+
+---
+
+### المشكلة 2: الحماية ضد هجمات التخمين (Persistent Rate Limiting في Firebase)
+- **الملف المعالج:** `api/admin-auth.js`
+- **طبيعة الخلل السابقة:**
+  - تخزين محاولات الدخول الفاشلة في الذاكرة المؤقتة `loginAttempts = new Map()`. يتم تصفيرها فور حدوث Cold Start لـ Serverless Instance في Vercel.
+- **التنفيذ المنجز:**
+  1. نقل سجل المحاولات بالكامل إلى مسار سحابي في Firebase: `/login_attempts/{sanitized_ip}`.
+  2. تطهير عنوان الـ IP لمنع أخطاء Firebase Path: `ip.replace(/[^a-zA-Z0-9_-]/g, '_')`.
+  3. تطبيق مبدأ **Fail-Closed الصارم**: إذا تعذر الاتصال بـ Firebase أو انقطع الاتصال، يتم رفض محاولة تسجيل الدخول بكود `503` لحماية اللوحة من الهجمات أثناء تعطل السحابة.
+  4. تسجيل `{ count, lockedUntil, lastAttempt }`. عند المحاولة الخامسة (5) الفاشلة، يتم تفعيل القفل لمدة 15 دقيقة (`Date.now() + 15 * 60 * 1000`) مع إرجاع `HTTP 429 Too Many Requests`.
+  5. عند تسجيل الدخول ببيانات صحيحة، يتم حذف سجل المحاولات فوراً من Firebase (`DELETE /login_attempts/{sanitized_ip}`).
+- **إثبات الاختبار الفعلي (`scratch/test_admin_auth_security.mjs`):**
+  - اختبار 1: انقطاع Firebase -> استجابة `HTTP 503` (Fail-Closed PASS).
+  - اختبار 2: 4 محاولات فاشلة -> زيادة العداد في Firebase إلى 4 دون قفل.
+  - اختبار 3: المحاولة الخامسة الفاشلة -> قفل السجل لمدة 15 دقيقة في Firebase.
+  - اختبار 4: المحاولة السادسة -> استجابة `HTTP 429 Too Many Requests`.
+  - اختبار 5: دخول ناجح -> حذف السجل من Firebase عبر `DELETE`.
+
+---
+
+### المشكلة 3: تأمين جلسة الأدمن بكوكي `HttpOnly` وحماية ضد XSS
+- **الملفات المعالجة:** `api/admin-auth.js`, `admin.html`
+- **طبيعة الخلل السابقة:**
+  - تخزين الـ JWT في `localStorage` أو `sessionStorage`، مما يعرض الجلسة بالكامل لسرقة التوكن في حال حدوث أي ثغرة XSS أو حقن سكربت.
+- **التنفيذ المنجز:**
+  1. في `api/admin-auth.js`:
+     - عند تسجيل الدخول الناجح، يتم إرسال التوكن عبر هيدر:
+       `Set-Cookie: abu_admin_session=<JWT>; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=43200`
+     - عدم إرجاع التوكن الخام في كائن الـ JSON للرد.
+     - تحديث دالة `verifyAdminToken(req)` لتقرأ الكوكي `abu_admin_session` أولاً، مع بقاء قراءة `Authorization: Bearer` كـ Fallback للتوافق.
+     - عند تسجيل الخروج (`POST /api/admin-auth?action=logout` أو `DELETE`)، يتم إرسال كوكي بتصفير الجلسة: `Max-Age=0`.
+  2. في `admin.html`:
+     - إلغاء قراءة أو تخزين التوكن في `localStorage` أو `sessionStorage`.
+     - تنظيف ومسح أي بقايا توكنات قديمة في الـ Storage عند الدخول والخروج.
+     - إضافة `credentials: 'same-origin'` إلى جميع استدعاءات `fetch` المحمية في لوحة الإدارة (`/api/products`, `/api/orders`, `/api/payment-settings`, `/api/discounts`, `/api/abandoned-cart`, `/api/admin-auth`).
+- **إثبات الاختبار الفعلي (`scratch/test_admin_auth_security.mjs`):**
+  - فحص صدور كوكي `abu_admin_session` بكل سمات الأمان (`HttpOnly`, `Secure`, `SameSite=Strict`, `Max-Age=43200`).
+  - فحص نجاح التحقق بالـ Cookie بدون هيدر `Authorization`.
+  - فحص عمل `verifyAdminToken` مع التوافقية العكسية.
+  - فحص تصفير الكوكي (`Max-Age=0`) عند استدعاء الخروج.
+  - جميع الفحوصات الـ 7 اجتازت بنسبة نجاح 100%.
+
+

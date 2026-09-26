@@ -20,129 +20,223 @@ function getFirebaseUrl(path = '') {
 }
 
 /**
+ * Rollback decremented stock for items if order creation fails or a subsequent item is out of stock.
+ */
+async function rollbackStock(items) {
+    if (!Array.isArray(items) || items.length === 0) return;
+    for (const item of items) {
+        const targetIndex = item.targetIndex !== undefined ? item.targetIndex : item.catalogIndex;
+        if (targetIndex === undefined || targetIndex === null) continue;
+        const qty = Number(item.qty || item.quantity || 1);
+        if (qty <= 0) continue;
+
+        const stockUrl = getFirebaseUrl(`/products/${targetIndex}/stock`);
+        for (let rAttempt = 1; rAttempt <= 3; rAttempt++) {
+            try {
+                const stockRes = await fetch(stockUrl, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Firebase-ETag': 'true'
+                    },
+                    signal: AbortSignal.timeout(3000)
+                });
+                if (!stockRes.ok) continue;
+
+                const etag = stockRes.headers.get('etag');
+                const currentStockRaw = await stockRes.json();
+                const currentStock = (currentStockRaw !== null && currentStockRaw !== undefined)
+                    ? Number(currentStockRaw)
+                    : 0;
+
+                const restoredStock = currentStock + qty;
+                const putHeaders = { 'Content-Type': 'application/json' };
+                if (etag) {
+                    putHeaders['if-match'] = etag;
+                }
+
+                const putRes = await fetch(stockUrl, {
+                    method: 'PUT',
+                    headers: putHeaders,
+                    body: JSON.stringify(restoredStock),
+                    signal: AbortSignal.timeout(3000)
+                });
+
+                if (putRes.ok) break;
+            } catch (rErr) {
+                console.warn('[Rollback Error]', rErr.message);
+            }
+        }
+    }
+}
+
+/**
  * Atomic stock decrement to prevent race conditions during concurrent orders.
  * Operates per-item via /products/{index}/stock.json with up to 3 retries and ETag concurrency control.
+ * Returns: { success: true } or { success: false, failedItem: string, reason: string }
  */
 async function decrementCatalogStock(items) {
-    if (!Array.isArray(items) || items.length === 0) return;
-    const secret = (process.env.FIREBASE_AUTH_SECRET || process.env.FIREBASE_DATABASE_SECRET || process.env.FIREBASE_SECRET || '').trim();
-    if (!secret) return;
-
-    try {
-        // Fallback index mapping if catalogIndex is not already present on items
-        let indexMap = null;
-        const needsIndexLookup = items.some(it => it.catalogIndex === undefined || it.catalogIndex === null);
-
-        if (needsIndexLookup) {
-            try {
-                const catRes = await fetch(getFirebaseUrl('/products'), {
-                    headers: { 'Accept': 'application/json' },
-                    signal: AbortSignal.timeout(4000)
-                });
-                if (catRes.ok) {
-                    const catData = await catRes.json();
-                    indexMap = new Map();
-                    if (Array.isArray(catData)) {
-                        catData.forEach((p, idx) => {
-                            if (p) {
-                                if (p.id) indexMap.set(String(p.id), idx);
-                                if (p.sku) indexMap.set(String(p.sku), idx);
-                            }
-                        });
-                    } else if (catData && typeof catData === 'object') {
-                        Object.keys(catData).forEach(k => {
-                            const p = catData[k];
-                            if (p) {
-                                if (p.id) indexMap.set(String(p.id), k);
-                                if (p.sku) indexMap.set(String(p.sku), k);
-                            }
-                        });
-                    }
-                }
-            } catch (mapErr) {
-                console.warn('[Orders API] Index lookup error:', mapErr.message);
-            }
-        }
-
-        let anyUpdated = false;
-
-        // Process each item separately via its dedicated path /products/{index}/stock.json
-        for (const orderedItem of items) {
-            const idKey = String(orderedItem.id || orderedItem.sku || '');
-            const qty = Number(orderedItem.quantity || orderedItem.qty || 1);
-            if (qty <= 0) continue;
-
-            const targetIndex = (orderedItem.catalogIndex !== undefined && orderedItem.catalogIndex !== null)
-                ? orderedItem.catalogIndex
-                : indexMap?.get(idKey);
-
-            if (targetIndex === undefined || targetIndex === null) {
-                console.warn(`[Orders API] Could not determine catalog index for item "${idKey}". Skipping stock decrement.`);
-                continue;
-            }
-
-            const stockUrl = getFirebaseUrl(`/products/${targetIndex}/stock`);
-
-            // Execute optimistic concurrency with up to 3 retries per item
-            for (let attempt = 1; attempt <= 3; attempt++) {
-                try {
-                    // Step 1: Read current stock and ETag for this specific product
-                    const stockRes = await fetch(stockUrl, {
-                        headers: { 'Accept': 'application/json' },
-                        signal: AbortSignal.timeout(3000)
-                    });
-
-                    if (!stockRes.ok) {
-                        console.warn(`[Orders API] Attempt ${attempt}/3: Failed to read stock at index ${targetIndex} (HTTP ${stockRes.status})`);
-                        if (attempt < 3) await new Promise(r => setTimeout(r, 50 * attempt));
-                        continue;
-                    }
-
-                    const etag = stockRes.headers.get('etag');
-                    const currentStockRaw = await stockRes.json();
-                    const currentStock = (currentStockRaw !== null && currentStockRaw !== undefined)
-                        ? Number(currentStockRaw)
-                        : 10;
-
-                    const newStock = Math.max(0, currentStock - qty);
-
-                    // Step 2: Atomic conditional write via ETag (if-match)
-                    const putHeaders = { 'Content-Type': 'application/json' };
-                    if (etag) {
-                        putHeaders['if-match'] = etag;
-                    }
-
-                    const putRes = await fetch(stockUrl, {
-                        method: 'PUT',
-                        headers: putHeaders,
-                        body: JSON.stringify(newStock),
-                        signal: AbortSignal.timeout(3000)
-                    });
-
-                    if (putRes.ok) {
-                        anyUpdated = true;
-                        break; // Success! Exit retry loop for this product
-                    } else if (putRes.status === 412) {
-                        // Concurrency conflict (Race condition prevented by ETag mismatch)
-                        console.warn(`[Orders API] Concurrency race detected on product index ${targetIndex} (attempt ${attempt}/3). Retrying...`);
-                        if (attempt < 3) await new Promise(r => setTimeout(r, 50 * attempt));
-                    } else {
-                        console.warn(`[Orders API] Attempt ${attempt}/3: PUT failed with status ${putRes.status}`);
-                        if (attempt < 3) await new Promise(r => setTimeout(r, 50 * attempt));
-                    }
-                } catch (retryErr) {
-                    console.warn(`[Orders API] Attempt ${attempt}/3 error for product index ${targetIndex}:`, retryErr.message);
-                    if (attempt < 3) await new Promise(r => setTimeout(r, 50 * attempt));
-                }
-            }
-        }
-
-        if (anyUpdated) {
-            clearCatalogCache();
-        }
-    } catch (e) {
-        console.warn('[Orders API] Failed to decrement product stock in Firebase:', e.message);
+    if (!Array.isArray(items) || items.length === 0) {
+        return { success: true };
     }
+    const secret = (process.env.FIREBASE_AUTH_SECRET || process.env.FIREBASE_DATABASE_SECRET || process.env.FIREBASE_SECRET || '').trim();
+    if (!secret) {
+        console.warn('[Orders API] Database secret missing; failing closed.');
+        return { success: false, failedItem: 'المنتج', reason: 'unconfigured_database_secret' };
+    }
+
+    // Fallback index mapping if catalogIndex is not already present on items
+    let indexMap = null;
+    const needsIndexLookup = items.some(it => it.catalogIndex === undefined || it.catalogIndex === null);
+
+    if (needsIndexLookup) {
+        try {
+            const catRes = await fetch(getFirebaseUrl('/products'), {
+                headers: { 'Accept': 'application/json' },
+                signal: AbortSignal.timeout(4000)
+            });
+            if (catRes.ok) {
+                const catData = await catRes.json();
+                indexMap = new Map();
+                if (Array.isArray(catData)) {
+                    catData.forEach((p, idx) => {
+                        if (p) {
+                            if (p.id) indexMap.set(String(p.id), idx);
+                            if (p.sku) indexMap.set(String(p.sku), idx);
+                        }
+                    });
+                } else if (catData && typeof catData === 'object') {
+                    Object.keys(catData).forEach(k => {
+                        const p = catData[k];
+                        if (p) {
+                            if (p.id) indexMap.set(String(p.id), k);
+                            if (p.sku) indexMap.set(String(p.sku), k);
+                        }
+                    });
+                }
+            }
+        } catch (mapErr) {
+            console.warn('[Orders API] Index lookup error:', mapErr.message);
+        }
+    }
+
+    const successfullyDecremented = [];
+
+    // Process each item separately via its dedicated path /products/{index}/stock.json
+    for (const orderedItem of items) {
+        const idKey = String(orderedItem.id || orderedItem.sku || '');
+        const qty = Number(orderedItem.quantity || orderedItem.qty || 1);
+        if (qty <= 0) continue;
+
+        const targetIndex = (orderedItem.catalogIndex !== undefined && orderedItem.catalogIndex !== null)
+            ? orderedItem.catalogIndex
+            : indexMap?.get(idKey);
+
+        const itemName = String(orderedItem.name || idKey);
+
+        if (targetIndex === undefined || targetIndex === null) {
+            console.warn(`[Orders API] Could not determine catalog index for item "${idKey}".`);
+            if (successfullyDecremented.length > 0) {
+                await rollbackStock(successfullyDecremented);
+                clearCatalogCache();
+            }
+            return { success: false, failedItem: itemName, reason: 'product_not_found' };
+        }
+
+        const stockUrl = getFirebaseUrl(`/products/${targetIndex}/stock`);
+        let itemSuccess = false;
+        let itemFailureReason = 'out_of_stock';
+
+        // Execute optimistic concurrency with up to 3 retries per item
+        for (let attempt = 1; attempt <= 3; attempt++) {
+            try {
+                // Step 1: Read current stock and ETag for this specific product (MUST include X-Firebase-ETag)
+                const stockRes = await fetch(stockUrl, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Firebase-ETag': 'true'
+                    },
+                    signal: AbortSignal.timeout(3000)
+                });
+
+                if (!stockRes.ok) {
+                    console.warn(`[Orders API] Attempt ${attempt}/3: Failed to read stock at index ${targetIndex} (HTTP ${stockRes.status})`);
+                    if (attempt < 3) await new Promise(r => setTimeout(r, 40 * attempt));
+                    continue;
+                }
+
+                const etag = stockRes.headers.get('etag');
+                const currentStockRaw = await stockRes.json();
+                const currentStock = (currentStockRaw !== null && currentStockRaw !== undefined)
+                    ? Number(currentStockRaw)
+                    : 10;
+
+                // Immediate rejection if current stock is less than ordered quantity
+                if (currentStock < qty) {
+                    itemFailureReason = 'out_of_stock';
+                    itemSuccess = false;
+                    break;
+                }
+
+                const newStock = Math.max(0, currentStock - qty);
+
+                // Step 2: Atomic conditional write via ETag (if-match)
+                const putHeaders = { 'Content-Type': 'application/json' };
+                if (etag) {
+                    putHeaders['if-match'] = etag;
+                }
+
+                const putRes = await fetch(stockUrl, {
+                    method: 'PUT',
+                    headers: putHeaders,
+                    body: JSON.stringify(newStock),
+                    signal: AbortSignal.timeout(3000)
+                });
+
+                if (putRes.ok) {
+                    itemSuccess = true;
+                    successfullyDecremented.push({
+                        targetIndex,
+                        qty,
+                        name: itemName
+                    });
+                    break; // Success! Exit retry loop for this product
+                } else if (putRes.status === 412) {
+                    // Concurrency conflict (Race condition prevented by ETag mismatch)
+                    console.warn(`[Orders API] Concurrency race detected on product index ${targetIndex} (attempt ${attempt}/3). Retrying...`);
+                    itemFailureReason = 'concurrency_race';
+                    if (attempt < 3) {
+                        await new Promise(r => setTimeout(r, 40 * attempt + Math.floor(Math.random() * 30)));
+                    }
+                } else {
+                    console.warn(`[Orders API] Attempt ${attempt}/3: PUT failed with status ${putRes.status}`);
+                    itemFailureReason = `http_${putRes.status}`;
+                    if (attempt < 3) await new Promise(r => setTimeout(r, 40 * attempt));
+                }
+            } catch (retryErr) {
+                console.warn(`[Orders API] Attempt ${attempt}/3 error for product index ${targetIndex}:`, retryErr.message);
+                itemFailureReason = retryErr.message;
+                if (attempt < 3) await new Promise(r => setTimeout(r, 40 * attempt));
+            }
+        }
+
+        // If this item failed, rollback all previously decremented items in this order
+        if (!itemSuccess) {
+            if (successfullyDecremented.length > 0) {
+                await rollbackStock(successfullyDecremented);
+            }
+            clearCatalogCache();
+            return {
+                success: false,
+                failedItem: itemName,
+                reason: itemFailureReason
+            };
+        }
+    }
+
+    if (successfullyDecremented.length > 0) {
+        clearCatalogCache();
+    }
+    return { success: true };
 }
 
 /**
@@ -220,6 +314,18 @@ export default async function handler(req, res) {
             total: verifiedTotal
         };
 
+        // 1. Decrement stock atomically with ETag concurrency BEFORE saving the order
+        const stockResult = await decrementCatalogStock(verifiedItems);
+        if (!stockResult.success) {
+            console.warn(`[Order Rejected] Stock decrement failed for item "${stockResult.failedItem}": ${stockResult.reason}`);
+            return res.status(409).json({
+                error: `عذراً، نفدت الكمية المتاحة من ${stockResult.failedItem} قبل تأكيد طلبك بلحظات.`,
+                failedItem: stockResult.failedItem,
+                reason: stockResult.reason
+            });
+        }
+
+        // 2. Save order to Firebase ONLY if stock decrement was 100% successful
         try {
             const fbRes = await fetch(getFirebaseUrl(`/orders/${orderId}`), {
                 method: 'PUT',
@@ -229,11 +335,11 @@ export default async function handler(req, res) {
 
             if (!fbRes.ok) {
                 console.error('[Firebase Order Save Failed]', await fbRes.text());
+                // Rollback stock since order failed to persist in DB
+                await rollbackStock(verifiedItems);
+                clearCatalogCache();
                 return res.status(502).json({ error: 'فشل حفظ الطلب في قاعدة البيانات السحابية' });
             }
-
-            // Decrement stock in Firebase RTDB and clear cache
-            decrementCatalogStock(verifiedItems).catch(err => console.error('[Stock Error]', err));
 
             return res.status(201).json({
                 success: true,
@@ -244,6 +350,8 @@ export default async function handler(req, res) {
 
         } catch (dbErr) {
             console.error('[Database Error]', dbErr);
+            await rollbackStock(verifiedItems);
+            clearCatalogCache();
             return res.status(500).json({ error: 'خطأ غير متوقع أثناء معالجة الطلب' });
         }
     }

@@ -41,32 +41,74 @@
 <body class="bg-white text-trek-black">
 
 
-    <!-- Main Navigation Header -->
-    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-trek-border">
+    <!-- TOP ANNOUNCEMENT & UTILITY BAR (E-Commerce Luxury Standard) -->
+    <div class="bg-trek-charcoal text-white text-[11px] py-1.5 px-4 border-b border-white/10 hidden md:block">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3 text-white/80">
+                <span class="flex items-center gap-1.5">
+                    <span class="text-emerald-400">🚚</span>
+                    <span>شحن سريع لجميع محافظات مصر • شحن مجاني للطلبات فوق 8,000 ج.م</span>
+                </span>
+                <span class="text-white/30">•</span>
+                <span class="flex items-center gap-1.5">
+                    <span>🛡️</span>
+                    <span>ضمان وصيانة معتمدة من توكيل أبو الجوخ 1925</span>
+                </span>
+            </div>
+            <div class="flex items-center gap-4 text-white/75 font-semibold">
+                <a href="track-order.html" class="hover:text-white transition flex items-center gap-1">📦 تتبع طلبك</a>
+                <span>•</span>
+                <a href="returns-policy.html" class="hover:text-white transition">الاسترجاع والضمان</a>
+                <span>•</span>
+                <a href="about.html" class="hover:text-white transition">تاريخ 1925</a>
+                <span>•</span>
+                <a href="index.html#locations" class="hover:text-white transition">📍 مقر الفرع</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN NAVIGATION BAR -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-trek-border shadow-sm transition-all">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <div class="flex items-center gap-8">
-                    <a href="index.html" class="flex items-center gap-3.5 group">
-                        <img src="abu_el_goukh_logo.png" alt="أبو الجوخ 1925" class="h-14 w-auto object-contain">
+            <div class="flex items-center justify-between h-16 sm:h-20 gap-4">
+                
+                <!-- Logo & Heritage Badge -->
+                <div class="flex items-center gap-3 sm:gap-6 flex-shrink-0">
+                    <a href="index.html" class="flex items-center gap-2.5 sm:gap-3.5 group">
+                        <img src="abu_el_goukh_logo.png" alt="أبو الجوخ" class="h-10 sm:h-12 w-auto object-contain rounded-md transition-transform group-hover:scale-105 drop-shadow-sm">
                         <div class="hidden sm:block border-r border-trek-border pr-3">
-                            <span class="font-black text-xl lg:text-2xl text-trek-black block leading-none">أبو الجوخ</span>
-                            <span class="text-[9px] uppercase tracking-wider text-trek-red font-black num-font block mt-1">EST. 1925 • التوكيل المعتمد</span>
+                            <span class="font-black text-lg lg:text-xl tracking-tight text-trek-black block leading-none">أبو الجوخ</span>
+                            <span class="text-[9px] uppercase tracking-wider text-trek-red font-black num-font block mt-0.5">EST. 1925 • التوكيل المعتمد</span>
                         </div>
                     </a>
-                    <nav class="hidden lg:flex items-center gap-7 text-[14px] font-bold text-trek-black">
-                        <a href="index.html" class="hover:text-trek-red transition">الرئيسية</a>
-                        <a href="shop.html" class="hover:text-trek-red transition">كتالوج العجل (55 موديل)</a>
-                        <a href="warranty.html" class="hover:text-trek-red transition">سياسة الضمان</a>
-                        <a href="shipping.html" class="text-trek-red border-b-2 border-trek-red pb-1">الشحن والتوصيل</a>
-                        <a href="index.html#locations" class="hover:text-trek-red transition">مقرنا والمعاينة</a>
-                    </nav>
                 </div>
-                <div class="flex items-center gap-3">
-                    <button onclick="toggleMobileNav()" class="lg:hidden p-2 rounded-xl bg-trek-lightgray hover:bg-trek-border transition text-trek-black" aria-label="القائمة">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                    </button>
-                    <a href="shop.html" class="bg-trek-black hover:bg-trek-charcoal text-white text-xs font-bold py-2.5 px-5 rounded-full transition shadow-sm">
-                        تصفح المتجر الآن
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden lg:flex items-center gap-6 xl:gap-8 text-xs lg:text-[13px] xl:text-[14px] font-bold text-trek-black flex-shrink-0">
+                    <a href="index.html" class="hover:text-trek-red transition">الرئيسية</a>
+                    <a href="shop.html" class="hover:text-trek-red transition flex items-center gap-1.5">
+                        <span>كتالوج العجل</span>
+                        <span class="bg-trek-red text-white text-[9px] font-black px-1.5 py-0.5 rounded-full num-font">67</span>
+                    </a>
+                    <a href="shipping.html" class="text-trek-red font-black border-b-2 border-trek-red pb-1">
+                        <span>الشحن والتوصيل</span>
+                    </a>
+                    <a href="shop.html#bike-finder" class="hover:text-trek-red transition flex items-center gap-1.5 text-trek-black">
+                        <span>🎯 حاسبة المقاس</span>
+                    </a>
+                    <a href="track-order.html" class="hover:text-trek-red transition text-trek-gray hover:text-trek-black">
+                        <span>تتبع طلبك</span>
+                    </a>
+                </nav>
+
+                <!-- Actions -->
+                <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+                    <a href="shop.html" class="py-2.5 px-4 rounded-xl bg-trek-black text-white text-xs font-bold hover:bg-neutral-800 transition hidden sm:inline-flex items-center gap-1.5">
+                        <span>تصفح المتجر 🚲</span>
+                    </a>
+                    <a href="https://wa.me/201202925192" target="_blank" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 px-4 rounded-xl transition shadow-sm">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.109.005.253-.042.395.299.144.347.491 1.199.534 1.286.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.174.086.275.072.376-.043.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.824z"/></svg>
+                        <span>تواصل فوراً</span>
                     </a>
                 </div>
             </div>

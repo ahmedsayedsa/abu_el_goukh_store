@@ -172,51 +172,51 @@
             
             <div class="bg-white p-5 rounded-2xl border border-trek-border shadow-sm flex items-center justify-between">
                 <div>
-                    <span class="text-xs text-trek-gray font-bold block mb-1">إجمالي العجل المعروض</span>
-                    <span id="stat-total" class="text-3xl font-black text-trek-black num-font">62</span>
-                    <span class="text-[11px] text-emerald-600 font-semibold block mt-1">✓ جاهزة للشراء أونلاين</span>
-                </div>
-                <div class="w-12 h-12 rounded-xl bg-red-50 text-trek-red flex items-center justify-center text-2xl font-bold">
-                    🚲
-                </div>
-            </div>
-
-            <div class="bg-white p-5 rounded-2xl border border-trek-border shadow-sm flex items-center justify-between">
-                <div>
-                    <span class="text-xs text-trek-gray font-bold block mb-1">تكلفة الاستضافة والـ Backend</span>
-                    <span class="text-3xl font-black text-emerald-600 num-font">0.00</span>
-                    <span class="text-[11px] text-emerald-700 font-semibold block mt-1">جنيه (مجاني مدى الحياة)</span>
+                    <span class="text-xs text-trek-gray font-bold block mb-1">مبيعات وإيراد اليوم</span>
+                    <span id="stat-today-revenue" class="text-2xl font-black text-emerald-600 num-font">0 ج.م</span>
+                    <span id="stat-today-orders" class="text-[11px] text-trek-gray font-semibold block mt-1">0 طلبات مسجلة اليوم</span>
                 </div>
                 <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl font-bold">
-                    ⚡
+                    💰
                 </div>
             </div>
 
             <div class="bg-white p-5 rounded-2xl border border-trek-border shadow-sm flex items-center justify-between">
                 <div>
-                    <span class="text-xs text-trek-gray font-bold block mb-1">الربط واستقبال الطلبات</span>
-                    <span class="text-xl font-black text-trek-black block">WhatsApp + Paymob</span>
-                    <span class="text-[11px] text-trek-gray font-semibold block mt-1">تنبيه فوري لمدير المتجر</span>
+                    <span class="text-xs text-trek-gray font-bold block mb-1">الطلبات قيد المتابعة والشحن</span>
+                    <span id="stat-pending-orders" class="text-2xl font-black text-trek-black num-font">0 طلب</span>
+                    <span id="stat-total-orders" class="text-[11px] text-blue-600 font-semibold block mt-1">إجمالي الطلبات: 0</span>
                 </div>
                 <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl font-bold">
-                    📲
+                    📦
                 </div>
             </div>
 
-            <div class="bg-white p-5 rounded-2xl border border-trek-border shadow-sm flex items-center justify-between">
+            <div onclick="switchMainTab('abandoned')" class="bg-white p-5 rounded-2xl border border-trek-border shadow-sm flex items-center justify-between cursor-pointer hover:border-amber-400 transition group">
                 <div>
-                    <span class="text-xs text-trek-gray font-bold block mb-1">سرعة المتجر (PageSpeed)</span>
-                    <span class="text-3xl font-black text-emerald-600 num-font">99%</span>
-                    <span class="text-[11px] text-emerald-700 font-semibold block mt-1">تحميل فوري في شوارع مصر</span>
+                    <span class="text-xs text-trek-gray font-bold block mb-1">سلات متروكة تحتاج متابعة</span>
+                    <span id="stat-abandoned-count" class="text-2xl font-black text-amber-600 num-font">0 سلة</span>
+                    <span class="text-[11px] text-amber-700 font-semibold block mt-1 group-hover:underline">متابعة واتساب فورية ➔</span>
                 </div>
-                <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl font-bold">
-                    🚀
+                <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl font-bold group-hover:scale-110 transition">
+                    🛒
+                </div>
+            </div>
+
+            <div onclick="switchMainTab('products')" class="bg-white p-5 rounded-2xl border border-trek-border shadow-sm flex items-center justify-between cursor-pointer hover:border-red-400 transition group">
+                <div>
+                    <span class="text-xs text-trek-gray font-bold block mb-1">إجمالي العجل والقطع بالمخزن</span>
+                    <span id="stat-total" class="text-2xl font-black text-trek-black num-font">67</span>
+                    <span id="stat-total-units" class="text-[11px] text-emerald-600 font-semibold block mt-1">جاهزة للشحن أونلاين</span>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-red-50 text-trek-red flex items-center justify-center text-2xl font-bold group-hover:scale-110 transition">
+                    🚲
                 </div>
             </div>
 
         </div>
 
-        <!-- Main Mode Tabs: Products vs Orders vs Payment Gateways -->
+        <!-- Main Mode Tabs: Products vs Orders vs Payment Gateways vs Discounts vs Abandoned -->
         <div class="flex items-center gap-3 mb-6 border-b border-trek-border pb-3 flex-wrap">
             <button id="main-tab-products" onclick="switchMainTab('products')" class="px-5 py-3 rounded-xl text-sm font-black bg-trek-black text-white transition flex items-center gap-2 shadow-sm">
                 <span>🚲 المنتجات والمخزون</span>
@@ -225,6 +225,14 @@
             <button id="main-tab-orders" onclick="switchMainTab('orders')" class="px-5 py-3 rounded-xl text-sm font-bold bg-white text-trek-black border border-trek-border hover:bg-trek-lightgray transition flex items-center gap-2">
                 <span>📦 الطلبات الواردة (E-Commerce Orders)</span>
                 <span class="bg-trek-red text-white text-xs font-black px-2 py-0.5 rounded-full num-font" id="tab-orders-badge">0</span>
+            </button>
+            <button id="main-tab-discounts" onclick="switchMainTab('discounts')" class="px-5 py-3 rounded-xl text-sm font-bold bg-white text-trek-black border border-trek-border hover:bg-trek-lightgray transition flex items-center gap-2">
+                <span>🏷️ أكواد الخصم والكوبونات</span>
+                <span id="tab-discounts-badge" class="bg-indigo-600 text-white text-[10px] font-black px-2.5 py-0.5 rounded-full">كوبونات 🏷️</span>
+            </button>
+            <button id="main-tab-abandoned" onclick="switchMainTab('abandoned')" class="px-5 py-3 rounded-xl text-sm font-bold bg-white text-trek-black border border-trek-border hover:bg-trek-lightgray transition flex items-center gap-2">
+                <span>🛒 السلات المتروكة</span>
+                <span id="tab-abandoned-badge" class="bg-amber-600 text-white text-[10px] font-black px-2.5 py-0.5 rounded-full">0</span>
             </button>
             <button id="main-tab-payments" onclick="switchMainTab('payments')" class="px-5 py-3 rounded-xl text-sm font-bold bg-white text-trek-black border border-trek-border hover:bg-trek-lightgray transition flex items-center gap-2">
                 <span>💳 بوابات الدفع الإلكتروني والـ APIs</span>
@@ -1118,6 +1126,107 @@
         </div>
         <!-- END HERO VIDEO VIEW -->
 
+        <!-- DISCOUNTS VIEW -->
+        <div id="view-discounts" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-3xl border border-trek-border shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-trek-border pb-5 mb-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-2xl font-black">
+                            🏷️
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-black text-trek-black">إدارة أكواد الخصم والكوبونات الترويجية</h2>
+                            <p class="text-xs text-trek-gray mt-0.5">أنشئ كوبونات ترويجية لعملائك أو حملات السوشيال ميديا مع التحقق الصارم في السيرفر.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="loadDiscounts(true)" class="px-4 py-2.5 rounded-xl border border-trek-border bg-trek-lightgray hover:bg-gray-200 text-xs font-bold text-trek-black transition flex items-center gap-1.5">
+                            <span>🔄 تحديث</span>
+                        </button>
+                        <button onclick="openDiscountModal()" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black transition flex items-center gap-1.5 shadow-sm">
+                            <span>➕ كود خصم جديد</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Discounts Table -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-right text-xs">
+                        <thead>
+                            <tr class="border-b border-trek-border text-trek-gray font-bold">
+                                <th class="py-3 px-4">كود الكوبون</th>
+                                <th class="py-3 px-4">نوع وقيمة الخصم</th>
+                                <th class="py-3 px-4">الحد الأدنى للطلب</th>
+                                <th class="py-3 px-4">الوصف</th>
+                                <th class="py-3 px-4 text-center">الحالة</th>
+                                <th class="py-3 px-4 text-center">إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="discounts-table-body" class="divide-y divide-trek-border">
+                            <tr>
+                                <td colspan="6" class="py-8 text-center text-trek-gray font-semibold">
+                                    جاري تحميل أكواد الخصم من السيرفر...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ABANDONED CARTS VIEW -->
+        <div id="view-abandoned" class="hidden space-y-6">
+            <div class="bg-white p-6 rounded-3xl border border-trek-border shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-trek-border pb-5 mb-6">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl font-black">
+                            🛒
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-black text-trek-black">متابعة السلات المتروكة (Abandoned Carts Recovery)</h2>
+                            <p class="text-xs text-trek-gray mt-0.5">عملاء أدخلوا أرقام هواتفهم ولم يتموا الطلب. فرصة ذهبية للمتابعة البيعية الفورية عبر واتساب.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="loadAbandonedCarts(true)" class="px-4 py-2.5 rounded-xl border border-trek-border bg-trek-lightgray hover:bg-gray-200 text-xs font-bold text-trek-black transition flex items-center gap-1.5">
+                            <span>🔄 تحديث السلات</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Notice banner -->
+                <div class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-4 mb-6 flex items-start gap-3">
+                    <span class="text-2xl">💡</span>
+                    <div class="text-xs text-amber-900 leading-relaxed">
+                        <strong class="font-black block mb-0.5">نصيحة البيع لخدمة العملاء:</strong>
+                        المتابعة السريعة خلال 15 إلى 30 دقيقة تزيد من فرصة إتمام البيع بنسبة تفوق 40%. الزر الأخضر يفتح رسالة واتساب جاهزة ولطيفة تستفسر إن كان العميل يحتاج مساعدة في اختيار المقاس أو استفسار عن التقسيط والشحن.
+                    </div>
+                </div>
+
+                <!-- Abandoned Carts Table -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-right text-xs">
+                        <thead>
+                            <tr class="border-b border-trek-border text-trek-gray font-bold">
+                                <th class="py-3 px-4">العميل ورقم الهاتف</th>
+                                <th class="py-3 px-4">المحافظة</th>
+                                <th class="py-3 px-4">محتويات السلة</th>
+                                <th class="py-3 px-4 font-black">قيمة السلة</th>
+                                <th class="py-3 px-4">وقت الترك</th>
+                                <th class="py-3 px-4 text-center">إجراء المتابعة البيعية</th>
+                            </tr>
+                        </thead>
+                        <tbody id="abandoned-table-body" class="divide-y divide-trek-border">
+                            <tr>
+                                <td colspan="6" class="py-8 text-center text-trek-gray font-semibold">
+                                    جاري فحص السلات المتروكة...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
     </main>
 
@@ -1192,6 +1301,19 @@
                     </div>
                 </div>
 
+                <!-- Stock Quantity & Badge -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-trek-black mb-1.5">الكمية المتوفرة بالمخزن (Stock) *</label>
+                        <input type="number" id="input-stock" min="0" required value="5" placeholder="مثال: 8" class="w-full bg-trek-lightgray border border-trek-border focus:border-trek-black focus:bg-white text-xs rounded-xl p-3 outline-none transition font-bold num-font">
+                        <span class="text-[10px] text-trek-gray mt-1 block">إذا كان 0 سيظهر للمشتري "نفد من المخزن" ويتعطل زر الشراء تلقائياً.</span>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-trek-black mb-1.5">شارة التميز (Badge)</label>
+                        <input type="text" id="input-badge" placeholder="مثال: FLAGSHIP أو الأكثر طلباً" class="w-full bg-trek-lightgray border border-trek-border focus:border-trek-black focus:bg-white text-xs rounded-xl p-3 outline-none transition font-medium">
+                    </div>
+                </div>
+
                 <!-- SEO & Meta Description for Search Engines -->
                 <div class="border border-blue-200 rounded-2xl p-4 bg-gradient-to-r from-blue-50/50 to-indigo-50/30 space-y-2.5">
                     <div class="flex items-center justify-between">
@@ -1215,7 +1337,7 @@
 
                 <!-- Image Upload / Link -->
                 <div class="border border-dashed border-trek-border rounded-2xl p-4 bg-trek-cardbg">
-                    <label class="block text-xs font-bold text-trek-black mb-2">صورة العجلة (رابط مباشر أو رفع ملف)</label>
+                    <label class="block text-xs font-bold text-trek-black mb-2">صورة العجلة الأساسية (رابط مباشر أو رفع ملف)</label>
                     <div class="flex flex-col sm:flex-row gap-3 items-center">
                         <input type="text" id="input-img" oninput="previewImage(this.value)" placeholder="ضع رابط صورة العجلة هنا..." class="flex-1 bg-white border border-trek-border text-xs rounded-xl p-2.5 outline-none font-medium">
                         <label class="bg-trek-black hover:bg-trek-charcoal text-white text-xs font-bold px-4 py-2.5 rounded-xl cursor-pointer transition">
@@ -1230,10 +1352,90 @@
                     </div>
                 </div>
 
+                <!-- Multiple Studio Images for Gallery -->
+                <div class="border border-trek-border rounded-2xl p-4 bg-gray-50/60 space-y-2">
+                    <div class="flex items-center gap-2">
+                        <span class="text-base">📸</span>
+                        <label class="block text-xs font-bold text-trek-black">صور إضافية لمعرض الأستوديو (Gallery Images)</label>
+                    </div>
+                    <textarea id="input-images" rows="3" placeholder="ضع كل رابط صورة في سطر جديد&#10;https://media.zbooni.com/.../img2.jpg&#10;https://media.zbooni.com/.../img3.jpg" class="w-full bg-white border border-trek-border focus:border-trek-black text-xs rounded-xl p-3 outline-none transition font-mono text-[11px]"></textarea>
+                    <span class="text-[10px] text-trek-gray block">تتيح للعميل استعراض زوايا الدراجة والشاسيه وناقل السرعات في صفحة العجلة.</span>
+                </div>
+
                 <!-- Action Buttons -->
                 <div class="pt-4 flex justify-end gap-3 border-t border-trek-border">
                     <button type="button" onclick="closeModal()" class="px-5 py-2.5 rounded-xl text-xs font-bold text-trek-gray hover:bg-trek-lightgray transition">إلغاء</button>
                     <button type="submit" class="px-7 py-2.5 rounded-xl text-xs font-black bg-trek-red hover:bg-trek-redhover text-white transition shadow-md">حفظ ونشر العجلة في المتجر</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ADD / EDIT DISCOUNT CODE MODAL -->
+    <div id="discount-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative text-right animate-in fade-in zoom-in duration-150">
+            <button onclick="closeDiscountModal()" class="absolute top-5 left-5 w-8 h-8 rounded-full bg-trek-lightgray text-trek-black flex items-center justify-center hover:bg-gray-200 transition font-bold text-sm">✕</button>
+
+            <div class="flex items-center gap-3 mb-6 border-b border-trek-border pb-4">
+                <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl font-bold">
+                    🏷️
+                </div>
+                <div>
+                    <h3 id="discount-modal-heading" class="text-xl font-black text-trek-black">إنشاء كود خصم جديد</h3>
+                    <p class="text-xs text-trek-gray mt-0.5">سيتم تطبيق الخصم فوراً في صفحة الدفع بعد التحقق السحابي</p>
+                </div>
+            </div>
+
+            <form onsubmit="saveDiscountCode(event)" class="space-y-4">
+                <input type="hidden" id="discount-is-edit" value="false">
+
+                <!-- Code -->
+                <div>
+                    <label class="block text-xs font-bold text-trek-black mb-1.5">كود الخصم (Promo Code) *</label>
+                    <input type="text" id="input-disc-code" required placeholder="مثال: SUMMER2026" class="w-full bg-trek-lightgray border border-trek-border focus:border-trek-black focus:bg-white text-xs rounded-xl p-3 outline-none transition font-bold font-mono tracking-wider uppercase">
+                    <span class="text-[10px] text-trek-gray mt-1 block">أحرف إنجليزية وأرقام بدون مسافات (3 إلى 20 حرفاً).</span>
+                </div>
+
+                <!-- Type & Value -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-trek-black mb-1.5">نسبة الخصم المئوية (%)</label>
+                        <input type="number" id="input-disc-percent" min="0" max="100" value="5" placeholder="5" class="w-full bg-trek-lightgray border border-trek-border focus:border-trek-black focus:bg-white text-xs rounded-xl p-3 outline-none transition font-bold num-font">
+                        <span class="text-[10px] text-trek-gray mt-1 block">ضع 0 إذا كان الخصم شحن مجاني فقط.</span>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-trek-black mb-1.5">الحد الأدنى لقيمة الطلب (ج.م)</label>
+                        <input type="number" id="input-disc-min" min="0" value="0" placeholder="0" class="w-full bg-trek-lightgray border border-trek-border focus:border-trek-black focus:bg-white text-xs rounded-xl p-3 outline-none transition font-bold num-font">
+                        <span class="text-[10px] text-trek-gray mt-1 block">0 يعني يطبق على أي طلب.</span>
+                    </div>
+                </div>
+
+                <!-- Free Shipping Checkbox -->
+                <div class="bg-gray-50 border border-trek-border rounded-xl p-3 flex items-center gap-3">
+                    <input type="checkbox" id="input-disc-freeship" class="w-4 h-4 rounded text-indigo-600 focus:ring-0">
+                    <label for="input-disc-freeship" class="text-xs font-bold text-trek-black cursor-pointer select-none">
+                        تفعيل الشحن المجاني (0 ج.م شحن لجميع المحافظات)
+                    </label>
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label class="block text-xs font-bold text-trek-black mb-1.5">وصف الكوبون (يظهر للمشتري عند التطبيق)</label>
+                    <input type="text" id="input-disc-desc" placeholder="مثال: خصم 5% خاص بمناسبة موسم الصيف" class="w-full bg-trek-lightgray border border-trek-border focus:border-trek-black focus:bg-white text-xs rounded-xl p-3 outline-none transition font-medium">
+                </div>
+
+                <!-- Active Toggle -->
+                <div class="flex items-center gap-2 pt-1">
+                    <input type="checkbox" id="input-disc-active" checked class="w-4 h-4 rounded text-emerald-600 focus:ring-0">
+                    <label for="input-disc-active" class="text-xs font-bold text-trek-black cursor-pointer select-none">
+                        الكود مفعل وجاهز للاستخدام في المتجر
+                    </label>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="pt-4 flex justify-end gap-3 border-t border-trek-border">
+                    <button type="button" onclick="closeDiscountModal()" class="px-5 py-2.5 rounded-xl text-xs font-bold text-trek-gray hover:bg-trek-lightgray transition">إلغاء</button>
+                    <button type="submit" class="px-7 py-2.5 rounded-xl text-xs font-black bg-indigo-600 hover:bg-indigo-700 text-white transition shadow-md">حفظ الكود سحابياً</button>
                 </div>
             </form>
         </div>
@@ -2133,6 +2335,15 @@
                 };
                 const catLabel = categoryNames[p.category] || p.category;
                 const installment = Math.round(p.price / 12 * 1.15); // ValU approx 12 mo
+                const stockVal = p.stock !== undefined ? Number(p.stock) : 5;
+                let stockBadge = '';
+                if (stockVal <= 0) {
+                    stockBadge = '<span class="inline-block bg-red-100 text-red-800 text-[10px] font-bold px-1.5 py-0.5 rounded">نفد من المخزن (0)</span>';
+                } else if (stockVal <= 3) {
+                    stockBadge = `<span class="inline-block bg-amber-100 text-amber-800 text-[10px] font-bold px-1.5 py-0.5 rounded">باقي ${stockVal} قطع فقط!</span>`;
+                } else {
+                    stockBadge = `<span class="inline-block bg-emerald-50 text-emerald-700 text-[10px] font-semibold px-1.5 py-0.5 rounded">المخزون: ${stockVal} قطعة</span>`;
+                }
 
                 return `
                     <tr class="hover:bg-gray-50/80 transition group">
@@ -2141,7 +2352,10 @@
                         </td>
                         <td class="py-3 px-4 font-bold text-trek-black">
                             <div class="text-xs line-clamp-1">${p.name}</div>
-                            <div class="text-[10px] text-trek-gray num-font">ID: #${p.id}</div>
+                            <div class="flex items-center gap-2 mt-0.5">
+                                <span class="text-[10px] text-trek-gray num-font">ID: #${p.id}</span>
+                                ${stockBadge}
+                            </div>
                         </td>
                         <td class="py-3 px-4">
                             <span class="bg-gray-100 text-trek-black font-semibold px-2 py-0.5 rounded text-[11px]">${catLabel}</span>
@@ -2248,6 +2462,12 @@
             document.getElementById('input-frame').value = 'شاسيه ألومنيوم 6061 هيدروفورم خفيف';
             document.getElementById('input-meta-desc').value = '';
             updateMetaCounter('');
+            const stockInput = document.getElementById('input-stock');
+            if (stockInput) stockInput.value = '5';
+            const badgeInput = document.getElementById('input-badge');
+            if (badgeInput) badgeInput.value = '';
+            const imagesInput = document.getElementById('input-images');
+            if (imagesInput) imagesInput.value = '';
             document.getElementById('input-img').value = 'https://media.zbooni.com/merchants/media/products/109246/1735216982659_croppedImg.jpg';
             document.getElementById('img-preview').src = 'https://media.zbooni.com/merchants/media/products/109246/1735216982659_croppedImg.jpg';
 
@@ -2269,6 +2489,14 @@
             document.getElementById('input-frame').value = p.frame || '';
             document.getElementById('input-meta-desc').value = p.metaDescription || p.meta_desc || '';
             updateMetaCounter(p.metaDescription || p.meta_desc || '');
+            const stockInput = document.getElementById('input-stock');
+            if (stockInput) stockInput.value = (p.stock !== undefined && p.stock !== null) ? p.stock : 5;
+            const badgeInput = document.getElementById('input-badge');
+            if (badgeInput) badgeInput.value = p.badge || '';
+            const imagesInput = document.getElementById('input-images');
+            if (imagesInput) {
+                imagesInput.value = Array.isArray(p.images) ? p.images.slice(1).join('\n') : '';
+            }
             document.getElementById('input-img').value = p.image;
             document.getElementById('img-preview').src = p.image;
 
@@ -2359,6 +2587,15 @@
             const metaDescription = document.getElementById('input-meta-desc').value.trim();
             const image = document.getElementById('input-img').value;
 
+            const stockVal = parseInt(document.getElementById('input-stock').value, 10);
+            const stock = isNaN(stockVal) ? 5 : Math.max(0, stockVal);
+            const badgeInput = document.getElementById('input-badge');
+            const badge = badgeInput ? badgeInput.value.trim() : '';
+            const imagesInput = document.getElementById('input-images');
+            const imagesRaw = imagesInput ? imagesInput.value.trim() : '';
+            const extraImages = imagesRaw ? imagesRaw.split(/[\n,]+/).map(s => s.trim()).filter(s => s.startsWith('http://') || s.startsWith('https://')) : [];
+            const images = [image, ...extraImages].filter(Boolean).filter((v, i, a) => a.indexOf(v) === i);
+
             // Clone current products array
             let updatedProducts = [...products];
 
@@ -2368,7 +2605,8 @@
                 if (index !== -1) {
                     updatedProducts[index] = {
                         ...updatedProducts[index],
-                        name, price, category, size, gears, frame, metaDescription, image
+                        name, price, category, size, gears, frame, metaDescription, image,
+                        stock, badge, images
                     };
                 }
             } else {
@@ -2377,6 +2615,7 @@
                 updatedProducts.unshift({
                     id: newId,
                     name, price, category, size, gears, frame, metaDescription, image,
+                    stock, badge, images,
                     active: true
                 });
             }
@@ -2727,23 +2966,26 @@
             const btnPay = document.getElementById('main-tab-payments');
             const btnPix = document.getElementById('main-tab-pixels');
             const btnVid = document.getElementById('main-tab-video');
+            const btnDisc = document.getElementById('main-tab-discounts');
+            const btnAban = document.getElementById('main-tab-abandoned');
+
             const viewProd = document.getElementById('view-products');
             const viewOrd = document.getElementById('view-orders');
             const viewPay = document.getElementById('view-payments');
             const viewPix = document.getElementById('view-pixels');
             const viewVid = document.getElementById('view-video');
+            const viewDisc = document.getElementById('view-discounts');
+            const viewAban = document.getElementById('view-abandoned');
 
             // Reset buttons to inactive style
-            [btnProd, btnOrd, btnPay, btnPix, btnVid].forEach(b => {
+            [btnProd, btnOrd, btnPay, btnPix, btnVid, btnDisc, btnAban].forEach(b => {
                 if (b) b.className = 'px-5 py-3 rounded-xl text-sm font-bold bg-white text-trek-black border border-trek-border hover:bg-trek-lightgray transition flex items-center gap-2';
             });
 
             // Hide all views
-            if (viewProd) viewProd.classList.add('hidden');
-            if (viewOrd) viewOrd.classList.add('hidden');
-            if (viewPay) viewPay.classList.add('hidden');
-            if (viewPix) viewPix.classList.add('hidden');
-            if (viewVid) viewVid.classList.add('hidden');
+            [viewProd, viewOrd, viewPay, viewPix, viewVid, viewDisc, viewAban].forEach(v => {
+                if (v) v.classList.add('hidden');
+            });
 
             if (tab === 'products') {
                 if (btnProd) btnProd.className = 'px-5 py-3 rounded-xl text-sm font-black bg-trek-black text-white transition flex items-center gap-2 shadow-sm';
@@ -2765,6 +3007,14 @@
                 if (btnVid) btnVid.className = 'px-5 py-3 rounded-xl text-sm font-black bg-purple-600 text-white transition flex items-center gap-2 shadow-sm';
                 if (viewVid) viewVid.classList.remove('hidden');
                 loadHeroVideoSettingsToUI();
+            } else if (tab === 'discounts') {
+                if (btnDisc) btnDisc.className = 'px-5 py-3 rounded-xl text-sm font-black bg-indigo-600 text-white transition flex items-center gap-2 shadow-sm';
+                if (viewDisc) viewDisc.classList.remove('hidden');
+                loadDiscounts();
+            } else if (tab === 'abandoned') {
+                if (btnAban) btnAban.className = 'px-5 py-3 rounded-xl text-sm font-black bg-amber-600 text-white transition flex items-center gap-2 shadow-sm';
+                if (viewAban) viewAban.classList.remove('hidden');
+                loadAbandonedCarts();
             }
         }
 
@@ -3267,6 +3517,44 @@
             if (badge) {
                 badge.innerText = orders.length;
             }
+            updateAdminDashboardStats(orders);
+        }
+
+        function updateAdminDashboardStats(orders) {
+            if (!orders) orders = getStoredOrders();
+
+            // 1. Total bikes & total stock units
+            const totalModelsEl = document.getElementById('stat-total');
+            if (totalModelsEl) totalModelsEl.innerText = products.length;
+            const totalUnitsEl = document.getElementById('stat-total-units');
+            if (totalUnitsEl) {
+                const totalUnits = products.reduce((acc, p) => acc + (Number(p.stock) || 0), 0);
+                totalUnitsEl.innerText = `${totalUnits} عجلة متوفرة بالمخزن`;
+            }
+
+            // 2. Today's orders & revenue
+            const todayISO = new Date().toISOString().split('T')[0];
+            const todayLocale = new Date().toLocaleDateString('ar-EG');
+            const todayOrders = orders.filter(o => {
+                if (!o.date) return false;
+                return o.date.includes(todayISO) || o.date.includes(todayLocale) || o.date === 'اليوم';
+            });
+            const todayRevenue = todayOrders.reduce((sum, o) => sum + (Number(o.total || o.subtotal) || 0), 0);
+
+            const revEl = document.getElementById('stat-today-revenue');
+            if (revEl) revEl.innerText = `${todayRevenue.toLocaleString('en-US')} ج.م`;
+            const ordTodayEl = document.getElementById('stat-today-orders');
+            if (ordTodayEl) ordTodayEl.innerText = `${todayOrders.length} طلبات مسجلة اليوم`;
+
+            // 3. Pending orders
+            const pendingOrders = orders.filter(o => {
+                const s = (o.status || '').toLowerCase();
+                return s.includes('جديد') || s.includes('قيد') || s.includes('جاري') || s === 'pending' || s === 'processing';
+            });
+            const pendingEl = document.getElementById('stat-pending-orders');
+            if (pendingEl) pendingEl.innerText = `${pendingOrders.length} طلب`;
+            const totalOrdEl = document.getElementById('stat-total-orders');
+            if (totalOrdEl) totalOrdEl.innerText = `إجمالي الطلبات: ${orders.length}`;
         }
 
         let currentOrderFilter = 'all';
@@ -4227,11 +4515,416 @@
             }
         }
 
+        // --- DISCOUNT CODES MANAGEMENT LOGIC ---
+        let currentDiscounts = {};
+
+        async function loadDiscounts(showNotice = false) {
+            const tbody = document.getElementById('discounts-table-body');
+            if (tbody && !showNotice) {
+                tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-trek-gray font-semibold">جاري تحميل أكواد الخصم...</td></tr>`;
+            }
+
+            try {
+                const res = await fetch('/api/discounts', {
+                    headers: getAdminAuthHeaders()
+                });
+
+                if (res.status === 401) {
+                    handleAdminLogout();
+                    return;
+                }
+
+                if (res.ok) {
+                    currentDiscounts = await res.json();
+                    renderDiscountsTable();
+                    const badge = document.getElementById('tab-discounts-badge');
+                    if (badge) {
+                        const activeCount = Object.values(currentDiscounts).filter(c => c && c.active).length;
+                        badge.innerText = `${activeCount} مفعل`;
+                    }
+                    if (showNotice) alert('✓ تم تحديث أكواد الخصم بنجاح من السيرفر!');
+                } else {
+                    if (tbody) tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-red-600 font-bold">تعذر تحميل أكواد الخصم من السيرفر.</td></tr>`;
+                }
+            } catch (err) {
+                console.error('[Load Discounts Error]', err);
+                if (tbody) tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-red-600 font-bold">خطأ في الاتصال بالسيرفر.</td></tr>`;
+            }
+        }
+
+        function renderDiscountsTable() {
+            const tbody = document.getElementById('discounts-table-body');
+            if (!tbody) return;
+
+            const codes = Object.values(currentDiscounts);
+            if (codes.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center py-8 text-trek-gray font-semibold">
+                            لا توجد أكواد خصم مسجلة حالياً. اضغط "➕ كود خصم جديد" لإضافة كود.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = codes.map(item => {
+                const codeSafe = escapeHtml(item.code);
+                const descSafe = escapeHtml(item.description || 'كود خصم متجر أبو الجوخ');
+                let typeLabel = '';
+                if (item.percent > 0 && item.freeShipping) {
+                    typeLabel = `خصم ${item.percent}% + شحن مجاني`;
+                } else if (item.percent > 0) {
+                    typeLabel = `خصم ${item.percent}%`;
+                } else if (item.freeShipping) {
+                    typeLabel = `شحن مجاني لكافة المحافظات`;
+                } else {
+                    typeLabel = `غير محدد`;
+                }
+
+                const minOrder = item.minSubtotal ? `${Number(item.minSubtotal).toLocaleString('en-US')} ج.م` : 'بدون حد أدنى';
+
+                return `
+                    <tr class="hover:bg-gray-50/80 transition">
+                        <td class="py-3 px-4 font-black font-mono text-sm tracking-wider text-trek-black">
+                            <span class="bg-gray-100 px-2.5 py-1 rounded-lg border border-trek-border select-all">${codeSafe}</span>
+                        </td>
+                        <td class="py-3 px-4 font-bold text-indigo-700">
+                            ${typeLabel}
+                        </td>
+                        <td class="py-3 px-4 font-semibold text-trek-gray num-font">
+                            ${minOrder}
+                        </td>
+                        <td class="py-3 px-4 text-trek-gray">
+                            ${descSafe}
+                        </td>
+                        <td class="py-3 px-4 text-center">
+                            <button onclick="toggleDiscountStatus('${codeSafe}')" class="px-2.5 py-1 rounded-full text-[10px] font-black transition ${item.active ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-200 text-gray-600'}">
+                                ${item.active ? '● مفعل' : '○ معطل'}
+                            </button>
+                        </td>
+                        <td class="py-3 px-4 text-center">
+                            <div class="flex items-center justify-center gap-1.5">
+                                <button onclick="openDiscountModal('${codeSafe}')" class="p-1.5 rounded-lg bg-gray-100 hover:bg-trek-black hover:text-white transition" title="تعديل">
+                                    ✏️
+                                </button>
+                                <button onclick="deleteDiscountCode('${codeSafe}')" class="p-1.5 rounded-lg bg-red-50 hover:bg-red-600 hover:text-white text-red-600 transition" title="حذف">
+                                    🗑️
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function openDiscountModal(code = null) {
+            const isEdit = Boolean(code && currentDiscounts[code]);
+            document.getElementById('discount-is-edit').value = isEdit ? 'true' : 'false';
+            document.getElementById('discount-modal-heading').innerText = isEdit ? `تعديل كود الخصم: ${code}` : 'إنشاء كود خصم جديد';
+
+            const codeInput = document.getElementById('input-disc-code');
+            const percentInput = document.getElementById('input-disc-percent');
+            const minInput = document.getElementById('input-disc-min');
+            const freeshipInput = document.getElementById('input-disc-freeship');
+            const descInput = document.getElementById('input-disc-desc');
+            const activeInput = document.getElementById('input-disc-active');
+
+            if (isEdit) {
+                const item = currentDiscounts[code];
+                codeInput.value = item.code;
+                codeInput.readOnly = true;
+                codeInput.classList.add('bg-gray-200', 'cursor-not-allowed');
+                percentInput.value = item.percent || 0;
+                minInput.value = item.minSubtotal || 0;
+                freeshipInput.checked = Boolean(item.freeShipping);
+                descInput.value = item.description || '';
+                activeInput.checked = item.active !== false;
+            } else {
+                codeInput.value = '';
+                codeInput.readOnly = false;
+                codeInput.classList.remove('bg-gray-200', 'cursor-not-allowed');
+                percentInput.value = '5';
+                minInput.value = '0';
+                freeshipInput.checked = false;
+                descInput.value = '';
+                activeInput.checked = true;
+            }
+
+            const m = document.getElementById('discount-modal');
+            if (m) {
+                m.classList.remove('hidden');
+                m.classList.add('flex');
+            }
+        }
+
+        function closeDiscountModal() {
+            const m = document.getElementById('discount-modal');
+            if (m) {
+                m.classList.add('hidden');
+                m.classList.remove('flex');
+            }
+        }
+
+        async function saveDiscountCode(e) {
+            e.preventDefault();
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn ? submitBtn.innerText : '';
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerText = '⏳ جاري الحفظ سحابياً...';
+            }
+
+            const code = document.getElementById('input-disc-code').value.trim().toUpperCase();
+            const percent = Number(document.getElementById('input-disc-percent').value) || 0;
+            const minSubtotal = Number(document.getElementById('input-disc-min').value) || 0;
+            const freeShipping = document.getElementById('input-disc-freeship').checked;
+            const description = document.getElementById('input-disc-desc').value.trim();
+            const active = document.getElementById('input-disc-active').checked;
+
+            try {
+                const res = await fetch('/api/discounts', {
+                    method: 'POST',
+                    headers: getAdminAuthHeaders(),
+                    body: JSON.stringify({ code, percent, minSubtotal, freeShipping, description, active })
+                });
+
+                const data = await res.json();
+                if (!res.ok) {
+                    alert('❌ فشل حفظ كود الخصم: ' + (data.error || 'خطأ غير متوقع'));
+                    return;
+                }
+
+                closeDiscountModal();
+                await loadDiscounts();
+                alert(`✓ تم حفظ كود الخصم "${code}" بنجاح في السحابة ومحرك الدفع!`);
+            } catch (err) {
+                console.error('[Save Discount Error]', err);
+                alert('❌ تعذر الاتصال بالسيرفر لحفظ كود الخصم.');
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = originalText;
+                }
+            }
+        }
+
+        async function toggleDiscountStatus(code) {
+            const item = currentDiscounts[code];
+            if (!item) return;
+
+            const updatedActive = !item.active;
+            try {
+                const res = await fetch('/api/discounts', {
+                    method: 'PUT',
+                    headers: getAdminAuthHeaders(),
+                    body: JSON.stringify({ ...item, active: updatedActive })
+                });
+
+                if (!res.ok) {
+                    const err = await res.json();
+                    alert('❌ فشل تحديث حالة الكود: ' + (err.error || 'غير مصرح'));
+                    return;
+                }
+
+                item.active = updatedActive;
+                renderDiscountsTable();
+                const badge = document.getElementById('tab-discounts-badge');
+                if (badge) {
+                    const activeCount = Object.values(currentDiscounts).filter(c => c && c.active).length;
+                    badge.innerText = `${activeCount} مفعل`;
+                }
+            } catch (err) {
+                console.error('[Toggle Discount Error]', err);
+                alert('❌ تعذر الاتصال بالسيرفر لتغيير حالة الكوبون.');
+            }
+        }
+
+        async function deleteDiscountCode(code) {
+            if (!confirm(`هل أنت متأكد من رغبتك في حذف كود الخصم "${code}" نهائياً من المتجر؟`)) return;
+
+            try {
+                const res = await fetch(`/api/discounts?code=${encodeURIComponent(code)}`, {
+                    method: 'DELETE',
+                    headers: getAdminAuthHeaders()
+                });
+
+                if (!res.ok) {
+                    const err = await res.json();
+                    alert('❌ فشل حذف كود الخصم: ' + (err.error || 'غير مصرح'));
+                    return;
+                }
+
+                delete currentDiscounts[code];
+                renderDiscountsTable();
+                const badge = document.getElementById('tab-discounts-badge');
+                if (badge) {
+                    const activeCount = Object.values(currentDiscounts).filter(c => c && c.active).length;
+                    badge.innerText = `${activeCount} مفعل`;
+                }
+                alert(`✓ تم حذف كود الخصم "${code}" بنجاح.`);
+            } catch (err) {
+                console.error('[Delete Discount Error]', err);
+                alert('❌ تعذر الاتصال بالسيرفر لحذف الكوبون.');
+            }
+        }
+
+        // --- ABANDONED CARTS MANAGEMENT LOGIC ---
+        let currentAbandonedCarts = [];
+
+        async function loadAbandonedCarts(showNotice = false) {
+            const tbody = document.getElementById('abandoned-table-body');
+            if (tbody && !showNotice) {
+                tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-trek-gray font-semibold">جاري فحص السلات المتروكة...</td></tr>`;
+            }
+
+            try {
+                const res = await fetch('/api/abandoned-cart', {
+                    headers: getAdminAuthHeaders()
+                });
+
+                if (res.status === 401) {
+                    handleAdminLogout();
+                    return;
+                }
+
+                if (res.ok) {
+                    currentAbandonedCarts = await res.json();
+                    if (!Array.isArray(currentAbandonedCarts)) currentAbandonedCarts = [];
+                    renderAbandonedCartsTable();
+                    updateAbandonedStats();
+                    if (showNotice) alert(`✓ تم العثور على ${currentAbandonedCarts.length} سلة متروكة!`);
+                } else {
+                    if (tbody) tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-red-600 font-bold">تعذر تحميل السلات المتروكة من السيرفر.</td></tr>`;
+                }
+            } catch (err) {
+                console.error('[Load Abandoned Carts Error]', err);
+                if (tbody) tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-red-600 font-bold">خطأ في الاتصال بالسيرفر.</td></tr>`;
+            }
+        }
+
+        function updateAbandonedStats() {
+            const count = currentAbandonedCarts.length;
+            const badge = document.getElementById('tab-abandoned-badge');
+            if (badge) badge.innerText = count;
+            const statCard = document.getElementById('stat-abandoned-count');
+            if (statCard) statCard.innerText = `${count} سلة`;
+        }
+
+        function formatTimeElapsed(isoDate) {
+            if (!isoDate) return 'غير محدد';
+            const diffMs = Date.now() - new Date(isoDate).getTime();
+            const diffMins = Math.floor(diffMs / 60000);
+            if (diffMins < 1) return 'الآن';
+            if (diffMins < 60) return `منذ ${diffMins} دقيقة`;
+            const diffHours = Math.floor(diffMins / 60);
+            if (diffHours < 24) return `منذ ${diffHours} ساعة`;
+            const diffDays = Math.floor(diffHours / 24);
+            return `منذ ${diffDays} يوم`;
+        }
+
+        function renderAbandonedCartsTable() {
+            const tbody = document.getElementById('abandoned-table-body');
+            if (!tbody) return;
+
+            if (currentAbandonedCarts.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center py-12 text-trek-gray font-semibold">
+                            <div class="text-3xl mb-2">🎉</div>
+                            <div class="font-bold text-sm text-trek-black">لا توجد سلات متروكة حالياً</div>
+                            <div class="text-[11px] mt-1">كافة العملاء الذين بدأوا الشراء أتموا طلباتهم بنجاح.</div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = currentAbandonedCarts.map(cart => {
+                const phoneSafe = escapeHtml(cart.phone);
+                const nameSafe = escapeHtml(cart.name || 'عميل محتمل');
+                const govSafe = escapeHtml(cart.gov || 'غير محدد');
+                const subtotal = Number(cart.subtotal || 0).toLocaleString('en-US');
+                const timeText = formatTimeElapsed(cart.updatedAt);
+
+                const items = Array.isArray(cart.items) ? cart.items : [];
+                const itemsNames = items.map(it => it.name).join(' + ') || 'دراجة هوائية';
+
+                const itemsPreview = items.slice(0, 3).map(it => `
+                    <div class="text-xs font-bold text-trek-black line-clamp-1">• ${escapeHtml(it.name)} (${Number(it.price || 0).toLocaleString('en-US')} ج.م)</div>
+                `).join('') + (items.length > 3 ? `<div class="text-[10px] text-trek-gray">+ ${items.length - 3} منتجات أخرى</div>` : '');
+
+                // Friendly WhatsApp recovery message
+                const waText = encodeURIComponent(
+                    `أهلاً بك يا فندم مع توكيل أبو الجوخ 1925 🚲%0A` +
+                    `لاحظنا إنك كنت بتختار دراجة (${itemsNames}) من المتجر وما كملتش خطوة الطلب.%0A` +
+                    `هل واجهتك أي مشكلة في الدفع أو تحب نساعدك في اختيار المقاس المناسب لحضرتك؟`
+                );
+
+                return `
+                    <tr class="hover:bg-gray-50/80 transition">
+                        <td class="py-3 px-4">
+                            <div class="font-bold text-trek-black text-xs">${nameSafe}</div>
+                            <div class="text-[11px] text-trek-gray num-font select-all font-mono mt-0.5">📞 ${phoneSafe}</div>
+                        </td>
+                        <td class="py-3 px-4 font-semibold text-trek-gray text-xs">
+                            ${govSafe}
+                        </td>
+                        <td class="py-3 px-4 max-w-xs">
+                            ${itemsPreview}
+                        </td>
+                        <td class="py-3 px-4 font-black text-trek-black num-font text-sm">
+                            ${subtotal} ج.م
+                        </td>
+                        <td class="py-3 px-4 text-trek-gray text-[11px]">
+                            ${timeText}
+                        </td>
+                        <td class="py-3 px-4 text-center">
+                            <div class="flex items-center justify-center gap-2">
+                                <a href="https://wa.me/2${phoneSafe}?text=${waText}" target="_blank" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition flex items-center gap-1.5 shadow-sm" title="متابعة واسترجاع عبر واتساب">
+                                    <span>💬 تواصل واتساب</span>
+                                </a>
+                                <button onclick="deleteAbandonedCart('${phoneSafe}')" class="p-1.5 rounded-lg bg-red-50 hover:bg-red-600 hover:text-white text-red-600 transition" title="أرشفة / حذف">
+                                    🗑️
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        async function deleteAbandonedCart(phone) {
+            if (!confirm(`هل أنت متأكد من حذف أو أرشفة سلة الهاتف "${phone}"؟`)) return;
+
+            try {
+                const res = await fetch(`/api/abandoned-cart?phone=${encodeURIComponent(phone)}`, {
+                    method: 'DELETE',
+                    headers: getAdminAuthHeaders()
+                });
+
+                if (!res.ok) {
+                    const err = await res.json();
+                    alert('❌ فشل حذف السلة: ' + (err.error || 'غير مصرح'));
+                    return;
+                }
+
+                currentAbandonedCarts = currentAbandonedCarts.filter(c => c.phone !== phone);
+                renderAbandonedCartsTable();
+                updateAbandonedStats();
+            } catch (err) {
+                console.error('[Delete Abandoned Error]', err);
+                alert('❌ تعذر الاتصال بالسيرفر لحذف السلة.');
+            }
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             checkAdminAuth();
             fetchCloudPaymentSettings();
             fetchCloudPixelsSettings();
             fetchCloudHeroVideoSettings();
+            loadDiscounts();
+            loadAbandonedCarts();
             updateCloudStatusUI();
 
             // Check URL parameter or hash for direct tab navigation
@@ -4245,6 +4938,10 @@
                 switchMainTab('pixels');
             } else if (tabParam === 'video') {
                 switchMainTab('video');
+            } else if (tabParam === 'discounts' || tabParam === 'discount') {
+                switchMainTab('discounts');
+            } else if (tabParam === 'abandoned') {
+                switchMainTab('abandoned');
             }
         });
     </script>

@@ -94,8 +94,8 @@ export async function verifyOrderPrice(items, claimedTotal, discountCode = '', s
         if (!p) return;
         const price = Number(p.price);
         if (price > 0) {
-            catalogMap.set(String(p.id), price);
-            if (p.sku) catalogMap.set(String(p.sku), price);
+            catalogMap.set(String(p.id), p);
+            if (p.sku) catalogMap.set(String(p.sku), p);
         }
     });
 
@@ -108,12 +108,14 @@ export async function verifyOrderPrice(items, claimedTotal, discountCode = '', s
         }
 
         const idKey = String(item.id || item.sku || '').trim();
-        const officialPrice = catalogMap.get(idKey);
+        const catalogProduct = catalogMap.get(idKey);
 
         // SECURITY FIX: Refuse any item not found in authoritative catalog
-        if (!officialPrice || officialPrice <= 0) {
+        if (!catalogProduct || Number(catalogProduct.price) <= 0) {
             throw new Error(`Unauthorized or unverified item ID in cart: "${idKey}". Price tampering rejected.`);
         }
+
+        const officialPrice = Number(catalogProduct.price);
 
         // SECURITY FIX: Enforce valid integer quantity between 1 and 50
         const qty = parseInt(item.quantity || item.qty || 1, 10);
@@ -121,12 +123,24 @@ export async function verifyOrderPrice(items, claimedTotal, discountCode = '', s
             throw new Error(`Invalid quantity for item "${idKey}": ${item.quantity}`);
         }
 
+        // STOCK VALIDATION (Fail-Closed):
+        const availableStock = (catalogProduct.stock !== undefined && catalogProduct.stock !== null)
+            ? Number(catalogProduct.stock)
+            : 10;
+
+        if (availableStock <= 0) {
+            throw new Error(`عذراً، المنتج "${catalogProduct.name}" غير متوفر حالياً في المخزن.`);
+        }
+        if (qty > availableStock) {
+            throw new Error(`الكمية المطلوبة من "${catalogProduct.name}" (${qty}) تتجاوز المخزون المتاح حالياً (${availableStock} قطع).`);
+        }
+
         const lineTotal = officialPrice * qty;
         verifiedSubtotal += lineTotal;
 
         verifiedItems.push({
             id: idKey,
-            name: String(item.name || 'دراجة هوائية').substring(0, 120),
+            name: String(item.name || catalogProduct.name || 'دراجة هوائية').substring(0, 120),
             price: officialPrice,
             quantity: qty,
             lineTotal
@@ -142,10 +156,48 @@ export async function verifyOrderPrice(items, claimedTotal, discountCode = '', s
     let verifiedDiscount = 0;
     if (discountCode) {
         const code = String(discountCode).trim().toUpperCase();
-        if (code === 'GOUKH1925') {
-            verifiedDiscount = Math.round(verifiedSubtotal * 0.05); // 5% discount
-        } else if (code === 'FREESHIP') {
-            verifiedShipping = 0;
+        let matched = false;
+
+        // Try reading dynamic discount codes from Firebase RTDB (Single Source of Truth)
+        try {
+            const fbRes = await fetch(getFirebaseUrl('/discount_codes'), {
+                headers: { 'Accept': 'application/json' },
+                signal: AbortSignal.timeout(3000)
+            });
+            if (fbRes.ok) {
+                const dynamicCodes = await fbRes.json();
+                if (dynamicCodes && typeof dynamicCodes === 'object' && dynamicCodes[code]) {
+                    const rule = dynamicCodes[code];
+                    if (rule.active !== false) {
+                        const isExpired = rule.expiresAt && (new Date(rule.expiresAt).getTime() < Date.now());
+                        if (!isExpired) {
+                            matched = true;
+                            if (rule.type === 'percentage') {
+                                const pct = Math.min(100, Math.max(0, Number(rule.value) || 0));
+                                verifiedDiscount = Math.round(verifiedSubtotal * (pct / 100));
+                            } else if (rule.type === 'fixed') {
+                                const amt = Math.max(0, Number(rule.value) || 0);
+                                verifiedDiscount = Math.min(verifiedSubtotal, amt);
+                            } else if (rule.type === 'freeship') {
+                                verifiedShipping = 0;
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (e) {
+            // Non-blocking fallback
+        }
+
+        // Fallback to built-in default codes
+        if (!matched) {
+            if (code === 'GOUKH1925') {
+                verifiedDiscount = Math.round(verifiedSubtotal * 0.05); // 5% discount
+            } else if (code === 'FREESHIP') {
+                verifiedShipping = 0;
+            } else {
+                console.warn(`[Discount Engine] Unrecognized or expired discount code "${code}" - no discount applied.`);
+            }
         }
     }
 

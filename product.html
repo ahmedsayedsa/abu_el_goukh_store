@@ -126,6 +126,9 @@
                     <a href="shop.html?cat=accessories#bikes-grid" class="hover:text-trek-red transition">إكسسوارات</a>
                     <a href="warranty.html" class="hover:text-trek-red transition">شهادة الضمان</a>
                     <a href="shipping.html" class="hover:text-trek-red transition">الشحن والمحافظات</a>
+                    <a href="track-order.html" class="hover:text-trek-red transition">تتبع طلبك</a>
+                    <a href="about.html" class="hover:text-trek-red transition">من نحن</a>
+                    <a href="returns-policy.html" class="hover:text-trek-red transition">سياسة الاسترجاع</a>
                 </nav>
 
                 <!-- Search & Actions -->
@@ -233,29 +236,9 @@
                         </div>
                     </div>
 
-                    <!-- Thumbnails & Angle Previews -->
-                    <div class="grid grid-cols-4 gap-3 sm:gap-4">
-                        <button onclick="setMainImageAngle(0)" class="thumb-btn border-2 border-trek-red rounded-2xl p-2 bg-white flex items-center justify-center h-20 transition hover:border-trek-black">
-                            <img id="thumb-img-0" src="" class="max-h-full object-contain">
-                        </button>
-                        <button onclick="setMainImageAngle(1)" class="thumb-btn border border-trek-border rounded-2xl p-2 bg-white flex items-center justify-center h-20 transition hover:border-trek-black">
-                            <div class="text-center">
-                                <span class="text-xl block">⚙️</span>
-                                <span class="text-[9px] font-bold text-trek-gray block mt-0.5">شيمانو أصلي</span>
-                            </div>
-                        </button>
-                        <button onclick="setMainImageAngle(2)" class="thumb-btn border border-trek-border rounded-2xl p-2 bg-white flex items-center justify-center h-20 transition hover:border-trek-black">
-                            <div class="text-center">
-                                <span class="text-xl block">🛑</span>
-                                <span class="text-[9px] font-bold text-trek-gray block mt-0.5">ديسك بريك</span>
-                            </div>
-                        </button>
-                        <button onclick="setMainImageAngle(3)" class="thumb-btn border border-trek-border rounded-2xl p-2 bg-white flex items-center justify-center h-20 transition hover:border-trek-black">
-                            <div class="text-center">
-                                <span class="text-xl block">🛡️</span>
-                                <span class="text-[9px] font-bold text-trek-gray block mt-0.5">كادر ألومنيوم</span>
-                            </div>
-                        </button>
+                    <!-- Thumbnails & Multi-Image Gallery Previews (Feature 2) -->
+                    <div id="product-thumbnails-container" class="grid grid-cols-4 gap-3 sm:gap-4">
+                        <!-- Populated dynamically based on product.images -->
                     </div>
 
                     <!-- Guarantees Banner Below Images -->
@@ -423,7 +406,7 @@
                                     <button onclick="changeQty(1)" class="w-8 h-8 flex items-center justify-center font-bold text-base hover:bg-trek-border">+</button>
                                 </div>
                             </div>
-                            <div class="text-[11px] font-bold text-emerald-700 flex items-center gap-1.5">
+                            <div id="product-stock-status" class="text-[11px] font-bold text-emerald-700 flex items-center gap-1.5">
                                 <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
                                 <span>متوفر بالمخزن وجاهز للشحن اليوم</span>
                             </div>
@@ -432,17 +415,17 @@
                     </div>
 
                     <!-- DIRECT CALL TO ACTIONS (BUY NOW & ADD TO CART) -->
-                    <div class="space-y-3 pt-2">
+                    <div id="product-actions-container" class="space-y-3 pt-2">
                         
                         <!-- ⚡ Primary Buy Now Direct -->
-                        <button onclick="buyNowCurrentProduct()" class="w-full py-4 px-6 rounded-2xl bg-trek-red hover:bg-red-700 text-white font-black text-base transition-all shadow-[0_10px_25px_-5px_rgba(204,0,0,0.4)] hover:shadow-red-600/50 hover:scale-[1.01] flex items-center justify-center gap-2.5">
+                        <button id="btn-buy-now" onclick="buyNowCurrentProduct()" class="w-full py-4 px-6 rounded-2xl bg-trek-red hover:bg-red-700 text-white font-black text-base transition-all shadow-[0_10px_25px_-5px_rgba(204,0,0,0.4)] hover:shadow-red-600/50 hover:scale-[1.01] flex items-center justify-center gap-2.5">
                             <span class="text-lg">⚡</span>
                             <span>شراء فوري الآن (الانتقال لشاشة الدفع)</span>
                         </button>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <!-- 🛒 Add to Cart Button -->
-                            <button onclick="addToCartCurrentProduct()" class="w-full py-3.5 px-4 rounded-xl bg-trek-black hover:bg-neutral-800 text-white font-black text-xs transition flex items-center justify-center gap-2">
+                            <button id="btn-add-to-cart" onclick="addToCartCurrentProduct()" class="w-full py-3.5 px-4 rounded-xl bg-trek-black hover:bg-neutral-800 text-white font-black text-xs transition flex items-center justify-center gap-2">
                                 <span class="text-base">🛒</span>
                                 <span>أضف إلى السلة</span>
                             </button>
@@ -482,7 +465,7 @@
                         🚚 الشحن والتوصيل وحق المعاينة
                     </button>
                     <button onclick="switchTab('reviews')" id="tab-btn-reviews" class="tab-btn pb-3 text-trek-gray hover:text-trek-black whitespace-nowrap transition">
-                        ⭐ آراء وتقييمات المشترين (184)
+                        ⭐ آراء وتقييمات المشترين (<span id="reviews-tab-count">184</span>)
                     </button>
                 </div>
 
@@ -644,7 +627,7 @@
                                         <span class="text-3xl font-black text-trek-black num-font">4.9</span>
                                         <div class="text-amber-400 text-lg">★★★★★</div>
                                     </div>
-                                    <p class="text-xs text-trek-gray mt-1">متوسط تقييم 184 عميل اشتروا هذه الدراجة من مختلف محافظات مصر</p>
+                                    <p class="text-xs text-trek-gray mt-1">متوسط تقييم <span id="reviews-summary-count">184</span> عميل اشتروا هذه الدراجة من مختلف محافظات مصر</p>
                                 </div>
                                 <a href="https://wa.me/201202925192?text=%D8%A3%D9%88%D8%AF%20%D9%85%D8%B4%D8%A7%D8%B1%D9%83%D8%A9%20%D8%AA%D9%82%D9%8A%D9%8A%D9%85%D9%8A%20%D9%84%D8%AF%D8%B1%D8%A7%D8%AC%D8%A9%20%D8%A3%D8%A8%D9%88%20%D8%A7%D9%84%D8%AC%D9%88%D8%AE" target="_blank" class="px-5 py-2.5 bg-trek-lightgray hover:bg-trek-border rounded-xl text-xs font-bold text-trek-black transition">
                                     ✍️ أضف تقييمك للدراجة
@@ -652,7 +635,7 @@
                             </div>
 
                             <!-- Reviews List -->
-                            <div class="space-y-4">
+                            <div id="reviews-cards-container" class="space-y-4">
                                 <div class="p-4 rounded-2xl bg-trek-lightgray/60 border border-trek-border space-y-2">
                                     <div class="flex items-center justify-between">
                                         <div class="flex items-center gap-2">
@@ -793,10 +776,12 @@
                     <h4 class="font-black text-sm text-white">روابط سريعة</h4>
                     <ul class="space-y-2 text-white/70 text-[11px]">
                         <li><a href="shop.html" class="hover:text-white transition">كتالوج الدراجات (67 موديل)</a></li>
+                        <li><a href="track-order.html" class="hover:text-white transition">📦 تتبع حالة طلبك</a></li>
+                        <li><a href="about.html" class="hover:text-white transition">🏛️ من نحن وتاريخ 1925</a></li>
+                        <li><a href="returns-policy.html" class="hover:text-white transition">🔄 سياسة الاسترجاع والاستبدال</a></li>
                         <li><a href="checkout.html" class="hover:text-white transition">سلة الشراء وإتمام الطلب</a></li>
                         <li><a href="warranty.html" class="hover:text-white transition">شهادة الضمان المعتمد</a></li>
                         <li><a href="shipping.html" class="hover:text-white transition">الشحن والتوصيل للمحافظات</a></li>
-                        
                     </ul>
                 </div>
 
@@ -901,9 +886,11 @@
                 <a href="shop.html?cat=fat#bikes-grid" class="block py-2 px-3 rounded-xl hover:bg-trek-lightgray transition">🛞 دبابات (Fat Bikes)</a>
                 <a href="shop.html?cat=accessories#bikes-grid" class="block py-2 px-3 rounded-xl hover:bg-trek-lightgray transition">🎒 إكسسوارات وقطع غيار</a>
                 <a href="checkout.html" class="block py-2 px-3 rounded-xl hover:bg-trek-lightgray transition">💳 إتمام الطلب وسلة الشراء</a>
+                <a href="track-order.html" class="block py-2 px-3 rounded-xl hover:bg-trek-lightgray transition">📦 تتبع حالة طلبك</a>
+                <a href="about.html" class="block py-2 px-3 rounded-xl hover:bg-trek-lightgray transition">🏛️ من نحن وتاريخ 1925</a>
+                <a href="returns-policy.html" class="block py-2 px-3 rounded-xl hover:bg-trek-lightgray transition">🔄 سياسة الاسترجاع والاستبدال</a>
                 <a href="warranty.html" class="block py-2 px-3 rounded-xl hover:bg-trek-lightgray transition">🛡️ شهادة الضمان المعتمد</a>
                 <a href="shipping.html" class="block py-2 px-3 rounded-xl hover:bg-trek-lightgray transition">🚚 الشحن للمحافظات</a>
-                
             </nav>
         </div>
 
@@ -1750,25 +1737,206 @@
             }
         }
 
-        // Quantity Selector
+        // HTML Sanitizer
+        function escapeHtml(str) {
+            if (str === null || str === undefined) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // Quantity Selector with Stock Validation
         function changeQty(delta) {
+            const maxStock = (currentProduct && currentProduct.stock !== undefined) ? Number(currentProduct.stock) : 99;
+            if (delta > 0 && selectedQty >= maxStock) {
+                alert('أقصى كمية متوفرة في المخزن هي ' + maxStock);
+                return;
+            }
             selectedQty = Math.max(1, selectedQty + delta);
             document.getElementById('product-qty').innerText = selectedQty;
         }
 
-        // Image angle switch
-        function setMainImageAngle(index) {
-            document.querySelectorAll('.thumb-btn').forEach((btn, i) => {
-                if (i === index) {
-                    btn.className = 'thumb-btn border-2 border-trek-red rounded-2xl p-2 bg-white flex items-center justify-center h-20 transition';
-                } else {
-                    btn.className = 'thumb-btn border border-trek-border rounded-2xl p-2 bg-white flex items-center justify-center h-20 transition hover:border-trek-black';
-                }
-            });
+        // Gallery Switcher
+        function setMainImage(src, btn) {
             const mainImg = document.getElementById('product-main-image');
-            if (index === 0 && currentProduct) {
-                mainImg.src = currentProduct.image;
+            if (mainImg) mainImg.src = src;
+            document.querySelectorAll('.thumbnail-btn').forEach(b => {
+                b.classList.remove('border-trek-red');
+                b.classList.add('border-trek-border');
+            });
+            if (btn) {
+                btn.classList.remove('border-trek-border');
+                btn.classList.add('border-trek-red');
             }
+        }
+
+        function renderGallery(product) {
+            const mainImgEl = document.getElementById('product-main-image');
+            if (mainImgEl) {
+                mainImgEl.src = product.image;
+                mainImgEl.onerror = function() {
+                    if (!this.dataset.triedBackup) {
+                        this.dataset.triedBackup = 1;
+                        this.src = 'images/bike_' + product.id + '.jpg';
+                    }
+                };
+            }
+            const container = document.getElementById('product-thumbnails-container');
+            if (!container) return;
+            const images = (product.images && Array.isArray(product.images) && product.images.length > 0)
+                ? product.images
+                : [product.image];
+            container.innerHTML = images.map((img, idx) => `
+                <button type="button" onclick="setMainImage('${img}', this)" class="thumbnail-btn rounded-2xl p-2 bg-white border-2 ${idx === 0 ? 'border-trek-red' : 'border-trek-border'} hover:border-trek-black transition aspect-square flex items-center justify-center overflow-hidden">
+                    <img src="${img}" alt="${escapeHtml(product.name)} - صورة ${idx + 1}" class="max-h-full max-w-full object-contain" loading="lazy" onerror="if(!this.dataset.triedBackup){this.dataset.triedBackup=1; this.src='images/bike_${product.id}.jpg';}">
+                </button>
+            `).join('');
+        }
+
+        function updateStockUI(product) {
+            const stockStatusEl = document.getElementById('product-stock-status');
+            const buyNowBtn = document.getElementById('btn-buy-now');
+            const addToCartBtn = document.getElementById('btn-add-to-cart');
+            const mobileBuyNowBtn = document.querySelector('div.md\\:hidden button[onclick="buyNowCurrentProduct()"]');
+            const mobileCartBtn = document.querySelector('div.md\\:hidden button[onclick="addToCartCurrentProduct()"]');
+
+            const stock = Number(product.stock !== undefined ? product.stock : 10);
+
+            if (stock <= 0) {
+                if (stockStatusEl) {
+                    stockStatusEl.className = "text-[11px] font-bold text-red-600 flex items-center gap-1.5";
+                    stockStatusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-red-500"></span><span>نفذت الكمية حالياً - غير متوفر بالمخزن</span>';
+                }
+                if (buyNowBtn) {
+                    buyNowBtn.disabled = true;
+                    buyNowBtn.className = "w-full py-4 px-6 rounded-2xl bg-gray-300 text-gray-500 font-black text-base cursor-not-allowed flex items-center justify-center gap-2.5";
+                    buyNowBtn.innerHTML = '<span>🚫 غير متوفر حالياً</span>';
+                }
+                if (addToCartBtn) {
+                    addToCartBtn.disabled = true;
+                    addToCartBtn.className = "w-full py-3.5 px-4 rounded-xl bg-gray-200 text-gray-400 font-black text-xs cursor-not-allowed flex items-center justify-center gap-2";
+                    addToCartBtn.innerHTML = '<span>غير متوفر</span>';
+                }
+                if (mobileBuyNowBtn) {
+                    mobileBuyNowBtn.disabled = true;
+                    mobileBuyNowBtn.className = "py-2.5 px-4 bg-gray-300 text-gray-500 font-black text-xs rounded-xl cursor-not-allowed";
+                    mobileBuyNowBtn.innerText = "غير متوفر";
+                }
+                if (mobileCartBtn) {
+                    mobileCartBtn.disabled = true;
+                    mobileCartBtn.className = "p-2.5 bg-gray-200 text-gray-400 rounded-xl text-xs font-bold cursor-not-allowed";
+                }
+            } else if (stock <= 3) {
+                if (stockStatusEl) {
+                    stockStatusEl.className = "text-[11px] font-bold text-amber-700 flex items-center gap-1.5";
+                    stockStatusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-500 animate-ping"></span><span>باقي <strong class="num-font text-xs">${stock}</strong> قطع فقط في المخزن - اطلب قبل نفاذ الكمية!</span>`;
+                }
+            } else {
+                if (stockStatusEl) {
+                    stockStatusEl.className = "text-[11px] font-bold text-emerald-700 flex items-center gap-1.5";
+                    stockStatusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span><span>متوفر بالمخزن وجاهز للشحن اليوم</span>';
+                }
+            }
+        }
+
+        function renderReviews(product) {
+            const countEl = document.getElementById('reviews-tab-count');
+            const summaryCountEl = document.getElementById('reviews-summary-count');
+            const container = document.getElementById('reviews-cards-container');
+            if (!container) return;
+
+            const reviews = (product.reviews && Array.isArray(product.reviews) && product.reviews.length > 0)
+                ? product.reviews
+                : [
+                    {
+                        "author": "م. عمرو عبد الفتاح",
+                        "city": "التجمع الخامس، القاهرة",
+                        "rating": 5,
+                        "text": "ما شاء الله العجلة خفيفة جداً وسرعات شيمانو بتنقل بنعومة فائقة. استلمتها مجمعة ومضبوطة بالملي والمندوب انتظرني لحد ما جربتها بنفسي في الشارع. شكراً أبو الجوخ على الاحترام والأمانة.",
+                        "verified": true,
+                        "date": "2026-03-15"
+                    },
+                    {
+                        "author": "طارق حسن",
+                        "city": "سموحة، الإسكندرية",
+                        "rating": 5,
+                        "text": "قسطت العجلة مع فاليو على 12 شهر والموضوع خلص في دقيقتين على الموقع. المساعدين الهيدروليك بيمتصوا أي حفر في طريق الكورنيش، والفرامل الديسك استجابتها ممتازة.",
+                        "verified": true,
+                        "date": "2026-02-28"
+                    },
+                    {
+                        "author": "كريم صلاح",
+                        "city": "المنصورة، الدقهلية",
+                        "rating": 5,
+                        "text": "التوصيل للمنصورة أخد أقل من 48 ساعة والتغليف كان ممتاز كرتونة مصفحة سميكة. العجلة شكلها على الحقيقة أفخم بكتير من الصور وشغل التوكيل الأصلي باين فيها.",
+                        "verified": true,
+                        "date": "2026-01-20"
+                    }
+                ];
+
+            if (countEl) countEl.innerText = reviews.length;
+            if (summaryCountEl) summaryCountEl.innerText = reviews.length;
+
+            container.innerHTML = reviews.map(rev => {
+                const stars = '★'.repeat(Math.min(5, Math.max(1, rev.rating || 5)));
+                const initials = rev.author ? rev.author.split(' ').map(w => w[0]).slice(0, 2).join('.') : 'عميل';
+                return `
+                    <div class="p-4 rounded-2xl bg-trek-lightgray/60 border border-trek-border space-y-2">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="w-8 h-8 rounded-full bg-trek-black text-white font-bold text-xs flex items-center justify-center">${escapeHtml(initials)}</span>
+                                <div>
+                                    <h5 class="text-xs font-black text-trek-black">${escapeHtml(rev.author)}</h5>
+                                    <span class="text-[10px] text-trek-gray">${escapeHtml(rev.city || 'مصر')} • ${rev.verified ? 'مشترٍ موثق' : 'تقييم معتمد'}</span>
+                                </div>
+                            </div>
+                            <div class="text-amber-400 text-xs">${stars}</div>
+                        </div>
+                        <p class="text-xs text-trek-gray leading-relaxed">
+                            "${escapeHtml(rev.text)}"
+                        </p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function injectProductJsonLd(product) {
+            const existing = document.getElementById('product-jsonld');
+            if (existing) existing.remove();
+
+            const price = Number(product.price) || 0;
+            const stock = Number(product.stock !== undefined ? product.stock : 10);
+            const images = (product.images && product.images.length > 0) ? product.images : [product.image];
+
+            const jsonLd = {
+                "@context": "https://schema.org/",
+                "@type": "Product",
+                "name": product.name,
+                "image": images,
+                "description": product.specs || product.name,
+                "sku": product.sku || ('ABU-' + product.id),
+                "brand": {
+                    "@type": "Brand",
+                    "name": "أبو الجوخ 1925"
+                },
+                "offers": {
+                    "@type": "Offer",
+                    "url": window.location.href,
+                    "priceCurrency": "EGP",
+                    "price": price,
+                    "availability": stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+                    "itemCondition": "https://schema.org/NewCondition"
+                }
+            };
+
+            const script = document.createElement('script');
+            script.type = 'application/ld+json';
+            script.id = 'product-jsonld';
+            script.textContent = JSON.stringify(jsonLd);
+            document.head.appendChild(script);
         }
 
         // Tab Switching
@@ -1855,6 +2023,15 @@
 
         function addToCartCurrentProduct() {
             if (!currentProduct) return;
+            const stock = Number(currentProduct.stock !== undefined ? currentProduct.stock : 10);
+            if (stock <= 0) {
+                alert('عذراً، هذا المنتج غير متوفر بالمخزن حالياً.');
+                return;
+            }
+            if (selectedQty > stock) {
+                alert('عذراً، الكمية المطلوبة غير متوفرة. أقصى كمية متاحة: ' + stock);
+                return;
+            }
             for (let i = 0; i < selectedQty; i++) {
                 cart.push({
                     id: currentProduct.id,
@@ -1882,6 +2059,11 @@
 
         function buyNowCurrentProduct() {
             if (!currentProduct) return;
+            const stock = Number(currentProduct.stock !== undefined ? currentProduct.stock : 10);
+            if (stock <= 0) {
+                alert('عذراً، هذا المنتج غير متوفر بالمخزن حالياً.');
+                return;
+            }
             cart.push({
                 id: currentProduct.id,
                 name: currentProduct.name,
@@ -2003,13 +2185,17 @@
             document.getElementById('product-title').innerText = currentProduct.name;
             document.getElementById('product-specs-summary').innerText = currentProduct.specs || 'شاسيه ألومنيوم طيران خفيف • سرعات شيمانو ياباني • فرامل ديسك أصلية';
             
-            // Image
-            const mainImgEl = document.getElementById('product-main-image');
-            mainImgEl.src = currentProduct.image;
-            mainImgEl.onerror = function(){ if(!this.dataset.triedBackup){ this.dataset.triedBackup=1; this.src='images/bike_'+currentProduct.id+'.jpg'; } };
-            const thumbImg0 = document.getElementById('thumb-img-0');
-            thumbImg0.src = currentProduct.image;
-            thumbImg0.onerror = function(){ if(!this.dataset.triedBackup){ this.dataset.triedBackup=1; this.src='images/bike_'+currentProduct.id+'.jpg'; } };
+            // Gallery & Multi-image
+            renderGallery(currentProduct);
+
+            // Stock UI Status & Buttons
+            updateStockUI(currentProduct);
+
+            // Customer Reviews
+            renderReviews(currentProduct);
+
+            // SEO JSON-LD
+            injectProductJsonLd(currentProduct);
 
             // Pricing
             const price = Number(currentProduct.price) || 0;
@@ -2090,6 +2276,13 @@
             </a>
         </div>
     </div>
+
+    <!-- FLOATING WHATSAPP BUTTON (Non-overlapping with mobile sticky bar) -->
+    <a href="https://wa.me/201202925192" target="_blank" rel="noopener noreferrer" 
+       class="fixed bottom-20 md:bottom-6 left-6 z-50 bg-[#25D366] hover:bg-[#20bd5a] text-white p-3.5 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 group" 
+       aria-label="تواصل معنا عبر واتساب">
+        <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.109.005.253-.042.395.299.144.347.491 1.199.534 1.286.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.174.086.275.072.376-.043.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.824z"/></svg>
+    </a>
 
 </body>
 </html>

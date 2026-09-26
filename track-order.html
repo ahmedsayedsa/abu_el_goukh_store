@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تتبع طلبك | أبو الجوخ 1925 - أصل العجل في مصر</title>
+    <meta name="description" content="تتبع حالة شحنتك وطلبك من متجر أبو الجوخ 1925 برقم الطلب ورقم الموبايل. اعرف موعد التجهيز والشحن والتوصيل لحظة بلحظة.">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚲</text></svg>">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        trek: {
+                            black: '#111111',
+                            red: '#CC0000',
+                            charcoal: '#1A1A1A',
+                            gray: '#555555',
+                            lightgray: '#F5F5F7',
+                            border: '#E5E5E7'
+                        }
+                    },
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        outfit: ['Outfit', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Cairo', sans-serif; background-color: #FAFAFB; color: #111111; }
+        .num-font { font-family: 'Outfit', sans-serif; }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col text-right">
+
+    <!-- TOP ANNOUNCEMENT BAR -->
+    <div class="bg-black text-white text-[11px] sm:text-xs py-2 px-4 border-b border-white/10">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-1.5">
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-trek-red animate-pulse"></span>
+                <span>تتبع شحنتك لحظة بلحظة | فحص ومعاينة الدراجة عند الاستلام قبل الدفع</span>
+            </div>
+            <div class="flex items-center gap-4 text-white/80">
+                <a href="tel:01202925192" class="hover:text-white transition flex items-center gap-1">
+                    <span>📞 الدعم الفني:</span>
+                    <strong class="text-white num-font">01202925192</strong>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN NAVIGATION BAR -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-trek-border transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20 gap-4">
+                <div class="flex items-center gap-3">
+                    <a href="index.html" class="flex items-center gap-3 group">
+                        <img src="abu_el_goukh_logo.png" alt="أبو الجوخ" class="h-12 w-auto object-contain transition-transform group-hover:scale-105">
+                        <div class="flex flex-col">
+                            <span class="font-black text-xl tracking-tight text-trek-black leading-none">أبو الجوخ</span>
+                            <span class="text-[10px] font-bold text-trek-red tracking-widest mt-1 num-font">EST. 1925 • EGYPT</span>
+                        </div>
+                    </a>
+                </div>
+
+                <nav class="hidden lg:flex items-center gap-6 text-xs font-bold text-trek-black">
+                    <a href="index.html" class="hover:text-trek-red transition">الرئيسية</a>
+                    <a href="shop.html" class="hover:text-trek-red transition">كتالوج الدراجات</a>
+                    <a href="track-order.html" class="text-trek-red font-black flex items-center gap-1">
+                        <span>تتبع طلبك</span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-trek-red"></span>
+                    </a>
+                    <a href="warranty.html" class="hover:text-trek-red transition">شهادة الضمان</a>
+                    <a href="shipping.html" class="hover:text-trek-red transition">الشحن والمحافظات</a>
+                    <a href="about.html" class="hover:text-trek-red transition">من نحن</a>
+                    <a href="returns-policy.html" class="hover:text-trek-red transition">سياسة الاسترجاع</a>
+                </nav>
+
+                <div class="flex items-center gap-3">
+                    <a href="shop.html" class="hidden sm:inline-flex items-center gap-1.5 py-2 px-4 rounded-xl bg-trek-black text-white text-xs font-bold hover:bg-neutral-800 transition">
+                        <span>تصفح العجل 🚲</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- BREADCRUMB -->
+    <div class="bg-white border-b border-trek-border py-3">
+        <div class="max-w-4xl mx-auto px-4 text-xs text-trek-gray flex items-center gap-2">
+            <a href="index.html" class="hover:text-trek-black transition">الرئيسية</a>
+            <span>/</span>
+            <span class="font-bold text-trek-black">تتبع حالة الطلب</span>
+        </div>
+    </div>
+
+    <!-- MAIN TRACKING CONTAINER -->
+    <main class="flex-grow py-10 px-4 sm:px-6">
+        <div class="max-w-3xl mx-auto space-y-8">
+
+            <!-- Title & Hero -->
+            <div class="text-center space-y-2">
+                <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-red-50 text-trek-red text-xs font-black">
+                    <span>📦 متابعة الشحنات المباشرة</span>
+                </span>
+                <h1 class="text-2xl sm:text-4xl font-black text-trek-black">تتبع شحنة دراجتك</h1>
+                <p class="text-xs sm:text-sm text-trek-gray max-w-lg mx-auto leading-relaxed">
+                    أدخل رقم الطلب المسجل (يبدأ بـ <span class="num-font font-bold dir-ltr">AEG-</span>) ورقم الموبايل الذي قمت بالشراء به لمعرفة حالة طلبك لحظة بلحظة.
+                </p>
+            </div>
+
+            <!-- Tracking Lookup Form -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-trek-border shadow-sm">
+                <form id="track-form" onsubmit="handleTrackOrder(event)" class="space-y-5">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-black text-trek-black mb-1.5">رقم الطلب (Order ID) *</label>
+                            <input 
+                                type="text" 
+                                id="track-order-id" 
+                                required 
+                                placeholder="مثال: AEG-M28K9Q-F4A1C9" 
+                                class="w-full bg-trek-lightgray border border-trek-border focus:border-trek-black focus:bg-white text-xs font-mono rounded-xl p-3.5 outline-none transition uppercase"
+                            >
+                        </div>
+                        <div>
+                            <label class="block text-xs font-black text-trek-black mb-1.5">رقم الموبايل المسجل بالطلب *</label>
+                            <input 
+                                type="tel" 
+                                id="track-order-phone" 
+                                required 
+                                placeholder="مثال: 01004545545" 
+                                class="w-full bg-trek-lightgray border border-trek-border focus:border-trek-black focus:bg-white text-xs font-mono rounded-xl p-3.5 outline-none transition"
+                            >
+                        </div>
+                    </div>
+
+                    <button 
+                        type="submit" 
+                        id="track-btn" 
+                        class="w-full py-3.5 px-6 bg-trek-red hover:bg-red-700 text-white font-black text-sm rounded-xl transition shadow-md flex items-center justify-center gap-2"
+                    >
+                        <span>استعلام عن حالة الطلب 🔍</span>
+                    </button>
+                </form>
+
+                <!-- Error Alert Box (Anti-Enumeration) -->
+                <div id="track-error" class="hidden mt-5 p-4 rounded-2xl bg-red-50 border border-red-200 text-red-800 text-xs font-bold text-center leading-relaxed">
+                    ⚠️ بيانات الطلب غير متطابقة. يرجى التأكد من كتابة رقم الطلب ورقم الموبايل المسجل بشكل صحيح.
+                </div>
+            </div>
+
+            <!-- ORDER STATUS RESULT CARD (Hidden initially) -->
+            <div id="track-result" class="hidden space-y-6 animate-in fade-in duration-300">
+                
+                <!-- Status Banner & Stepper -->
+                <div class="bg-white rounded-3xl p-6 sm:p-8 border border-trek-border shadow-sm space-y-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-trek-border pb-5">
+                        <div>
+                            <span class="text-[11px] text-trek-gray font-bold block">رقم الطلب</span>
+                            <span id="res-order-id" class="text-xl font-black text-trek-black num-font">#AEG-1925</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span id="res-payment-badge" class="px-3 py-1 rounded-full text-xs font-black bg-blue-50 text-blue-700">الدفع عند الاستلام</span>
+                            <span id="res-status-badge" class="px-3.5 py-1 rounded-full text-xs font-black bg-emerald-50 text-emerald-700">قيد التجهيز</span>
+                        </div>
+                    </div>
+
+                    <!-- Visual Progress Timeline -->
+                    <div>
+                        <h3 class="text-xs font-black text-trek-black mb-4">مراحل تنفيذ الطلب:</h3>
+                        <div class="grid grid-cols-4 gap-2 sm:gap-4 text-center">
+                            <!-- Step 1 -->
+                            <div class="space-y-2">
+                                <div id="step-circle-1" class="w-9 h-9 sm:w-11 sm:h-11 mx-auto rounded-full bg-emerald-600 text-white flex items-center justify-center text-sm font-bold shadow">
+                                    ✓
+                                </div>
+                                <span class="text-[10px] sm:text-xs font-bold text-trek-black block">تم تأكيد الطلب</span>
+                                <span id="res-order-date" class="text-[9px] text-trek-gray block num-font">-</span>
+                            </div>
+
+                            <!-- Step 2 -->
+                            <div class="space-y-2">
+                                <div id="step-circle-2" class="w-9 h-9 sm:w-11 sm:h-11 mx-auto rounded-full bg-amber-500 text-white flex items-center justify-center text-sm font-bold shadow">
+                                    🔧
+                                </div>
+                                <span class="text-[10px] sm:text-xs font-bold text-trek-black block">التجميع والضبط</span>
+                                <span class="text-[9px] text-trek-gray block">فحص يدوي شامل</span>
+                            </div>
+
+                            <!-- Step 3 -->
+                            <div class="space-y-2">
+                                <div id="step-circle-3" class="w-9 h-9 sm:w-11 sm:h-11 mx-auto rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-bold">
+                                    🚚
+                                </div>
+                                <span class="text-[10px] sm:text-xs font-bold text-trek-black block">خرج للشحن</span>
+                                <span class="text-[9px] text-trek-gray block">مع شركة الشحن</span>
+                            </div>
+
+                            <!-- Step 4 -->
+                            <div class="space-y-2">
+                                <div id="step-circle-4" class="w-9 h-9 sm:w-11 sm:h-11 mx-auto rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-bold">
+                                    🏠
+                                </div>
+                                <span class="text-[10px] sm:text-xs font-bold text-trek-black block">تم التوصيل</span>
+                                <span class="text-[9px] text-trek-gray block">استلام ومعاينة</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Items Details Table -->
+                <div class="bg-white rounded-3xl p-6 sm:p-8 border border-trek-border shadow-sm space-y-4">
+                    <h3 class="text-sm font-black text-trek-black">المنتجات المطلوبة في هذه الشحنة:</h3>
+                    <div id="res-items-list" class="divide-y divide-trek-border">
+                        <!-- Populated dynamically -->
+                    </div>
+
+                    <!-- Order Financial Breakdown -->
+                    <div class="pt-4 border-t border-trek-border space-y-2 text-xs">
+                        <div class="flex justify-between text-trek-gray">
+                            <span>المجموع الفرعي للمنتجات:</span>
+                            <span id="res-subtotal" class="font-bold text-trek-black num-font">0 ج.م</span>
+                        </div>
+                        <div class="flex justify-between text-trek-gray">
+                            <span>الشحن والتوصيل للمحافظة:</span>
+                            <span id="res-shipping" class="font-bold text-trek-black num-font">0 ج.م</span>
+                        </div>
+                        <div id="res-discount-row" class="hidden flex justify-between text-emerald-700 font-bold">
+                            <span>الخصم المطبق:</span>
+                            <span id="res-discount" class="num-font">-0 ج.م</span>
+                        </div>
+                        <div class="flex justify-between text-base font-black text-trek-black pt-2 border-t border-trek-border">
+                            <span>الإجمالي النهائي المستحق:</span>
+                            <span id="res-grand-total" class="num-font text-trek-red">0 ج.م</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customer Support Assistance -->
+                <div class="bg-emerald-50 border border-emerald-200 rounded-3xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <span class="text-3xl">💬</span>
+                        <div>
+                            <h4 class="text-xs font-black text-emerald-950">هل تود تغيير العنوان أو الاستفسار عن الشحنة؟</h4>
+                            <p class="text-[11px] text-emerald-800 mt-0.5">فريق دعم عملاء أبو الجوخ متاح على واتساب طوال اليوم لمساعدتك.</p>
+                        </div>
+                    </div>
+                    <a id="res-wa-link" href="https://wa.me/201202925192" target="_blank" class="py-2.5 px-5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl shadow transition whitespace-nowrap">
+                        محادثة واتساب مباشرة ↗
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-trek-black text-white pt-12 pb-10 border-t border-white/10 mt-16 text-right">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-10 border-b border-white/10">
+                <div class="space-y-3 md:col-span-2">
+                    <div class="flex items-center gap-3">
+                        <img src="abu_el_goukh_logo.png" alt="أبو الجوخ" class="h-10 w-auto bg-white p-1 rounded-lg">
+                        <span class="font-black text-xl text-white">أبو الجوخ 1925</span>
+                    </div>
+                    <p class="text-xs text-white/60 max-w-sm leading-relaxed">
+                        الاسم الأعرق في عالم الدراجات بمصر منذ 100 عام. شاسيه أصلي، سرعات شيمانو، وفحص ومعاينة قبل الدفع.
+                    </p>
+                    <div class="text-[11px] text-white/70">
+                        📍 المعرض: ألف مسكن - شارع جسر السويس الرئيسي، القاهرة • هاتف: <span class="num-font text-white">01202925192</span>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-black uppercase text-trek-red num-font mb-3">روابط هامة</h4>
+                    <ul class="space-y-2 text-xs text-white/70">
+                        <li><a href="index.html" class="hover:text-white transition">الرئيسية</a></li>
+                        <li><a href="shop.html" class="hover:text-white transition">كتالوج الدراجات</a></li>
+                        <li><a href="track-order.html" class="text-white font-bold">تتبع طلبك</a></li>
+                        <li><a href="about.html" class="hover:text-white transition">قصة أبو الجوخ (من نحن)</a></li>
+                        <li><a href="returns-policy.html" class="hover:text-white transition">سياسة الاسترجاع والاستبدال</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-black uppercase text-trek-red num-font mb-3">الضمان وحماية المستهلك</h4>
+                    <ul class="space-y-2 text-xs text-white/70">
+                        <li><a href="warranty.html" class="hover:text-white transition">شهادة الضمان 5 سنوات</a></li>
+                        <li><a href="shipping.html" class="hover:text-white transition">الشحن لكافة المحافظات</a></li>
+                        <li><a href="returns-policy.html" class="hover:text-white transition">شروط استبدال البضائع</a></li>
+                    </ul>
+                    <div class="mt-4 pt-3 border-t border-white/10 text-[10px] text-white/40">
+                        سجل تجاري: 104523 • بطاقة ضريبية: 341-890-120
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-6 flex flex-col sm:flex-row justify-between items-center text-xs text-white/40 gap-3">
+                <div>جميع الحقوق محفوظة © 2026 شركة أبو الجوخ لتجارة الدراجات.</div>
+                <div class="flex gap-4">
+                    <a href="returns-policy.html" class="hover:text-white">سياسة الاسترجاع</a>
+                    <span>•</span>
+                    <a href="warranty.html" class="hover:text-white">الضمان</a>
+                    <span>•</span>
+                    <a href="about.html" class="hover:text-white">من نحن</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- FLOATING WHATSAPP BUTTON -->
+    <a 
+        href="https://wa.me/201202925192?text=مرحباً%20أبو%20الجوخ،%20أود%20الاستفسار%20عن%20حالة%20طلبي" 
+        target="_blank" 
+        class="fixed bottom-6 left-6 z-50 w-14 h-14 bg-[#25D366] hover:bg-[#20ba59] text-white rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-110 group" 
+        title="تواصل معنا عبر واتساب"
+        aria-label="WhatsApp"
+    >
+        <svg class="w-8 h-8 fill-current" viewBox="0 0 24 24">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+        </svg>
+    </a>
+
+    <!-- SCRIPT -->
+    <script>
+        // XSS sanitization helper
+        function escapeHtml(str) {
+            if (str === null || str === undefined) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        async function handleTrackOrder(e) {
+            e.preventDefault();
+            const orderIdInput = document.getElementById('track-order-id').value.trim();
+            const phoneInput = document.getElementById('track-order-phone').value.trim();
+
+            const errEl = document.getElementById('track-error');
+            const resEl = document.getElementById('track-result');
+            const btnEl = document.getElementById('track-btn');
+
+            errEl.classList.add('hidden');
+            resEl.classList.add('hidden');
+
+            if (!orderIdInput || !phoneInput) return;
+
+            btnEl.disabled = true;
+            btnEl.innerHTML = 'جاري البحث عن شحنتك... ⏳';
+
+            try {
+                const res = await fetch(`/api/orders?id=${encodeURIComponent(orderIdInput)}&phone=${encodeURIComponent(phoneInput)}`);
+                if (!res.ok) {
+                    throw new Error('بيانات غير متطابقة');
+                }
+                const data = await res.json();
+                if (!data || !data.order) {
+                    throw new Error('بيانات غير متطابقة');
+                }
+
+                renderOrderDetails(data.order);
+                resEl.classList.remove('hidden');
+                resEl.scrollIntoView({ behavior: 'smooth' });
+
+            } catch (err) {
+                errEl.classList.remove('hidden');
+            } finally {
+                btnEl.disabled = false;
+                btnEl.innerHTML = 'استعلام عن حالة الطلب 🔍';
+            }
+        }
+
+        function renderOrderDetails(order) {
+            document.getElementById('res-order-id').innerText = '#' + (order.id || '');
+            document.getElementById('res-order-date').innerText = order.date || '';
+
+            // Status Badge & Stepper
+            const statusText = order.status || 'جديد (قيد المراجعة)';
+            document.getElementById('res-status-badge').innerText = statusText;
+
+            // Payment badge
+            let paymentStr = order.payment || 'الدفع عند الاستلام';
+            if (paymentStr === 'paytabs') paymentStr = 'بطاقة بنكية (PayTabs)';
+            else if (paymentStr === 'paymob') paymentStr = 'باي موب (Paymob)';
+            else if (paymentStr === 'fawry') paymentStr = 'فوري باي (Fawry)';
+            else if (paymentStr === 'valu') paymentStr = 'تقسيط فوري (valU)';
+            else if (paymentStr === 'instapay') paymentStr = 'إنستاباي / كاش';
+            document.getElementById('res-payment-badge').innerText = paymentStr;
+
+            // Update Stepper circles
+            const c1 = document.getElementById('step-circle-1');
+            const c2 = document.getElementById('step-circle-2');
+            const c3 = document.getElementById('step-circle-3');
+            const c4 = document.getElementById('step-circle-4');
+
+            // Default
+            c1.className = 'w-9 h-9 sm:w-11 sm:h-11 mx-auto rounded-full bg-emerald-600 text-white flex items-center justify-center text-sm font-bold shadow';
+            c2.className = 'w-9 h-9 sm:w-11 sm:h-11 mx-auto rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-bold';
+            c3.className = 'w-9 h-9 sm:w-11 sm:h-11 mx-auto rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-bold';
+            c4.className = 'w-9 h-9 sm:w-11 sm:h-11 mx-auto rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-sm font-bold';
+
+            if (statusText.includes('تجهيز') || statusText.includes('مراجعة') || statusText.includes('مضبوطة')) {
+                c2.className = 'w-9 h-9 sm:w-11 sm:h-11 mx-auto rounded-full bg-amber-500 text-white flex items-center justify-center text-sm font-bold shadow';
+            } else if (statusText.includes('شحن') || statusText.includes('طريق')) {
+                c2.className = 'w-9 h-9 sm:w-11 sm:h-11 mx-auto rounded-full bg-emerald-600 text-white flex items-center justify-center text-sm font-bold shadow';
+                c3.className = 'w-9 h-9 sm:w-11 sm:h-11 mx-auto rounded-full bg-amber-500 text-white flex items-center justify-center text-sm font-bold shadow';
+            } else if (statusText.includes('تم التسليم') || statusText.includes('تم التوصيل') || statusText.includes('ناجح')) {
+                c2.className = 'w-9 h-9 sm:w-11 sm:h-11 mx-auto rounded-full bg-emerald-600 text-white flex items-center justify-center text-sm font-bold shadow';
+                c3.className = 'w-9 h-9 sm:w-11 sm:h-11 mx-auto rounded-full bg-emerald-600 text-white flex items-center justify-center text-sm font-bold shadow';
+                c4.className = 'w-9 h-9 sm:w-11 sm:h-11 mx-auto rounded-full bg-emerald-600 text-white flex items-center justify-center text-sm font-bold shadow';
+            }
+
+            // Render Items
+            const itemsList = document.getElementById('res-items-list');
+            const items = Array.isArray(order.items) ? order.items : [];
+            itemsList.innerHTML = items.map(item => {
+                const itemPrice = Number(item.price) || 0;
+                const qty = Number(item.quantity || item.qty || 1);
+                return `
+                    <div class="py-3 flex items-center justify-between gap-3 text-xs">
+                        <div class="space-y-0.5">
+                            <span class="font-bold text-trek-black block text-sm">${escapeHtml(item.name || 'دراجة هوائية')}</span>
+                            <span class="text-[11px] text-trek-gray block">الكمية: <strong class="num-font text-trek-black">${qty}</strong> | سعر الوحدة: <span class="num-font font-bold">${itemPrice.toLocaleString('en-US')} ج.م</span></span>
+                        </div>
+                        <div class="text-left font-black text-trek-black text-sm num-font">
+                            ${(itemPrice * qty).toLocaleString('en-US')} ج.م
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Financial Summary
+            const subtotal = Number(order.subtotal || items.reduce((s, i) => s + (Number(i.price || 0) * Number(i.quantity || 1)), 0));
+            const shipping = Number(order.shipping !== undefined ? order.shipping : 150);
+            const discount = Number(order.discount || 0);
+            const total = Number(order.total || (subtotal + shipping - discount));
+
+            document.getElementById('res-subtotal').innerText = subtotal.toLocaleString('en-US') + ' ج.م';
+            document.getElementById('res-shipping').innerText = shipping.toLocaleString('en-US') + ' ج.م';
+            if (discount > 0) {
+                document.getElementById('res-discount-row').classList.remove('hidden');
+                document.getElementById('res-discount').innerText = '-' + discount.toLocaleString('en-US') + ' ج.م';
+            } else {
+                document.getElementById('res-discount-row').classList.add('hidden');
+            }
+            document.getElementById('res-grand-total').innerText = total.toLocaleString('en-US') + ' ج.م';
+
+            // WhatsApp support link with pre-filled Order ID
+            const waMsg = encodeURIComponent(`مرحباً أبو الجوخ، أود الاستفسار عن طلبي رقم: #${order.id}`);
+            document.getElementById('res-wa-link').href = `https://wa.me/201202925192?text=${waMsg}`;
+        }
+
+        // Auto-fill from URL query param if present
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+            const phone = params.get('phone');
+            if (id) document.getElementById('track-order-id').value = id;
+            if (phone) document.getElementById('track-order-phone').value = phone;
+            if (id && phone) {
+                document.getElementById('track-form').dispatchEvent(new Event('submit'));
+            }
+        });
+    </script>
+</body>
+</html>

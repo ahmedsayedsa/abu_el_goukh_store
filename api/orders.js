@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { verifyOrderPrice } from './_verify-price.js';
+import { verifyOrderPrice, clearCatalogCache } from './_verify-price.js';
 import { verifyAdminToken } from './admin-auth.js';
 
 /**
@@ -17,6 +17,46 @@ function getFirebaseUrl(path = '') {
     const secret = (process.env.FIREBASE_AUTH_SECRET || '').trim();
     const query = secret ? `?auth=${encodeURIComponent(secret)}` : '';
     return `${base}${path}.json${query}`;
+}
+
+async function decrementCatalogStock(items) {
+    if (!Array.isArray(items) || items.length === 0) return;
+    const secret = (process.env.FIREBASE_AUTH_SECRET || '').trim();
+    if (!secret) return;
+
+    try {
+        const fbUrl = getFirebaseUrl('/products');
+        const res = await fetch(fbUrl, { headers: { 'Accept': 'application/json' }, signal: AbortSignal.timeout(4000) });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!data) return;
+
+        let updated = false;
+        const isArray = Array.isArray(data);
+        const productsList = isArray ? data : Object.values(data);
+
+        for (const orderedItem of items) {
+            const idKey = String(orderedItem.id || '');
+            const qty = Number(orderedItem.quantity || orderedItem.qty || 1);
+            const p = productsList.find(prod => prod && (String(prod.id) === idKey || String(prod.sku) === idKey));
+            if (p) {
+                const currentStock = (p.stock !== undefined && p.stock !== null) ? Number(p.stock) : 10;
+                p.stock = Math.max(0, currentStock - qty);
+                updated = true;
+            }
+        }
+
+        if (updated) {
+            await fetch(fbUrl, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            clearCatalogCache();
+        }
+    } catch (e) {
+        console.warn('[Orders API] Failed to decrement product stock in Firebase:', e.message);
+    }
 }
 
 /**
@@ -106,6 +146,9 @@ export default async function handler(req, res) {
                 return res.status(502).json({ error: 'فشل حفظ الطلب في قاعدة البيانات السحابية' });
             }
 
+            // Decrement stock in Firebase RTDB and clear cache
+            decrementCatalogStock(verifiedItems).catch(err => console.error('[Stock Error]', err));
+
             return res.status(201).json({
                 success: true,
                 orderId,
@@ -124,8 +167,9 @@ export default async function handler(req, res) {
     // ─────────────────────────────────────────────────────────────
     if (req.method === 'GET') {
         const queryId = req.query?.id ? String(req.query.id).trim() : '';
+        const queryPhone = req.query?.phone ? String(req.query.phone).trim() : '';
 
-        // If specific order ID requested by customer for confirmation page
+        // If specific order ID requested by customer for confirmation page or tracking
         if (queryId) {
             // Validate order ID pattern to prevent path traversal
             if (!/^AEG-[A-Za-z0-9_-]+$/.test(queryId)) {
@@ -135,25 +179,39 @@ export default async function handler(req, res) {
             try {
                 const fbRes = await fetch(getFirebaseUrl(`/orders/${queryId}`));
                 if (!fbRes.ok) {
-                    return res.status(404).json({ error: 'الطلب غير موجود' });
+                    return res.status(404).json({ error: 'بيانات الطلب غير متطابقة' });
                 }
                 const orderData = await fbRes.json();
                 if (!orderData) {
-                    return res.status(404).json({ error: 'الطلب غير موجود' });
+                    return res.status(404).json({ error: 'بيانات الطلب غير متطابقة' });
+                }
+
+                // If customer requested order tracking with phone verification (Anti-Enumeration / Anti-IDOR):
+                if (queryPhone) {
+                    const cleanQueryPhone = queryPhone.replace(/[\s\-_]/g, '').replace(/^\+?2/, '');
+                    const cleanOrderPhone = String(orderData.phone || '').replace(/[\s\-_]/g, '').replace(/^\+?2/, '');
+                    if (cleanQueryPhone !== cleanOrderPhone) {
+                        // Generic 404 error - does not disclose whether order ID exists
+                        return res.status(404).json({ error: 'بيانات الطلب غير متطابقة' });
+                    }
                 }
 
                 // SECURITY FIX: Sanitize output for public callers (Anti-IDOR / Anti-PII Leak)
-                // Do NOT expose phone number or street address to unauthenticated callers
+                // Do NOT expose customer name, phone number or street address to public callers
                 return res.status(200).json({
                     success: true,
                     order: {
                         id: orderData.id,
                         date: orderData.date,
+                        createdAt: orderData.createdAt || '',
                         status: orderData.status,
                         payment: orderData.payment,
                         paymentStatus: orderData.paymentStatus,
                         paidAt: orderData.paidAt || '',
                         paymentRef: orderData.paymentRef || '',
+                        subtotal: orderData.subtotal,
+                        shipping: orderData.shipping,
+                        discount: orderData.discount || 0,
                         total: orderData.total,
                         items: orderData.items || []
                     }

@@ -135,12 +135,19 @@ export default async function handler(req, res) {
             id: Number(p.id) || p.id,
             name: String(p.name || '').trim(),
             price: Number(p.price) || 0,
-            category: String(p.category || 'mountain').trim(),
+            category: String(p.category || 'دراجات هوائية').trim(),
+            cat_key: String(p.cat_key || '').trim(),
+            sku: String(p.sku || `ABU-${p.id}`).trim(),
+            badge: String(p.badge || 'ORIGINAL').trim(),
+            specs: String(p.specs || '').trim(),
+            stock: p.stock !== undefined ? Math.max(0, parseInt(p.stock, 10) || 0) : 10,
+            images: Array.isArray(p.images) ? p.images.map(img => String(img || '').trim()).filter(Boolean) : (p.image ? [String(p.image).trim()] : []),
+            reviews: Array.isArray(p.reviews) ? p.reviews : [],
             size: String(p.size || '').trim(),
             gears: String(p.gears || '').trim(),
             frame: String(p.frame || '').trim(),
             metaDescription: String(p.metaDescription || '').trim(),
-            image: String(p.image || '').trim(),
+            image: String(p.image || (Array.isArray(p.images) && p.images[0]) || '').trim(),
             active: p.active !== false
         }));
 

@@ -90,12 +90,12 @@ export async function verifyOrderPrice(items, claimedTotal, discountCode = '', s
     const catalog = await fetchAuthoritativeCatalog();
 
     const catalogMap = new Map();
-    catalog.forEach(p => {
+    catalog.forEach((p, idx) => {
         if (!p) return;
         const price = Number(p.price);
         if (price > 0) {
-            catalogMap.set(String(p.id), p);
-            if (p.sku) catalogMap.set(String(p.sku), p);
+            catalogMap.set(String(p.id), { product: p, index: idx });
+            if (p.sku) catalogMap.set(String(p.sku), { product: p, index: idx });
         }
     });
 
@@ -108,13 +108,15 @@ export async function verifyOrderPrice(items, claimedTotal, discountCode = '', s
         }
 
         const idKey = String(item.id || item.sku || '').trim();
-        const catalogProduct = catalogMap.get(idKey);
+        const catalogEntry = catalogMap.get(idKey);
 
         // SECURITY FIX: Refuse any item not found in authoritative catalog
-        if (!catalogProduct || Number(catalogProduct.price) <= 0) {
+        if (!catalogEntry || Number(catalogEntry.product.price) <= 0) {
             throw new Error(`Unauthorized or unverified item ID in cart: "${idKey}". Price tampering rejected.`);
         }
 
+        const catalogProduct = catalogEntry.product;
+        const catalogIndex = catalogEntry.index;
         const officialPrice = Number(catalogProduct.price);
 
         // SECURITY FIX: Enforce valid integer quantity between 1 and 50
@@ -143,7 +145,8 @@ export async function verifyOrderPrice(items, claimedTotal, discountCode = '', s
             name: String(item.name || catalogProduct.name || 'دراجة هوائية').substring(0, 120),
             price: officialPrice,
             quantity: qty,
-            lineTotal
+            lineTotal,
+            catalogIndex
         });
     }
 

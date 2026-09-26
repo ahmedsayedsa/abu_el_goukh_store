@@ -19,39 +19,125 @@ function getFirebaseUrl(path = '') {
     return `${base}${path}.json${query}`;
 }
 
+/**
+ * Atomic stock decrement to prevent race conditions during concurrent orders.
+ * Operates per-item via /products/{index}/stock.json with up to 3 retries and ETag concurrency control.
+ */
 async function decrementCatalogStock(items) {
     if (!Array.isArray(items) || items.length === 0) return;
     const secret = (process.env.FIREBASE_AUTH_SECRET || process.env.FIREBASE_DATABASE_SECRET || process.env.FIREBASE_SECRET || '').trim();
     if (!secret) return;
 
     try {
-        const fbUrl = getFirebaseUrl('/products');
-        const res = await fetch(fbUrl, { headers: { 'Accept': 'application/json' }, signal: AbortSignal.timeout(4000) });
-        if (!res.ok) return;
-        const data = await res.json();
-        if (!data) return;
+        // Fallback index mapping if catalogIndex is not already present on items
+        let indexMap = null;
+        const needsIndexLookup = items.some(it => it.catalogIndex === undefined || it.catalogIndex === null);
 
-        let updated = false;
-        const isArray = Array.isArray(data);
-        const productsList = isArray ? data : Object.values(data);
-
-        for (const orderedItem of items) {
-            const idKey = String(orderedItem.id || '');
-            const qty = Number(orderedItem.quantity || orderedItem.qty || 1);
-            const p = productsList.find(prod => prod && (String(prod.id) === idKey || String(prod.sku) === idKey));
-            if (p) {
-                const currentStock = (p.stock !== undefined && p.stock !== null) ? Number(p.stock) : 10;
-                p.stock = Math.max(0, currentStock - qty);
-                updated = true;
+        if (needsIndexLookup) {
+            try {
+                const catRes = await fetch(getFirebaseUrl('/products'), {
+                    headers: { 'Accept': 'application/json' },
+                    signal: AbortSignal.timeout(4000)
+                });
+                if (catRes.ok) {
+                    const catData = await catRes.json();
+                    indexMap = new Map();
+                    if (Array.isArray(catData)) {
+                        catData.forEach((p, idx) => {
+                            if (p) {
+                                if (p.id) indexMap.set(String(p.id), idx);
+                                if (p.sku) indexMap.set(String(p.sku), idx);
+                            }
+                        });
+                    } else if (catData && typeof catData === 'object') {
+                        Object.keys(catData).forEach(k => {
+                            const p = catData[k];
+                            if (p) {
+                                if (p.id) indexMap.set(String(p.id), k);
+                                if (p.sku) indexMap.set(String(p.sku), k);
+                            }
+                        });
+                    }
+                }
+            } catch (mapErr) {
+                console.warn('[Orders API] Index lookup error:', mapErr.message);
             }
         }
 
-        if (updated) {
-            await fetch(fbUrl, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
+        let anyUpdated = false;
+
+        // Process each item separately via its dedicated path /products/{index}/stock.json
+        for (const orderedItem of items) {
+            const idKey = String(orderedItem.id || orderedItem.sku || '');
+            const qty = Number(orderedItem.quantity || orderedItem.qty || 1);
+            if (qty <= 0) continue;
+
+            const targetIndex = (orderedItem.catalogIndex !== undefined && orderedItem.catalogIndex !== null)
+                ? orderedItem.catalogIndex
+                : indexMap?.get(idKey);
+
+            if (targetIndex === undefined || targetIndex === null) {
+                console.warn(`[Orders API] Could not determine catalog index for item "${idKey}". Skipping stock decrement.`);
+                continue;
+            }
+
+            const stockUrl = getFirebaseUrl(`/products/${targetIndex}/stock`);
+
+            // Execute optimistic concurrency with up to 3 retries per item
+            for (let attempt = 1; attempt <= 3; attempt++) {
+                try {
+                    // Step 1: Read current stock and ETag for this specific product
+                    const stockRes = await fetch(stockUrl, {
+                        headers: { 'Accept': 'application/json' },
+                        signal: AbortSignal.timeout(3000)
+                    });
+
+                    if (!stockRes.ok) {
+                        console.warn(`[Orders API] Attempt ${attempt}/3: Failed to read stock at index ${targetIndex} (HTTP ${stockRes.status})`);
+                        if (attempt < 3) await new Promise(r => setTimeout(r, 50 * attempt));
+                        continue;
+                    }
+
+                    const etag = stockRes.headers.get('etag');
+                    const currentStockRaw = await stockRes.json();
+                    const currentStock = (currentStockRaw !== null && currentStockRaw !== undefined)
+                        ? Number(currentStockRaw)
+                        : 10;
+
+                    const newStock = Math.max(0, currentStock - qty);
+
+                    // Step 2: Atomic conditional write via ETag (if-match)
+                    const putHeaders = { 'Content-Type': 'application/json' };
+                    if (etag) {
+                        putHeaders['if-match'] = etag;
+                    }
+
+                    const putRes = await fetch(stockUrl, {
+                        method: 'PUT',
+                        headers: putHeaders,
+                        body: JSON.stringify(newStock),
+                        signal: AbortSignal.timeout(3000)
+                    });
+
+                    if (putRes.ok) {
+                        anyUpdated = true;
+                        break; // Success! Exit retry loop for this product
+                    } else if (putRes.status === 412) {
+                        // Concurrency conflict (Race condition prevented by ETag mismatch)
+                        console.warn(`[Orders API] Concurrency race detected on product index ${targetIndex} (attempt ${attempt}/3). Retrying...`);
+                        if (attempt < 3) await new Promise(r => setTimeout(r, 50 * attempt));
+                    } else {
+                        console.warn(`[Orders API] Attempt ${attempt}/3: PUT failed with status ${putRes.status}`);
+                        if (attempt < 3) await new Promise(r => setTimeout(r, 50 * attempt));
+                    }
+                } catch (retryErr) {
+                    console.warn(`[Orders API] Attempt ${attempt}/3 error for product index ${targetIndex}:`, retryErr.message);
+                    if (attempt < 3) await new Promise(r => setTimeout(r, 50 * attempt));
+                }
+            }
+        }
+
+        if (anyUpdated) {
             clearCatalogCache();
         }
     } catch (e) {

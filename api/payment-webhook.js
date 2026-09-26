@@ -153,33 +153,60 @@ export default async function handler(req, res) {
     // ─────────────────────────────────────────────────────────────
     // 3. FawryPay Webhook Verification (SHA-256)
     // ─────────────────────────────────────────────────────────────
-    if (gateway === 'fawry' || body.fawryRefNum || body.merchantRefNum) {
+    if (gateway === 'fawry' || body.fawryRefNumber || body.fawryRefNum || body.merchantRefNumber || body.merchantRefNum) {
         const secKey = (dynamicCfg.fawry?.securityKey || process.env.FAWRY_SECURITY_KEY || '').trim();
         if (!secKey) {
             console.error('[SECURITY ERROR] FAWRY_SECURITY_KEY not set in Database or environment!');
             return res.status(500).json({ error: 'Server webhook unconfigured' });
         }
 
-        const { fawryRefNum, merchantRefNum, orderAmount, orderStatus, messageSignature } = body;
-        // SECURITY FIX: Fail-Closed if messageSignature is missing or empty
-        if (!messageSignature) {
-            console.warn('[SECURITY ALERT] Fawry webhook received with no signature - rejected.');
+        const {
+            fawryRefNumber,
+            fawryRefNum,
+            merchantRefNumber,
+            merchantRefNum,
+            paymentAmount,
+            orderAmount,
+            orderStatus,
+            paymentMethod,
+            paymentRefrenceNumber,
+            paymentReferenceNumber,
+            paymentRefNumber,
+            messageSignature
+        } = body;
+
+        // SECURITY: Fail-Closed if messageSignature is missing, empty, or not a string
+        if (!messageSignature || typeof messageSignature !== 'string') {
+            console.warn('[SECURITY ALERT] Fawry webhook received with no valid signature - rejected.');
             return res.status(403).json({ error: 'Missing signature' });
         }
 
-        const formattedAmount = Number(orderAmount).toFixed(2);
+        const refNumber = String(fawryRefNumber || fawryRefNum || '').trim();
+        const merchantOrder = String(merchantRefNumber || merchantRefNum || '').trim();
+        const pAmount = Number(paymentAmount ?? orderAmount ?? 0).toFixed(2);
+        const oAmount = Number(orderAmount ?? paymentAmount ?? 0).toFixed(2);
+        const status = String(orderStatus || '').trim();
+        const method = String(paymentMethod || '').trim();
+        const paymentRef = String(paymentRefrenceNumber || paymentReferenceNumber || paymentRefNumber || '').trim();
 
-        // Fawry signature: fawryRefNum + merchantRefNum + amount + orderStatus + securityKey
-        const rawString = `${fawryRefNum}${merchantRefNum}${formattedAmount}${orderStatus}${secKey}`;
-        const calculatedSig = crypto.createHash('sha256').update(rawString).digest('hex');
+        // Official FawryPay V2 Server-to-Server Notification formula:
+        // fawryRefNumber + merchantRefNum/merchantRefNumber + paymentAmount + orderAmount + orderStatus + paymentMethod + paymentRefrenceNumber + secureKey
+        const rawStringV2 = `${refNumber}${merchantOrder}${pAmount}${oAmount}${status}${method}${paymentRef}${secKey}`;
+        const calculatedSigV2 = crypto.createHash('sha256').update(rawStringV2).digest('hex');
 
-        if (!safeCompare(messageSignature, calculatedSig)) {
-            console.warn('[SECURITY ALERT] Invalid Fawry Signature attempt!');
+        // Legacy / V1 fallback formula: fawryRefNumber + merchantRefNum + orderAmount + orderStatus + secureKey
+        const rawStringV1 = `${refNumber}${merchantOrder}${oAmount}${status}${secKey}`;
+        const calculatedSigV1 = crypto.createHash('sha256').update(rawStringV1).digest('hex');
+
+        const isValid = safeCompare(messageSignature, calculatedSigV2) || safeCompare(messageSignature, calculatedSigV1);
+
+        if (!isValid) {
+            console.warn('[SECURITY ALERT] Invalid Fawry Signature attempt! Received:', messageSignature, 'Computed V2:', calculatedSigV2);
             return res.status(403).json({ error: 'Invalid signature' });
         }
 
-        const isSuccess = String(orderStatus).toUpperCase() === 'PAID';
-        await updateOrderPayment(merchantRefNum, isSuccess ? 'paid' : 'failed', fawryRefNum, 'fawry');
+        const isSuccess = status.toUpperCase() === 'PAID';
+        await updateOrderPayment(merchantOrder, isSuccess ? 'paid' : 'failed', refNumber, 'fawry');
         return res.status(200).json({ received: true });
     }
 

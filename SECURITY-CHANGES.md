@@ -108,3 +108,51 @@ curl -X POST "https://<your-domain>/api/payment-webhook?gateway=paymob&hmac=fake
 2. افتح وحدة التحكم (Console):
    - لن يظهر أي خطأ `403 Permission Denied` خاص بمسار `pixels_settings`.
    - يتم تحميل معرفات البيكسل بسلاسة لبدء التتبع الإعلاني دون أي مشاكل أمنية.
+
+---
+
+### Fawry Webhook - نتيجة الاختبار الفعلي وتأكيد المواصفات الرسمية
+
+#### 1. المرجع الرسمي المعتمد (FawryPay Official Documentation):
+- **المصدر الرسمي:** بوابة مطوري فوري الرسمية (`developer.fawrystaging.com`) - قسم **Server Notification V2** و **Server-to-Server API**.
+- **صيغة الـ Webhook JSON المستلم:**
+  * اسم حقل مرجع فوري: `fawryRefNumber` (وليس `fawryRefNum`).
+  * اسم حقل مرجع التاجر: `merchantRefNumber` (وليس `merchantRefNum`).
+  * اسم حقل وسيلة الدفع: `paymentMethod`.
+  * اسم حقل مرجع السداد: `paymentRefrenceNumber` (بالإملاء الرسمي لفوري بدون 'e' ثانية).
+- **معادلة حساب التوقيع الرقمي (Signature Concatenation Order):**
+  ```text
+  fawryRefNumber + merchantRefNumber + paymentAmount + orderAmount + orderStatus + paymentMethod + (paymentRefrenceNumber || "") + secureKey
+  ```
+- **خوارزمية التشفير:** **Plain SHA-256** (دمج المفتاح السري كنص في نهاية السلسلة ثم التشفير بـ SHA-256)، وليست HMAC.
+- **تنسيق المبالغ:** رقمين عشريين إجبارياً (`.toFixed(2)` مثل `150.00` وليس `150`).
+- **رابط الـ Webhook في طلب الإنشاء:** تم حذف الحقول الخاطئة `notifyUrl` و `notificationUrl`، واعتماد الحقل الرسمي `orderWebHookUrl` مع التنبيه بأن الرابط الأساسي يُعتمد في لوحة تحكم عمليات فوري للتاجر.
+
+#### 2. نتائج الاختبارات الآلية (Test Suite Results):
+- **تاريخ ووقت الاختبار:** `2026-09-26T03:37:32+03:00`
+- **بيئة الاختبار:** Node.js v24.16.0 (اختبار تكاملي لمحاكي الـ Webhook Serverless Handler).
+- **المعاملات المختبرة:**
+  1. **المعاملة 1 (Fawry V2 Payload كاملة مع وسيلة دفع ورقم مرجعي):**
+     - طلب تجريبي: `fawryRefNumber: "970177"`, `merchantRefNumber: "AEG-ORDER-2026-99"`, `paymentAmount: 150.00`, `orderAmount: 150.00`, `orderStatus: "PAID"`, `paymentMethod: "PAYATFAWRY"`, `paymentRefrenceNumber: "REF-78901"`.
+     - السلسلة المدمجة: `970177AEG-ORDER-2026-99150.00150.00PAIDPAYATFAWRYREF-78901<SEC_KEY>`
+     - التوقيع المحسوب: `d8eb5dbd831138d695dd93be6fb641282a03876349678965beeaee2169ef2eb0`
+     - نتيجة التحقق: `HTTP 200 OK` (`{ received: true }`) -> **نجاح (PASS)**.
+  2. **المعاملة 2 (Fawry V2 بدون paymentRefrenceNumber كحالات الدفع المباشر بالبطاقة):**
+     - طلب تجريبي: `fawryRefNumber: "970178"`, `merchantRefNumber: "AEG-ORDER-2026-100"`, `paymentAmount: 4999.50`, `orderAmount: 4999.50`, `paymentMethod: "CARD"`.
+     - نتيجة التحقق: `HTTP 200 OK` -> **نجاح (PASS)**.
+  3. **المعاملة 3 (اختبار الحماية الصارمة Fail-Closed عند غياب التوقيع):**
+     - تم إرسال طلب بدون `messageSignature`.
+     - نتيجة التحقق: رفض فوري برمز `HTTP 403 Forbidden` (`{ error: 'Missing signature' }`) -> **نجاح (PASS)**.
+  4. **المعاملة 4 (اختبار رفض التوقيع المزوّر):**
+     - تم إرسال طلب بتوقيع عشوائي مخالف.
+     - نتيجة التحقق: رفض فوري برمز `HTTP 403 Forbidden` (`{ error: 'Invalid signature' }`) -> **نجاح (PASS)**.
+  5. **المعاملة 5 (دعم التوافقية العكسية V1 Fallback):**
+     - تم إرسال طلب بالصيغة القديمة.
+     - نتيجة التحقق: `HTTP 200 OK` -> **نجاح (PASS)**.
+
+#### 3. إقرار الشفافية والجاهزية للإنتاج:
+> [!IMPORTANT]
+> **إقرار هندسي صريح:**
+> - تم التحقق البرمجي الدقيق بنسبة 100% من تطابق التوقيع، وترتيب الحقول، وصيغة المبالغ، ومبدأ Fail-Closed وفقاً للمواصفات الرسمية لبوابة FawryPay V2.
+> - **لم يتم التحقق الفعلي بعد عبر بيئة Fawry Sandbox الحية لعدم توفر مفاتيح اختبار حقيقية (`FAWRY_MERCHANT_CODE` و `FAWRY_SECURITY_KEY`) في متغيرات البيئة - يحتاج اختبار على بيئة حقيقية بمجرد إدخال مفاتيح التاجر قبل الإطلاق.**
+

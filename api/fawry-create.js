@@ -92,8 +92,7 @@ export default async function handler(req, res) {
             }
         ],
         returnUrl: retUrl,
-        notifyUrl: `${baseUrl}/api/payment-webhook?gateway=fawry`,
-        notificationUrl: `${baseUrl}/api/payment-webhook?gateway=fawry`,
+        orderWebHookUrl: `${baseUrl}/api/payment-webhook?gateway=fawry`,
         signature: signature
     };
 

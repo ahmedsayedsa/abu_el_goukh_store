@@ -326,42 +326,54 @@
                         </div>
                     </div>
 
-                    <!-- VALU & BANK INSTALLMENT CALCULATOR WIDGET -->
-                    <div class="bg-gradient-to-r from-amber-50 to-orange-50 p-4 sm:p-5 rounded-2xl border border-amber-200 space-y-3">
+                    <!-- INSTALLMENT PARTNERS TRUST BANNER -->
+                    <div class="bg-gradient-to-r from-amber-50/90 via-orange-50/60 to-amber-50/90 p-4 sm:p-5 rounded-2xl border border-amber-200 space-y-3">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">
                                 <span class="text-xl">💳</span>
-                                <h3 class="text-xs font-black text-trek-black">قسّط الدراجة عبر Paymob / ValU وبنوك مصر</h3>
+                                <h3 class="text-xs font-black text-trek-black">متاح التقسيط حتى 36 شهراً</h3>
                             </div>
-                            <span class="text-[10px] font-black bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full">بدون مقدم</span>
+                            <span class="text-[10px] font-black bg-amber-200 text-amber-900 px-2.5 py-0.5 rounded-full">بدون مقدم</span>
                         </div>
-
-                        <!-- Installment Options -->
-                        <div class="grid grid-cols-3 gap-2 text-center">
-                            <div class="bg-white p-2.5 rounded-xl border border-amber-200 shadow-2xs">
-                                <div class="text-[10px] text-trek-gray font-bold">12 شهر</div>
-                                <div id="inst-12" class="text-xs sm:text-sm font-black text-trek-black num-font mt-0.5">663 ج.م</div>
-                                <div class="text-[9px] text-trek-gray">شهرياً</div>
-                            </div>
-                            <div class="bg-white p-2.5 rounded-xl border-2 border-amber-500 shadow-2xs">
-                                <div class="text-[10px] text-amber-800 font-extrabold">24 شهر ⭐</div>
-                                <div id="inst-24" class="text-xs sm:text-sm font-black text-amber-900 num-font mt-0.5">380 ج.م</div>
-                                <div class="text-[9px] text-trek-gray">شهرياً</div>
-                            </div>
-                            <div class="bg-white p-2.5 rounded-xl border border-amber-200 shadow-2xs">
-                                <div class="text-[10px] text-trek-gray font-bold">36 شهر</div>
-                                <div id="inst-36" class="text-xs sm:text-sm font-black text-trek-black num-font mt-0.5">275 ج.م</div>
-                                <div class="text-[9px] text-trek-gray">شهرياً</div>
-                            </div>
+                        <div class="flex flex-wrap items-center gap-1.5 text-[11px] font-bold text-amber-950">
+                            <span class="bg-white px-2.5 py-1 rounded-lg border border-amber-200 shadow-2xs">فاليو valU</span>
+                            <span class="bg-white px-2.5 py-1 rounded-lg border border-amber-200 shadow-2xs">أمان Aman</span>
+                            <span class="bg-white px-2.5 py-1 rounded-lg border border-amber-200 shadow-2xs">حالا Halan</span>
+                            <span class="bg-white px-2.5 py-1 rounded-lg border border-amber-200 shadow-2xs">سهولة Souhoola</span>
+                            <span class="bg-white px-2.5 py-1 rounded-lg border border-amber-200 shadow-2xs">فرصة Forsa</span>
+                            <span class="bg-white px-2.5 py-1 rounded-lg border border-amber-200 shadow-2xs">خزنة Khazna</span>
+                            <span class="bg-white px-2.5 py-1 rounded-lg border border-amber-200 shadow-2xs">كونتكت Contact</span>
+                            <span class="bg-white px-2.5 py-1 rounded-lg border border-amber-200 shadow-2xs">بطاقات بنوك مصر</span>
                         </div>
-                        <div class="text-[10px] text-amber-900/80 leading-relaxed">
-                            متاح التقسيط مع: <strong>فاليو ValU • أمان • سهولة • فيزا البنك الأهلي، CIB، بنك مصر، بنك القاهرة</strong> عبر بوابة الدفع الإلكتروني.
-                        </div>
+                        <p class="text-[11px] text-amber-900/90 leading-relaxed">
+                            اختر "الدفع الإلكتروني (Paymob)" في صفحة الدفع لإتمام التقسيط فوراً حسب حدك الائتماني وشروط الشركة المزودة.
+                        </p>
                     </div>
 
                     <!-- BIKE CONFIGURATION: SIZE & COLOR SELECTORS -->
                     <div class="space-y-4 bg-white p-5 rounded-2xl border border-trek-border">
                         
+                        <!-- Interactive Smart Rider Fit Finder -->
+                        <div class="bg-trek-lightgray/90 p-4 rounded-2xl border border-trek-border mb-3 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-trek-black flex items-center gap-1.5">
+                                    <span>🎯</span>
+                                    <span>محتار في المقاس؟ اكتب طولك بالسنتيمتر:</span>
+                                </span>
+                                <span class="text-[10px] text-trek-gray">تحديد فوري للمقاس المضبوط</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="relative flex-1">
+                                    <input type="number" id="input-rider-height" min="90" max="220" placeholder="اكتب طولك (مثال: 175)" class="w-full bg-white border border-trek-border focus:border-trek-black rounded-xl p-2.5 text-xs font-bold num-font outline-none text-right pr-3 pl-10" oninput="calculateRiderFit(this.value)">
+                                    <span class="absolute left-3 top-2.5 text-xs text-trek-gray font-bold">سم</span>
+                                </div>
+                                <button type="button" onclick="calculateRiderFit(document.getElementById('input-rider-height').value)" class="px-4 py-2.5 bg-trek-black hover:bg-neutral-800 text-white text-xs font-bold rounded-xl transition shadow-sm whitespace-nowrap">
+                                    حدد المقاس
+                                </button>
+                            </div>
+                            <div id="fit-result-badge" class="hidden p-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2"></div>
+                        </div>
+
                         <!-- Wheel & Frame Size Selector -->
                         <div>
                             <div class="flex items-center justify-between mb-2">
@@ -414,6 +426,47 @@
 
                     </div>
 
+                    <!-- CROSS-SELL SAFETY & RIDER ACCESSORIES BUNDLE -->
+                    <div class="bg-trek-lightgray/70 p-4 rounded-2xl border border-trek-border space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="text-base">🛡️</span>
+                                <h3 class="text-xs font-black text-trek-black">أكمل باقة الأمان والركوب (تصلك مع العجلة):</h3>
+                            </div>
+                            <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">شحن مجاني مع الدراجة</span>
+                        </div>
+                        <div class="space-y-2" id="accessories-bundle-container">
+                            <label class="flex items-center justify-between p-2.5 bg-white rounded-xl border border-trek-border hover:border-trek-black transition cursor-pointer select-none">
+                                <div class="flex items-center gap-2.5">
+                                    <input type="checkbox" id="acc-helmet" onchange="updateBundleTotal()" data-name="خوذة أمان معتمدة بفتحات تهوية" data-price="450" class="w-4 h-4 rounded text-trek-red focus:ring-0">
+                                    <span class="text-xs font-bold text-trek-black">⛑️ خوذة حماية للرأس (خفيفة ومبطنة)</span>
+                                </div>
+                                <span class="text-xs font-black text-trek-black num-font">+450 ج.م</span>
+                            </label>
+                            <label class="flex items-center justify-between p-2.5 bg-white rounded-xl border border-trek-border hover:border-trek-black transition cursor-pointer select-none">
+                                <div class="flex items-center gap-2.5">
+                                    <input type="checkbox" id="acc-lock" onchange="updateBundleTotal()" data-name="قفل جنزير مصفح كود ضد السرقة" data-price="180" class="w-4 h-4 rounded text-trek-red focus:ring-0">
+                                    <span class="text-xs font-bold text-trek-black">🔒 قفل جنزير مصفح كود أمان ضد السرقة</span>
+                                </div>
+                                <span class="text-xs font-black text-trek-black num-font">+180 ج.م</span>
+                            </label>
+                            <label class="flex items-center justify-between p-2.5 bg-white rounded-xl border border-trek-border hover:border-trek-black transition cursor-pointer select-none">
+                                <div class="flex items-center gap-2.5">
+                                    <input type="checkbox" id="acc-lights" onchange="updateBundleTotal()" data-name="طقم كشاف LED أمامي وخلفي شحن USB" data-price="220" class="w-4 h-4 rounded text-trek-red focus:ring-0">
+                                    <span class="text-xs font-bold text-trek-black">🔦 طقم كشاف LED أمامي وخلفي شحن USB</span>
+                                </div>
+                                <span class="text-xs font-black text-trek-black num-font">+220 ج.م</span>
+                            </label>
+                            <label class="flex items-center justify-between p-2.5 bg-white rounded-xl border border-trek-border hover:border-trek-black transition cursor-pointer select-none">
+                                <div class="flex items-center gap-2.5">
+                                    <input type="checkbox" id="acc-pump" onchange="updateBundleTotal()" data-name="منفاخ محمول يدوي يثبت في الكادر" data-price="250" class="w-4 h-4 rounded text-trek-red focus:ring-0">
+                                    <span class="text-xs font-bold text-trek-black">💨 منفاخ هواء يدوي محمول مع عداد ضغط</span>
+                                </div>
+                                <span class="text-xs font-black text-trek-black num-font">+250 ج.م</span>
+                            </label>
+                        </div>
+                    </div>
+
                     <!-- DIRECT CALL TO ACTIONS (BUY NOW & ADD TO CART) -->
                     <div id="product-actions-container" class="space-y-3 pt-2">
                         
@@ -437,12 +490,19 @@
                             </a>
                         </div>
 
-                        <!-- Direct Hotline Button -->
-                        <div class="text-center pt-1">
-                            <a href="tel:01202925192" class="inline-flex items-center gap-1.5 text-xs font-bold text-trek-gray hover:text-trek-black transition">
-                                <span>📞 اتصل بنا هاتفياً لطلب الدراجة فوراً:</span>
-                                <strong class="text-trek-black num-font">01202925192</strong>
-                            </a>
+                        <!-- Direct Hotline Button & Share on WhatsApp -->
+                        <div class="text-center pt-1 space-y-1.5">
+                            <div>
+                                <a href="tel:01202925192" class="inline-flex items-center gap-1.5 text-xs font-bold text-trek-gray hover:text-trek-black transition">
+                                    <span>📞 اتصل بنا هاتفياً لطلب الدراجة فوراً:</span>
+                                    <strong class="text-trek-black num-font">01202925192</strong>
+                                </a>
+                            </div>
+                            <div>
+                                <button type="button" onclick="shareBikeOnWhatsApp()" class="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-700 hover:text-emerald-800 transition">
+                                    <span>📲 شارك تفاصيل العجلة مع الأهل أو الأصدقاء عبر واتساب</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -2021,6 +2081,96 @@
             updateCartUI();
         }
 
+        function calculateRiderFit(heightVal) {
+            const h = parseInt(heightVal, 10);
+            const badge = document.getElementById('fit-result-badge');
+            if (!badge) return;
+            if (isNaN(h) || h < 90 || h > 220) {
+                badge.className = "p-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-amber-50 text-amber-800 border border-amber-200";
+                badge.innerHTML = "<span>⚠️</span><span>يرجى كتابة طول صحيح بالسنتيمتر (بين 90 و 220 سم).</span>";
+                badge.classList.remove('hidden');
+                return;
+            }
+
+            let recommendedSize = '26';
+            let message = '';
+
+            if (h < 120) {
+                recommendedSize = '12';
+                message = `طولك (${h} سم) مناسب لدراجات الأطفال الصغار (مقاس 12 إلى 16 بوصة) المزودة بعجلات مساعدة.`;
+            } else if (h < 140) {
+                recommendedSize = '20';
+                message = `طولك (${h} سم) مناسب لدراجات الناشئين والأطفال (مقاس 20 إلى 24 بوصة).`;
+            } else if (h <= 172) {
+                recommendedSize = '26';
+                message = `طولك (${h} سم) مثالي لمقاس 26 بوصة مع شاسيه خفيف لسهولة التحكم والمناورة.`;
+            } else if (h <= 182) {
+                recommendedSize = '27.5';
+                message = `طولك (${h} سم) ممتاز لمقاس 27.5 أو 29 بوصة للراحة وسرعة قطع المسافات.`;
+            } else {
+                recommendedSize = '29';
+                message = `طولك (${h} سم) يناسب مقاس 29 بوصة (كبار ومحترفين) لأقصى سرعة وثبات على الطرق.`;
+            }
+
+            badge.className = "p-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-emerald-50 text-emerald-800 border border-emerald-200 animate-in fade-in";
+            badge.innerHTML = `<span>✓</span><span>${message}</span>`;
+            badge.classList.remove('hidden');
+
+            if (['26', '27.5', '29'].includes(recommendedSize)) {
+                selectBikeSize(recommendedSize);
+            }
+        }
+
+        function getSelectedAccessories() {
+            const accList = [];
+            const checks = document.querySelectorAll('#accessories-bundle-container input[type="checkbox"]:checked');
+            checks.forEach(chk => {
+                accList.push({
+                    id: 'acc-' + chk.id,
+                    name: chk.dataset.name,
+                    price: Number(chk.dataset.price) || 0,
+                    image: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=300&q=80',
+                    sku: 'ACC-' + chk.id.toUpperCase(),
+                    size: 'قياسي',
+                    color: 'أصلي'
+                });
+            });
+            return accList;
+        }
+
+        function updateBundleTotal() {
+            if (!currentProduct) return;
+            const accList = getSelectedAccessories();
+            const accTotal = accList.reduce((sum, item) => sum + item.price, 0);
+            const basePrice = Number(currentProduct.price) * selectedQty;
+            const finalTotal = basePrice + accTotal;
+
+            const priceEl = document.getElementById('product-price');
+            if (priceEl) priceEl.innerText = fmt(finalTotal);
+
+            const buyBtn = document.getElementById('btn-buy-now');
+            if (buyBtn && !buyBtn.disabled) {
+                if (accList.length > 0) {
+                    buyBtn.innerHTML = `<span>⚡</span><span>شراء العجلة والباقة (${fmt(finalTotal)} ج.م)</span>`;
+                } else {
+                    buyBtn.innerHTML = `<span>⚡</span><span>شراء فوري الآن (الانتقال لشاشة الدفع)</span>`;
+                }
+            }
+        }
+
+        function shareBikeOnWhatsApp() {
+            if (!currentProduct) return;
+            const url = window.location.href;
+            const text = encodeURIComponent(
+                `🚴‍♂️ دراجة مميزة من توكيل أبو الجوخ 1925:\n` +
+                `*${currentProduct.name}*\n` +
+                `السعر: ${fmt(currentProduct.price)} ج.م\n` +
+                `المواصفات: ${currentProduct.specs || 'شاسيه ألومنيوم وسرعات شيمانو'}\n` +
+                `رابط العجلة للمعاينة والشراء:\n${url}`
+            );
+            window.open(`https://wa.me/?text=${text}`, '_blank');
+        }
+
         function addToCartCurrentProduct() {
             if (!currentProduct) return;
             const stock = Number(currentProduct.stock !== undefined ? currentProduct.stock : 10);
@@ -2043,6 +2193,11 @@
                     color: selectedColor
                 });
             }
+
+            // Append any selected cross-sell accessories
+            const accessories = getSelectedAccessories();
+            accessories.forEach(acc => cart.push(acc));
+
             localStorage.setItem('abu_el_goukh_cart', JSON.stringify(cart));
             updateCartUI();
             toggleCartDrawer();
@@ -2073,6 +2228,11 @@
                 size: selectedSize,
                 color: selectedColor
             });
+
+            // Append any selected cross-sell accessories
+            const accessories = getSelectedAccessories();
+            accessories.forEach(acc => cart.push(acc));
+
             localStorage.setItem('abu_el_goukh_cart', JSON.stringify(cart));
 
             // Track AddToCart E-Commerce Event
@@ -2206,16 +2366,16 @@
             document.getElementById('product-old-price').innerText = fmt(originalPrice) + ' ج.م';
             document.getElementById('product-saving').innerText = 'وفّر ' + fmt(savings) + ' ج.م';
 
-            // Installment Breakdown
-            document.getElementById('inst-12').innerText = fmt(Math.round(price / 12)) + ' ج.م';
-            document.getElementById('inst-24').innerText = fmt(Math.round(price / 24)) + ' ج.م';
-            document.getElementById('inst-36').innerText = fmt(Math.round(price / 36)) + ' ج.م';
+            // Safe Installment Handling (No rigid speculative figures)
+            if (document.getElementById('inst-12')) document.getElementById('inst-12').innerText = fmt(Math.round(price / 12)) + ' ج.م';
+            if (document.getElementById('inst-24')) document.getElementById('inst-24').innerText = fmt(Math.round(price / 24)) + ' ج.م';
+            if (document.getElementById('inst-36')) document.getElementById('inst-36').innerText = fmt(Math.round(price / 36)) + ' ج.م';
 
             // Sync Mobile Sticky Bottom Bar
             const stickyPrice = document.getElementById('mobile-sticky-price');
             if (stickyPrice) stickyPrice.innerText = fmt(price);
             const stickyInst = document.getElementById('mobile-sticky-inst');
-            if (stickyInst) stickyInst.innerText = fmt(Math.round(price / 36));
+            if (stickyInst) stickyInst.innerText = 'متاح تقسيط حتى 36 شهر';
 
             // WhatsApp Direct Inquiry Link
             const waText = encodeURIComponent("مرحباً أبو الجوخ، أود الاستفسار وحجز دراجة: " + currentProduct.name + " (كود: " + currentProduct.sku + ") بسعر " + fmt(price) + " ج.م");
@@ -2259,8 +2419,9 @@
                 <span id="mobile-sticky-price" class="text-base font-black text-trek-black num-font">7,950</span>
                 <span class="text-[10px] font-bold text-trek-gray">ج.م</span>
             </div>
-            <div class="text-[9px] text-emerald-700 font-bold whitespace-nowrap">
-                تقسيط من <strong class="num-font" id="mobile-sticky-inst">275</strong> ج.م/ش
+            <div class="text-[9px] text-emerald-700 font-bold whitespace-nowrap flex items-center gap-1">
+                <span>💳</span>
+                <span id="mobile-sticky-inst">متاح تقسيط حتى 36 شهر</span>
             </div>
         </div>
 

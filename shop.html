@@ -426,33 +426,114 @@
     <section id="bikes-grid" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <!-- Header with Live Filters and Sort -->
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-8 border-b border-trek-border mb-8">
-            <div>
-                <span class="text-xs font-bold text-trek-red uppercase tracking-wider num-font block mb-1">OFFICIAL FLEET</span>
-                <h2 class="text-2xl sm:text-3xl font-black text-trek-black">كتالوج دراجات أبو الجوخ الأصلية</h2>
-                <p id="product-count-label" class="text-xs text-trek-gray mt-1">يتم عرض الدراجات المعتمدة بأسعار التوكيل الرسمية</p>
+        <div class="pb-8 border-b border-trek-border mb-8 space-y-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <span class="text-xs font-bold text-trek-red uppercase tracking-wider num-font block mb-1">OFFICIAL FLEET</span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-trek-black">كتالوج دراجات أبو الجوخ الأصلية</h2>
+                    <p id="product-count-label" class="text-xs text-trek-gray mt-1">يتم عرض الدراجات المعتمدة بأسعار التوكيل الرسمية</p>
+                </div>
+
+                <!-- Trek Filter Pills (Horizontal swipe on mobile, wrap on desktop) -->
+                <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none w-full md:w-auto -mx-4 px-4 sm:mx-0 sm:px-0 flex-nowrap md:flex-wrap">
+                    <button onclick="filterCategory('all')" id="btn-cat-all" class="cat-pill whitespace-nowrap bg-trek-black text-white text-xs font-bold px-4 py-2 rounded-full transition shadow-sm flex-shrink-0">
+                        الكل
+                    </button>
+                    <button onclick="filterCategory('mountain')" id="btn-cat-mountain" class="cat-pill whitespace-nowrap bg-trek-lightgray hover:bg-trek-border text-trek-black text-xs font-semibold px-4 py-2 rounded-full transition flex-shrink-0">
+                        جبلية (Mountain)
+                    </button>
+                    <button onclick="filterCategory('road')" id="btn-cat-road" class="cat-pill whitespace-nowrap bg-trek-lightgray hover:bg-trek-border text-trek-black text-xs font-semibold px-4 py-2 rounded-full transition flex-shrink-0">
+                        طرق وسرعة (Road)
+                    </button>
+                    <button onclick="filterCategory('kids')" id="btn-cat-kids" class="cat-pill whitespace-nowrap bg-trek-lightgray hover:bg-trek-border text-trek-black text-xs font-semibold px-4 py-2 rounded-full transition flex-shrink-0">
+                        أطفال وبناتي (Kids)
+                    </button>
+                    <button onclick="filterCategory('fat')" id="btn-cat-fat" class="cat-pill whitespace-nowrap bg-trek-lightgray hover:bg-trek-border text-trek-black text-xs font-semibold px-4 py-2 rounded-full transition flex-shrink-0">
+                        دبابات (Fat)
+                    </button>
+                    <button onclick="filterCategory('accessories')" id="btn-cat-accessories" class="cat-pill whitespace-nowrap bg-trek-lightgray hover:bg-trek-border text-trek-black text-xs font-semibold px-4 py-2 rounded-full transition flex-shrink-0">
+                        إكسسوارات وقطع غيار
+                    </button>
+                </div>
             </div>
 
-            <!-- Trek Filter Pills (Horizontal swipe on mobile, wrap on desktop) -->
-            <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none w-full md:w-auto -mx-4 px-4 sm:mx-0 sm:px-0 flex-nowrap md:flex-wrap">
-                <button onclick="filterCategory('all')" id="btn-cat-all" class="cat-pill whitespace-nowrap bg-trek-black text-white text-xs font-bold px-4 py-2 rounded-full transition shadow-sm flex-shrink-0">
-                    الكل
-                </button>
-                <button onclick="filterCategory('mountain')" id="btn-cat-mountain" class="cat-pill whitespace-nowrap bg-trek-lightgray hover:bg-trek-border text-trek-black text-xs font-semibold px-4 py-2 rounded-full transition flex-shrink-0">
-                    جبلية (Mountain)
-                </button>
-                <button onclick="filterCategory('road')" id="btn-cat-road" class="cat-pill whitespace-nowrap bg-trek-lightgray hover:bg-trek-border text-trek-black text-xs font-semibold px-4 py-2 rounded-full transition flex-shrink-0">
-                    طرق وسرعة (Road)
-                </button>
-                <button onclick="filterCategory('kids')" id="btn-cat-kids" class="cat-pill whitespace-nowrap bg-trek-lightgray hover:bg-trek-border text-trek-black text-xs font-semibold px-4 py-2 rounded-full transition flex-shrink-0">
-                    أطفال وبناتي (Kids)
-                </button>
-                <button onclick="filterCategory('fat')" id="btn-cat-fat" class="cat-pill whitespace-nowrap bg-trek-lightgray hover:bg-trek-border text-trek-black text-xs font-semibold px-4 py-2 rounded-full transition flex-shrink-0">
-                    دبابات (Fat)
-                </button>
-                <button onclick="filterCategory('accessories')" id="btn-cat-accessories" class="cat-pill whitespace-nowrap bg-trek-lightgray hover:bg-trek-border text-trek-black text-xs font-semibold px-4 py-2 rounded-full transition flex-shrink-0">
-                    إكسسوارات وقطع غيار
-                </button>
+            <!-- Advanced Filter & Search Toolbar (CRO / UX Boost) -->
+            <div class="bg-trek-lightgray/80 border border-trek-border rounded-2xl p-4 sm:p-5 space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                    <!-- Search Field -->
+                    <div class="relative">
+                        <input id="catalog-search-input" onkeyup="searchBikes(this.value)" type="text" placeholder="ابحث بالاسم أو الموديل أو المقاس..." class="w-full bg-white border border-trek-border focus:border-trek-black text-xs rounded-xl py-2.5 pr-9 pl-3 outline-none transition font-medium">
+                        <svg class="w-4 h-4 text-trek-gray absolute right-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+
+                    <!-- Brand Filter -->
+                    <div>
+                        <select id="filter-brand" onchange="filterBrand(this.value)" class="w-full bg-white border border-trek-border focus:border-trek-black text-xs rounded-xl py-2.5 px-3 outline-none transition font-bold text-trek-black">
+                            <option value="all">🏷️ كل الماركات العالمية</option>
+                            <option value="trinx">ترينكس (Trinx)</option>
+                            <option value="phoenix">فونيكس (Phoenix)</option>
+                            <option value="totem">توتيم (Totem)</option>
+                            <option value="galaxy">جلاكسي (Galaxy)</option>
+                            <option value="upland">أبلاند (Upland)</option>
+                            <option value="zouma">زوما (Zouma)</option>
+                        </select>
+                    </div>
+
+                    <!-- Wheel Size Filter -->
+                    <div>
+                        <select id="filter-wheel-size" onchange="filterWheelSize(this.value)" class="w-full bg-white border border-trek-border focus:border-trek-black text-xs rounded-xl py-2.5 px-3 outline-none transition font-bold text-trek-black">
+                            <option value="all">🎯 كل مقاسات العجل</option>
+                            <option value="29">مقاس 29 بوصة (طول 175-195 سم)</option>
+                            <option value="27.5">مقاس 27.5 بوصة (طول 165-180 سم)</option>
+                            <option value="26">مقاس 26 بوصة (طول 150-170 سم)</option>
+                            <option value="24">مقاس 24 بوصة (طول 135-155 سم)</option>
+                            <option value="20">مقاس 20 بوصة (أطفال 7-11 سنة)</option>
+                            <option value="16">مقاس 16 بوصة (أطفال 4-7 سنوات)</option>
+                            <option value="12">مقاس 12 بوصة (أطفال 3-5 سنوات)</option>
+                        </select>
+                    </div>
+
+                    <!-- Sort Order -->
+                    <div>
+                        <select id="sort-select" onchange="setSortBy(this.value)" class="w-full bg-white border border-trek-border focus:border-trek-black text-xs rounded-xl py-2.5 px-3 outline-none transition font-bold text-trek-black">
+                            <option value="default">⚡ الترتيب الافتراضي (الأكثر مبيعاً)</option>
+                            <option value="price-asc">السعر: من الأقل للأعلى</option>
+                            <option value="price-desc">السعر: من الأعلى للأقل</option>
+                            <option value="name">الاسم: أ - ي</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Budget Range Chips + In-stock Toggle + Reset Button -->
+                <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-trek-border/60">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="text-xs font-bold text-trek-gray ml-1">الميزانية:</span>
+                        <button onclick="filterBudget('all')" id="budget-chip-all" class="budget-chip text-[11px] font-bold px-3 py-1.5 rounded-full transition bg-trek-black text-white shadow-sm">
+                            الكل
+                        </button>
+                        <button onclick="filterBudget('under5k')" id="budget-chip-under5k" class="budget-chip text-[11px] font-bold px-3 py-1.5 rounded-full transition bg-white border border-trek-border text-trek-gray hover:border-trek-black">
+                            أقل من 5,000 ج.م
+                        </button>
+                        <button onclick="filterBudget('5k-10k')" id="budget-chip-5k-10k" class="budget-chip text-[11px] font-bold px-3 py-1.5 rounded-full transition bg-white border border-trek-border text-trek-gray hover:border-trek-black">
+                            5,000 - 10,000 ج.م
+                        </button>
+                        <button onclick="filterBudget('over10k')" id="budget-chip-over10k" class="budget-chip text-[11px] font-bold px-3 py-1.5 rounded-full transition bg-white border border-trek-border text-trek-gray hover:border-trek-black">
+                            أكثر من 10,000 ج.م
+                        </button>
+                    </div>
+
+                    <div class="flex items-center gap-4">
+                        <label class="flex items-center gap-2 cursor-pointer select-none">
+                            <input type="checkbox" id="in-stock-only-toggle" onchange="toggleInStockOnly(this.checked)" class="w-4 h-4 text-trek-red rounded border-trek-border focus:ring-0 cursor-pointer">
+                            <span class="text-xs font-bold text-trek-black">المتوفر في المخزن فقط 🟢</span>
+                        </label>
+
+                        <button onclick="resetAllFilters()" class="text-xs font-bold text-trek-red hover:underline flex items-center gap-1 transition">
+                            <span>↺</span>
+                            <span>إعادة ضبط</span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -683,8 +764,9 @@
                         <div class="mb-4">
                             <span id="modal-price" class="text-2xl font-black text-trek-black num-font"></span>
                             <span class="text-xs text-trek-gray font-normal">ج.م شامل الضريبة</span>
-                            <div class="text-[11px] text-trek-gray mt-1">
-                                أو قسّط على 12 شهر بمبلغ <strong id="modal-install" class="text-trek-black num-font"></strong> ج.م/شهر عبر Paymob
+                            <div class="text-[11px] text-emerald-700 font-semibold mt-1.5 flex items-center gap-1.5 bg-emerald-50 px-2.5 py-1.5 rounded-lg border border-emerald-200/60">
+                                <span>💳</span>
+                                <span>متاح تقسيط بنكي ومباشر حتى 36 شهر عبر شركاء التقسيط المعتمدين</span>
                             </div>
                         </div>
 
@@ -734,6 +816,17 @@
             <div class="flex items-center gap-2">
                 <span class="font-black text-base text-trek-black">سلة المشتريات</span>
                 <span id="drawer-count-badge" class="bg-trek-red text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center num-font">0</span>
+            </div>
+        </div>
+
+        <!-- FREE SHIPPING GOAL PROGRESS BAR -->
+        <div id="free-shipping-container" class="bg-emerald-50 border-b border-emerald-100 p-3.5 text-center">
+            <div id="free-shipping-text" class="text-xs font-bold text-emerald-900 mb-1.5 flex items-center justify-center gap-1.5">
+                <span>🚚</span>
+                <span>أضف منتجات بقيمة <span id="shipping-diff" class="num-font font-black text-emerald-700">8,000</span> ج.م للحصول على شحن مجاني!</span>
+            </div>
+            <div class="w-full bg-emerald-200/70 h-2 rounded-full overflow-hidden">
+                <div id="free-shipping-progress" class="bg-emerald-600 h-full rounded-full transition-all duration-500" style="width: 0%;"></div>
             </div>
         </div>
 
@@ -1503,29 +1596,45 @@
 ];
 
         let cart = [];
+        let compareList = [];
         let currentModalProduct = null;
-        let currentCategory = 'all';
+
+        // Unified Filter State
+        let filterState = {
+            category: 'all',
+            search: '',
+            brand: 'all',
+            wheelSize: 'all',
+            budget: 'all',
+            inStockOnly: false,
+            sortBy: 'default'
+        };
 
         function renderProducts(items) {
             const container = document.getElementById('products-container');
             const countLabel = document.getElementById('product-count-label');
-            countLabel.innerText = `يتم عرض ${items.length} دراجة أصلية بالأسعار الرسمية`;
+            if (countLabel) {
+                countLabel.innerText = `يتم عرض ${items.length} دراجة أصلية بالأسعار الرسمية`;
+            }
 
             if (items.length === 0) {
                 container.innerHTML = `
                     <div class="col-span-full py-16 text-center text-trek-gray">
                         <div class="text-4xl mb-3">🔍</div>
                         <h3 class="text-lg font-bold text-trek-black">لم يتم العثور على دراجات مطابقة</h3>
-                        <p class="text-xs text-trek-gray mt-1">جرب تغيير معايير البحث أو اختيار تصنيف آخر</p>
+                        <p class="text-xs text-trek-gray mt-1">جرب تغيير معايير البحث أو تصفية الميزانية</p>
+                        <button onclick="resetAllFilters()" class="mt-4 px-5 py-2 bg-trek-black text-white text-xs font-bold rounded-full hover:bg-trek-charcoal transition">
+                            إعادة ضبط جميع الفلاتر ↺
+                        </button>
                     </div>
                 `;
                 return;
             }
 
-            container.innerHTML = items.map((p, idx) => {
+            container.innerHTML = items.map((p) => {
                 const priceFormatted = Number(p.price).toLocaleString('en-US');
-                const installFormatted = Math.round(p.price / 12).toLocaleString('en-US');
                 const badgeClass = p.badge === 'FLAGSHIP' ? 'bg-trek-red text-white' : 'bg-trek-black text-white';
+                const isCompared = compareList.includes(p.id);
 
                 const stock = Number(p.stock !== undefined ? p.stock : 10);
                 let stockBadgeHtml = '';
@@ -1583,13 +1692,20 @@
                                 ${stockBadgeHtml}
                             </div>
                             <div class="text-[10px] text-trek-gray mt-1 flex justify-between items-center">
-                                <span>تقسيط من <strong class="text-trek-black num-font font-bold">${installFormatted}</strong> ج.م/ش</span>
-                                <span class="text-trek-red font-bold text-[11px] group-hover:translate-x-[-2px] transition-transform">المواصفات بالكامل ←</span>
+                                <span class="text-emerald-700 font-semibold flex items-center gap-1">💳 متاح تقسيط حتى 36 شهر</span>
+                                <span class="text-trek-red font-bold text-[11px] group-hover:translate-x-[-2px] transition-transform">المواصفات ←</span>
                             </div>
 
                             <!-- Quick Action Buttons -->
                             <div class="flex items-center gap-2 mt-3 pt-2 border-t border-trek-border/60">
                                 ${buyButtonHtml}
+                                <button onclick="event.stopPropagation(); toggleCompareBike(${p.id});" 
+                                        id="btn-compare-${p.id}" 
+                                        class="p-2 rounded-lg transition text-xs font-bold flex items-center gap-1 ${isCompared ? 'bg-trek-black text-white' : 'bg-trek-lightgray hover:bg-trek-border text-trek-black'}" 
+                                        title="${isCompared ? 'إلغاء من المقارنة' : 'أضف للمقارنة'}">
+                                    <span>⚖️</span>
+                                    <span class="text-[10px] hidden sm:inline">${isCompared ? 'بالمقارنة' : 'قارن'}</span>
+                                </button>
                                 <button onclick="event.stopPropagation(); openProductQuickview(${p.id});" class="p-2 bg-trek-lightgray hover:bg-trek-border text-trek-black rounded-lg transition text-xs font-bold" title="نظرة سريعة">
                                     <span>🔍</span>
                                 </button>
@@ -1600,38 +1716,285 @@
             }).join('');
         }
 
-        function filterCategory(cat) {
-            currentCategory = cat;
-            document.querySelectorAll('.cat-pill').forEach(btn => {
-                btn.className = 'cat-pill bg-trek-lightgray hover:bg-trek-border text-trek-black text-xs font-semibold px-4 py-2 rounded-full transition';
-            });
-            const activeBtn = document.getElementById('btn-cat-' + cat);
-            if (activeBtn) {
-                activeBtn.className = 'cat-pill bg-trek-black text-white text-xs font-bold px-4 py-2 rounded-full transition shadow-sm';
+        // BIKE COMPARISON SYSTEM (Side-by-Side)
+        function toggleCompareBike(id) {
+            const idx = compareList.indexOf(id);
+            if (idx > -1) {
+                compareList.splice(idx, 1);
+            } else {
+                if (compareList.length >= 3) {
+                    alert('يمكنك مقارنة 3 دراجات كحد أقصى في المرة الواحدة لتسهيل قراءة الفروق.');
+                    return;
+                }
+                compareList.push(id);
+            }
+            updateCompareBar();
+            
+            // Fast visual toggle of button
+            const btn = document.getElementById('btn-compare-' + id);
+            if (btn) {
+                const isCompared = compareList.includes(id);
+                btn.className = `p-2 rounded-lg transition text-xs font-bold flex items-center gap-1 ${isCompared ? 'bg-trek-black text-white' : 'bg-trek-lightgray hover:bg-trek-border text-trek-black'}`;
+                btn.title = isCompared ? 'إلغاء من المقارنة' : 'أضف للمقارنة';
+                btn.innerHTML = `<span>⚖️</span><span class="text-[10px] hidden sm:inline">${isCompared ? 'بالمقارنة' : 'قارن'}</span>`;
+            }
+        }
+
+        function updateCompareBar() {
+            const bar = document.getElementById('compare-bar');
+            const thumbsContainer = document.getElementById('compare-thumbnails');
+            const countBadge = document.getElementById('compare-count-badge');
+            if (!bar) return;
+
+            if (compareList.length === 0) {
+                bar.classList.add('translate-y-32', 'opacity-0', 'pointer-events-none');
+                return;
             }
 
+            bar.classList.remove('translate-y-32', 'opacity-0', 'pointer-events-none');
+            if (countBadge) countBadge.innerText = `${compareList.length}/3`;
+
             const sourceList = (typeof allLoadedProducts !== 'undefined' && allLoadedProducts.length > 0) ? allLoadedProducts : curatedBikes;
-            let filtered = sourceList;
-            if (cat !== 'all') {
-                filtered = sourceList.filter(p => p.cat_key === cat);
+            const selectedBikes = compareList.map(id => sourceList.find(b => b.id === id)).filter(Boolean);
+
+            if (thumbsContainer) {
+                thumbsContainer.innerHTML = selectedBikes.map(b => `
+                    <div class="relative group flex items-center gap-1.5 bg-white/10 px-2.5 py-1 rounded-xl flex-shrink-0 border border-white/10">
+                        <img src="${b.image}" class="w-7 h-7 object-contain bg-white rounded-lg p-0.5">
+                        <span class="text-[11px] font-bold text-white max-w-[85px] sm:max-w-[120px] truncate">${b.name}</span>
+                        <button onclick="event.stopPropagation(); toggleCompareBike(${b.id})" class="text-white/60 hover:text-white text-xs px-1">✕</button>
+                    </div>
+                `).join('');
             }
+        }
+
+        function clearCompareList() {
+            compareList = [];
+            updateCompareBar();
+            applyAllFilters();
+        }
+
+        function openCompareModal() {
+            if (compareList.length === 0) return;
+            const sourceList = (typeof allLoadedProducts !== 'undefined' && allLoadedProducts.length > 0) ? allLoadedProducts : curatedBikes;
+            const bikes = compareList.map(id => sourceList.find(b => b.id === id)).filter(Boolean);
+
+            const modal = document.getElementById('compare-modal');
+            const content = document.getElementById('compare-modal-content');
+            if (!modal || !content) return;
+
+            let gridCols = bikes.length === 1 ? 'grid-cols-1 max-w-md mx-auto' : (bikes.length === 2 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 md:grid-cols-3');
+
+            let html = `
+                <div class="grid ${gridCols} gap-6 text-right">
+                    ${bikes.map(b => {
+                        const stock = Number(b.stock !== undefined ? b.stock : 10);
+                        const stockText = stock <= 0 ? '<span class="text-red-600 font-bold">غير متوفر حالياً 🚫</span>' : (stock <= 3 ? `<span class="text-amber-600 font-bold">باقي ${stock} قطع فقط! ⚠️</span>` : '<span class="text-emerald-600 font-bold">متوفر في المخزن 🟢</span>');
+                        return `
+                            <div class="bg-trek-lightgray/80 rounded-2xl p-5 flex flex-col justify-between border border-trek-border hover:border-trek-black transition">
+                                <div>
+                                    <div class="h-44 flex items-center justify-center p-3 mb-4 bg-white rounded-xl shadow-inner">
+                                        <img src="${b.image}" alt="${b.name}" class="max-h-full object-contain" onerror="if(!this.dataset.triedBackup){this.dataset.triedBackup=1; this.src='images/bike_'+${b.id}+'.jpg';}">
+                                    </div>
+                                    <span class="text-[10px] font-black uppercase text-trek-red px-2 py-0.5 bg-red-50 rounded">${b.badge || 'ORIGINAL'}</span>
+                                    <h4 class="text-base font-black text-trek-black mt-1 mb-2">${b.name}</h4>
+                                    <div class="text-xl font-black text-trek-black num-font mb-1">${Number(b.price).toLocaleString('en-US')} <span class="text-xs font-normal">ج.م</span></div>
+                                    <div class="text-[11px] text-emerald-700 font-semibold mb-4">💳 متاح تقسيط مباشر وبنكي حتى 36 شهر</div>
+
+                                    <div class="space-y-2.5 text-xs border-t border-trek-border pt-3">
+                                        <div class="flex justify-between">
+                                            <span class="text-trek-gray">كود الموديل:</span>
+                                            <span class="font-bold num-font">${b.sku}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-trek-gray">التصنيف:</span>
+                                            <span class="font-bold">${b.category}</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-trek-gray block mb-1">المواصفات الفنية:</span>
+                                            <span class="font-medium text-trek-black leading-relaxed block bg-white p-2.5 rounded-lg border border-trek-border/60">${b.specs}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-trek-gray">حالة التوفر:</span>
+                                            <span>${stockText}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="space-y-2 mt-6 pt-4 border-t border-trek-border">
+                                    <a href="product.html?id=${b.id}" class="w-full py-2.5 bg-trek-black hover:bg-trek-charcoal text-white font-bold text-xs rounded-xl transition text-center block">
+                                        فتح صفحة الدراجة ↗
+                                    </a>
+                                    <button onclick="buyNowDirect(${b.id})" class="w-full py-2.5 bg-trek-red hover:bg-red-700 text-white font-bold text-xs rounded-xl transition text-center block ${stock <= 0 ? 'opacity-50 cursor-not-allowed' : ''}" ${stock <= 0 ? 'disabled' : ''}>
+                                        ⚡ شراء فوري
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+
+            content.innerHTML = html;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeCompareModal() {
+            const modal = document.getElementById('compare-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        // ADVANCED FILTER LOGIC (Faceted Search & Multi-criteria)
+        function applyAllFilters() {
+            const sourceList = (typeof allLoadedProducts !== 'undefined' && allLoadedProducts.length > 0) ? allLoadedProducts : curatedBikes;
+            let filtered = [...sourceList];
+
+            // 1. Category Filter
+            if (filterState.category !== 'all') {
+                filtered = filtered.filter(p => p.cat_key === filterState.category);
+            }
+
+            // 2. Search Query Filter
+            if (filterState.search) {
+                const q = filterState.search.toLowerCase();
+                filtered = filtered.filter(p =>
+                    (p.name && p.name.toLowerCase().includes(q)) ||
+                    (p.sku && p.sku.toLowerCase().includes(q)) ||
+                    (p.specs && p.specs.toLowerCase().includes(q)) ||
+                    (p.category && p.category.toLowerCase().includes(q))
+                );
+            }
+
+            // 3. Brand Filter
+            if (filterState.brand !== 'all') {
+                const b = filterState.brand.toLowerCase();
+                filtered = filtered.filter(p =>
+                    (p.name && p.name.toLowerCase().includes(b)) ||
+                    (p.specs && p.specs.toLowerCase().includes(b))
+                );
+            }
+
+            // 4. Wheel Size Filter
+            if (filterState.wheelSize !== 'all') {
+                const ws = filterState.wheelSize;
+                filtered = filtered.filter(p =>
+                    (p.name && (p.name.includes(ws) || p.name.includes(ws + '"'))) ||
+                    (p.specs && (p.specs.includes(ws) || p.specs.includes(ws + '"')))
+                );
+            }
+
+            // 5. Budget Range Filter
+            if (filterState.budget === 'under5k') {
+                filtered = filtered.filter(p => p.price < 5000);
+            } else if (filterState.budget === '5k-10k') {
+                filtered = filtered.filter(p => p.price >= 5000 && p.price <= 10000);
+            } else if (filterState.budget === 'over10k') {
+                filtered = filtered.filter(p => p.price > 10000);
+            }
+
+            // 6. In-Stock Only
+            if (filterState.inStockOnly) {
+                filtered = filtered.filter(p => {
+                    const stock = p.stock !== undefined ? Number(p.stock) : 10;
+                    return stock > 0;
+                });
+            }
+
+            // 7. Sort
+            if (filterState.sortBy === 'price-asc') {
+                filtered.sort((a, b) => a.price - b.price);
+            } else if (filterState.sortBy === 'price-desc') {
+                filtered.sort((a, b) => b.price - a.price);
+            } else if (filterState.sortBy === 'name') {
+                filtered.sort((a, b) => a.name.localeCompare(b.name, 'ar'));
+            }
+
             renderProducts(filtered);
         }
 
-        function searchBikes(query) {
-            const q = query.trim().toLowerCase();
-            if (!q) {
-                filterCategory(currentCategory);
-                return;
+        function filterCategory(cat) {
+            filterState.category = cat;
+            document.querySelectorAll('.cat-pill').forEach(btn => {
+                btn.className = 'cat-pill whitespace-nowrap bg-trek-lightgray hover:bg-trek-border text-trek-black text-xs font-semibold px-4 py-2 rounded-full transition flex-shrink-0';
+            });
+            const activeBtn = document.getElementById('btn-cat-' + cat);
+            if (activeBtn) {
+                activeBtn.className = 'cat-pill whitespace-nowrap bg-trek-black text-white text-xs font-bold px-4 py-2 rounded-full transition shadow-sm flex-shrink-0';
             }
-            const sourceList = (typeof allLoadedProducts !== 'undefined' && allLoadedProducts.length > 0) ? allLoadedProducts : curatedBikes;
-            const filtered = sourceList.filter(p => 
-                (p.name && p.name.toLowerCase().includes(q)) || 
-                (p.sku && p.sku.toLowerCase().includes(q)) ||
-                (p.specs && p.specs.toLowerCase().includes(q)) ||
-                (p.category && p.category.toLowerCase().includes(q))
-            );
-            renderProducts(filtered);
+            applyAllFilters();
+        }
+
+        function searchBikes(query) {
+            filterState.search = query.trim();
+            const navInput = document.getElementById('search-input');
+            const catInput = document.getElementById('catalog-search-input');
+            if (navInput && navInput.value !== query) navInput.value = query;
+            if (catInput && catInput.value !== query) catInput.value = query;
+            applyAllFilters();
+        }
+
+        function filterBrand(val) {
+            filterState.brand = val;
+            applyAllFilters();
+        }
+
+        function filterWheelSize(val) {
+            filterState.wheelSize = val;
+            applyAllFilters();
+        }
+
+        function filterBudget(budgetVal) {
+            filterState.budget = budgetVal;
+            document.querySelectorAll('.budget-chip').forEach(c => {
+                c.className = 'budget-chip text-[11px] font-bold px-3 py-1.5 rounded-full transition bg-white border border-trek-border text-trek-gray hover:border-trek-black';
+            });
+            const activeChip = document.getElementById('budget-chip-' + budgetVal);
+            if (activeChip) {
+                activeChip.className = 'budget-chip text-[11px] font-bold px-3 py-1.5 rounded-full transition bg-trek-black text-white shadow-sm';
+            }
+            applyAllFilters();
+        }
+
+        function toggleInStockOnly(checked) {
+            filterState.inStockOnly = checked;
+            applyAllFilters();
+        }
+
+        function setSortBy(val) {
+            filterState.sortBy = val;
+            applyAllFilters();
+        }
+
+        function resetAllFilters() {
+            filterState = {
+                category: 'all',
+                search: '',
+                brand: 'all',
+                wheelSize: 'all',
+                budget: 'all',
+                inStockOnly: false,
+                sortBy: 'default'
+            };
+            const navInput = document.getElementById('search-input');
+            const catInput = document.getElementById('catalog-search-input');
+            const brandSelect = document.getElementById('filter-brand');
+            const sizeSelect = document.getElementById('filter-wheel-size');
+            const sortSelect = document.getElementById('sort-select');
+            const stockCheckbox = document.getElementById('in-stock-only-toggle');
+
+            if (navInput) navInput.value = '';
+            if (catInput) catInput.value = '';
+            if (brandSelect) brandSelect.value = 'all';
+            if (sizeSelect) sizeSelect.value = 'all';
+            if (sortSelect) sortSelect.value = 'default';
+            if (stockCheckbox) stockCheckbox.checked = false;
+
+            filterCategory('all');
+            filterBudget('all');
         }
 
         function applyFinderFilter() {
@@ -1639,25 +2002,29 @@
             const u = document.getElementById('finder-use').value;
             const b = document.getElementById('finder-budget').value;
 
-            const sourceList = (typeof allLoadedProducts !== 'undefined' && allLoadedProducts.length > 0) ? allLoadedProducts : curatedBikes;
-            let filtered = sourceList;
-
             if (h === 'kids' || u === 'kids') {
-                filtered = filtered.filter(p => p.cat_key === 'kids' || p.price < 4200);
-            } else if (h === 'adult') {
-                filtered = filtered.filter(p => p.price >= 5500);
+                filterState.category = 'kids';
+                filterCategory('kids');
+            } else if (u === 'speed') {
+                filterState.category = 'road';
+                filterCategory('road');
+            } else if (u === 'mountain') {
+                filterState.category = 'mountain';
+                filterCategory('mountain');
             }
 
             if (b === 'budget') {
-                filtered = filtered.filter(p => p.price < 4000);
+                filterBudget('under5k');
             } else if (b === 'mid') {
-                filtered = filtered.filter(p => p.price >= 4000 && p.price <= 8000);
+                filterBudget('5k-10k');
             } else if (b === 'premium') {
-                filtered = filtered.filter(p => p.price > 8000);
+                filterBudget('over10k');
+            } else {
+                applyAllFilters();
             }
 
-            document.getElementById('bikes-grid').scrollIntoView({ behavior: 'smooth' });
-            renderProducts(filtered);
+            const grid = document.getElementById('bikes-grid');
+            if (grid) grid.scrollIntoView({ behavior: 'smooth' });
         }
 
         function openProductQuickview(productId) {
@@ -1668,7 +2035,10 @@
 
             document.getElementById('modal-title').innerText = p.name;
             document.getElementById('modal-price').innerText = Number(p.price).toLocaleString('en-US');
-            document.getElementById('modal-install').innerText = Math.round(p.price / 12).toLocaleString('en-US');
+            const installEl = document.getElementById('modal-install');
+            if (installEl) {
+                installEl.innerText = Math.round(p.price / 12).toLocaleString('en-US');
+            }
             document.getElementById('modal-img').src = p.image;
             document.getElementById('modal-img').onerror = function() {
                 if (!this.dataset.triedBackup) {
@@ -1730,41 +2100,81 @@
         }
 
         function updateCartUI() {
-            document.getElementById('cart-badge').innerText = cart.length;
-            document.getElementById('drawer-count-badge').innerText = cart.length;
+            const badge1 = document.getElementById('cart-badge');
+            if (badge1) badge1.innerText = cart.length;
+            const badge2 = document.getElementById('drawer-count-badge');
+            if (badge2) badge2.innerText = cart.length;
             const mobileBarBadge = document.getElementById('mobile-bar-cart-badge');
             if (mobileBarBadge) mobileBarBadge.innerText = cart.length;
 
             const list = document.getElementById('cart-items-list');
-            if (cart.length === 0) {
-                list.innerHTML = `
-                    <div class="text-center py-16 text-trek-gray">
-                        <div class="text-4xl mb-2">🛒</div>
-                        <div class="font-bold text-sm">سلتك فارغة حالياً</div>
-                        <div class="text-xs text-trek-gray mt-1">تصفح دراجات أبو الجوخ وأضف دراجتك المفضلة</div>
-                    </div>
-                `;
-                document.getElementById('cart-total-price').innerText = '0 ج.م';
-                return;
-            }
+            const totalEl = document.getElementById('cart-total-price');
 
             let total = 0;
-            list.innerHTML = cart.map((item, idx) => {
-                total += item.price;
-                return `
-                    <div class="flex items-center gap-3 p-3 bg-trek-lightgray rounded-xl">
-                        <img src="${item.image}" class="w-16 h-16 object-contain bg-white rounded-lg p-1">
-                        <div class="flex-1">
-                            <h4 class="text-xs font-bold text-trek-black line-clamp-1">${item.name}</h4>
-                            <div class="text-xs font-black text-trek-black num-font mt-1">${Number(item.price).toLocaleString('en-US')} ج.م</div>
+            if (cart.length === 0) {
+                if (list) {
+                    list.innerHTML = `
+                        <div class="text-center py-16 text-trek-gray">
+                            <div class="text-4xl mb-2">🛒</div>
+                            <div class="font-bold text-sm">سلتك فارغة حالياً</div>
+                            <div class="text-xs text-trek-gray mt-1">تصفح دراجات أبو الجوخ وأضف دراجتك المفضلة</div>
                         </div>
-                        <button onclick="removeFromCart(${idx})" class="text-trek-gray hover:text-trek-red font-bold text-sm p-1">✕</button>
-                    </div>
-                `;
-            }).join('');
+                    `;
+                }
+                if (totalEl) totalEl.innerText = '0 ج.م';
+            } else {
+                if (list) {
+                    list.innerHTML = cart.map((item, idx) => {
+                        total += Number(item.price);
+                        return `
+                            <div class="flex items-center gap-3 p-3 bg-trek-lightgray rounded-xl">
+                                <img src="${item.image}" class="w-16 h-16 object-contain bg-white rounded-lg p-1" onerror="if(!this.dataset.triedBackup){this.dataset.triedBackup=1; this.src='images/bike_'+${item.id}+'.jpg';}">
+                                <div class="flex-1">
+                                    <h4 class="text-xs font-bold text-trek-black line-clamp-1">${item.name}</h4>
+                                    <div class="text-xs font-black text-trek-black num-font mt-1">${Number(item.price).toLocaleString('en-US')} ج.م</div>
+                                </div>
+                                <button onclick="removeFromCart(${idx})" class="text-trek-gray hover:text-trek-red font-bold text-sm p-1">✕</button>
+                            </div>
+                        `;
+                    }).join('');
+                }
+                if (totalEl) totalEl.innerText = Number(total).toLocaleString('en-US') + ' ج.م';
+            }
 
-            document.getElementById('cart-total-price').innerText = Number(total).toLocaleString('en-US') + ' ج.م';
+            // Free Shipping Progress Calculation (Threshold: 8,000 EGP)
+            const shippingThreshold = 8000;
+            const shippingText = document.getElementById('free-shipping-text');
+            const shippingProg = document.getElementById('free-shipping-progress');
+            if (shippingText && shippingProg) {
+                if (total === 0) {
+                    shippingText.innerHTML = `<span>🚚</span><span>أضف منتجات بقيمة <strong class="num-font font-black text-emerald-700">8,000</strong> ج.م للحصول على شحن مجاني!</span>`;
+                    shippingProg.style.width = '0%';
+                    shippingProg.className = 'bg-emerald-600 h-full rounded-full transition-all duration-500';
+                } else if (total < shippingThreshold) {
+                    const diff = shippingThreshold - total;
+                    const pct = Math.min(100, Math.round((total / shippingThreshold) * 100));
+                    shippingText.innerHTML = `<span>🚚</span><span>أضف بـ <strong class="num-font font-black text-emerald-700">${Number(diff).toLocaleString('en-US')}</strong> ج.م للحصول على <strong>شحن مجاني</strong>!</span>`;
+                    shippingProg.style.width = pct + '%';
+                    shippingProg.className = 'bg-emerald-600 h-full rounded-full transition-all duration-500';
+                } else {
+                    shippingText.innerHTML = `<span>🎉</span><span class="font-black text-emerald-700">مبروك! طلبك مؤهل للشحن المجاني بالكامل لجميع المحافظات!</span>`;
+                    shippingProg.style.width = '100%';
+                    shippingProg.className = 'bg-emerald-500 h-full rounded-full transition-all duration-500 shadow-sm';
+                }
+            }
         }
+
+        // Back to top scroll listener
+        window.addEventListener('scroll', () => {
+            const btt = document.getElementById('back-to-top');
+            if (btt) {
+                if (window.scrollY > 400) {
+                    btt.classList.remove('opacity-0', 'pointer-events-none');
+                } else {
+                    btt.classList.add('opacity-0', 'pointer-events-none');
+                }
+            }
+        });
 
         function removeFromCart(index) {
             cart.splice(index, 1);
@@ -1898,13 +2308,11 @@
             const searchParam = urlParams.get('q');
 
             if (searchParam) {
-                const searchInput = document.getElementById('search-input');
-                if (searchInput) searchInput.value = searchParam;
                 searchBikes(searchParam);
             } else if (catParam) {
                 filterCategory(catParam);
             } else {
-                renderProducts(allLoadedProducts);
+                applyAllFilters();
             }
 
             // Smooth scroll to bikes grid if cat or bikes-grid anchor requested
@@ -1985,7 +2393,45 @@
        class="fixed bottom-20 md:bottom-6 left-6 z-50 bg-[#25D366] hover:bg-[#20bd5a] text-white p-3.5 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 group" 
        aria-label="تواصل معنا عبر واتساب">
         <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.109.005.253-.042.395.299.144.347.491 1.199.534 1.286.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.174.086.275.072.376-.043.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.824z"/></svg>
-    </a>
+    <!-- STICKY COMPARISON FLOATING BAR -->
+    <div id="compare-bar" class="fixed bottom-20 md:bottom-6 left-1/2 transform -translate-x-1/2 z-40 bg-trek-black/95 text-white backdrop-blur-md px-4 py-3 rounded-2xl shadow-2xl border border-white/20 flex items-center justify-between gap-4 transition-all duration-300 translate-y-32 opacity-0 pointer-events-none max-w-xl w-[92%]">
+        <div class="flex items-center gap-2 flex-1 overflow-x-auto py-1 scrollbar-none" id="compare-thumbnails">
+            <!-- Dynamic Selected Bike Thumbnails Injected Here -->
+        </div>
+        <div class="flex items-center gap-2 flex-shrink-0">
+            <button onclick="openCompareModal()" class="py-2.5 px-4 bg-trek-red hover:bg-red-700 text-white font-bold text-xs rounded-xl transition shadow flex items-center gap-1.5 whitespace-nowrap">
+                <span>⚖️ قارن الآن</span>
+                <span id="compare-count-badge" class="bg-white/25 px-1.5 py-0.5 rounded-full text-[10px] num-font">0/3</span>
+            </button>
+            <button onclick="clearCompareList()" class="p-2 text-white/60 hover:text-white text-xs font-bold transition" title="مسح قائمة المقارنة">
+                ✕
+            </button>
+        </div>
+    </div>
+
+    <!-- COMPARISON MODAL DIALOG -->
+    <div id="compare-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-5xl w-full max-h-[92vh] overflow-hidden shadow-2xl flex flex-col text-right">
+            <div class="p-5 border-b border-trek-border flex justify-between items-center bg-trek-lightgray">
+                <button onclick="closeCompareModal()" class="w-8 h-8 rounded-full bg-white hover:bg-trek-border flex items-center justify-center font-bold text-sm shadow-sm transition">✕</button>
+                <div class="flex items-center gap-2">
+                    <span class="text-xl">⚖️</span>
+                    <div>
+                        <h3 class="text-base sm:text-lg font-black text-trek-black">مقارنة الدراجات وجهاً لوجه</h3>
+                        <p class="text-[11px] text-trek-gray">قارن بين المواصفات والأسعار لاختيار الدراجة الأنسب لاحتياجاتك</p>
+                    </div>
+                </div>
+            </div>
+            <div id="compare-modal-content" class="p-6 overflow-y-auto flex-1">
+                <!-- Comparison Grid dynamically injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- BACK TO TOP FLOATING BUTTON -->
+    <button id="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fixed bottom-20 md:bottom-6 right-6 z-40 bg-trek-black/85 hover:bg-trek-black text-white p-3.5 rounded-full shadow-2xl transition-all duration-300 opacity-0 pointer-events-none hover:scale-110 flex items-center justify-center border border-white/10" aria-label="الرجوع للأعلى">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+    </button>
 
 </body>
 </html>

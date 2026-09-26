@@ -14,7 +14,13 @@ import { clearCatalogCache } from './_verify-price.js';
 
 function getFirebaseUrl(subpath = '') {
     const base = (process.env.FIREBASE_DATABASE_URL || 'https://abu-el-goukh-store-default-rtdb.firebaseio.com').replace(/\/+$/, '');
-    const secret = (process.env.FIREBASE_AUTH_SECRET || '').trim();
+    const secret = (
+        process.env.FIREBASE_AUTH_SECRET ||
+        process.env.FIREBASE_DATABASE_SECRET ||
+        process.env.FIREBASE_SECRET ||
+        process.env.FIREBASE_ADMIN_SECRET ||
+        ''
+    ).trim();
     const query = secret ? `?auth=${encodeURIComponent(secret)}` : '';
     return `${base}${subpath}.json${query}`;
 }
@@ -71,13 +77,13 @@ export default async function handler(req, res) {
         });
     }
 
-    const secret = (process.env.FIREBASE_AUTH_SECRET || '').trim();
-    if (!secret) {
-        console.error('[SECURITY ERROR] FIREBASE_AUTH_SECRET not set in environment variables!');
-        return res.status(500).json({
-            error: 'تعذر الاتصال بقاعدة البيانات: مفتاح الأمان السحابي FIREBASE_AUTH_SECRET غير مضبوط في متغيرات البيئة.'
-        });
-    }
+    const secret = (
+        process.env.FIREBASE_AUTH_SECRET ||
+        process.env.FIREBASE_DATABASE_SECRET ||
+        process.env.FIREBASE_SECRET ||
+        process.env.FIREBASE_ADMIN_SECRET ||
+        ''
+    ).trim();
 
     // ─────────────────────────────────────────────────────────────
     // 2. PUT / POST: Update or Sync Products Catalog
@@ -161,6 +167,11 @@ export default async function handler(req, res) {
             if (!fbRes.ok) {
                 const errText = await fbRes.text();
                 console.error('[Products API] Firebase PUT failed:', fbRes.status, errText);
+                if (!secret || fbRes.status === 401 || fbRes.status === 403 || errText.includes('Permission denied')) {
+                    return res.status(502).json({
+                        error: 'تعذر الحفظ في قاعدة بيانات Firebase: مفتاح الأمان السحابي FIREBASE_AUTH_SECRET غير مضبوط في متغيرات بيئة Vercel أو تم رفض الصلاحيات (Permission Denied). يرجى نسخ مفتاح Database Secret من Firebase Console وإضافته في Vercel Dashboard.'
+                    });
+                }
                 return res.status(502).json({
                     error: `فشل الحفظ في قاعدة بيانات Firebase (${fbRes.status}): ${fbRes.statusText}`
                 });
@@ -215,6 +226,13 @@ export default async function handler(req, res) {
             });
 
             if (!fbRes.ok) {
+                const errText = await fbRes.text();
+                console.error('[Products API] Firebase DELETE failed:', fbRes.status, errText);
+                if (!secret || fbRes.status === 401 || fbRes.status === 403 || errText.includes('Permission denied')) {
+                    return res.status(502).json({
+                        error: 'تعذر حذف المنتج من قاعدة بيانات Firebase: مفتاح الأمان السحابي FIREBASE_AUTH_SECRET غير مضبوط في متغيرات بيئة Vercel أو تم رفض الصلاحيات (Permission Denied).'
+                    });
+                }
                 return res.status(502).json({ error: 'فشل حذف المنتج من قاعدة بيانات Firebase' });
             }
 

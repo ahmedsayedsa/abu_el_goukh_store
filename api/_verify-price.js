@@ -21,7 +21,7 @@ export function clearCatalogCache() {
 
 function getFirebaseUrl(subpath = '') {
     const base = (process.env.FIREBASE_DATABASE_URL || 'https://abu-el-goukh-store-default-rtdb.firebaseio.com').replace(/\/+$/, '');
-    const secret = (process.env.FIREBASE_AUTH_SECRET || '').trim();
+    const secret = (process.env.FIREBASE_AUTH_SECRET || process.env.FIREBASE_DATABASE_SECRET || process.env.FIREBASE_SECRET || '').trim();
     const query = secret ? `?auth=${encodeURIComponent(secret)}` : '';
     return `${base}${subpath}.json${query}`;
 }

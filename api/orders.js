@@ -14,14 +14,14 @@ import { verifyAdminToken } from './admin-auth.js';
 
 function getFirebaseUrl(path = '') {
     const base = (process.env.FIREBASE_DATABASE_URL || 'https://abu-el-goukh-store-default-rtdb.firebaseio.com').replace(/\/+$/, '');
-    const secret = (process.env.FIREBASE_AUTH_SECRET || '').trim();
+    const secret = (process.env.FIREBASE_AUTH_SECRET || process.env.FIREBASE_DATABASE_SECRET || process.env.FIREBASE_SECRET || '').trim();
     const query = secret ? `?auth=${encodeURIComponent(secret)}` : '';
     return `${base}${path}.json${query}`;
 }
 
 async function decrementCatalogStock(items) {
     if (!Array.isArray(items) || items.length === 0) return;
-    const secret = (process.env.FIREBASE_AUTH_SECRET || '').trim();
+    const secret = (process.env.FIREBASE_AUTH_SECRET || process.env.FIREBASE_DATABASE_SECRET || process.env.FIREBASE_SECRET || '').trim();
     if (!secret) return;
 
     try {

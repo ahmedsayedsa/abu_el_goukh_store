@@ -275,9 +275,9 @@
                             <th class="py-3.5 px-4">الصورة</th>
                             <th class="py-3.5 px-4">اسم وموديل العجلة</th>
                             <th class="py-3.5 px-4">التصنيف</th>
-                            <th class="py-3.5 px-4">السعر (ج.م)</th>
-                            <th class="py-3.5 px-4">قسط فاليو الشهري</th>
-                            <th class="py-3.5 px-4">المقاس / المواصفات</th>
+                            <th class="py-3.5 px-4">السعر الرسمي</th>
+                            <th class="py-3.5 px-4">كود الموديل (SKU)</th>
+                            <th class="py-3.5 px-4">المقاس والمواصفات</th>
                             <th class="py-3.5 px-4 text-center">الحالة</th>
                             <th class="py-3.5 px-4 text-center">إجراءات</th>
                         </tr>
@@ -1254,15 +1254,15 @@
                     <input type="text" id="input-name" required placeholder="مثال: ترنكس 136 برو ألومنيوم مقاس 29" class="w-full bg-trek-lightgray border border-trek-border focus:border-trek-black focus:bg-white text-xs rounded-xl p-3 outline-none transition font-semibold">
                 </div>
 
-                <!-- Price & Installment -->
+                <!-- Price & SKU -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-bold text-trek-black mb-1.5">السعر بالجنيه المصري (ج.م) *</label>
-                        <input type="number" id="input-price" required oninput="calcInstallment(this.value)" placeholder="مثال: 11500" class="w-full bg-trek-lightgray border border-trek-border focus:border-trek-black focus:bg-white text-xs rounded-xl p-3 outline-none transition font-bold num-font">
+                        <input type="number" id="input-price" required placeholder="مثال: 11500" class="w-full bg-trek-lightgray border border-trek-border focus:border-trek-black focus:bg-white text-xs rounded-xl p-3 outline-none transition font-bold num-font">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-trek-black mb-1.5">قسط فاليو التقديري (12 شهر)</label>
-                        <input type="text" id="input-installment" readonly value="0 ج.م / شهر" class="w-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs rounded-xl p-3 outline-none font-bold">
+                        <label class="block text-xs font-bold text-trek-black mb-1.5">كود الموديل (SKU) *</label>
+                        <input type="text" id="input-sku" placeholder="مثال: ABU-1189653" class="w-full bg-trek-lightgray border border-trek-border focus:border-trek-black focus:bg-white text-xs rounded-xl p-3 outline-none font-bold num-font">
                     </div>
                 </div>
 
@@ -2334,7 +2334,6 @@
                     fat: 'دبابات (Fat)'
                 };
                 const catLabel = categoryNames[p.category] || p.category;
-                const installment = Math.round(p.price / 12 * 1.15); // ValU approx 12 mo
                 const stockVal = p.stock !== undefined ? Number(p.stock) : 5;
                 let stockBadge = '';
                 if (stockVal <= 0) {
@@ -2343,6 +2342,14 @@
                     stockBadge = `<span class="inline-block bg-amber-100 text-amber-800 text-[10px] font-bold px-1.5 py-0.5 rounded">باقي ${stockVal} قطع فقط!</span>`;
                 } else {
                     stockBadge = `<span class="inline-block bg-emerald-50 text-emerald-700 text-[10px] font-semibold px-1.5 py-0.5 rounded">المخزون: ${stockVal} قطعة</span>`;
+                }
+
+                // Clean size calculation (no "undefined")
+                let sizeDisplay = p.size && p.size !== 'undefined' ? p.size + '"' : '';
+                if (!sizeDisplay) {
+                    const match = ((p.name || '') + ' ' + (p.specs || '')).match(/(29|27\.5|26|24|20|16|12)\s*["״ بوصة]/i) ||
+                                  ((p.name || '') + ' ' + (p.specs || '')).match(/\b(29|27\.5|26|24|20|16|12)\b/);
+                    sizeDisplay = match ? match[1] + '"' : 'قياسي';
                 }
 
                 return `
@@ -2363,12 +2370,12 @@
                         <td class="py-3 px-4 font-black text-trek-black num-font text-sm">
                             ${Number(p.price).toLocaleString('en-US')} ج.م
                         </td>
-                        <td class="py-3 px-4 text-emerald-700 font-bold num-font text-xs">
-                            ${installment} ج.م / شهر
+                        <td class="py-3 px-4">
+                            <span class="font-bold text-trek-black num-font text-xs bg-gray-100 px-2 py-1 rounded-md border border-gray-200">${p.sku || `ABU-${p.id}`}</span>
                         </td>
                         <td class="py-3 px-4 text-trek-gray text-[11px]">
-                            <div>مقاس: <strong class="text-trek-black num-font">${p.size}"</strong></div>
-                            <div class="text-[10px] line-clamp-1">${p.gears || 'شيمانو'}</div>
+                            <div>مقاس: <strong class="text-trek-black num-font">${sizeDisplay}</strong></div>
+                            <div class="text-[10px] line-clamp-1 text-trek-gray mt-0.5">${p.specs || p.gears || 'مواصفات قياسية معتمدة'}</div>
                         </td>
                         <td class="py-3 px-4 text-center">
                             <button onclick="toggleProductStatus(${p.id})" class="px-2.5 py-1 rounded-full text-[10px] font-black transition ${p.active ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-200 text-gray-600'}">
@@ -2455,7 +2462,8 @@
             document.getElementById('modal-heading').innerText = 'إضافة عجلة جديدة للمتجر';
             document.getElementById('input-name').value = '';
             document.getElementById('input-price').value = '';
-            document.getElementById('input-installment').value = '0 ج.م / شهر';
+            const skuInput = document.getElementById('input-sku');
+            if (skuInput) skuInput.value = '';
             document.getElementById('input-category').value = 'mountain';
             document.getElementById('input-size').value = '29';
             document.getElementById('input-gears').value = 'شيمانو تورني 21 سرعة ياباني أصلي';
@@ -2482,7 +2490,8 @@
             document.getElementById('modal-heading').innerText = `تعديل العجلة: ${p.name}`;
             document.getElementById('input-name').value = p.name;
             document.getElementById('input-price').value = p.price;
-            calcInstallment(p.price);
+            const skuInput = document.getElementById('input-sku');
+            if (skuInput) skuInput.value = p.sku || ('ABU-' + p.id);
             document.getElementById('input-category').value = p.category;
             document.getElementById('input-size').value = p.size || '26';
             document.getElementById('input-gears').value = p.gears || '';
@@ -2596,6 +2605,9 @@
             const extraImages = imagesRaw ? imagesRaw.split(/[\n,]+/).map(s => s.trim()).filter(s => s.startsWith('http://') || s.startsWith('https://')) : [];
             const images = [image, ...extraImages].filter(Boolean).filter((v, i, a) => a.indexOf(v) === i);
 
+            const skuInput = document.getElementById('input-sku');
+            const sku = skuInput && skuInput.value.trim() ? skuInput.value.trim() : '';
+
             // Clone current products array
             let updatedProducts = [...products];
 
@@ -2606,7 +2618,8 @@
                     updatedProducts[index] = {
                         ...updatedProducts[index],
                         name, price, category, size, gears, frame, metaDescription, image,
-                        stock, badge, images
+                        stock, badge, images,
+                        sku: sku || updatedProducts[index].sku || `ABU-${editId}`
                     };
                 }
             } else {
@@ -2616,6 +2629,7 @@
                     id: newId,
                     name, price, category, size, gears, frame, metaDescription, image,
                     stock, badge, images,
+                    sku: sku || `ABU-${newId}`,
                     active: true
                 });
             }

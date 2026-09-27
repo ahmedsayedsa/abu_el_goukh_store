@@ -1630,6 +1630,26 @@
         let compareList = [];
         let currentModalProduct = null;
 
+        // SECURITY FIX: HTML entity encoding to prevent Stored XSS from product/cart data
+        function escapeShopHtml(str) {
+            if (str === null || str === undefined) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // SECURITY FIX: Only allow http(s) / data-image sources in <img src> attributes
+        function sanitizeShopImageUrl(url) {
+            const s = String(url === null || url === undefined ? '' : url).trim();
+            if (/^https?:\/\//i.test(s) || /^data:image\/(png|jpe?g|webp|gif);base64,/i.test(s) || /^images\//i.test(s)) {
+                return escapeShopHtml(s);
+            }
+            return 'images/bike_1.jpg';
+        }
+
         // Unified Filter State
         let filterState = {
             category: 'all',
@@ -1683,17 +1703,17 @@
                 }
 
                 return `
-                    <div class="trek-card rounded-xl p-5 flex flex-col justify-between group cursor-pointer hover:border-trek-black transition relative" onclick="window.location.href='product.html?id=' + ${p.id}">
+                    <div class="trek-card rounded-xl p-5 flex flex-col justify-between group cursor-pointer hover:border-trek-black transition relative" onclick="window.location.href='product.html?id=' + ${Number(p.id) || 0}">
                         <div>
                             <!-- Card Header: Badges & SKU -->
                             <div class="flex justify-between items-center mb-3">
-                                <span class="trek-badge ${badgeClass} px-2.5 py-0.5 rounded-sm">${p.badge}</span>
-                                <span class="text-[11px] font-bold text-trek-gray num-font">${p.sku}</span>
+                                <span class="trek-badge ${badgeClass} px-2.5 py-0.5 rounded-sm">${escapeShopHtml(p.badge)}</span>
+                                <span class="text-[11px] font-bold text-trek-gray num-font">${escapeShopHtml(p.sku)}</span>
                             </div>
 
                             <!-- Bike Image Container with Trek Studio Shadow -->
                             <div class="h-44 sm:h-48 flex items-center justify-center my-2 p-2 relative bike-studio-shadow">
-                                <img src="${p.image}" alt="${p.name}" loading="lazy" class="max-h-full object-contain relative z-10 transition-transform duration-300 group-hover:scale-105" onerror="if(!this.dataset.triedBackup){this.dataset.triedBackup=1; this.src='images/bike_'+${p.id}+'.jpg';}">
+                                <img src="${sanitizeShopImageUrl(p.image)}" alt="${escapeShopHtml(p.name)}" loading="lazy" class="max-h-full object-contain relative z-10 transition-transform duration-300 group-hover:scale-105" onerror="if(!this.dataset.triedBackup){this.dataset.triedBackup=1; this.src='images/bike_'+${Number(p.id) || 0}+'.jpg';}">
                             </div>
 
                             <!-- Colorway Swatches (Trek Style) -->
@@ -1706,10 +1726,10 @@
 
                             <!-- Bike Name & Category -->
                             <h3 class="text-sm font-extrabold text-trek-black line-clamp-1 group-hover:text-trek-red transition">
-                                ${p.name}
+                                ${escapeShopHtml(p.name)}
                             </h3>
                             <p class="text-[11px] text-trek-gray mt-1 line-clamp-1">
-                                ${p.specs}
+                                ${escapeShopHtml(p.specs)}
                             </p>
                         </div>
 
@@ -1816,34 +1836,43 @@
 
             let gridCols = bikes.length === 1 ? 'grid-cols-1 max-w-md mx-auto' : (bikes.length === 2 ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1 md:grid-cols-3');
 
+            // SECURITY FIX: Escape product-controlled values before HTML injection (Stored XSS hardening)
+            const esc = s => escapeShopHtml(s);
+
             let html = `
                 <div class="grid ${gridCols} gap-6 text-right">
                     ${bikes.map(b => {
                         const stock = Number(b.stock !== undefined ? b.stock : 10);
                         const stockText = stock <= 0 ? '<span class="text-red-600 font-bold">غير متوفر حالياً 🚫</span>' : (stock <= 3 ? `<span class="text-amber-600 font-bold">باقي ${stock} قطع فقط! ⚠️</span>` : '<span class="text-emerald-600 font-bold">متوفر في المخزن 🟢</span>');
+                        const safeImage = sanitizeShopImageUrl(b.image);
+                        const safeName = esc(b.name);
+                        const safeBadge = esc(b.badge || 'ORIGINAL');
+                        const safeSku = esc(b.sku);
+                        const safeCategory = esc(b.category);
+                        const safeSpecs = esc(b.specs);
                         return `
                             <div class="bg-trek-lightgray/80 rounded-2xl p-5 flex flex-col justify-between border border-trek-border hover:border-trek-black transition">
                                 <div>
                                     <div class="h-44 flex items-center justify-center p-3 mb-4 bg-white rounded-xl shadow-inner">
-                                        <img src="${b.image}" alt="${b.name}" class="max-h-full object-contain" onerror="if(!this.dataset.triedBackup){this.dataset.triedBackup=1; this.src='images/bike_'+${b.id}+'.jpg';}">
+                                        <img src="${safeImage}" alt="${safeName}" class="max-h-full object-contain" onerror="if(!this.dataset.triedBackup){this.dataset.triedBackup=1; this.src='images/bike_'+${Number(b.id) || 0}+'.jpg';}">
                                     </div>
-                                    <span class="text-[10px] font-black uppercase text-trek-red px-2 py-0.5 bg-red-50 rounded">${b.badge || 'ORIGINAL'}</span>
-                                    <h4 class="text-base font-black text-trek-black mt-1 mb-2">${b.name}</h4>
+                                    <span class="text-[10px] font-black uppercase text-trek-red px-2 py-0.5 bg-red-50 rounded">${safeBadge}</span>
+                                    <h4 class="text-base font-black text-trek-black mt-1 mb-2">${safeName}</h4>
                                     <div class="text-xl font-black text-trek-black num-font mb-1">${Number(b.price).toLocaleString('en-US')} <span class="text-xs font-normal">ج.م</span></div>
                                     <div class="text-[11px] text-emerald-700 font-semibold mb-4">💳 متاح تقسيط مباشر وبنكي حتى 36 شهر</div>
 
                                     <div class="space-y-2.5 text-xs border-t border-trek-border pt-3">
                                         <div class="flex justify-between">
                                             <span class="text-trek-gray">كود الموديل:</span>
-                                            <span class="font-bold num-font">${b.sku}</span>
+                                            <span class="font-bold num-font">${safeSku}</span>
                                         </div>
                                         <div class="flex justify-between">
                                             <span class="text-trek-gray">التصنيف:</span>
-                                            <span class="font-bold">${b.category}</span>
+                                            <span class="font-bold">${safeCategory}</span>
                                         </div>
                                         <div>
                                             <span class="text-trek-gray block mb-1">المواصفات الفنية:</span>
-                                            <span class="font-medium text-trek-black leading-relaxed block bg-white p-2.5 rounded-lg border border-trek-border/60">${b.specs}</span>
+                                            <span class="font-medium text-trek-black leading-relaxed block bg-white p-2.5 rounded-lg border border-trek-border/60">${safeSpecs}</span>
                                         </div>
                                         <div class="flex justify-between">
                                             <span class="text-trek-gray">حالة التوفر:</span>
@@ -1853,10 +1882,10 @@
                                 </div>
 
                                 <div class="space-y-2 mt-6 pt-4 border-t border-trek-border">
-                                    <a href="product.html?id=${b.id}" class="w-full py-2.5 bg-trek-black hover:bg-trek-charcoal text-white font-bold text-xs rounded-xl transition text-center block">
+                                    <a href="product.html?id=${Number(b.id) || 0}" class="w-full py-2.5 bg-trek-black hover:bg-trek-charcoal text-white font-bold text-xs rounded-xl transition text-center block">
                                         فتح صفحة الدراجة ↗
                                     </a>
-                                    <button onclick="buyNowDirect(${b.id})" class="w-full py-2.5 bg-trek-red hover:bg-red-700 text-white font-bold text-xs rounded-xl transition text-center block ${stock <= 0 ? 'opacity-50 cursor-not-allowed' : ''}" ${stock <= 0 ? 'disabled' : ''}>
+                                    <button onclick="buyNowDirect(${Number(b.id) || 0})" class="w-full py-2.5 bg-trek-red hover:bg-red-700 text-white font-bold text-xs rounded-xl transition text-center block ${stock <= 0 ? 'opacity-50 cursor-not-allowed' : ''}" ${stock <= 0 ? 'disabled' : ''}>
                                         ⚡ شراء فوري
                                     </button>
                                 </div>
@@ -2157,11 +2186,15 @@
                 if (list) {
                     list.innerHTML = cart.map((item, idx) => {
                         total += Number(item.price);
+                        // SECURITY FIX: Escape product-controlled values before HTML injection
+                        const safeImage = sanitizeShopImageUrl(item.image);
+                        const safeName = escapeShopHtml(item.name);
+                        const safeItemId = Number(item.id) || 0;
                         return `
                             <div class="flex items-center gap-3 p-3 bg-trek-lightgray rounded-xl">
-                                <img src="${item.image}" class="w-16 h-16 object-contain bg-white rounded-lg p-1" onerror="if(!this.dataset.triedBackup){this.dataset.triedBackup=1; this.src='images/bike_'+${item.id}+'.jpg';}">
+                                <img src="${safeImage}" class="w-16 h-16 object-contain bg-white rounded-lg p-1" onerror="if(!this.dataset.triedBackup){this.dataset.triedBackup=1; this.src='images/bike_'+${safeItemId}+'.jpg';}">
                                 <div class="flex-1">
-                                    <h4 class="text-xs font-bold text-trek-black line-clamp-1">${item.name}</h4>
+                                    <h4 class="text-xs font-bold text-trek-black line-clamp-1">${safeName}</h4>
                                     <div class="text-xs font-black text-trek-black num-font mt-1">${Number(item.price).toLocaleString('en-US')} ج.م</div>
                                 </div>
                                 <button onclick="removeFromCart(${idx})" class="text-trek-gray hover:text-trek-red font-bold text-sm p-1">✕</button>

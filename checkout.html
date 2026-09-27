@@ -461,6 +461,27 @@
         let appliedDiscountPercent = 0;
         let shippingFee = 150;
 
+        // SECURITY FIX: HTML entity encoding to prevent Reflected / Stored XSS when injecting
+        // product names, specs or URL parameters into the DOM.
+        function escapeHtml(str) {
+            return String(str == null ? '' : str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // SECURITY FIX: Allow only http(s) / data-image sources for <img src> to prevent
+        // javascript: / data:text/html attribute injection from cart or product data.
+        function sanitizeImageUrl(url) {
+            const s = String(url == null ? '' : url).trim();
+            if (/^https?:\/\//i.test(s) || /^data:image\/(png|jpe?g|webp|gif);base64,/i.test(s)) {
+                return escapeHtml(s);
+            }
+            return 'images/bike_1.jpg';
+        }
+
         let livePaymentCfg = {};
 
         // Load non-sensitive payment gateway display preferences safely
@@ -549,7 +570,8 @@
             if (payStatus && payStatus.includes('success')) {
                 const banner = document.createElement('div');
                 banner.className = 'bg-emerald-600 text-white p-4 rounded-2xl mb-6 text-center font-bold text-xs sm:text-sm shadow-md flex items-center justify-center gap-2';
-                banner.innerHTML = `<span>✓ تم تأكيد سداد دفعتك الإلكترونية بنجاح ${returnOrderId ? `للطلب #${returnOrderId}` : ''}! جاري ضبط دراجتك وتجهيزها للشحن فوراً.</span>`;
+                // SECURITY FIX: Reflected XSS protection - order id comes from URL params
+                banner.innerHTML = `<span>✓ تم تأكيد سداد دفعتك الإلكترونية بنجاح ${returnOrderId ? `للطلب #${escapeHtml(returnOrderId)}` : ''}! جاري ضبط دراجتك وتجهيزها للشحن فوراً.</span>`;
                 const mainEl = document.querySelector('main');
                 if (mainEl) mainEl.prepend(banner);
 
@@ -574,12 +596,16 @@
             }
 
             container.innerHTML = cart.map((item, idx) => {
+                // SECURITY FIX: Escape all customer/product-controlled values injected into HTML
+                const safeImage = sanitizeImageUrl(item.image);
+                const safeName = escapeHtml(item.name);
+                const safeSpecs = escapeHtml(item.specs || 'شاسيه ألومنيوم • ضمان الوكيل');
                 return `
                     <div class="flex items-center gap-3 p-3 bg-trek-lightgray rounded-xl border border-trek-border">
-                        <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-contain bg-white rounded-lg p-1 border border-trek-border">
+                        <img src="${safeImage}" alt="${safeName}" class="w-16 h-16 object-contain bg-white rounded-lg p-1 border border-trek-border">
                         <div class="flex-1 min-w-0">
-                            <h4 class="text-xs font-bold text-trek-black line-clamp-1">${item.name}</h4>
-                            <p class="text-[10px] text-trek-gray mt-0.5">${item.specs || 'شاسيه ألومنيوم • ضمان الوكيل'}</p>
+                            <h4 class="text-xs font-bold text-trek-black line-clamp-1">${safeName}</h4>
+                            <p class="text-[10px] text-trek-gray mt-0.5">${safeSpecs}</p>
                             <div class="text-xs font-black text-trek-black num-font mt-1">${Number(item.price).toLocaleString('en-US')} ج.م</div>
                         </div>
                         <button type="button" onclick="removeItem(${idx})" title="حذف" class="text-trek-gray hover:text-trek-red font-bold text-sm p-1.5">✕</button>

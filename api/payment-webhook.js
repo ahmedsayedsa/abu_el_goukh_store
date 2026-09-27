@@ -4,6 +4,16 @@ import { rollbackStock } from './orders.js';
 import { clearCatalogCache } from './_verify-price.js';
 
 /**
+ * CRITICAL CONFIG: Disable Vercel automatic body parser for this webhook endpoint.
+ * This preserves the raw, byte-for-byte HTTP payload required for exact HMAC-SHA256 signature verification.
+ */
+export const config = {
+    api: {
+        bodyParser: false
+    }
+};
+
+/**
  * Server-to-Server Payment Webhook Handler
  * SECURITY FIX:
  * 1. ONLY authoritative endpoint permitted to mark orders as 'paid' or 'failed'.
@@ -150,8 +160,35 @@ export default async function handler(req, res) {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
 
-    const gateway = String(req.query?.gateway || '').toLowerCase();
-    const body = req.body || {};
+    // Read the exact raw byte stream to preserve character-for-character payload for HMAC verification
+    let rawBody = '';
+    if (typeof req[Symbol.asyncIterator] === 'function') {
+        const chunks = [];
+        for await (const chunk of req) {
+            chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
+        }
+        rawBody = Buffer.concat(chunks).toString('utf8');
+    } else if (typeof req.rawBody === 'string') {
+        rawBody = req.rawBody;
+    } else if (typeof req.body === 'string') {
+        rawBody = req.body;
+    } else if (req.body && typeof req.body === 'object') {
+        rawBody = JSON.stringify(req.body);
+    }
+
+    let body = {};
+    if (rawBody && rawBody.trim()) {
+        try {
+            body = JSON.parse(rawBody);
+        } catch (e) {
+            console.warn('[Webhook Warning] Failed to parse JSON body:', e.message);
+            return res.status(400).json({ error: 'Invalid JSON payload' });
+        }
+    } else if (req.body && typeof req.body === 'object') {
+        body = req.body;
+    }
+
+    const gateway = String(req.query?.gateway || body.gateway || '').toLowerCase();
     const dynamicCfg = await getGatewayConfig();
 
     // ─────────────────────────────────────────────────────────────
@@ -231,7 +268,7 @@ export default async function handler(req, res) {
             return res.status(403).json({ error: 'Missing signature header' });
         }
 
-        const rawBody = typeof req.body === 'string' ? req.body : JSON.stringify(req.body);
+        // SECURITY FIX: Calculate HMAC-SHA256 directly on the exact rawBody byte stream
         const calculatedSig = crypto.createHmac('sha256', serverKey).update(rawBody).digest('hex');
         if (!safeCompare(signatureHeader, calculatedSig)) {
             console.warn('[SECURITY ALERT] Invalid PayTabs Signature attempt!');

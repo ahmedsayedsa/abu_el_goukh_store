@@ -340,5 +340,83 @@ curl -X POST "https://<your-domain>/api/payment-webhook?gateway=paymob&hmac=fake
 ---
 *تم الاختبار الآلي الشامل بنجاح واجتياز كافة الفحوصات الـ 5 بنسبة 100% (`test_deep_audit_fixes.mjs`).*
 
+---
+
+## ⚡ تقرير حل مشكلة توقيع PayTabs (الجولة السادسة - Raw Stream HMAC-SHA256)
+
+### طبيعة الخلل المعماري الأصلي:
+- **الملف المتأثر:** `api/payment-webhook.js`.
+- **الملاحظة الجوهرية:** هذا الخلل **كان موجوداً في التصميم الأساسي والأصلي للملف منذ إنشائه الأول**، وليس ناتجاً عن أي تعديل أمني حديث.
+- **الشرح الفني:**
+  - منصة Vercel Serverless تقوم افتراضياً بتحليل وفك الـ JSON للطلب الوارد تلقائياً (`bodyParser: true`) قبل تسليمه للـ Handler، فيصل `req.body` ككائن JavaScript مفكوك.
+  - كان الكود الأصلي يحاول إعادة بناء النص عبر `JSON.stringify(req.body)` لتمريره لدالة التشفير:
+    ```javascript
+    const rawBody = typeof req.body === 'string' ? req.body : JSON.stringify(req.body);
+    const calculatedSig = crypto.createHmac('sha256', serverKey).update(rawBody).digest('hex');
+    ```
+  - إعادة بناء الـ JSON بهذه الطريقة يغير حتماً من ترتيب المفاتيح، والمسافات البادئة، والفواصل، والأرقام العشرية (مثل `"8500.00"` مقابل `8500`) مقارنة بالبايتات الأصلية الحرفية التي أرسلتها سيرفرات PayTabs وحسبت التوقيع عليها.
+  - نتيجة لذلك، كان التحقق من توقيع PayTabs يفشل دائماً في أي معاملة فعلية حقيقية ويرجع `HTTP 403 Invalid signature`.
+
+### الحل الجذري المنفذ:
+1. **تعطيل الـ BodyParser التلقائي لـ Vercel حصرياً لهذا الملف:**
+   ```javascript
+   export const config = {
+       api: {
+           bodyParser: false
+       }
+   };
+   ```
+2. **قراءة البايتات الخام للطلب مباشرة من الـ Stream (Raw Byte Stream):**
+   ```javascript
+   let rawBody = '';
+   if (typeof req[Symbol.asyncIterator] === 'function') {
+       const chunks = [];
+       for await (const chunk of req) {
+           chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
+       }
+       rawBody = Buffer.concat(chunks).toString('utf8');
+   }
+   ```
+3. **حساب توقيع PayTabs على `rawBody` الحرفي بدون أي معالجة أو إعادة تشكيل:**
+   ```javascript
+   const calculatedSig = crypto.createHmac('sha256', serverKey).update(rawBody).digest('hex');
+   ```
+4. **فك الـ JSON يدوياً واستخدامه لكافة البوابات:**
+   - استخراج حقول المعاملة عبر `body = JSON.parse(rawBody)`.
+   - استمرار عمل بوابات Paymob و Fawry بكفاءة تامة وتوافقية 100% لكونهما يعتمدان على الحقول المستخرجة من كائن `body` وليس النص الحرفي.
+
+---
+
+### نتائج الاختبار الفعلي الإجباري (`scratch/test_paytabs_raw_hmac.mjs`):
+تم بناء واختبار سيرفر محاكاة حقيقي مع حمولة PayTabs واقعية تشتمل على مسافات وترتيب حقول وأرقام عشرية:
+```text
+===============================================================
+  PAYTABS RAW STREAM HMAC-SHA256 WEBHOOK VERIFICATION TEST
+===============================================================
+
+✓ Vercel automatic bodyParser is successfully disabled (bodyParser: false).
+
+[Test 1] Real-world PayTabs Payload with Exact Raw Byte Signature
+  → Confirmed: JSON.stringify produces different hash:
+    * Original Raw HMAC:      f1769b2a9c5c8e70aae5c6d2f4ffe386...
+    * Re-serialized JSON HMAC: b453d191b28383334988966d8257b642... (Mismatch!)
+  ✓ PayTabs raw HMAC signature was SUCCESSFULLY verified and accepted!
+
+[Test 2] Tampered PayTabs Signature Rejection
+  ✓ Tampered PayTabs signature properly rejected with HTTP 403 Forbidden.
+
+[Test 3] Missing PayTabs Signature Header Rejection
+  ✓ Missing signature header properly rejected with HTTP 403 Forbidden.
+
+[Test 4] Paymob and Fawry Webhook Compatibility
+  ✓ Paymob parsed body handler functions correctly with raw stream parsing.
+  ✓ Fawry parsed body handler functions correctly with raw stream parsing.
+
+===============================================================
+  ALL PAYTABS RAW STREAM & GATEWAY TESTS PASSED SUCCESSFULLY!  
+===============================================================
+```
+
+
 
 

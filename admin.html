@@ -2345,20 +2345,25 @@
                 }
 
                 // Clean size calculation (no "undefined")
-                let sizeDisplay = p.size && p.size !== 'undefined' ? p.size + '"' : '';
+                let sizeDisplay = p.size && p.size !== 'undefined' ? escapeHtml(p.size) + '"' : '';
                 if (!sizeDisplay) {
                     const match = ((p.name || '') + ' ' + (p.specs || '')).match(/(29|27\.5|26|24|20|16|12)\s*["״ بوصة]/i) ||
                                   ((p.name || '') + ' ' + (p.specs || '')).match(/\b(29|27\.5|26|24|20|16|12)\b/);
                     sizeDisplay = match ? match[1] + '"' : 'قياسي';
                 }
+                // SECURITY FIX: Escape product-controlled values before HTML injection (Stored XSS hardening)
+                const safeName = escapeHtml(p.name);
+                const safeImage = sanitizeAdminImageUrl(p.image);
+                const safeSku = escapeHtml(p.sku || `ABU-${p.id}`);
+                const safeSpecs = escapeHtml(p.specs || p.gears || 'مواصفات قياسية معتمدة');
 
                 return `
                     <tr class="hover:bg-gray-50/80 transition group">
                         <td class="py-3 px-4">
-                            <img src="${p.image}" class="w-12 h-12 object-contain bg-white rounded-lg border border-trek-border p-1 group-hover:scale-105 transition" onerror="if(!this.dataset.triedBackup){this.dataset.triedBackup=1; this.src='images/bike_'+p.id+'.jpg';}">
+                            <img src="${safeImage}" class="w-12 h-12 object-contain bg-white rounded-lg border border-trek-border p-1 group-hover:scale-105 transition" onerror="if(!this.dataset.triedBackup){this.dataset.triedBackup=1; this.src='images/bike_'+${Number(p.id) || 0}+'.jpg';}">
                         </td>
                         <td class="py-3 px-4 font-bold text-trek-black">
-                            <div class="text-xs line-clamp-1">${p.name}</div>
+                            <div class="text-xs line-clamp-1">${safeName}</div>
                             <div class="flex items-center gap-2 mt-0.5">
                                 <span class="text-[10px] text-trek-gray num-font">ID: #${p.id}</span>
                                 ${stockBadge}
@@ -2371,11 +2376,11 @@
                             ${Number(p.price).toLocaleString('en-US')} ج.م
                         </td>
                         <td class="py-3 px-4">
-                            <span class="font-bold text-trek-black num-font text-xs bg-gray-100 px-2 py-1 rounded-md border border-gray-200">${p.sku || `ABU-${p.id}`}</span>
+                            <span class="font-bold text-trek-black num-font text-xs bg-gray-100 px-2 py-1 rounded-md border border-gray-200">${safeSku}</span>
                         </td>
                         <td class="py-3 px-4 text-trek-gray text-[11px]">
                             <div>مقاس: <strong class="text-trek-black num-font">${sizeDisplay}</strong></div>
-                            <div class="text-[10px] line-clamp-1 text-trek-gray mt-0.5">${p.specs || p.gears || 'مواصفات قياسية معتمدة'}</div>
+                            <div class="text-[10px] line-clamp-1 text-trek-gray mt-0.5">${safeSpecs}</div>
                         </td>
                         <td class="py-3 px-4 text-center">
                             <button onclick="toggleProductStatus(${p.id})" class="px-2.5 py-1 rounded-full text-[10px] font-black transition ${p.active ? 'bg-emerald-100 text-emerald-800' : 'bg-gray-200 text-gray-600'}">
@@ -3663,9 +3668,7 @@
                     syncBtn.innerHTML = `<span>🔄 مزامنة سحابية</span>`;
                 }
             }
-        }
-
-        // HTML Sanitizer to prevent Stored XSS
+        }        // HTML Sanitizer to prevent Stored XSS
         function escapeHtml(str) {
             if (str === null || str === undefined) return '';
             return String(str)
@@ -3674,6 +3677,16 @@
                 .replace(/>/g, '&gt;')
                 .replace(/"/g, '&quot;')
                 .replace(/'/g, '&#039;');
+
+        }
+
+        // SECURITY FIX: Only allow http(s) and safe data-image URLs in <img src> attributes
+        function sanitizeAdminImageUrl(url) {
+            const s = String(url === null || url === undefined ? '' : url).trim();
+            if (/^https?:\/\//i.test(s) || /^data:image\/(png|jpe?g|webp|gif);base64,/i.test(s) || /^images\//i.test(s)) {
+                return escapeHtml(s);
+            }
+            return 'https://media.zbooni.com/merchants/media/products/109246/1735216982659_croppedImg.jpg';
         }
 
         function renderOrdersTable() {

@@ -584,8 +584,8 @@
                         <div class="flex items-center gap-3">
                             <span class="text-2xl font-black text-emerald-600">💵</span>
                             <div>
-                                <h3 class="text-base font-black text-trek-black">الدفع عند الاستلام والمعاينة (COD)</h3>
-                                <p class="text-[11px] text-trek-gray">التحصيل نقداً عند باب البيت بعد فحص الدراجة وتجربتها</p>
+                                <h3 class="text-base font-black text-trek-black">الدفع عند الاستلام (COD)</h3>
+                                <p class="text-[11px] text-trek-gray">التحصيل نقداً عند باب البيت مع فحص مسبق في الورشة وضمان استرجاع 14 يوماً</p>
                             </div>
                         </div>
                         <label class="relative inline-flex items-center cursor-pointer">
@@ -612,7 +612,7 @@
                         <div class="pt-2">
                             <label class="flex items-center gap-2 cursor-pointer select-none">
                                 <input type="checkbox" id="cod-inspection" checked class="rounded border-gray-300 text-trek-red focus:ring-trek-red w-4 h-4">
-                                <span class="text-xs font-bold text-trek-black">إبراز ميزة "السماح بالمعاينة والتجربة قبل الدفع للمندوب" في صفحة الشراء</span>
+                                <span class="text-xs font-bold text-trek-black">إبراز ميزة "الدفع عند الاستلام مع ضمان استبدال واسترجاع 14 يوماً" في صفحة الشراء</span>
                             </label>
                         </div>
                     </div>
@@ -2454,7 +2454,7 @@
             const gears = document.getElementById('input-gears').value.trim() || 'سرعات شيمانو أصلية';
             const frame = document.getElementById('input-frame').value.trim() || 'شاسيه ألومنيوم خفيف';
             const priceText = price ? `بسعر ${Number(price).toLocaleString('en-US')} ج.م` : '';
-            const gen = `اشتري ${name} الأصلية من توكيل أبو الجوخ 1925 ${priceText}. ${frame} ومجموعة ${gears} مع فحص ومعاينة قبل الدفع وشحن سريع لجميع المحافظات.`.trim();
+            const gen = `اشتري ${name} الأصلية من توكيل أبو الجوخ 1925 ${priceText}. ${frame} ومجموعة ${gears} مجمعة ومضبوطة يدوياً مع ضمان استرجاع 14 يوماً وشحن سريع.`.trim();
             const input = document.getElementById('input-meta-desc');
             if (input) {
                 input.value = gen.substring(0, 160);
@@ -2767,7 +2767,7 @@
             document.getElementById('edit-ord-subtotal').value = ord.subtotal || ord.total || 0;
             document.getElementById('edit-ord-shipping').value = ord.shipping !== undefined ? ord.shipping : 150;
             document.getElementById('edit-ord-discount').value = ord.discount || 0;
-            document.getElementById('edit-ord-payment').value = ord.payment || 'الدفع عند الاستلام والمعاينة';
+            document.getElementById('edit-ord-payment').value = ord.payment || 'الدفع عند الاستلام';
             
             // Payment Status and Reference
             let pStatus = ord.paymentStatus;
@@ -2890,13 +2890,35 @@
             const ord = currentEditingOrder;
             const printWindow = window.open('', '_blank');
             const items = Array.isArray(ord.items) && ord.items.length > 0 ? ord.items : [{ name: ord.item_name || 'دراجة هوائية من أبو الجوخ', price: ord.total || 0 }];
+
+            // SECURITY FIX: All customer-controlled fields (name, phone, address, notes, item names)
+            // must be HTML-escaped before document.write - the about:blank print window inherits
+            // the admin origin, so unescaped data here equals stored XSS against the admin session.
+            const escInv = s => escapeHtml(s);
+            const safeOrdId = escInv(ord.id);
+            const safeDate = escInv(ord.date || new Date().toLocaleDateString('ar-EG'));
+            const safeCustomer = escInv(ord.customer);
+            const safePhone = escInv(ord.phone);
+            const safeAltPhone = ord.altPhone ? ' | ' + escInv(ord.altPhone) : '';
+            const safeGov = escInv(ord.gov);
+            const safeCity = escInv(ord.city);
+            const safeAddress = escInv(ord.address);
+            const safeNotes = ord.notes ? `<p style="margin: 4px 0;"><strong>ملاحظات التسليم:</strong> ${escInv(ord.notes)}</p>` : '';
+            const safePayment = escInv(ord.payment);
+            const safeItemsRows = items.map((it, i) => `
+                                    <tr>
+                                        <td>${i+1}</td>
+                                        <td>${escInv(it.name)}</td>
+                                        <td>${Number(it.price || 0).toLocaleString('en-US')} ج.م</td>
+                                    </tr>
+                                `).join('');
             
             printWindow.document.write(`
                 <!DOCTYPE html>
                 <html lang="ar" dir="rtl">
                 <head>
                     <meta charset="UTF-8">
-                    <title>بوليصة شحن وفاتورة - طلب ${ord.id}</title>
+                    <title>بوليصة شحن وفاتورة - طلب ${safeOrdId}</title>
                     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
                     <style>
                         body { font-family: 'Cairo', sans-serif; padding: 30px; color: #111; direction: rtl; }
@@ -2917,18 +2939,18 @@
                         </div>
                         <div style="text-align: left;">
                             <h2 style="margin:0; color:#D50000;">بوليصة شحن</h2>
-                            <p style="margin: 5px 0 0 0; font-weight: bold;">رقم الطلب: ${ord.id}</p>
-                            <p style="margin: 2px 0 0 0; font-size: 11px;">تاريخ: ${ord.date || new Date().toLocaleDateString('ar-EG')}</p>
+                            <p style="margin: 5px 0 0 0; font-weight: bold;">رقم الطلب: ${safeOrdId}</p>
+                            <p style="margin: 2px 0 0 0; font-size: 11px;">تاريخ: ${safeDate}</p>
                         </div>
                     </div>
 
                     <div class="box">
                         <h3 style="margin-top:0; font-size: 14px; border-bottom: 1px solid #eee; padding-bottom: 5px;">بيانات المستلم وعنوان التوصيل</h3>
-                        <p style="margin: 4px 0;"><strong>اسم العميل:</strong> ${ord.customer}</p>
-                        <p style="margin: 4px 0;"><strong>رقم الهاتف:</strong> ${ord.phone} ${ord.altPhone ? ' | ' + ord.altPhone : ''}</p>
-                        <p style="margin: 4px 0;"><strong>المحافظة والمدينة:</strong> ${ord.gov} - ${ord.city}</p>
-                        <p style="margin: 4px 0;"><strong>العنوان التفصيلي:</strong> ${ord.address}</p>
-                        ${ord.notes ? `<p style="margin: 4px 0;"><strong>ملاحظات التسليم:</strong> ${ord.notes}</p>` : ''}
+                        <p style="margin: 4px 0;"><strong>اسم العميل:</strong> ${safeCustomer}</p>
+                        <p style="margin: 4px 0;"><strong>رقم الهاتف:</strong> ${safePhone}${safeAltPhone}</p>
+                        <p style="margin: 4px 0;"><strong>المحافظة والمدينة:</strong> ${safeGov} - ${safeCity}</p>
+                        <p style="margin: 4px 0;"><strong>العنوان التفصيلي:</strong> ${safeAddress}</p>
+                        ${safeNotes}
                     </div>
 
                     <div class="box">
@@ -2942,13 +2964,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                ${items.map((it, i) => `
-                                    <tr>
-                                        <td>${i+1}</td>
-                                        <td>${it.name}</td>
-                                        <td>${Number(it.price || 0).toLocaleString('en-US')} ج.م</td>
-                                    </tr>
-                                `).join('')}
+                                ${safeItemsRows}
                             </tbody>
                         </table>
 
@@ -2956,13 +2972,13 @@
                             <p style="margin: 3px 0;"><strong>المجموع الفرعي:</strong> ${Number(ord.subtotal || ord.total || 0).toLocaleString('en-US')} ج.م</p>
                             <p style="margin: 3px 0;"><strong>تكلفة الشحن:</strong> ${Number(ord.shipping || 0).toLocaleString('en-US')} ج.م</p>
                             ${ord.discount ? `<p style="margin: 3px 0; color: green;"><strong>الخصم:</strong> -${Number(ord.discount).toLocaleString('en-US')} ج.م</p>` : ''}
-                            <p style="margin: 3px 0;"><strong>طريقة الدفع:</strong> ${ord.payment}</p>
+                            <p style="margin: 3px 0;"><strong>طريقة الدفع:</strong> ${safePayment}</p>
                             <div class="total-box">المبلغ المطلوب تحصيله: ${Number(ord.total || ord.subtotal || 0).toLocaleString('en-US')} ج.م</div>
                         </div>
                     </div>
 
                     <div style="margin-top: 25px; font-size: 11px; color: #666; text-align: center; border-top: 1px dashed #ccc; padding-top: 15px;">
-                        تصل الدراجة مجمعة ومضبوطة بالكامل مع شهادة الضمان المعتمدة. يحق للعميل معاينة الشحنة قبل الاستلام.
+                        تصل الدراجة مجمعة ومضبوطة بالكامل مع شهادة الضمان المعتمدة. يحق للعميل الاستبدال أو الاسترجاع خلال 14 يوماً وفقاً للشروط.
                     </div>
 
                 </body>
@@ -4252,7 +4268,8 @@
                             <div>
                                 <span class="text-xs font-bold text-trek-gray block mb-1">بوابة / طريقة الدفع:</span>
                                 <select id="edit-ord-payment" class="w-full text-xs font-bold bg-white border border-trek-border rounded-lg p-2 outline-none">
-                                    <option value="الدفع عند الاستلام والمعاينة">💵 الدفع عند الاستلام والمعاينة</option>
+                                    <option value="الدفع عند الاستلام">💵 الدفع عند الاستلام (COD)</option>
+                                    <option value="الدفع عند الاستلام والمعاينة" style="display:none">💵 الدفع عند الاستلام والمعاينة (سابقاً)</option>
                                     <option value="paytabs">💳 بطاقة بنكية فيزا / ماستر (PayTabs)</option>
                                     <option value="paymob">💳 بطاقة بنكية / محفظة / تقسيط (Paymob)</option>
                                     <option value="fawry">🏪 فوري باي كود نقدي (FawryPay)</option>

@@ -14,7 +14,7 @@ export default async function handler(req, res) {
     }
 
     const {
-        orderId, total, items, promoCode, shippingFee,
+        orderId, total, items, promoCode, shippingFee, gov,
         cartDescription, customerName, customerPhone,
         customerCity, customerState, customerAddress, returnUrl,
         paymentMethod
@@ -47,7 +47,9 @@ export default async function handler(req, res) {
     // SECURITY FIX: Authoritative Server-side price validation (Fail-Closed)
     let priceResult;
     try {
-        priceResult = await verifyOrderPrice(items, total, promoCode, shippingFee);
+    // SECURITY FIX: Pass the customer governorate into the price engine so the authoritative
+    // shipping rate matches the order record (see paytabs-create.js note).
+    priceResult = await verifyOrderPrice(items, total, promoCode, shippingFee, gov || customerState || '');
     } catch (verErr) {
         console.error('[Paymob Price Check Failed]', verErr.message);
         return res.status(400).json({ error: verErr.message });

@@ -181,9 +181,16 @@ export async function verifyOrderPrice(items, claimedTotal, discountCode = '', s
     // ISSUE 3 FIX: Authoritative Server-side shipping fee calculation strictly based on Egyptian governorate table
     // Completely ignore client-supplied shippingFee in calculation
     const cleanGov = String(gov || '').trim();
-    const verifiedShipping = OFFICIAL_GOV_SHIPPING[cleanGov] !== undefined
-        ? OFFICIAL_GOV_SHIPPING[cleanGov]
-        : 150; // Default baseline (Cairo/Giza rate)
+    const officialRate = OFFICIAL_GOV_SHIPPING[cleanGov];
+
+    // SECURITY FIX: Fail-Closed shipping validation.
+    // Previously an unknown/missing governorate silently defaulted to the cheapest rate (150 EGP),
+    // letting buyers in Upper Egypt / border governorates (up to 400 EGP) underpay shipping.
+    // Now an unrecognized governorate rejects the order instead of guessing the price.
+    if (officialRate === undefined) {
+        throw new Error('يرجى اختيار محافظة صحيحة من قائمة المحافظات المصرية لاحتساب مصاريف الشحن الرسمية.');
+    }
+    const verifiedShipping = officialRate;
 
     if (shippingFee !== null && shippingFee !== undefined && !isNaN(Number(shippingFee)) && Number(shippingFee) !== verifiedShipping) {
         console.warn(`[Shipping Check] Client attempted shipping fee ${shippingFee} EGP, authoritatively overridden to ${verifiedShipping} EGP for governorate "${cleanGov}".`);

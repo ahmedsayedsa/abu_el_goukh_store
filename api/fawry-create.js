@@ -17,7 +17,7 @@ export default async function handler(req, res) {
 
     const {
         expiry, orderId, total, items, promoCode,
-        shippingFee, cartDescription, customerName,
+        shippingFee, gov, cartDescription, customerName,
         customerPhone, customerEmail, returnUrl
     } = req.body || {};
 
@@ -43,7 +43,9 @@ export default async function handler(req, res) {
     // SECURITY FIX: Authoritative Server-side price validation (Fail-Closed)
     let priceResult;
     try {
-        priceResult = await verifyOrderPrice(items, total, promoCode, shippingFee);
+    // SECURITY FIX: Pass the customer governorate into the price engine so the authoritative
+    // shipping rate matches the order record (see paytabs-create.js note).
+    priceResult = await verifyOrderPrice(items, total, promoCode, shippingFee, gov || '');
     } catch (verErr) {
         console.error('[Fawry Price Check Failed]', verErr.message);
         return res.status(400).json({ error: verErr.message });

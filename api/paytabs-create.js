@@ -15,7 +15,7 @@ export default async function handler(req, res) {
     }
 
     const {
-        orderId, total, items, promoCode, shippingFee,
+        orderId, total, items, promoCode, shippingFee, gov,
         cartDescription, customerName, customerPhone,
         customerCity, customerState, customerAddress, returnUrl
     } = req.body || {};
@@ -41,7 +41,10 @@ export default async function handler(req, res) {
     // SECURITY FIX: Authoritative Server-side price validation (Fail-Closed)
     let priceResult;
     try {
-        priceResult = await verifyOrderPrice(items, total, promoCode, shippingFee);
+    // SECURITY FIX: Pass the customer governorate into the price engine so the authoritative
+    // shipping rate matches the order record. Without it, the engine could compute a different
+    // total than /api/orders, causing legitimate payments to be flagged as amount_mismatch.
+    priceResult = await verifyOrderPrice(items, total, promoCode, shippingFee, gov || customerState || '');
     } catch (verErr) {
         console.error('[PayTabs Price Check Failed]', verErr.message);
         return res.status(400).json({ error: verErr.message });

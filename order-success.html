@@ -482,7 +482,7 @@
                     statusEl.innerText = '📱 بانتظار تأكيد التحويل (إنستاباي / محفظة كاش)';
                     statusEl.className = 'font-bold text-purple-700 px-2 py-0.5 bg-purple-50 rounded border border-purple-200';
                 } else if (pStatus === 'cod' || (order.payment && (order.payment.includes('كاش') || order.payment.includes('الاستلام')))) {
-                    statusEl.innerText = '💵 قيد التحصيل عند الاستلام والمعاينة';
+                    statusEl.innerText = '💵 قيد التحصيل عند الاستلام (نقداً)';
                     statusEl.className = 'font-bold text-blue-700 px-2 py-0.5 bg-blue-50 rounded border border-blue-200';
                 } else {
                     statusEl.innerText = isSuccess ? '⏳ جاري مضاهاة السداد البنكي…' : '🟡 بانتظار الدفع الإلكتروني';

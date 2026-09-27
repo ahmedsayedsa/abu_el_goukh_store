@@ -27,9 +27,23 @@ const DEFAULT_CODES = {
 };
 
 export default async function handler(req, res) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    // SECURITY FIX (Vulnerability 5): Restrict CORS to trusted origins
+    const siteUrl = (process.env.SITE_URL || 'https://aboelgoukhshop.com').replace(/\/+$/, '');
+    const origin = req.headers?.origin || '';
+    const isAllowedOrigin = origin && (
+        origin === siteUrl ||
+        origin === 'https://abu-el-goukh-store.vercel.app' ||
+        /^https:\/\/[a-z0-9-]+-ahmedsayedsas-projects\.vercel\.app$/i.test(origin) ||
+        /^https:\/\/[a-z0-9-]+-abu-el-goukh-store\.vercel\.app$/i.test(origin) ||
+        /^http:\/\/localhost(:\d+)?$/i.test(origin) ||
+        /^http:\/\/127\.0\.0\.1(:\d+)?$/i.test(origin)
+    );
+
+    res.setHeader('Access-Control-Allow-Origin', isAllowedOrigin ? origin : siteUrl);
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Vary', 'Origin');
 
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
@@ -128,8 +142,9 @@ export default async function handler(req, res) {
     if (req.method === 'DELETE') {
         try {
             const codeRaw = String(req.query.code || req.body?.code || '').trim().toUpperCase();
-            if (!codeRaw) {
-                return res.status(400).json({ error: 'كود الخصم مطلوب للحذف' });
+            // SECURITY FIX (Vulnerability 1): Strict regex validation on DELETE prevents Path Traversal
+            if (!codeRaw || !/^[A-Z0-9_\-]{3,20}$/.test(codeRaw)) {
+                return res.status(400).json({ error: 'كود الخصم غير صالح أو مفقود. يجب أن يتكون من 3 إلى 20 حرفاً وأرقاماً إنجليزية فقط.' });
             }
 
             const fbRes = await fetch(getFirebaseUrl(`/discount_codes/${codeRaw}`), {

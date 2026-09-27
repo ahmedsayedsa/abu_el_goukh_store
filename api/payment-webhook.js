@@ -30,6 +30,11 @@ async function updateOrderPayment(orderId, paymentStatus, paymentRef, gateway, p
     if (!orderId) return false;
 
     const cleanOrderId = String(orderId).trim();
+    // SECURITY FIX: Prevent Path Traversal via webhook orderId
+    if (!cleanOrderId || !/^[A-Za-z0-9_-]+$/.test(cleanOrderId)) {
+        console.warn(`[SECURITY ALERT] Invalid orderId format in webhook: "${cleanOrderId}". Update rejected.`);
+        return false;
+    }
     const orderUrl = getFirebaseUrl(`/orders/${cleanOrderId}`);
 
     let currentOrder = null;

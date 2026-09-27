@@ -14,15 +14,28 @@ function getFirebaseUrl(path = '') {
  * Sanitize client IP for safe use as a Firebase path key
  * Firebase prohibits '.', '#', '$', '[', ']' in key names.
  */
-function sanitizeIp(ip) {
+export function sanitizeIp(ip) {
     return String(ip || '127_0_0_1').replace(/[^a-zA-Z0-9_-]/g, '_');
 }
 
-function getClientIp(req) {
-    const forwarded = req.headers?.['x-forwarded-for'];
-    if (forwarded) {
-        return forwarded.split(',')[0].trim();
+/**
+ * SECURITY FIX (Vulnerability 2): Anti-IP Spoofing for Rate Limiting
+ * 1. Prioritizes 'x-vercel-forwarded-for' (set authoritatively by Vercel Edge; cannot be spoofed by client).
+ * 2. Fallbacks to the last (rightmost) IP in 'x-forwarded-for' (closest trusted upstream proxy).
+ * 3. Never trusts the first/leftmost IP in 'x-forwarded-for' as it is easily forged by client headers.
+ */
+export function getClientIp(req) {
+    const vercelForwarded = req.headers?.['x-vercel-forwarded-for'];
+    if (vercelForwarded && typeof vercelForwarded === 'string') {
+        return vercelForwarded.split(',')[0].trim();
     }
+
+    const forwarded = req.headers?.['x-forwarded-for'];
+    if (forwarded && typeof forwarded === 'string') {
+        const parts = forwarded.split(',');
+        return parts.pop().trim();
+    }
+
     return req.socket?.remoteAddress || '127.0.0.1';
 }
 

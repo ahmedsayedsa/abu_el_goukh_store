@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 import { verifyOrderPrice, clearCatalogCache } from './_verify-price.js';
-import { verifyAdminToken } from './admin-auth.js';
+import { verifyAdminToken, getClientIp, sanitizeIp } from './admin-auth.js';
 
 /**
  * Serverless Order Management Endpoint
@@ -287,11 +287,114 @@ function generateSecureOrderId() {
     return `AEG-${timePart}-${randPart}`;
 }
 
+/**
+ * SECURITY FIX (Vulnerability 4): Rate Limiting for Public Order Creation (POST /api/orders)
+ * Stores order creation counts per IP in Firebase RTDB (/order_rate_limits/{sanitized_ip}).
+ * Limit: 8 orders per 10-minute window per IP.
+ * Fail-Closed: If Firebase cannot be reached, reject with 503 to protect backend from flooding.
+ */
+async function checkOrderRateLimit(ip) {
+    const cleanIp = sanitizeIp(ip);
+    const now = Date.now();
+    const WINDOW_MS = 10 * 60 * 1000; // 10 minutes
+    const MAX_ORDERS = 8;
+    const rateLimitUrl = getFirebaseUrl(`/order_rate_limits/${cleanIp}`);
+
+    try {
+        const res = await fetch(rateLimitUrl, {
+            headers: { 'Accept': 'application/json' },
+            signal: AbortSignal.timeout(3000)
+        });
+
+        // Fail-Closed: If Firebase cannot be reached, reject to protect backend
+        if (!res.ok) {
+            console.error('[RateLimit Error] Failed to read order rate limit from Firebase, status:', res.status);
+            return {
+                allowed: false,
+                statusCode: 503,
+                message: 'تعذر التحقق من أمان الخادم مؤقتاً. يرجى المحاولة بعد قليل.'
+            };
+        }
+
+        const data = await res.json();
+        let record = data && typeof data === 'object' ? data : null;
+
+        if (record) {
+            // Check if currently locked
+            if (record.lockedUntil && now < record.lockedUntil) {
+                const remainingMinutes = Math.max(1, Math.ceil((record.lockedUntil - now) / 60000));
+                return {
+                    allowed: false,
+                    statusCode: 429,
+                    message: `تم تجاوز الحد المسموح لإنشاء الطلبات مؤقتاً (8 طلبات كل 10 دقائق). يرجى المحاولة بعد ${remainingMinutes} دقيقة.`
+                };
+            }
+
+            // Check if window or previous lock has expired
+            if ((record.lockedUntil && now >= record.lockedUntil) || !record.windowStart || (now - record.windowStart) > WINDOW_MS) {
+                record = { count: 1, windowStart: now };
+            } else {
+                record.count = (Number(record.count) || 0) + 1;
+                if (record.count > MAX_ORDERS) {
+                    record.lockedUntil = now + WINDOW_MS;
+                    // Persist lock
+                    await fetch(rateLimitUrl, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(record),
+                        signal: AbortSignal.timeout(3000)
+                    });
+                    return {
+                        allowed: false,
+                        statusCode: 429,
+                        message: 'تم تجاوز الحد المسموح لإنشاء الطلبات مؤقتاً (8 طلبات كل 10 دقائق). يرجى المحاولة بعد قليل.'
+                    };
+                }
+            }
+        } else {
+            record = { count: 1, windowStart: now };
+        }
+
+        // Persist updated count
+        await fetch(rateLimitUrl, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(record),
+            signal: AbortSignal.timeout(3000)
+        });
+
+        return { allowed: true };
+    } catch (err) {
+        console.error('[RateLimit Error] Firebase exception during order rate limit check:', err.message);
+        // Fail-Closed
+        return {
+            allowed: false,
+            statusCode: 503,
+            message: 'تعذر التحقق من أمان الخادم مؤقتاً. يرجى إعادة المحاولة بعد ثوانٍ.'
+        };
+    }
+}
+
 export default async function handler(req, res) {
     // ─────────────────────────────────────────────────────────────
     // 1. POST: Create New Order (Public Checkout)
     // ─────────────────────────────────────────────────────────────
     if (req.method === 'POST') {
+        // SECURITY FIX (Discovery 6): Payload size guard to prevent resource exhaustion
+        if (req.body && typeof req.body === 'object') {
+            const payloadLength = JSON.stringify(req.body).length;
+            if (payloadLength > 200000) {
+                return res.status(413).json({ error: 'حجم الطلب كبير جداً وغير مسموح به' });
+            }
+        }
+
+        // SECURITY FIX (Vulnerability 4): Rate Limiting on public order creation (8 orders per 10 mins per IP)
+        const clientIp = getClientIp(req);
+        const rateCheck = await checkOrderRateLimit(clientIp);
+        if (!rateCheck.allowed) {
+            return res.status(rateCheck.statusCode).json({ error: rateCheck.message });
+        }
+
         const {
             items, total, discountCode, shippingFee,
             customer, phone, altPhone, gov, city, address, notes, payment

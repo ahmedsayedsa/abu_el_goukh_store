@@ -178,21 +178,15 @@ export async function verifyOrderPrice(items, claimedTotal, discountCode = '', s
         });
     }
 
-    // ISSUE 3 FIX: Authoritative Server-side shipping fee calculation based on Egyptian governorates
-    // Prevent client manipulation of shipping fees
+    // ISSUE 3 FIX: Authoritative Server-side shipping fee calculation strictly based on Egyptian governorate table
+    // Completely ignore client-supplied shippingFee in calculation
     const cleanGov = String(gov || '').trim();
-    let verifiedShipping = OFFICIAL_GOV_SHIPPING[cleanGov];
-    if (verifiedShipping === undefined) {
-        // If gov was not passed or unrecognized, check if shippingFee matches a known governorate or valid bound
-        if (typeof shippingFee === 'string' && OFFICIAL_GOV_SHIPPING[shippingFee.trim()]) {
-            verifiedShipping = OFFICIAL_GOV_SHIPPING[shippingFee.trim()];
-        } else {
-            const parsedNum = Number(shippingFee);
-            // Default to Cairo/Giza baseline (150 EGP) if invalid or omitted
-            verifiedShipping = (!isNaN(parsedNum) && parsedNum >= 100 && parsedNum <= 450)
-                ? parsedNum
-                : 150;
-        }
+    const verifiedShipping = OFFICIAL_GOV_SHIPPING[cleanGov] !== undefined
+        ? OFFICIAL_GOV_SHIPPING[cleanGov]
+        : 150; // Default baseline (Cairo/Giza rate)
+
+    if (shippingFee !== null && shippingFee !== undefined && !isNaN(Number(shippingFee)) && Number(shippingFee) !== verifiedShipping) {
+        console.warn(`[Shipping Check] Client attempted shipping fee ${shippingFee} EGP, authoritatively overridden to ${verifiedShipping} EGP for governorate "${cleanGov}".`);
     }
 
     // ISSUE 6 FIX: Universal discount schema parser (Supports both Admin format & legacy format, plus minSubtotal)

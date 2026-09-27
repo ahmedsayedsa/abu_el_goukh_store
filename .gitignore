@@ -6,5 +6,7 @@ Thumbs.db
 *.log
 npm-debug.log*
 
-# Vercel
+# Vercel & IDE
 .vercel
+.freebuff
+

@@ -8,10 +8,23 @@ function getFirebaseUrl(subpath = '') {
 }
 
 export default async function handler(req, res) {
-    // Enable CORS for API requests
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    // SECURITY FIX (Vulnerability 5): Restrict CORS to trusted origins
+    const siteUrl = (process.env.SITE_URL || 'https://aboelgoukhshop.com').replace(/\/+$/, '');
+    const origin = req.headers?.origin || '';
+    const isAllowedOrigin = origin && (
+        origin === siteUrl ||
+        origin === 'https://abu-el-goukh-store.vercel.app' ||
+        /^https:\/\/[a-z0-9-]+-ahmedsayedsas-projects\.vercel\.app$/i.test(origin) ||
+        /^https:\/\/[a-z0-9-]+-abu-el-goukh-store\.vercel\.app$/i.test(origin) ||
+        /^http:\/\/localhost(:\d+)?$/i.test(origin) ||
+        /^http:\/\/127\.0\.0\.1(:\d+)?$/i.test(origin)
+    );
+
+    res.setHeader('Access-Control-Allow-Origin', isAllowedOrigin ? origin : siteUrl);
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Vary', 'Origin');
 
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
@@ -116,9 +129,10 @@ export default async function handler(req, res) {
     // 3. DELETE: Remove or resolve abandoned cart
     if (req.method === 'DELETE') {
         try {
-            const phone = String(req.query.phone || req.body?.phone || '').trim();
-            if (!phone) {
-                return res.status(400).json({ error: 'رقم الهاتف مطلوب لحذف السلة' });
+            const phone = String(req.query.phone || req.body?.phone || '').trim().replace(/[\s\-\+]/g, '');
+            // SECURITY FIX (Vulnerability 1): Strict Egyptian mobile number regex validation on DELETE prevents Path Traversal
+            if (!phone || !/^01[0125][0-9]{8}$/.test(phone)) {
+                return res.status(400).json({ error: 'رقم هاتف غير صالح أو مفقود. يجب إدخال رقم محمول مصري صحيح مكون من 11 رقماً.' });
             }
 
             await fetch(getFirebaseUrl(`/abandoned_carts/${phone}`), {

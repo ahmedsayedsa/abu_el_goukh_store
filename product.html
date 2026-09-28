@@ -2002,7 +2002,7 @@
                 "@type": "Product",
                 "name": product.name,
                 "image": images,
-                "description": product.specs || product.name,
+                "description": product.metaDescription || product.meta_desc || product.specs || product.name,
                 "sku": product.sku || ('ABU-' + product.id),
                 "brand": {
                     "@type": "Brand",

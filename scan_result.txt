@@ -1,0 +1,963 @@
+=== FOUND 481 MATCHES ===
+about.html:6  [أبو الجوخ]
+  <title>من نحن | أبو الجوخ 1925 - قرن كامل من الريادة في عالم الدراجات</title>
+about.html:7  [أبو الجوخ]
+  <meta name="description" content="تعرف على تاريخ ومسيرة محلات أبو الجوخ منذ عام 1925 وحتى اليوم. مائة عام من الأصالة وتوفير الدراجات الهوائية وقطع الغ
+about.html:57  [أبو الجوخ]
+  <span>ضمان وصيانة معتمدة من توكيل أبو الجوخ 1925</span>
+about.html:80  [أبو الجوخ]
+  <img src="abu_el_goukh_logo.png" alt="أبو الجوخ" class="h-10 sm:h-12 w-auto object-contain rounded-md transition-transform group-hover:scale-105 drop-
+about.html:82  [أبو الجوخ]
+  <span class="font-black text-lg lg:text-xl tracking-tight text-trek-black block leading-none">أبو الجوخ</span>
+about.html:127  [أبو الجوخ]
+  أبو الجوخ.. قرن كامل من شغف الدراجات في شوارع مصر
+about.html:148  [أبو الجوخ]
+  في عام 1925، افتتح الحاج محمد أبو الجوخ أول متجر لبيع وصيانة الدراجات الهوائية الأوروبية المستوردة في القاهرة الخديوية. كانت الدراجات وقتها وسيلة مواص
+about.html:159  [أبو الجوخ]
+  خدمنا أكثر من نصف مليون عميل على مدار 3 أجيال متعاقبة، وحافظنا على سمعة "أبو الجوخ" كأول اسم يُذكر عند التفكير في شراء دراجة أصلية تعيش العمر.
+about.html:167  [أبو الجوخ]
+  <h2 class="text-2xl sm:text-3xl font-black text-trek-black">لماذا يختار الرياضيون أبو الجوخ؟</h2>
+about.html:227  [أبو الجوخ]
+  <img src="abu_el_goukh_logo.png" alt="أبو الجوخ" class="h-10 w-auto bg-white p-1 rounded-lg">
+about.html:228  [أبو الجوخ]
+  <span class="font-black text-xl text-white">أبو الجوخ 1925</span>
+about.html:246  [أبو الجوخ]
+  <li><a href="about.html" class="text-white font-bold">قصة أبو الجوخ (من نحن)</a></li>
+about.html:265  [أبو الجوخ]
+  <div>جميع الحقوق محفوظة © 2026 شركة أبو الجوخ لتجارة الدراجات • تصميم وتطوير <a href="https://www.dotsadv.com/" target="_blank" rel="noopener" class="
+admin.html:7  [أبو الجوخ]
+  <title>أبو الجوخ 1925 | لوحة التحكم المجانية - إدارة المنتجات والصور</title>
+admin.html:58  [أبو الجوخ]
+  <img src="abu_el_goukh_logo.png" alt="شعار أبو الجوخ" class="h-16 w-auto mx-auto object-contain">
+admin.html:60  [أبو الجوخ]
+  <h2 class="text-xl font-black text-trek-black">بوابة الإدارة المشفرة | أبو الجوخ 1925</h2>
+admin.html:131  [أبو الجوخ]
+  <img src="abu_el_goukh_logo.png" alt="أبو الجوخ" class="h-10 w-auto object-contain">
+admin.html:1241  [أبو الجوخ]
+  <p class="text-xs text-trek-gray mt-0.5">أدخل تفاصيل العجلة وستظهر فوراً في كتالوج أبو الجوخ الرسمي</p>
+admin.html:1326  [أبو الجوخ]
+  <textarea id="input-meta-desc" rows="2" maxlength="170" oninput="updateMetaCounter(this.value)" placeholder="مثال: اشتري دراجة ترنكس 136 برو أصلية من 
+admin.html:2024  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+admin.html:2041  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+admin.html:2058  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+admin.html:2075  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+admin.html:2092  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+admin.html:2109  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ دراجات ابو الجوخ ٢٤ و٢٦ سرعات ومساعدين",
+admin.html:2126  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+admin.html:2143  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+admin.html:2160  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+admin.html:2177  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ ٨٥٠٠",
+admin.html:2501  [abu_el_goukh]
+  const cached = localStorage.getItem('abu_el_goukh_admin_products');
+admin.html:2506  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(initialProducts));
+admin.html:2510  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(initialProducts));
+admin.html:2517  [abu_el_goukh]
+  const saved = localStorage.getItem('abu_el_goukh_admin_products');
+admin.html:2524  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(products));
+admin.html:2531  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(products));
+admin.html:2696  [أبو الجوخ]
+  const gen = `اشتري ${name} الأصلية من توكيل أبو الجوخ 1925 ${priceText}. ${frame} ومجموعة ${gears} مجمعة ومضبوطة يدوياً مع ضمان استرجاع 14 يوماً وشحن 
+admin.html:2899  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(products));
+admin.html:2937  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(products));
+admin.html:2963  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(products));
+admin.html:3019  [أبو الجوخ]
+  const items = Array.isArray(ord.items) && ord.items.length > 0 ? ord.items : [{ name: ord.item_name || 'دراجة هوائية من أبو الجوخ', price: ord.subtota
+admin.html:3031  [أبو الجوخ]
+  const safeName = escapeHtml(item.name || 'دراجة هوائية من أبو الجوخ');
+admin.html:3126  [أبو الجوخ]
+  const items = Array.isArray(ord.items) && ord.items.length > 0 ? ord.items : [{ name: ord.item_name || 'دراجة هوائية من أبو الجوخ', price: ord.total |
+admin.html:3171  [أبو الجوخ]
+  <h1 style="margin:0; font-size: 24px;">شركة أبو الجوخ لتجارة الدراجات 1925</h1>
+admin.html:3234  [أبو الجوخ]
+  `*تفاصيل طلبك المعتمد من متجر أبو الجوخ 1925*%0A` +
+admin.html:3781  [أبو الجوخ]
+  if (!confirm('هل تريد استعادة الفيديو الترويجي الافتراضي لأبو الجوخ؟')) return;
+admin.html:3791  [abu_el_goukh]
+  const stored = localStorage.getItem('abu_el_goukh_orders');
+admin.html:3802  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_orders', JSON.stringify(orders));
+admin.html:4045  [أبو الجوخ]
+  const waText = encodeURIComponent(`أهلاً بك أستاذ ${ord.customer}، معك إدارة متجر أبو الجوخ 1925 بخصوص طلبك رقم ${ord.id}.`);
+admin.html:4298  [abu_el_goukh]
+  link.setAttribute("download", `abu_el_goukh_orders_${new Date().toISOString().slice(0,10)}.csv`);
+admin.html:4313  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(products));
+admin.html:4615  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_firebase_url', url);
+admin.html:4622  [abu_el_goukh]
+  localStorage.removeItem('abu_el_goukh_firebase_url');
+admin.html:4851  [أبو الجوخ]
+  const descSafe = escapeHtml(item.description || 'كود خصم متجر أبو الجوخ');
+admin.html:5141  [أبو الجوخ]
+  `أهلاً بك يا فندم مع توكيل أبو الجوخ 1925 🚲%0A` +
+admin_payments.html:6  [أبو الجوخ]
+  <title>بوابات الدفع الإلكتروني | أبو الجوخ 1925</title>
+checkout.html:6  [أبو الجوخ]
+  <title>أبو الجوخ 1925 | إتمام الطلب والشحن لجميع المحافظات</title>
+checkout.html:8  [أبو الجوخ]
+  <meta name="description" content="أتمم طلب دراجتك الأصلية من أبو الجوخ 1925. شحن سريع لكافة محافظات مصر، دراجات مفحوصة ومجمعة يدوياً وضمان استبدال واس
+checkout.html:53  [أبو الجوخ]
+  <img src="abu_el_goukh_logo.png" alt="أبو الجوخ 1925" class="h-10 sm:h-12 w-auto object-contain">
+checkout.html:55  [أبو الجوخ]
+  <span class="font-black text-xl text-trek-black block leading-none">أبو الجوخ</span>
+checkout.html:374  [أبو الجوخ]
+  <p class="text-[11px] text-emerald-800">خبراء الدراجات في أبو الجوخ متاحون الآن لمساعدتك</p>
+checkout.html:399  [أبو الجوخ]
+  <p class="text-xs text-trek-gray mt-2">شكراً لثقتك في أبو الجوخ 1925. جاري تجهيز دراجتك وضبطها على يد فنيينا المتخصصين لشحنها فوراً.</p>
+checkout.html:434  [أبو الجوخ]
+  <div>جميع الحقوق محفوظة © 2026 شركة أبو الجوخ لتجارة الدراجات منذ عام 1925 • تصميم وتطوير <a href="https://www.dotsadv.com/" target="_blank" rel="noop
+checkout.html:552  [abu_el_goukh]
+  const storedCart = localStorage.getItem('abu_el_goukh_cart');
+checkout.html:590  [abu_el_goukh]
+  localStorage.removeItem('abu_el_goukh_cart');
+checkout.html:630  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_cart', JSON.stringify(cart));
+checkout.html:858  [abu_el_goukh]
+  let existingOrders = JSON.parse(localStorage.getItem('abu_el_goukh_orders') || '[]');
+checkout.html:860  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_orders', JSON.stringify(existingOrders));
+checkout.html:894  [أبو الجوخ]
+  cartDescription: 'أبو الجوخ 1925 – ' + cartDesc,
+checkout.html:906  [abu_el_goukh]
+  localStorage.removeItem('abu_el_goukh_cart');
+checkout.html:944  [أبو الجوخ]
+  cartDescription: 'أبو الجوخ 1925 – ' + cartDesc,
+checkout.html:956  [abu_el_goukh]
+  localStorage.removeItem('abu_el_goukh_cart');
+checkout.html:994  [أبو الجوخ]
+  cartDescription: 'أبو الجوخ 1925 – ' + cartDesc,
+checkout.html:1004  [abu_el_goukh]
+  localStorage.removeItem('abu_el_goukh_cart');
+checkout.html:1025  [abu_el_goukh]
+  localStorage.removeItem('abu_el_goukh_cart');
+checkout.html:1029  [أبو الجوخ]
+  `*طلب جديد من متجر أبو الجوخ 1925 الإلكتروني*%0A` +
+index.html:6  [أبو الجوخ]
+  <title>أبو الجوخ 1925 | أكبر صرح لبيع العجل والدراجات الأصلية في مصر - شحن وضمان معتمد</title>
+index.html:10  [أبو الجوخ]
+  <meta name="description" content="الموقع الرسمي لمحلات أبو الجوخ 1925 - اشتري أفضل عجل في مصر (ترنكس، زوم، رودكس) بأسعار حصرية 2026. شاسيهات ألومنيوم 
+index.html:11  [ابو الجوخ]
+  <meta name="keywords" content="عجل ابو الجوخ, اسعار العجل في مصر 2026, عجل ترنكس, عجل زوم, عجل سرعات, عجل مقاس 26, عجل مقاس 29, عجل اطفال, عجل بناتي, 
+index.html:12  [أبو الجوخ]
+  <meta name="author" content="أبو الجوخ للدراجات - Abo El Goukh">
+index.html:19  [أبو الجوخ]
+  <meta property="og:title" content="أبو الجوخ 1925 | أكبر صرح لبيع العجل والدراجات الأصلية في مصر">
+index.html:23  [أبو الجوخ]
+  <meta property="og:site_name" content="أبو الجوخ - Abo El Goukh Cycles">
+index.html:24  [abu_el_goukh]
+  <meta property="og:image" content="abu_el_goukh_logo.png">
+index.html:27  [أبو الجوخ]
+  <meta property="og:image:alt" content="شعار شركة أبو الجوخ 1925">
+index.html:31  [أبو الجوخ]
+  <meta name="twitter:title" content="أبو الجوخ 1925 | تجربة العجل العالمية في مصر">
+index.html:33  [أبو الجوخ]
+  <meta name="twitter:description" content="تصفح كتالوج العجل الرسمي لأبو الجوخ - دراجات أصلية مع الضمان المعتمد والشحن لكافة محافظات مصر.">
+index.html:34  [abu_el_goukh]
+  <meta name="twitter:image" content="abu_el_goukh_logo.png">
+index.html:44  [أبو الجوخ]
+  "name": "أبو الجوخ للدراجات - Abo El Goukh",
+index.html:47  [abu_el_goukh]
+  "logo": "abu_el_goukh_logo.png",
+index.html:62  [أبو الجوخ]
+  "name": "أبو الجوخ - متجر الدراجات والعجل الأصلي",
+index.html:73  [أبو الجوخ]
+  "name": "أبو الجوخ - المتجر الإلكتروني المعتمد",
+index.html:74  [abu_el_goukh]
+  "image": "abu_el_goukh_logo.png",
+index.html:97  [أبو الجوخ]
+  "text": "في أبو الجوخ نضمن استلام العجلة مجمعة ومضبوطة بالكامل، مشحمة ومشدودة السلوك على يد فنيين محترفين ومعاير نواقل السرعات والفرامل لتكون جاهزة لل
+index.html:102  [أبو الجوخ]
+  "name": "ما هي طرق الدفع المتاحة في أبو الجوخ؟",
+index.html:113  [أبو الجوخ]
+  "text": "نعم، كافة مجموعات التروس، الشواكيش، والكاسيت المعروضة في دراجات أبو الجوخ أصلية 100% مستوردة بضمان معتمد، مع توافر الدعم الفني وتوفير قطع الغ
+index.html:289  [أبو الجوخ]
+  <span>ضمان وصيانة معتمدة من توكيل أبو الجوخ 1925</span>
+index.html:312  [أبو الجوخ]
+  <img src="abu_el_goukh_logo.png" alt="شعار أبو الجوخ 1925 - التوكيل الرسمي للدراجات الهوائية في مصر" class="h-10 sm:h-12 w-auto object-contain rounded
+index.html:314  [أبو الجوخ]
+  <span class="font-black text-lg lg:text-xl tracking-tight text-trek-black block leading-none">أبو الجوخ</span>
+index.html:401  [أبو الجوخ]
+  منذ عام <strong class="text-white font-black">1925</strong>، صرح "أبو الجوخ" هو الاسم الأول والموثوق لتجارة العجل في مصر. شاسيهات ألومنيوم طيران خفيفة
+index.html:436  [أبو الجوخ]
+  <h2 class="text-3xl sm:text-4xl font-black text-trek-black">عجل أبو الجوخ حسب استخدامك ومقاسك</h2>
+index.html:458  [أبو الجوخ]
+  <img src="https://media.zbooni.com/merchants/media/products/109246/1735216982659_croppedImg.jpg" alt="عجل جبلي ألومنيوم أبو الجوخ" class="max-h-full o
+index.html:494  [أبو الجوخ]
+  <img src="https://media.zbooni.com/merchants/media/products/109246/1735153902037_croppedImg.jpg" alt="عجل أطفال وبناتي أبو الجوخ" class="max-h-full ob
+index.html:529  [أبو الجوخ]
+  <h2 class="text-3xl sm:text-4xl font-black text-trek-black">هندسة تفصيلية وراء كل دراجة من أبو الجوخ</h2>
+index.html:706  [أبو الجوخ]
+  <h2 class="text-3xl sm:text-4xl font-black text-white">لماذا تشتري دراجتك من أبو الجوخ؟</h2>
+index.html:756  [abu el goukh]
+  <!-- HERITAGE SECTION (Trek's "Born in a Barn" Equivalent for Abu El Goukh 1925) -->
+index.html:766  [أبو الجوخ]
+  كما بدأت Trek في ورشة صغيرة بولاية ويسكونسن عام 1976 لتصنع ثورة عالمية، انطلقت رحلة <strong>أبو الجوخ</strong> في قلب القاهرة عام 1925 لتبني ثقافة ركو
+index.html:769  [أبو الجوخ]
+  على مدار 100 عام، ظل اسم "أبو الجوخ" المرادف الأول للثقة، المتانة، وأصالة قطع الغيار، وها نحن ننطلق بتجربة رقمية عالمية تضع أفضل دراجات العالم بين يدي
+index.html:811  [أبو الجوخ]
+  <h2 class="text-3xl sm:text-4xl font-black text-trek-black">تجارب أبطال الدراجات وعملاء أبو الجوخ في مصر</h2>
+index.html:812  [أبو الجوخ]
+  <p class="text-xs sm:text-sm text-trek-gray mt-2">أكثر من 50,000 عميل في كافة محافظات مصر يثقون في أبو الجوخ منذ 100 عام.</p>
+index.html:866  [أبو الجوخ]
+  "أبو الجوخ اسم عريق من أيام والدي وجدي، وما زالوا الرقم واحد في مصر. شاسيه ألومنيوم طيران وضمان مدى الحياة وشهادة الضمان مختومة داخل الكرتونة."
+index.html:918  [أبو الجوخ]
+  <h3 class="text-2xl sm:text-3xl font-black text-trek-black">أبو الجوخ 1925 - المبيعات الرسمية والدعم</h3>
+index.html:992  [أبو الجوخ]
+  في أبو الجوخ، جميع الدراجات التي تطلبها من المتجر الإلكتروني <strong>تصلك مجمعة ومضبوطة بالكامل وجاهزة على الركوب فوراً</strong>. يقوم فنيونا المتخصصو
+index.html:1043  [أبو الجوخ]
+  <img src="abu_el_goukh_logo.png" alt="شعار أبو الجوخ 1925 الرسمي" class="h-12 w-auto object-contain">
+index.html:1046  [أبو الجوخ]
+  <span class="font-black text-2xl text-white block leading-tight">أبو الجوخ</span>
+index.html:1108  [أبو الجوخ]
+  جميع الحقوق محفوظة © 2026 شركة أبو الجوخ لتجارة الدراجات • تصميم وتطوير <a href="https://www.dotsadv.com/" target="_blank" rel="noopener" class="text-
+index.html:1306  [abu_el_goukh]
+  const cartData = JSON.parse(localStorage.getItem('abu_el_goukh_cart') || '[]');
+index.html:1395  [أبو الجوخ]
+  <img src="abu_el_goukh_logo.png" alt="أبو الجوخ" class="h-10 w-auto object-contain">
+index.html:1396  [أبو الجوخ]
+  <span class="font-black text-lg text-trek-black">أبو الجوخ 1925</span>
+order-success.html:6  [أبو الجوخ]
+  <title>تأكيد الطلب وفاتورة الشراء | أبو الجوخ 1925</title>
+order-success.html:8  [أبو الجوخ]
+  <meta name="description" content="تم تأكيد طلبك بنجاح من متجر أبو الجوخ 1925. يمكنك مراجعة الفاتورة أو طباعتها أو متابعة شحنتك.">
+order-success.html:84  [أبو الجوخ]
+  <span class="text-base font-black tracking-tight text-trek-black block leading-none">أبو الجوخ <span class="text-trek-red">1925</span></span>
+order-success.html:115  [أبو الجوخ]
+  شكراً لثقتك في أبو الجوخ 1925. يقوم فريق التجهيز بمراجعة طلبك وضبط الدراجة قبل تسليمها لشركة الشحن.
+order-success.html:163  [أبو الجوخ]
+  <h2 class="text-xl font-black text-slate-900 tracking-tight">شركة أبو الجوخ للتجارة والصناعة (1925)</h2>
+order-success.html:258  [أبو الجوخ]
+  <p>شكراً لتعاملكم مع أبو الجوخ 1925 - رائد الدراجات الأول في مصر منذ قرن من الزمان</p>
+order-success.html:290  [أبو الجوخ]
+  <p>© 2026 أبو الجوخ 1925 (Abu El Goukh Bikes). جميع الحقوق محفوظة • تصميم وتطوير <a href="https://www.dotsadv.com/" target="_blank" rel="noopener" cla
+order-success.html:306  [abu_el_goukh]
+  const storedOrders = JSON.parse(localStorage.getItem('abu_el_goukh_orders') || '[]');
+order-success.html:332  [أبو الجوخ]
+  customer: 'عميل أبو الجوخ المميز',
+order-success.html:510  [abu_el_goukh]
+  let localOrders = JSON.parse(localStorage.getItem('abu_el_goukh_orders') || '[]');
+order-success.html:514  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_orders', JSON.stringify(localOrders));
+order-success.html:520  [أبو الجوخ]
+  `*مرحباً خدمة عملاء أبو الجوخ 1925*%0A` +
+pixels.js:2  [abu el goukh]
+  * Abu El Goukh 1925 - Universal E-Commerce Pixels & Tracking Engine
+privacy.html:7  [أبو الجوخ]
+  <title>سياسة الخصوصية وحماية البيانات | أبو الجوخ 1925</title>
+privacy.html:8  [أبو الجوخ]
+  <meta name="description" content="سياسة الخصوصية وحماية البيانات الشخصية لمتجر أبو الجوخ 1925 وفقاً لقانون حماية البيانات الشخصية المصري رقم 151 لسنة 
+privacy.html:58  [أبو الجوخ]
+  <span>ضمان وصيانة معتمدة من توكيل أبو الجوخ 1925</span>
+privacy.html:81  [أبو الجوخ]
+  <img src="abu_el_goukh_logo.png" alt="أبو الجوخ" class="h-10 sm:h-12 w-auto object-contain rounded-md transition-transform group-hover:scale-105 drop-
+privacy.html:83  [أبو الجوخ]
+  <span class="font-black text-lg lg:text-xl tracking-tight text-trek-black block leading-none">أبو الجوخ</span>
+privacy.html:138  [أبو الجوخ]
+  نولي في شركة أبو الجوخ 1925 أهمية قصوى لسرية وأمان بياناتك الشخصية. توضح هذه السياسة كيف نجمع بياناتك ونستخدمها ونحميها بكل أمان ومسؤولية.
+privacy.html:176  [أبو الجوخ]
+  تتم جميع المدفوعات الإلكترونية عبر بوابات دفع مرخصة وخاضعة للبنك المركزي المصري (مثل PayTabs، فوري باي FawryPay، وPaymob) بتشفير متقدم 256-bit SSL وبر
+privacy.html:260  [أبو الجوخ]
+  <img src="abu_el_goukh_logo.png" alt="أبو الجوخ" class="h-10 w-auto bg-white p-1 rounded-lg">
+privacy.html:261  [أبو الجوخ]
+  <span class="font-black text-xl text-white">أبو الجوخ 1925</span>
+privacy.html:277  [أبو الجوخ]
+  <li><a href="about.html" class="hover:text-white transition">قصة أبو الجوخ (من نحن)</a></li>
+privacy.html:297  [أبو الجوخ]
+  <div>جميع الحقوق محفوظة © 2026 شركة أبو الجوخ لتجارة الدراجات • تصميم وتطوير <a href="https://www.dotsadv.com/" target="_blank" rel="noopener" class="
+product.html:6  [أبو الجوخ]
+  <title id="page-meta-title">تفاصيل الدراجة | أبو الجوخ 1925 - أصل العجل في مصر</title>
+product.html:10  [أبو الجوخ]
+  <meta name="description" id="page-meta-desc" content="المواصفات الكاملة وأسعار دراجات أبو الجوخ الأصلية مع الضمان المعتمد وشحن سريع لكافة المحافظات.">
+product.html:11  [ابو الجوخ]
+  <meta name="keywords" content="عجل ابو الجوخ, اسعار العجل, ترنكس, زوم, شيمانو, مقاس 26, مقاس 29, عجل سرعات">
+product.html:12  [أبو الجوخ]
+  <meta name="author" content="أبو الجوخ للدراجات - Abo El Goukh">
+product.html:20  [أبو الجوخ]
+  <meta property="og:title" id="og-title" content="تفاصيل دراجة أصلية | أبو الجوخ 1925">
+product.html:23  [abu_el_goukh]
+  <meta property="og:image" id="og-image" content="abu_el_goukh_logo.png">
+product.html:96  [أبو الجوخ]
+  <span>ضمان وصيانة معتمدة من توكيل أبو الجوخ 1925</span>
+product.html:119  [أبو الجوخ]
+  <img src="abu_el_goukh_logo.png" alt="شعار أبو الجوخ الرسمي" class="h-10 sm:h-12 w-auto object-contain rounded-md transition-transform group-hover:sca
+product.html:121  [أبو الجوخ]
+  <span class="font-black text-lg lg:text-xl tracking-tight text-trek-black block leading-none">أبو الجوخ</span>
+product.html:233  [abu_el_goukh]
+  src="abu_el_goukh_logo.png"
+product.html:234  [أبو الجوخ]
+  alt="دراجة أبو الجوخ الأصلية"
+product.html:248  [abu el goukh]
+  ABU EL GOUKH STUDIO 1925
+product.html:597  [أبو الجوخ]
+  <h3 class="text-lg font-black text-trek-black">شهادة ضمان أبو الجوخ 1925 المعتمدة</h3>
+product.html:713  [أبو الجوخ]
+  "ما شاء الله العجلة خفيفة جداً وسرعات شيمانو بتنقل بنعومة فائقة. استلمتها مجمعة ومضبوطة بالملي والمندوب انتظرني لحد ما جربتها بنفسي في الشارع. شكراً أ
+product.html:825  [أبو الجوخ]
+  <img src="abu_el_goukh_logo.png" alt="أبو الجوخ" class="h-10 w-auto object-contain">
+product.html:827  [أبو الجوخ]
+  <span class="font-black text-base tracking-tight text-white block">أبو الجوخ 1925</span>
+product.html:832  [أبو الجوخ]
+  منذ عام 1925، أبو الجوخ هو الاسم الأعرق لتجارة وصيانة الدراجات الأصلية في مصر. شاسيهات ألومنيوم معتمدة، سرعات شيمانو ياباني، وشحن سريع لكافة المحافظات
+product.html:894  [أبو الجوخ]
+  جميع الحقوق محفوظة © 1925 - 2026 لمؤسسة أبو الجوخ للدراجات الهوائية • تصميم وتطوير <a href="https://www.dotsadv.com/" target="_blank" rel="noopener" c
+product.html:942  [أبو الجوخ]
+  <img src="abu_el_goukh_logo.png" alt="أبو الجوخ" class="h-10 w-auto object-contain">
+product.html:943  [أبو الجوخ]
+  <span class="font-black text-lg text-trek-black">أبو الجوخ 1925</span>
+product.html:1354  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+product.html:1365  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+product.html:1376  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+product.html:1387  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+product.html:1398  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+product.html:1409  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ دراجات ابو الجوخ ٢٤ و٢٦ سرعات ومساعدين",
+product.html:1420  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+product.html:1431  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+product.html:1442  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+product.html:1453  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ ٨٥٠٠",
+product.html:1977  [أبو الجوخ]
+  "text": "ما شاء الله العجلة خفيفة جداً وسرعات شيمانو بتنقل بنعومة فائقة. استلمتها مجمعة ومضبوطة بالملي والمندوب انتظرني لحد ما جربتها بنفسي في الشارع.
+product.html:2042  [أبو الجوخ]
+  "name": "أبو الجوخ 1925"
+product.html:2139  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_cart', JSON.stringify(cart));
+product.html:2224  [أبو الجوخ]
+  `🚴‍♂️ دراجة مميزة من توكيل أبو الجوخ 1925:\n` +
+product.html:2260  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_cart', JSON.stringify(cart));
+product.html:2295  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_cart', JSON.stringify(cart));
+product.html:2369  [abu_el_goukh]
+  const rawAdmin = localStorage.getItem('abu_el_goukh_admin_products');
+product.html:2374  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(adminProducts));
+product.html:2383  [abu_el_goukh]
+  const savedCart = localStorage.getItem('abu_el_goukh_cart');
+product.html:2391  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_cart', JSON.stringify(cart));
+product.html:2410  [أبو الجوخ]
+  const pageTitle = currentProduct.name + ' | أبو الجوخ 1925';
+product.html:2415  [أبو الجوخ]
+  const seoDesc = currentProduct.metaDescription || currentProduct.meta_desc || `اشتري ${currentProduct.name} الأصلية من توكيل أبو الجوخ 1925 بسعر ${fmt
+products.json:45  [أبو الجوخ]
+  "comment": "تعامل راقي جداً من أبو الجوخ، استلام الدراجة مجمعة ومضبوطة بالكامل والدفع أونلاين كان سلس وسريع عبر فاليو.",
+products.json:170  [أبو الجوخ]
+  "comment": "تعامل راقي جداً من أبو الجوخ، استلام الدراجة مجمعة ومضبوطة بالكامل والدفع أونلاين كان سلس وسريع عبر فاليو.",
+products.json:200  [أبو الجوخ]
+  "comment": "تعامل راقي جداً من أبو الجوخ، استلام الدراجة مجمعة ومضبوطة بالكامل والدفع أونلاين كان سلس وسريع عبر فاليو.",
+products.json:320  [أبو الجوخ]
+  "comment": "تعامل راقي جداً من أبو الجوخ، استلام الدراجة مجمعة ومضبوطة بالكامل والدفع أونلاين كان سلس وسريع عبر فاليو.",
+products.json:344  [أبو الجوخ]
+  "comment": "تعامل راقي جداً من أبو الجوخ، استلام الدراجة مجمعة ومضبوطة بالكامل والدفع أونلاين كان سلس وسريع عبر فاليو.",
+products.json:444  [أبو الجوخ]
+  "comment": "تعامل راقي جداً من أبو الجوخ، استلام الدراجة مجمعة ومضبوطة بالكامل والدفع أونلاين كان سلس وسريع عبر فاليو.",
+products.json:492  [أبو الجوخ]
+  "comment": "تعامل راقي جداً من أبو الجوخ، استلام الدراجة مجمعة ومضبوطة بالكامل والدفع أونلاين كان سلس وسريع عبر فاليو.",
+products.json:618  [أبو الجوخ]
+  "comment": "تعامل راقي جداً من أبو الجوخ، استلام الدراجة مجمعة ومضبوطة بالكامل والدفع أونلاين كان سلس وسريع عبر فاليو.",
+products.json:648  [أبو الجوخ]
+  "comment": "تعامل راقي جداً من أبو الجوخ، استلام الدراجة مجمعة ومضبوطة بالكامل والدفع أونلاين كان سلس وسريع عبر فاليو.",
+products.json:768  [أبو الجوخ]
+  "comment": "تعامل راقي جداً من أبو الجوخ، استلام الدراجة مجمعة ومضبوطة بالكامل والدفع أونلاين كان سلس وسريع عبر فاليو.",
+products.json:791  [أبو الجوخ]
+  "comment": "تعامل راقي جداً من أبو الجوخ، استلام الدراجة مجمعة ومضبوطة بالكامل والدفع أونلاين كان سلس وسريع عبر فاليو.",
+products.json:893  [أبو الجوخ]
+  "comment": "تعامل راقي جداً من أبو الجوخ، استلام الدراجة مجمعة ومضبوطة بالكامل والدفع أونلاين كان سلس وسريع عبر فاليو.",
+products.json:941  [أبو الجوخ]
+  "comment": "تعامل راقي جداً من أبو الجوخ، استلام الدراجة مجمعة ومضبوطة بالكامل والدفع أونلاين كان سلس وسريع عبر فاليو.",
+products.json:1014  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+products.json:1044  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+products.json:1067  [أبو الجوخ]
+  "comment": "تعامل راقي جداً من أبو الجوخ، استلام الدراجة مجمعة ومضبوطة بالكامل والدفع أونلاين كان سلس وسريع عبر فاليو.",
+products.json:1080  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+products.json:1097  [أبو الجوخ]
+  "comment": "تعامل راقي جداً من أبو الجوخ، استلام الدراجة مجمعة ومضبوطة بالكامل والدفع أونلاين كان سلس وسريع عبر فاليو.",
+products.json:1104  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+products.json:1134  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+products.json:1170  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ دراجات ابو الجوخ ٢٤ و٢٦ سرعات ومساعدين",
+products.json:1194  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+products.json:1217  [أبو الجوخ]
+  "comment": "تعامل راقي جداً من أبو الجوخ، استلام الدراجة مجمعة ومضبوطة بالكامل والدفع أونلاين كان سلس وسريع عبر فاليو.",
+products.json:1224  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+products.json:1241  [أبو الجوخ]
+  "comment": "تعامل راقي جداً من أبو الجوخ، استلام الدراجة مجمعة ومضبوطة بالكامل والدفع أونلاين كان سلس وسريع عبر فاليو.",
+products.json:1260  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+products.json:1284  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ ٨٥٠٠",
+products.json:1343  [أبو الجوخ]
+  "comment": "تعامل راقي جداً من أبو الجوخ، استلام الدراجة مجمعة ومضبوطة بالكامل والدفع أونلاين كان سلس وسريع عبر فاليو.",
+products.json:1391  [أبو الجوخ]
+  "comment": "تعامل راقي جداً من أبو الجوخ، استلام الدراجة مجمعة ومضبوطة بالكامل والدفع أونلاين كان سلس وسريع عبر فاليو.",
+products.json:1517  [أبو الجوخ]
+  "comment": "تعامل راقي جداً من أبو الجوخ، استلام الدراجة مجمعة ومضبوطة بالكامل والدفع أونلاين كان سلس وسريع عبر فاليو.",
+products.json:1547  [أبو الجوخ]
+  "comment": "تعامل راقي جداً من أبو الجوخ، استلام الدراجة مجمعة ومضبوطة بالكامل والدفع أونلاين كان سلس وسريع عبر فاليو.",
+products.json:1666  [أبو الجوخ]
+  "comment": "تعامل راقي جداً من أبو الجوخ، استلام الدراجة مجمعة ومضبوطة بالكامل والدفع أونلاين كان سلس وسريع عبر فاليو.",
+products.json:1690  [أبو الجوخ]
+  "comment": "تعامل راقي جداً من أبو الجوخ، استلام الدراجة مجمعة ومضبوطة بالكامل والدفع أونلاين كان سلس وسريع عبر فاليو.",
+products.json:1791  [أبو الجوخ]
+  "comment": "تعامل راقي جداً من أبو الجوخ، استلام الدراجة مجمعة ومضبوطة بالكامل والدفع أونلاين كان سلس وسريع عبر فاليو.",
+products.json:1839  [أبو الجوخ]
+  "comment": "تعامل راقي جداً من أبو الجوخ، استلام الدراجة مجمعة ومضبوطة بالكامل والدفع أونلاين كان سلس وسريع عبر فاليو.",
+products.json:1961  [أبو الجوخ]
+  "comment": "تعامل راقي جداً من أبو الجوخ، استلام الدراجة مجمعة ومضبوطة بالكامل والدفع أونلاين كان سلس وسريع عبر فاليو.",
+products.json:1990  [أبو الجوخ]
+  "comment": "تعامل راقي جداً من أبو الجوخ، استلام الدراجة مجمعة ومضبوطة بالكامل والدفع أونلاين كان سلس وسريع عبر فاليو.",
+README.md:1  [أبو الجوخ]
+  # متجر وموقع أبو الجوخ 1925 | Abo El Goukh Bicycles Official Flagship Store
+README.md:3  [أبو الجوخ]
+  المتجر الإلكتروني الرسمي لشركة **أبو الجوخ** لتجارة وتوزيع الدراجات الهوائية في مصر (تأسس عام 1925 - مئوية 100 عام)، بتصميم متطور فائق الفخامة والسرعة
+README.md:80  [أبو الجوخ]
+  * **عن أبو الجوخ (المئوية):** `/about`
+README.md:85  [أبو الجوخ]
+  © 2026 شركة أبو الجوخ لتجارة الدراجات الهوائية (تأسست 1925) - جميع الحقوق محفوظة.
+returns-policy.html:6  [أبو الجوخ]
+  <title>سياسة الاسترجاع والاستبدال | أبو الجوخ 1925 - حماية المستهلك</title>
+returns-policy.html:7  [أبو الجوخ]
+  <meta name="description" content="سياسة الاسترجاع والاستبدال الرسمية لمتجر أبو الجوخ 1925 وفقاً لقانون حماية المستهلك المصري. استبدال واسترجاع حتى 14 
+returns-policy.html:57  [أبو الجوخ]
+  <span>ضمان وصيانة معتمدة من توكيل أبو الجوخ 1925</span>
+returns-policy.html:80  [أبو الجوخ]
+  <img src="abu_el_goukh_logo.png" alt="أبو الجوخ" class="h-10 sm:h-12 w-auto object-contain rounded-md transition-transform group-hover:scale-105 drop-
+returns-policy.html:82  [أبو الجوخ]
+  <span class="font-black text-lg lg:text-xl tracking-tight text-trek-black block leading-none">أبو الجوخ</span>
+returns-policy.html:137  [أبو الجوخ]
+  نلتزم في شركة أبو الجوخ 1925 بأعلى معايير الشفافية وحماية حقوق عملائنا وفقاً لأحكام قانون حماية المستهلك المصري رقم 181 لسنة 2018 ولائحته التنفيذية.
+returns-policy.html:186  [أبو الجوخ]
+  <li><strong>بعد استلام الشحنة (شبكة الأمان الكاملة):</strong> نظراً لأن شركات الشحن تسلّم الطرود مغلقة، فإن حقك في فحص الدراجة والتأكد من مطابقتها للم
+returns-policy.html:256  [أبو الجوخ]
+  <img src="abu_el_goukh_logo.png" alt="أبو الجوخ" class="h-10 w-auto bg-white p-1 rounded-lg">
+returns-policy.html:257  [أبو الجوخ]
+  <span class="font-black text-xl text-white">أبو الجوخ 1925</span>
+returns-policy.html:273  [أبو الجوخ]
+  <li><a href="about.html" class="hover:text-white transition">قصة أبو الجوخ (من نحن)</a></li>
+returns-policy.html:292  [أبو الجوخ]
+  <div>جميع الحقوق محفوظة © 2026 شركة أبو الجوخ لتجارة الدراجات • تصميم وتطوير <a href="https://www.dotsadv.com/" target="_blank" rel="noopener" class="
+robots.txt:1  [abu el goukh]
+  # Abu El Goukh 1925 Cycles - Official Robots.txt
+scan_result.txt:9  [abu_el_goukh]
+  <img src="abu_el_goukh_logo.png" alt="╪ú╪¿┘ê ╪º┘ä╪¼┘ê╪«" class="h-10 sm:h-12 w-auto object-contain rounded-md transition-transform group-hover:scale-1
+scan_result.txt:21  [abu_el_goukh]
+  <img src="abu_el_goukh_logo.png" alt="╪ú╪¿┘ê ╪º┘ä╪¼┘ê╪«" class="h-10 w-auto bg-white p-1 rounded-lg">
+scan_result.txt:31  [abu_el_goukh]
+  <img src="abu_el_goukh_logo.png" alt="╪┤╪╣╪º╪▒ ╪ú╪¿┘ê ╪º┘ä╪¼┘ê╪«" class="h-16 w-auto mx-auto object-contain">
+scan_result.txt:35  [abu_el_goukh]
+  <img src="abu_el_goukh_logo.png" alt="╪ú╪¿┘ê ╪º┘ä╪¼┘ê╪«" class="h-10 w-auto object-contain">
+scan_result.txt:60  [abu_el_goukh]
+  admin.html:2501  [abu_el_goukh]
+scan_result.txt:61  [abu_el_goukh]
+  const cached = localStorage.getItem('abu_el_goukh_admin_products');
+scan_result.txt:62  [abu_el_goukh]
+  admin.html:2506  [abu_el_goukh]
+scan_result.txt:63  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(initialProducts));
+scan_result.txt:64  [abu_el_goukh]
+  admin.html:2510  [abu_el_goukh]
+scan_result.txt:65  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(initialProducts));
+scan_result.txt:66  [abu_el_goukh]
+  admin.html:2517  [abu_el_goukh]
+scan_result.txt:67  [abu_el_goukh]
+  const saved = localStorage.getItem('abu_el_goukh_admin_products');
+scan_result.txt:68  [abu_el_goukh]
+  admin.html:2524  [abu_el_goukh]
+scan_result.txt:69  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(products));
+scan_result.txt:70  [abu_el_goukh]
+  admin.html:2531  [abu_el_goukh]
+scan_result.txt:71  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(products));
+scan_result.txt:74  [abu_el_goukh]
+  admin.html:2899  [abu_el_goukh]
+scan_result.txt:75  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(products));
+scan_result.txt:76  [abu_el_goukh]
+  admin.html:2937  [abu_el_goukh]
+scan_result.txt:77  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(products));
+scan_result.txt:78  [abu_el_goukh]
+  admin.html:2963  [abu_el_goukh]
+scan_result.txt:79  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(products));
+scan_result.txt:92  [abu_el_goukh]
+  admin.html:3791  [abu_el_goukh]
+scan_result.txt:93  [abu_el_goukh]
+  const stored = localStorage.getItem('abu_el_goukh_orders');
+scan_result.txt:94  [abu_el_goukh]
+  admin.html:3802  [abu_el_goukh]
+scan_result.txt:95  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_orders', JSON.stringify(orders));
+scan_result.txt:98  [abu_el_goukh]
+  admin.html:4298  [abu_el_goukh]
+scan_result.txt:99  [abu_el_goukh]
+  link.setAttribute("download", `abu_el_goukh_orders_${new Date().toISOString().slice(0,10)}.csv`);
+scan_result.txt:100  [abu_el_goukh]
+  admin.html:4313  [abu_el_goukh]
+scan_result.txt:101  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(products));
+scan_result.txt:102  [abu_el_goukh]
+  admin.html:4615  [abu_el_goukh]
+scan_result.txt:103  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_firebase_url', url);
+scan_result.txt:104  [abu_el_goukh]
+  admin.html:4622  [abu_el_goukh]
+scan_result.txt:105  [abu_el_goukh]
+  localStorage.removeItem('abu_el_goukh_firebase_url');
+scan_result.txt:117  [abu_el_goukh]
+  <img src="abu_el_goukh_logo.png" alt="╪ú╪¿┘ê ╪º┘ä╪¼┘ê╪« 1925" class="h-10 sm:h-12 w-auto object-contain">
+scan_result.txt:126  [abu_el_goukh]
+  checkout.html:552  [abu_el_goukh]
+scan_result.txt:127  [abu_el_goukh]
+  const storedCart = localStorage.getItem('abu_el_goukh_cart');
+scan_result.txt:128  [abu_el_goukh]
+  checkout.html:590  [abu_el_goukh]
+scan_result.txt:129  [abu_el_goukh]
+  localStorage.removeItem('abu_el_goukh_cart');
+scan_result.txt:130  [abu_el_goukh]
+  checkout.html:630  [abu_el_goukh]
+scan_result.txt:131  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_cart', JSON.stringify(cart));
+scan_result.txt:132  [abu_el_goukh]
+  checkout.html:858  [abu_el_goukh]
+scan_result.txt:133  [abu_el_goukh]
+  let existingOrders = JSON.parse(localStorage.getItem('abu_el_goukh_orders') || '[]');
+scan_result.txt:134  [abu_el_goukh]
+  checkout.html:860  [abu_el_goukh]
+scan_result.txt:135  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_orders', JSON.stringify(existingOrders));
+scan_result.txt:138  [abu_el_goukh]
+  checkout.html:906  [abu_el_goukh]
+scan_result.txt:139  [abu_el_goukh]
+  localStorage.removeItem('abu_el_goukh_cart');
+scan_result.txt:142  [abu_el_goukh]
+  checkout.html:956  [abu_el_goukh]
+scan_result.txt:143  [abu_el_goukh]
+  localStorage.removeItem('abu_el_goukh_cart');
+scan_result.txt:146  [abu_el_goukh]
+  checkout.html:1004  [abu_el_goukh]
+scan_result.txt:147  [abu_el_goukh]
+  localStorage.removeItem('abu_el_goukh_cart');
+scan_result.txt:148  [abu_el_goukh]
+  checkout.html:1025  [abu_el_goukh]
+scan_result.txt:149  [abu_el_goukh]
+  localStorage.removeItem('abu_el_goukh_cart');
+scan_result.txt:164  [abu_el_goukh]
+  index.html:24  [abu_el_goukh]
+scan_result.txt:165  [abu_el_goukh]
+  <meta property="og:image" content="abu_el_goukh_logo.png">
+scan_result.txt:172  [abu_el_goukh]
+  index.html:34  [abu_el_goukh]
+scan_result.txt:173  [abu_el_goukh]
+  <meta name="twitter:image" content="abu_el_goukh_logo.png">
+scan_result.txt:176  [abu_el_goukh]
+  index.html:47  [abu_el_goukh]
+scan_result.txt:177  [abu_el_goukh]
+  "logo": "abu_el_goukh_logo.png",
+scan_result.txt:182  [abu_el_goukh]
+  index.html:74  [abu_el_goukh]
+scan_result.txt:183  [abu_el_goukh]
+  "image": "abu_el_goukh_logo.png",
+scan_result.txt:193  [abu_el_goukh]
+  <img src="abu_el_goukh_logo.png" alt="╪┤╪╣╪º╪▒ ╪ú╪¿┘ê ╪º┘ä╪¼┘ê╪« 1925 - ╪º┘ä╪¬┘ê┘â┘è┘ä ╪º┘ä╪▒╪│┘à┘è ┘ä┘ä╪»╪▒╪º╪¼╪º╪¬ ╪º┘ä┘ç┘ê╪º╪ª┘è╪⌐ ┘ü┘è ┘à╪╡╪▒" cla
+scan_result.txt:208  [abu el goukh]
+  index.html:756  [abu el goukh]
+scan_result.txt:209  [abu el goukh]
+  <!-- HERITAGE SECTION (Trek's "Born in a Barn" Equivalent for Abu El Goukh 1925) -->
+scan_result.txt:225  [abu_el_goukh]
+  <img src="abu_el_goukh_logo.png" alt="╪┤╪╣╪º╪▒ ╪ú╪¿┘ê ╪º┘ä╪¼┘ê╪« 1925 ╪º┘ä╪▒╪│┘à┘è" class="h-12 w-auto object-contain">
+scan_result.txt:230  [abu_el_goukh]
+  index.html:1306  [abu_el_goukh]
+scan_result.txt:231  [abu_el_goukh]
+  const cartData = JSON.parse(localStorage.getItem('abu_el_goukh_cart') || '[]');
+scan_result.txt:233  [abu_el_goukh]
+  <img src="abu_el_goukh_logo.png" alt="╪ú╪¿┘ê ╪º┘ä╪¼┘ê╪«" class="h-10 w-auto object-contain">
+scan_result.txt:249  [abu el goukh]
+  <p>┬⌐ 2026 ╪ú╪¿┘ê ╪º┘ä╪¼┘ê╪« 1925 (Abu El Goukh Bikes). ╪¼┘à┘è╪╣ ╪º┘ä╪¡┘é┘ê┘é ┘à╪¡┘ü┘ê╪╕╪⌐ ΓÇó ╪¬╪╡┘à┘è┘à ┘ê╪¬╪╖┘ê┘è╪▒ <a href="https://www.dotsadv.co
+scan_result.txt:250  [abu_el_goukh]
+  order-success.html:306  [abu_el_goukh]
+scan_result.txt:251  [abu_el_goukh]
+  const storedOrders = JSON.parse(localStorage.getItem('abu_el_goukh_orders') || '[]');
+scan_result.txt:254  [abu_el_goukh]
+  order-success.html:510  [abu_el_goukh]
+scan_result.txt:255  [abu_el_goukh]
+  let localOrders = JSON.parse(localStorage.getItem('abu_el_goukh_orders') || '[]');
+scan_result.txt:256  [abu_el_goukh]
+  order-success.html:514  [abu_el_goukh]
+scan_result.txt:257  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_orders', JSON.stringify(localOrders));
+scan_result.txt:260  [abu el goukh]
+  pixels.js:2  [abu el goukh]
+scan_result.txt:261  [abu el goukh]
+  * Abu El Goukh 1925 - Universal E-Commerce Pixels & Tracking Engine
+scan_result.txt:269  [abu_el_goukh]
+  <img src="abu_el_goukh_logo.png" alt="╪ú╪¿┘ê ╪º┘ä╪¼┘ê╪«" class="h-10 sm:h-12 w-auto object-contain rounded-md transition-transform group-hover:scale-1
+scan_result.txt:277  [abu_el_goukh]
+  <img src="abu_el_goukh_logo.png" alt="╪ú╪¿┘ê ╪º┘ä╪¼┘ê╪«" class="h-10 w-auto bg-white p-1 rounded-lg">
+scan_result.txt:294  [abu_el_goukh]
+  product.html:23  [abu_el_goukh]
+scan_result.txt:295  [abu_el_goukh]
+  <meta property="og:image" id="og-image" content="abu_el_goukh_logo.png">
+scan_result.txt:299  [abu_el_goukh]
+  <img src="abu_el_goukh_logo.png" alt="╪┤╪╣╪º╪▒ ╪ú╪¿┘ê ╪º┘ä╪¼┘ê╪« ╪º┘ä╪▒╪│┘à┘è" class="h-10 sm:h-12 w-auto object-contain rounded-md transition-transfo
+scan_result.txt:302  [abu_el_goukh]
+  product.html:233  [abu_el_goukh]
+scan_result.txt:303  [abu_el_goukh]
+  src="abu_el_goukh_logo.png"
+scan_result.txt:306  [abu el goukh]
+  product.html:248  [abu el goukh]
+scan_result.txt:307  [abu el goukh]
+  ABU EL GOUKH STUDIO 1925
+scan_result.txt:313  [abu_el_goukh]
+  <img src="abu_el_goukh_logo.png" alt="╪ú╪¿┘ê ╪º┘ä╪¼┘ê╪«" class="h-10 w-auto object-contain">
+scan_result.txt:321  [abu_el_goukh]
+  <img src="abu_el_goukh_logo.png" alt="╪ú╪¿┘ê ╪º┘ä╪¼┘ê╪«" class="h-10 w-auto object-contain">
+scan_result.txt:348  [abu_el_goukh]
+  product.html:2139  [abu_el_goukh]
+scan_result.txt:349  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_cart', JSON.stringify(cart));
+scan_result.txt:352  [abu_el_goukh]
+  product.html:2260  [abu_el_goukh]
+scan_result.txt:353  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_cart', JSON.stringify(cart));
+scan_result.txt:354  [abu_el_goukh]
+  product.html:2295  [abu_el_goukh]
+scan_result.txt:355  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_cart', JSON.stringify(cart));
+scan_result.txt:356  [abu_el_goukh]
+  product.html:2369  [abu_el_goukh]
+scan_result.txt:357  [abu_el_goukh]
+  const rawAdmin = localStorage.getItem('abu_el_goukh_admin_products');
+scan_result.txt:358  [abu_el_goukh]
+  product.html:2374  [abu_el_goukh]
+scan_result.txt:359  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(adminProducts));
+scan_result.txt:360  [abu_el_goukh]
+  product.html:2383  [abu_el_goukh]
+scan_result.txt:361  [abu_el_goukh]
+  const savedCart = localStorage.getItem('abu_el_goukh_cart');
+scan_result.txt:362  [abu_el_goukh]
+  product.html:2391  [abu_el_goukh]
+scan_result.txt:363  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_cart', JSON.stringify(cart));
+scan_result.txt:457  [abu_el_goukh]
+  <img src="abu_el_goukh_logo.png" alt="╪ú╪¿┘ê ╪º┘ä╪¼┘ê╪«" class="h-10 sm:h-12 w-auto object-contain rounded-md transition-transform group-hover:scale-1
+scan_result.txt:465  [abu_el_goukh]
+  <img src="abu_el_goukh_logo.png" alt="╪ú╪¿┘ê ╪º┘ä╪¼┘ê╪«" class="h-10 w-auto bg-white p-1 rounded-lg">
+scan_result.txt:472  [abu el goukh]
+  robots.txt:1  [abu el goukh]
+scan_result.txt:473  [abu el goukh]
+  # Abu El Goukh 1925 Cycles - Official Robots.txt
+scan_result.txt:485  [abu_el_goukh]
+  <img src="abu_el_goukh_logo.png" alt="╪ú╪¿┘ê ╪º┘ä╪¼┘ê╪«" class="h-10 sm:h-12 w-auto object-contain rounded-md transition-transform group-hover:scale-1
+scan_result.txt:489  [abu_el_goukh]
+  <img src="abu_el_goukh_logo.png" alt="╪ú╪¿┘ê ╪º┘ä╪¼┘ê╪«" class="h-8 w-auto bg-white p-1 rounded">
+scan_result.txt:493  [abu_el_goukh]
+  <img src="abu_el_goukh_logo.png" alt="╪ú╪¿┘ê ╪º┘ä╪¼┘ê╪«" class="h-10 w-auto object-contain">
+scan_result.txt:506  [abu_el_goukh]
+  shop.html:22  [abu_el_goukh]
+scan_result.txt:507  [abu_el_goukh]
+  <meta property="og:image" content="abu_el_goukh_logo.png">
+scan_result.txt:512  [abu_el_goukh]
+  shop.html:31  [abu_el_goukh]
+scan_result.txt:513  [abu_el_goukh]
+  <meta name="twitter:image" content="abu_el_goukh_logo.png">
+scan_result.txt:521  [abu_el_goukh]
+  <img src="abu_el_goukh_logo.png" alt="╪┤╪╣╪º╪▒ ╪ú╪¿┘ê ╪º┘ä╪¼┘ê╪« 1925 - ╪º┘ä╪¬┘ê┘â┘è┘ä ╪º┘ä╪▒╪│┘à┘è ┘ä┘ä╪»╪▒╪º╪¼╪º╪¬ ╪º┘ä┘ç┘ê╪º╪ª┘è╪⌐ ┘ü┘è ┘à╪╡╪▒" cla
+scan_result.txt:528  [abu el goukh]
+  shop.html:637  [abu el goukh]
+scan_result.txt:529  [abu el goukh]
+  <!-- HERITAGE SECTION (Trek's "Born in a Barn" Equivalent for Abu El Goukh) -->
+scan_result.txt:535  [abu_el_goukh]
+  <img src="abu_el_goukh_logo.png" alt="╪┤╪╣╪º╪▒ ╪ú╪¿┘ê ╪º┘ä╪¼┘ê╪« 1925 ╪º┘ä╪▒╪│┘à┘è" class="h-12 w-auto object-contain">
+scan_result.txt:544  [abu el goukh]
+  shop.html:894  [abu el goukh]
+scan_result.txt:545  [abu el goukh]
+  // Official Curated Abu El Goukh Bikes Fleet
+scan_result.txt:568  [abu_el_goukh]
+  shop.html:2206  [abu_el_goukh]
+scan_result.txt:569  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_cart', JSON.stringify(cart));
+scan_result.txt:572  [abu_el_goukh]
+  shop.html:2304  [abu_el_goukh]
+scan_result.txt:573  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_cart', JSON.stringify(cart));
+scan_result.txt:574  [abu_el_goukh]
+  shop.html:2325  [abu_el_goukh]
+scan_result.txt:575  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_cart', JSON.stringify(cart));
+scan_result.txt:576  [abu_el_goukh]
+  shop.html:2350  [abu_el_goukh]
+scan_result.txt:577  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_cart', JSON.stringify(cart));
+scan_result.txt:578  [abu_el_goukh]
+  shop.html:2424  [abu_el_goukh]
+scan_result.txt:579  [abu_el_goukh]
+  const storedCart = localStorage.getItem('abu_el_goukh_cart');
+scan_result.txt:580  [abu_el_goukh]
+  shop.html:2432  [abu_el_goukh]
+scan_result.txt:581  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_cart', JSON.stringify(cart));
+scan_result.txt:582  [abu_el_goukh]
+  shop.html:2440  [abu_el_goukh]
+scan_result.txt:583  [abu_el_goukh]
+  const rawAdmin = localStorage.getItem('abu_el_goukh_admin_products');
+scan_result.txt:584  [abu_el_goukh]
+  shop.html:2445  [abu_el_goukh]
+scan_result.txt:585  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(adminProducts));
+scan_result.txt:587  [abu_el_goukh]
+  <img src="abu_el_goukh_logo.png" alt="╪ú╪¿┘ê ╪º┘ä╪¼┘ê╪«" class="h-10 w-auto object-contain">
+scan_result.txt:597  [abu_el_goukh]
+  <img src="abu_el_goukh_logo.png" alt="╪ú╪¿┘ê ╪º┘ä╪¼┘ê╪« 1925" class="h-10 sm:h-12 w-auto object-contain transition-transform group-hover:scale-105">
+scan_result.txt:611  [abu_el_goukh]
+  <img src="abu_el_goukh_logo.png" alt="╪ú╪¿┘ê ╪º┘ä╪¼┘ê╪«" class="h-10 w-auto bg-white p-1 rounded-lg">
+scan_result.txt:625  [abu_el_goukh]
+  <img src="abu_el_goukh_logo.png" alt="╪ú╪¿┘ê ╪º┘ä╪¼┘ê╪«" class="h-10 sm:h-12 w-auto object-contain rounded-md transition-transform group-hover:scale-1
+scan_result.txt:629  [abu_el_goukh]
+  <img src="abu_el_goukh_logo.png" alt="╪ú╪¿┘ê ╪º┘ä╪¼┘ê╪«" class="h-10 w-auto bg-white p-1 rounded-lg">
+scan_result.txt:643  [abu_el_goukh]
+  <img src="abu_el_goukh_logo.png" alt="╪ú╪¿┘ê ╪º┘ä╪¼┘ê╪«" class="h-10 sm:h-12 w-auto object-contain rounded-md transition-transform group-hover:scale-1
+scan_result.txt:651  [abu_el_goukh]
+  <img src="abu_el_goukh_logo.png" alt="╪ú╪¿┘ê ╪º┘ä╪¼┘ê╪«" class="h-8 w-auto bg-white p-1 rounded">
+scan_result.txt:655  [abu_el_goukh]
+  <img src="abu_el_goukh_logo.png" alt="╪ú╪¿┘ê ╪º┘ä╪¼┘ê╪«" class="h-10 w-auto object-contain">
+scan_result.txt:672  [abu el goukh]
+  paytabs-create.js:74  [abu el goukh]
+scan_result.txt:673  [abu el goukh]
+  cart_description: String(cartDescription || 'Abu El Goukh Bikes 1925').substring(0, 127),
+SECURITY-CHANGES.md:1  [أبو الجوخ]
+  # تقرير الإصلاحات الأمنية الشاملة لمتجر أبو الجوخ 1925
+SECURITY-CHANGES.md:4  [أبو الجوخ]
+  تم فحص ومعالجة كافة الثغرات والعيوب التشغيلية المحددة في المراجعة الأمنية والوظيفية لمتجر **أبو الجوخ 1925**. جميع الإصلاحات تم تنفيذها وفقاً لأعلى مع
+shipping.html:6  [أبو الجوخ]
+  <title>أبو الجوخ 1925 | الشحن والتوصيل لكافة محافظات مصر وضمان الاستلام</title>
+shipping.html:7  [أبو الجوخ]
+  <meta name="description" content="سياسة الشحن والتوصيل السريع من أبو الجوخ - استلم عجلتك مجمعة ومضبوطة بالكامل لحد باب بيتك في أي محافظة مصرية، مع ضما
+shipping.html:55  [أبو الجوخ]
+  <span>ضمان وصيانة معتمدة من توكيل أبو الجوخ 1925</span>
+shipping.html:78  [أبو الجوخ]
+  <img src="abu_el_goukh_logo.png" alt="أبو الجوخ" class="h-10 sm:h-12 w-auto object-contain rounded-md transition-transform group-hover:scale-105 drop-
+shipping.html:80  [أبو الجوخ]
+  <span class="font-black text-lg lg:text-xl tracking-tight text-trek-black block leading-none">أبو الجوخ</span>
+shipping.html:225  [أبو الجوخ]
+  <img src="abu_el_goukh_logo.png" alt="أبو الجوخ" class="h-8 w-auto bg-white p-1 rounded">
+shipping.html:226  [أبو الجوخ]
+  <span>جميع الحقوق محفوظة © 2026 شركة أبو الجوخ لتجارة الدراجات • تصميم وتطوير <a href="https://www.dotsadv.com/" target="_blank" rel="noopener" class=
+shipping.html:247  [أبو الجوخ]
+  <img src="abu_el_goukh_logo.png" alt="أبو الجوخ" class="h-10 w-auto object-contain">
+shipping.html:248  [أبو الجوخ]
+  <span class="font-black text-lg text-trek-black">أبو الجوخ 1925</span>
+shop.html:6  [أبو الجوخ]
+  <title>أبو الجوخ 1925 | كتالوج العجل الرسمي في مصر - أسعار ومواصفات أكثر من 60 موديل أصلي</title>
+shop.html:10  [أبو الجوخ]
+  <meta name="description" content="تصفح الكتالوج الرسمي لمحلات أبو الجوخ 2026 - أسعار ومواصفات دراجات هوائية أصلية في مصر (ترنكس Trinx، زوم Zoom، رودكس
+shop.html:11  [ابو الجوخ]
+  <meta name="keywords" content="اسعار العجل في مصر 2026, كتالوج عجل ابو الجوخ, عجل ترنكس 29, عجل زوم 26, عجل اطفال, عجل بناتي, عجل دبابات, عجل سرعات شي
+shop.html:12  [أبو الجوخ]
+  <meta name="author" content="أبو الجوخ للدراجات - Abo El Goukh">
+shop.html:19  [أبو الجوخ]
+  <meta property="og:title" content="كتالوج عجل أبو الجوخ 1925 | أكثر من 60 موديل أصلي بأفضل سعر في مصر">
+shop.html:22  [abu_el_goukh]
+  <meta property="og:image" content="abu_el_goukh_logo.png">
+shop.html:24  [أبو الجوخ]
+  <meta property="og:site_name" content="أبو الجوخ - Abo El Goukh">
+shop.html:28  [أبو الجوخ]
+  <meta name="twitter:title" content="كتالوج عجل أبو الجوخ الرسمي 2026">
+shop.html:31  [abu_el_goukh]
+  <meta name="twitter:image" content="abu_el_goukh_logo.png">
+shop.html:41  [أبو الجوخ]
+  "name": "كتالوج عجل أبو الجوخ الرسمي - أكثر من 60 موديلاً أصلياً",
+shop.html:46  [أبو الجوخ]
+  "name": "أبو الجوخ 1925",
+shop.html:169  [أبو الجوخ]
+  <span>ضمان وصيانة معتمدة من توكيل أبو الجوخ 1925</span>
+shop.html:192  [أبو الجوخ]
+  <img src="abu_el_goukh_logo.png" alt="شعار أبو الجوخ 1925 - التوكيل الرسمي للدراجات الهوائية في مصر" class="h-10 sm:h-12 w-auto object-contain rounded
+shop.html:194  [أبو الجوخ]
+  <span class="font-black text-lg lg:text-xl tracking-tight text-trek-black block leading-none">أبو الجوخ</span>
+shop.html:467  [أبو الجوخ]
+  <h2 class="text-2xl sm:text-3xl font-black text-trek-black">كتالوج دراجات أبو الجوخ الأصلية</h2>
+shop.html:587  [أبو الجوخ]
+  <h2 class="text-3xl font-black text-white">لماذا تشتري دراجتك من أبو الجوخ؟</h2>
+shop.html:637  [abu el goukh]
+  <!-- HERITAGE SECTION (Trek's "Born in a Barn" Equivalent for Abu El Goukh) -->
+shop.html:647  [أبو الجوخ]
+  كما بدأت Trek في ورشة صغيرة بولاية ويسكونسن عام 1976 لتصنع ثورة عالمية، انطلقت رحلة <strong>أبو الجوخ</strong> في قلب القاهرة عام 1925 لتبني ثقافة ركو
+shop.html:650  [أبو الجوخ]
+  على مدار 100 عام، ظل اسم "أبو الجوخ" المرادف الأول للثقة، المتانة، وأصالة قطع الغيار، وها نحن ننطلق بتجربة رقمية عالمية تضع أفضل دراجات العالم بين يدي
+shop.html:695  [أبو الجوخ]
+  <img src="abu_el_goukh_logo.png" alt="شعار أبو الجوخ 1925 الرسمي" class="h-12 w-auto object-contain">
+shop.html:698  [أبو الجوخ]
+  <span class="font-black text-2xl text-white block leading-tight">أبو الجوخ</span>
+shop.html:760  [أبو الجوخ]
+  جميع الحقوق محفوظة © 2026 شركة أبو الجوخ لتجارة الدراجات • تصميم وتطوير <a href="https://www.dotsadv.com/" target="_blank" rel="noopener" class="text-
+shop.html:826  [أبو الجوخ]
+  <span class="font-bold text-trek-red">سنة كاملة من أبو الجوخ</span>
+shop.html:874  [أبو الجوخ]
+  <div class="text-xs text-trek-gray mt-1">تصفح دراجات أبو الجوخ وأضف دراجتك المفضلة</div>
+shop.html:894  [abu el goukh]
+  // Official Curated Abu El Goukh Bikes Fleet
+shop.html:1272  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+shop.html:1283  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+shop.html:1294  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+shop.html:1305  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+shop.html:1316  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+shop.html:1327  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ دراجات ابو الجوخ ٢٤ و٢٦ سرعات ومساعدين",
+shop.html:1338  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+shop.html:1349  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+shop.html:1360  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ",
+shop.html:1371  [ابو الجوخ]
+  "name": "دراجات ابو الجوخ ٨٥٠٠",
+shop.html:2185  [أبو الجوخ]
+  document.getElementById('modal-whatsapp-link').href = "https://wa.me/201114767140?text=" + encodeURIComponent("استفسار بخصوص دراجة أبو الجوخ: " + p.na
+shop.html:2206  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_cart', JSON.stringify(cart));
+shop.html:2239  [أبو الجوخ]
+  <div class="text-xs text-trek-gray mt-1">تصفح دراجات أبو الجوخ وأضف دراجتك المفضلة</div>
+shop.html:2304  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_cart', JSON.stringify(cart));
+shop.html:2325  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_cart', JSON.stringify(cart));
+shop.html:2350  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_cart', JSON.stringify(cart));
+shop.html:2424  [abu_el_goukh]
+  const storedCart = localStorage.getItem('abu_el_goukh_cart');
+shop.html:2432  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_cart', JSON.stringify(cart));
+shop.html:2440  [abu_el_goukh]
+  const rawAdmin = localStorage.getItem('abu_el_goukh_admin_products');
+shop.html:2445  [abu_el_goukh]
+  localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(adminProducts));
+shop.html:2481  [أبو الجوخ]
+  <img src="abu_el_goukh_logo.png" alt="أبو الجوخ" class="h-10 w-auto object-contain">
+shop.html:2482  [أبو الجوخ]
+  <span class="font-black text-lg text-trek-black">أبو الجوخ 1925</span>
+terms.html:7  [أبو الجوخ]
+  <title>الشروط والأحكام | أبو الجوخ 1925</title>
+terms.html:8  [أبو الجوخ]
+  <meta name="description" content="الشروط والأحكام المنظمة لعمليات الشراء والتعاقد واستخدام متجر أبو الجوخ 1925 للدراجات الهوائية ومستلزماتها وفقاً للق
+terms.html:58  [أبو الجوخ]
+  <span>ضمان وصيانة معتمدة من توكيل أبو الجوخ 1925</span>
+terms.html:79  [أبو الجوخ]
+  <img src="abu_el_goukh_logo.png" alt="أبو الجوخ 1925" class="h-10 sm:h-12 w-auto object-contain transition-transform group-hover:scale-105">
+terms.html:81  [أبو الجوخ]
+  <span class="font-black text-lg sm:text-xl tracking-tight text-trek-black leading-none">أبو الجوخ</span>
+terms.html:113  [أبو الجوخ]
+  تنظم هذه الوثيقة العلاقة التعاقدية بين متجر "أبو الجوخ 1925" وعملائه الكرام وفقاً لأحكام القانون المصري وقانون حماية المستهلك رقم 181 لسنة 2018.
+terms.html:132  [أبو الجوخ]
+  أهلاً بك في متجر "أبو الجوخ 1925" الإلكتروني (المشار إليه لاحقاً بـ "المتجر" أو "نحن"). يمثل دخولك إلى الموقع أو تصفح منتجاتنا أو تقديم أي طلب شراء إق
+terms.html:165  [أبو الجوخ]
+  نحن نحرص في متجر أبو الجوخ 1925 على عرض أدق التفاصيل التقنية والأسعار الفعلية لدراجاتنا ومستلزماتها. ومع ذلك، تنطبق القواعد التالية:
+terms.html:248  [أبو الجوخ]
+  <strong class="text-trek-black">حدود المسؤولية:</strong> لا يتحمل متجر أبو الجوخ 1925 أي مسؤولية عن أي حوادث أو إصابات شخصية أو أضرار ناتجة عن القيادة
+terms.html:261  [أبو الجوخ]
+  اسم "أبو الجوخ"، وشعار "أبو الجوخ 1925"، وكافة النصوص، والكتالوجات، والشروحات الفنية، والصور، والمواد البصرية والبرمجية المعروضة على هذا الموقع هي ملك
+terms.html:298  [أبو الجوخ]
+  <img src="abu_el_goukh_logo.png" alt="أبو الجوخ" class="h-10 w-auto bg-white p-1 rounded-lg">
+terms.html:299  [أبو الجوخ]
+  <span class="font-black text-xl text-white">أبو الجوخ 1925</span>
+terms.html:315  [أبو الجوخ]
+  <li><a href="about.html" class="hover:text-white transition">قصة أبو الجوخ (من نحن)</a></li>
+terms.html:335  [أبو الجوخ]
+  <div>جميع الحقوق محفوظة © 2026 شركة أبو الجوخ لتجارة الدراجات • تصميم وتطوير <a href="https://www.dotsadv.com/" target="_blank" rel="noopener" class="
+track-order.html:6  [أبو الجوخ]
+  <title>تتبع طلبك | أبو الجوخ 1925 - أصل العجل في مصر</title>
+track-order.html:7  [أبو الجوخ]
+  <meta name="description" content="تتبع حالة شحنتك وطلبك من متجر أبو الجوخ 1925 برقم الطلب ورقم الموبايل. اعرف موعد التجهيز والشحن والتوصيل لحظة بلحظة.
+track-order.html:57  [أبو الجوخ]
+  <span>ضمان وصيانة معتمدة من توكيل أبو الجوخ 1925</span>
+track-order.html:80  [أبو الجوخ]
+  <img src="abu_el_goukh_logo.png" alt="أبو الجوخ" class="h-10 sm:h-12 w-auto object-contain rounded-md transition-transform group-hover:scale-105 drop-
+track-order.html:82  [أبو الجوخ]
+  <span class="font-black text-lg lg:text-xl tracking-tight text-trek-black block leading-none">أبو الجوخ</span>
+track-order.html:294  [أبو الجوخ]
+  <img src="abu_el_goukh_logo.png" alt="أبو الجوخ" class="h-10 w-auto bg-white p-1 rounded-lg">
+track-order.html:295  [أبو الجوخ]
+  <span class="font-black text-xl text-white">أبو الجوخ 1925</span>
+track-order.html:311  [أبو الجوخ]
+  <li><a href="about.html" class="hover:text-white transition">قصة أبو الجوخ (من نحن)</a></li>
+track-order.html:330  [أبو الجوخ]
+  <div>جميع الحقوق محفوظة © 2026 شركة أبو الجوخ لتجارة الدراجات • تصميم وتطوير <a href="https://www.dotsadv.com/" target="_blank" rel="noopener" class="
+warranty.html:6  [أبو الجوخ]
+  <title>أبو الجوخ 1925 | سياسة الضمان المعتمد والصيانة الدورية للدراجات</title>
+warranty.html:7  [أبو الجوخ]
+  <meta name="description" content="تعرف على شهادة الضمان المعتمدة من أبو الجوخ 1925 - ضمان مدى الحياة للشاسيه، ضمان سرعات شيمانو، ومراكز الخدمة المعتمد
+warranty.html:55  [أبو الجوخ]
+  <span>ضمان وصيانة معتمدة من توكيل أبو الجوخ 1925</span>
+warranty.html:78  [أبو الجوخ]
+  <img src="abu_el_goukh_logo.png" alt="أبو الجوخ" class="h-10 sm:h-12 w-auto object-contain rounded-md transition-transform group-hover:scale-105 drop-
+warranty.html:80  [أبو الجوخ]
+  <span class="font-black text-lg lg:text-xl tracking-tight text-trek-black block leading-none">أبو الجوخ</span>
+warranty.html:124  [أبو الجوخ]
+  <h1 class="text-3xl sm:text-5xl font-black">ضمانك الحقيقي يبدأ من اسم "أبو الجوخ"</h1>
+warranty.html:126  [أبو الجوخ]
+  لا نبيعك دراجة ونتركك للطريق؛ كل دراجة تخرج من صرح أبو الجوخ مغطاة بشهادة ضمان حقيقية، مع توافر كامل لقطع الغيار الأصلية ومراكز خدمة في قلب القاهرة وا
+warranty.html:207  [أبو الجوخ]
+  <img src="abu_el_goukh_logo.png" alt="أبو الجوخ" class="h-8 w-auto bg-white p-1 rounded">
+warranty.html:208  [أبو الجوخ]
+  <span>جميع الحقوق محفوظة © 2026 شركة أبو الجوخ لتجارة الدراجات • تصميم وتطوير <a href="https://www.dotsadv.com/" target="_blank" rel="noopener" class=
+warranty.html:229  [أبو الجوخ]
+  <img src="abu_el_goukh_logo.png" alt="أبو الجوخ" class="h-10 w-auto object-contain">
+warranty.html:230  [أبو الجوخ]
+  <span class="font-black text-lg text-trek-black">أبو الجوخ 1925</span>
+discounts.js:100  [أبو الجوخ]
+  description: 'خصم 5% رسمي بمناسبة مئوية أبو الجوخ 1925'
+fawry-create.js:84  [أبو الجوخ]
+  customerName: String(customerName || 'عميل أبو الجوخ').substring(0, 50),
+fawry-create.js:91  [أبو الجوخ]
+  description: String(cartDescription || 'طلب دراجة من متجر أبو الجوخ 1925').substring(0, 100),
+paymob-create.js:65  [أبو الجوخ]
+  const nameParts = String(customerName || 'عميل أبو الجوخ').trim().split(/\s+/);
+paymob-create.js:67  [أبو الجوخ]
+  const lastName = nameParts.slice(1).join(' ') || 'أبو الجوخ';
+paymob-create.js:90  [أبو الجوخ]
+  name: String(cartDescription || 'دراجة هوائية من أبو الجوخ 1925').substring(0, 100),
+paymob-create.js:181  [أبو الجوخ]
+  name: String(cartDescription || 'دراجة هوائية أبو الجوخ').substring(0, 100),
+paytabs-create.js:74  [abu el goukh]
+  cart_description: String(cartDescription || 'Abu El Goukh Bikes 1925').substring(0, 127),

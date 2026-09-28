@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أبو الجوخ 1925 | كتالوج العجل الرسمي في مصر - أسعار ومواصفات 55 موديل أصلي</title>
+    <title>أبو الجوخ 1925 | كتالوج العجل الرسمي في مصر - أسعار ومواصفات أكثر من 60 موديل أصلي</title>
     
     <!-- Comprehensive SEO Meta Tags for Egyptian Bicycle Shoppers -->
     <!-- TODO: أعد ذكر التقسيط بعد تفعيل Paymob -->
@@ -16,7 +16,7 @@
     <!-- Open Graph / Social Sharing -->
     <meta property="og:locale" content="ar_EG">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="كتالوج عجل أبو الجوخ 1925 | 55 موديل أصلي بأفضل سعر في مصر">
+    <meta property="og:title" content="كتالوج عجل أبو الجوخ 1925 | أكثر من 60 موديل أصلي بأفضل سعر في مصر">
     <!-- TODO: أعد ذكر التقسيط بعد تفعيل Paymob -->
     <meta property="og:description" content="أسعار العجل الأصلي في مصر: ترنكس، زوم، دراجات جبلية، سباق، وأطفال مع شحن سريع وضمان استبدال واسترجاع 14 يوماً.">
     <meta property="og:image" content="abu_el_goukh_logo.png">
@@ -38,7 +38,7 @@
         {
           "@type": "CollectionPage",
           "@id": "https://aboelgoukhshop.com/catalog#collection",
-          "name": "كتالوج عجل أبو الجوخ الرسمي - 55 موديل أصلي",
+          "name": "كتالوج عجل أبو الجوخ الرسمي - أكثر من 60 موديلاً أصلياً",
           "description": "تشكيلة الدراجات الهوائية الأصلية بمصر: جبلية، طريق، أطفال، ودبابات",
           "url": "https://aboelgoukhshop.com/catalog",
           "isPartOf": {
@@ -59,7 +59,7 @@
             {
               "@type": "ListItem",
               "position": 2,
-              "name": "كتالوج العجل (55 موديل)",
+              "name": "كتالوج العجل (أكثر من 60 موديلاً)",
               "item": "shop.html"
             }
           ]
@@ -439,9 +439,9 @@
                         <label class="block text-xs font-bold text-trek-black mb-2">الميزانية المستهدفة:</label>
                         <select id="finder-budget" class="w-full bg-trek-lightgray border border-trek-border text-xs rounded-xl p-3 font-semibold outline-none focus:border-trek-black">
                             <option value="all">أي ميزانية...</option>
-                            <option value="budget">اقتصادي (أقل من 4,000 ج.م)</option>
-                            <option value="mid">فئة متوسطة (4,000 - 8,000 ج.م)</option>
-                            <option value="premium">احترافي عالي (أكثر من 8,000 ج.م)</option>
+                            <option value="budget">أقل من 5,000 ج.م</option>
+                            <option value="mid">من 5,000 إلى 10,000 ج.م</option>
+                            <option value="premium">أكثر من 10,000 ج.م</option>
                         </select>
                     </div>
                 </div>
@@ -1911,6 +1911,19 @@
             }
         }
 
+        // Arabic Text Normalization helper for resilient search
+        function normalizeArabic(s) {
+            if (!s || typeof s !== 'string') return '';
+            return s
+                .replace(/[\u064B-\u0652\u0670]/g, '') // Remove tashkeel (diacritics)
+                .replace(/\u0640/g, '')               // Remove tatweel (ـ)
+                .replace(/[أإآء]/g, 'ا')              // Unify hamzas
+                .replace(/ة/g, 'ه')                   // Unify taa marbuta to haa
+                .replace(/ى/g, 'ي')                   // Unify alif maqsura to yaa
+                .toLowerCase()
+                .trim();
+        }
+
         // ADVANCED FILTER LOGIC (Faceted Search & Multi-criteria)
         function applyAllFilters() {
             const sourceList = (typeof allLoadedProducts !== 'undefined' && allLoadedProducts.length > 0) ? allLoadedProducts : curatedBikes;
@@ -1921,15 +1934,24 @@
                 filtered = filtered.filter(p => p.cat_key === filterState.category);
             }
 
-            // 2. Search Query Filter
+            // 2. Search Query Filter with Arabic Normalization
             if (filterState.search) {
-                const q = filterState.search.toLowerCase();
-                filtered = filtered.filter(p =>
-                    (p.name && p.name.toLowerCase().includes(q)) ||
-                    (p.sku && p.sku.toLowerCase().includes(q)) ||
-                    (p.specs && p.specs.toLowerCase().includes(q)) ||
-                    (p.category && p.category.toLowerCase().includes(q))
-                );
+                const q = normalizeArabic(filterState.search);
+                filtered = filtered.filter(p => {
+                    const name = normalizeArabic(p.name);
+                    const sku = normalizeArabic(p.sku);
+                    const specs = normalizeArabic(p.specs);
+                    const desc = normalizeArabic(p.description);
+                    const cat = normalizeArabic(p.category);
+                    const brand = normalizeArabic(p.brand);
+
+                    return name.includes(q) ||
+                           sku.includes(q) ||
+                           specs.includes(q) ||
+                           desc.includes(q) ||
+                           cat.includes(q) ||
+                           brand.includes(q);
+                });
             }
 
             // 3. Brand Filter
@@ -2369,7 +2391,7 @@
             } catch (e) {}
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             checkShopInstallmentStatus();
             // 1. Fetch live catalog from Cloud DB or server products.json
             try {
@@ -2431,7 +2453,7 @@
 
             <nav class="space-y-3 text-sm font-bold text-trek-black">
                 <a href="index.html" class="block py-2.5 px-3 rounded-xl hover:bg-trek-lightgray transition">🏠 الصفحة الرئيسية</a>
-                <a href="shop.html" class="block py-2.5 px-3 rounded-xl bg-trek-red/10 text-trek-red font-black">🚲 كتالوج العجل (67 موديل)</a>
+                <a href="shop.html" class="block py-2.5 px-3 rounded-xl bg-trek-red/10 text-trek-red font-black">🚲 كتالوج العجل (أكثر من 60 موديلاً)</a>
                 <a href="track-order.html" class="block py-2.5 px-3 rounded-xl hover:bg-trek-lightgray transition">📦 تتبع حالة طلبك</a>
                 <a href="about.html" class="block py-2.5 px-3 rounded-xl hover:bg-trek-lightgray transition">🏛️ من نحن وتاريخ 1925</a>
                 <a href="returns-policy.html" class="block py-2.5 px-3 rounded-xl hover:bg-trek-lightgray transition">🔄 سياسة الاسترجاع والاستبدال</a>

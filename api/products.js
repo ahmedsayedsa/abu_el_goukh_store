@@ -38,11 +38,50 @@ function getLocalProductsFallback() {
     return [];
 }
 
+const BANNED_IMAGE_HASHES = [
+    '1735153530582',
+    '1735217352952',
+    '1735217678684',
+    '1736510479027',
+    '1781192843619',
+    '1781193841658'
+];
+
+function sanitizeProductImage(url, id) {
+    if (!url) return `images/bike_${id || 1}.jpg`;
+    const s = String(url);
+    for (const h of BANNED_IMAGE_HASHES) {
+        if (s.includes(h)) {
+            return `images/bike_${id || 1}.jpg`;
+        }
+    }
+    return s;
+}
+
+function cleanProduct(p) {
+    if (!p) return p;
+    const cleanImg = sanitizeProductImage(p.image, p.id);
+    let cleanImages = [cleanImg];
+    if (Array.isArray(p.images) && p.images.length > 0) {
+        cleanImages = p.images.map(img => sanitizeProductImage(img, p.id));
+    }
+    return {
+        ...p,
+        image: cleanImg,
+        images: cleanImages
+    };
+}
+
 export default async function handler(req, res) {
     // ─────────────────────────────────────────────────────────────
     // 1. GET: Retrieve Public Products Catalog
     // ─────────────────────────────────────────────────────────────
     if (req.method === 'GET') {
+        const fallback = getLocalProductsFallback();
+        if (Array.isArray(fallback) && fallback.length > 0) {
+            return res.status(200).json(fallback.map(cleanProduct));
+        }
+
         try {
             const fbRes = await fetch(getFirebaseUrl('/products'), {
                 headers: { 'Accept': 'application/json' },
@@ -52,18 +91,17 @@ export default async function handler(req, res) {
             if (fbRes.ok) {
                 const data = await fbRes.json();
                 if (Array.isArray(data) && data.length > 0) {
-                    return res.status(200).json(data);
+                    return res.status(200).json(data.map(cleanProduct));
                 } else if (data && typeof data === 'object') {
                     const arr = Object.values(data);
-                    if (arr.length > 0) return res.status(200).json(arr);
+                    if (arr.length > 0) return res.status(200).json(arr.map(cleanProduct));
                 }
             }
         } catch (fbErr) {
             console.warn('[Products API] Firebase read failed, serving local fallback:', fbErr.message);
         }
 
-        const fallback = getLocalProductsFallback();
-        return res.status(200).json(fallback);
+        return res.status(200).json([]);
     }
 
     // ─────────────────────────────────────────────────────────────

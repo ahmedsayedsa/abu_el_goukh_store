@@ -1719,37 +1719,65 @@
         let selectedColor = 'red';
         let selectedQty = 1;
         let cart = [];
-                // Cloud Database Configuration (Google Firebase Realtime Database)
-        window.ABU_FIREBASE_URL = 'https://abu-el-goukh-store-default-rtdb.firebaseio.com';
+                const BANNED_IMAGE_HASHES = [
+            '1735153530582',
+            '1735217352952',
+            '1735217678684',
+            '1736510479027',
+            '1781192843619',
+            '1781193841658'
+        ];
+
+        function sanitizeProductImage(url, id) {
+            if (!url) return 'images/bike_' + (id || 1) + '.jpg';
+            const s = String(url);
+            for (const h of BANNED_IMAGE_HASHES) {
+                if (s.includes(h)) {
+                    return 'images/bike_' + (id || 1) + '.jpg';
+                }
+            }
+            return s;
+        }
+
+        function cleanProductObj(p) {
+            if (!p) return p;
+            const cleanImg = sanitizeProductImage(p.image, p.id);
+            let cleanImages = [cleanImg];
+            if (Array.isArray(p.images) && p.images.length > 0) {
+                cleanImages = p.images.map(img => sanitizeProductImage(img, p.id));
+            }
+            return {
+                ...p,
+                image: cleanImg,
+                images: cleanImages
+            };
+        }
 
         async function getLiveCatalog() {
-            // 1. Try Google Firebase Cloud DB if URL configured
-            if (window.ABU_FIREBASE_URL) {
-                try {
-                    const fbEndpoint = window.ABU_FIREBASE_URL.replace(/\/+$/, '') + '/products.json';
-                    const res = await fetch(fbEndpoint);
-                    if (res.ok) {
-                        const cloudData = await res.json();
-                        if (Array.isArray(cloudData) && cloudData.length > 0) {
-                            return cloudData;
-                        }
-                    }
-                } catch(e) { console.warn('Cloud DB fetch failed, using fallback', e); }
-            }
-
-            // 2. Try Centralized Server products.json
+            // 1. Primary: Direct static products.json (deployed on Vercel CDN, authoritative and fresh)
             try {
                 const resp = await fetch('products.json?v=' + Date.now());
                 if (resp.ok) {
                     const liveBikes = await resp.json();
                     if (Array.isArray(liveBikes) && liveBikes.length > 0) {
-                        return liveBikes;
+                        return liveBikes.map(cleanProductObj);
                     }
                 }
-            } catch(e) { console.log('Falling back to static data', e); }
+            } catch(e) { console.warn('products.json fetch failed, trying API fallback', e); }
+
+            // 2. Secondary: Serverless API /api/products
+            try {
+                const apiRes = await fetch('/api/products?v=' + Date.now());
+                if (apiRes.ok) {
+                    const data = await apiRes.json();
+                    if (Array.isArray(data) && data.length > 0) {
+                        return data.map(cleanProductObj);
+                    }
+                }
+            } catch(e) {}
 
             // 3. Fallback to embedded curatedBikes
-            return curatedBikes;
+            return curatedBikes.map(cleanProductObj);
         }
 
         let allLoadedProducts = [...curatedBikes];
@@ -1860,7 +1888,7 @@
         function renderGallery(product) {
             const mainImgEl = document.getElementById('product-main-image');
             if (mainImgEl) {
-                mainImgEl.src = product.image;
+                mainImgEl.src = sanitizeProductImageUrl(sanitizeProductImage(product.image, product.id));
                 mainImgEl.onerror = function() {
                     if (!this.dataset.triedBackup) {
                         this.dataset.triedBackup = 1;
@@ -1870,9 +1898,8 @@
             }
             const container = document.getElementById('product-thumbnails-container');
             if (!container) return;
-            const images = (product.images && Array.isArray(product.images) && product.images.length > 0)
-                ? product.images
-                : [product.image];
+            const rawImages = (product.images && Array.isArray(product.images) && product.images.length > 0) ? product.images : [product.image];
+            const images = rawImages.map(img => sanitizeProductImage(img, product.id));
             // SECURITY FIX: Store gallery images in a global and pass only the numeric index
             // through inline onclick handlers - never pass raw URLs into JS string contexts.
             window.__galleryImages = images;
@@ -2294,7 +2321,7 @@
                     <div class="bg-white border border-trek-border hover:border-trek-black rounded-2xl p-4 transition-all duration-300 hover:shadow-lg flex flex-col justify-between group">
                         <a href="product.html?id=${p.id}" class="block">
                             <div class="h-40 flex items-center justify-center p-2 relative bg-trek-lightgray/50 rounded-xl mb-3">
-                                <img src="${p.image}" alt="${p.name}" class="max-h-full object-contain transition-transform duration-300 group-hover:scale-105" onerror="if(!this.dataset.triedBackup){this.dataset.triedBackup=1; this.src='images/bike_'+p.id+'.jpg';}">
+                                <img src="${sanitizeProductImageUrl(sanitizeProductImage(p.image, p.id))}" alt="${escapeHtml(p.name)}" class="max-h-full object-contain transition-transform duration-300 group-hover:scale-105" onerror="if(!this.dataset.triedBackup){this.dataset.triedBackup=1; this.src='images/bike_'+Number(p.id)+'.jpg';}">
                             </div>
                             <span class="text-[10px] font-bold text-trek-red uppercase num-font">${p.sku}</span>
                             <h3 class="text-xs font-bold text-trek-black line-clamp-2 mt-1 group-hover:text-trek-red transition">
@@ -2331,26 +2358,39 @@
                 }
             } catch(e) {}
 
-            // 1. Fetch live catalog from Cloud DB or server products.json
+            // 1. Fetch live catalog from server products.json
             try {
-                allLoadedProducts = await getLiveCatalog();
+                const catalog = await getLiveCatalog();
+                allLoadedProducts = catalog.map(cleanProductObj);
             } catch(e) { console.error('Catalog load error', e); }
 
-            // 2. Sync with Admin Products from LocalStorage
+            // 2. Sync with Admin Products from LocalStorage (with mandatory sanitization and cache purge)
             try {
-                const adminProducts = JSON.parse(localStorage.getItem('abu_el_goukh_admin_products'));
-                if (adminProducts && adminProducts.length > 0) {
-                    const activeAdmin = adminProducts.filter(p => p.active !== false);
-                    allLoadedProducts = [...activeAdmin, ...allLoadedProducts.filter(cb => !activeAdmin.some(ap => ap.id === cb.id))];
+                const rawAdmin = localStorage.getItem('abu_el_goukh_admin_products');
+                if (rawAdmin) {
+                    const parsedAdmin = JSON.parse(rawAdmin);
+                    if (Array.isArray(parsedAdmin)) {
+                        const adminProducts = parsedAdmin.map(cleanProductObj);
+                        localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(adminProducts));
+                        const activeAdmin = adminProducts.filter(p => p.active !== false);
+                        allLoadedProducts = [...activeAdmin, ...allLoadedProducts.filter(cb => !activeAdmin.some(ap => ap.id === cb.id))];
+                    }
                 }
             } catch(e) { console.error(e); }
 
-            // 2. Load Cart
+            // 3. Load Cart (with mandatory sanitization)
             try {
                 const savedCart = localStorage.getItem('abu_el_goukh_cart');
                 if (savedCart) {
-                    cart = JSON.parse(savedCart);
-                    updateCartUI();
+                    const parsedCart = JSON.parse(savedCart);
+                    if (Array.isArray(parsedCart)) {
+                        cart = parsedCart.map(item => ({
+                            ...item,
+                            image: sanitizeProductImage(item.image, item.id)
+                        }));
+                        localStorage.setItem('abu_el_goukh_cart', JSON.stringify(cart));
+                        updateCartUI();
+                    }
                 }
             } catch(e) { console.error(e); }
 

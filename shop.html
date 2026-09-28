@@ -1648,6 +1648,40 @@
         }
 
         // SECURITY FIX: Only allow http(s) / data-image sources in <img src> attributes
+                const BANNED_IMAGE_HASHES = [
+            '1735153530582',
+            '1735217352952',
+            '1735217678684',
+            '1736510479027',
+            '1781192843619',
+            '1781193841658'
+        ];
+
+        function sanitizeProductImage(url, id) {
+            if (!url) return 'images/bike_' + (id || 1) + '.jpg';
+            const s = String(url);
+            for (const h of BANNED_IMAGE_HASHES) {
+                if (s.includes(h)) {
+                    return 'images/bike_' + (id || 1) + '.jpg';
+                }
+            }
+            return s;
+        }
+
+        function cleanProductObj(p) {
+            if (!p) return p;
+            const cleanImg = sanitizeProductImage(p.image, p.id);
+            let cleanImages = [cleanImg];
+            if (Array.isArray(p.images) && p.images.length > 0) {
+                cleanImages = p.images.map(img => sanitizeProductImage(img, p.id));
+            }
+            return {
+                ...p,
+                image: cleanImg,
+                images: cleanImages
+            };
+        }
+
         function sanitizeShopImageUrl(url) {
             const s = String(url === null || url === undefined ? '' : url).trim();
             if (/^https?:\/\//i.test(s) || /^data:image\/(png|jpe?g|webp|gif);base64,/i.test(s) || /^images\//i.test(s)) {
@@ -1719,7 +1753,7 @@
 
                             <!-- Bike Image Container with Trek Studio Shadow -->
                             <div class="h-44 sm:h-48 flex items-center justify-center my-2 p-2 relative bike-studio-shadow">
-                                <img src="${sanitizeShopImageUrl(p.image)}" alt="${escapeShopHtml(p.name)}" loading="lazy" class="max-h-full object-contain relative z-10 transition-transform duration-300 group-hover:scale-105" onerror="if(!this.dataset.triedBackup){this.dataset.triedBackup=1; this.src='images/bike_'+${Number(p.id) || 0}+'.jpg';}">
+                                <img src="${sanitizeShopImageUrl(sanitizeProductImage(p.image, p.id))}" alt="${escapeShopHtml(p.name)}" loading="lazy" class="max-h-full object-contain relative z-10 transition-transform duration-300 group-hover:scale-105" onerror="if(!this.dataset.triedBackup){this.dataset.triedBackup=1; this.src='images/bike_'+${Number(p.id) || 0}+'.jpg';}">
                             </div>
 
                             <!-- Colorway Swatches (Trek Style) -->
@@ -2124,7 +2158,7 @@
             document.getElementById('modal-title').innerText = p.name;
             document.getElementById('modal-price').innerText = Number(p.price).toLocaleString('en-US');
             // Installment calculation removed per pricing honesty compliance
-            document.getElementById('modal-img').src = p.image;
+            document.getElementById('modal-img').src = sanitizeShopImageUrl(sanitizeProductImage(p.image, p.id));
             document.getElementById('modal-img').onerror = function() {
                 if (!this.dataset.triedBackup) {
                     this.dataset.triedBackup = 1;
@@ -2320,48 +2354,31 @@
             window.location.href = 'checkout.html';
         }
 
-        // Cloud Database Configuration (Google Firebase Realtime Database)
-        window.ABU_FIREBASE_URL = 'https://abu-el-goukh-store-default-rtdb.firebaseio.com';
-
         async function getLiveCatalog() {
-            // 1. Try Serverless API /api/products (authoritative cloud catalog)
-            try {
-                const apiRes = await fetch('/api/products');
-                if (apiRes.ok) {
-                    const data = await apiRes.json();
-                    if (Array.isArray(data) && data.length > 0) {
-                        return data;
-                    }
-                }
-            } catch(e) { console.warn('API products fetch failed, attempting fallbacks', e); }
-
-            // 2. Try Google Firebase Cloud DB if URL configured
-            if (window.ABU_FIREBASE_URL) {
-                try {
-                    const fbEndpoint = window.ABU_FIREBASE_URL.replace(/\/+$/, '') + '/products.json';
-                    const res = await fetch(fbEndpoint);
-                    if (res.ok) {
-                        const cloudData = await res.json();
-                        if (Array.isArray(cloudData) && cloudData.length > 0) {
-                            return cloudData;
-                        }
-                    }
-                } catch(e) { console.warn('Cloud DB fetch failed, using fallback', e); }
-            }
-
-            // 3. Try Centralized Server products.json
+            // 1. Primary: Direct static products.json (deployed on Vercel CDN, authoritative and fresh)
             try {
                 const resp = await fetch('products.json?v=' + Date.now());
                 if (resp.ok) {
                     const liveBikes = await resp.json();
                     if (Array.isArray(liveBikes) && liveBikes.length > 0) {
-                        return liveBikes;
+                        return liveBikes.map(cleanProductObj);
                     }
                 }
-            } catch(e) { console.log('Falling back to static data', e); }
+            } catch(e) { console.warn('products.json fetch failed, trying API fallback', e); }
 
-            // 4. Fallback to embedded curatedBikes
-            return curatedBikes;
+            // 2. Secondary: Serverless API /api/products
+            try {
+                const apiRes = await fetch('/api/products?v=' + Date.now());
+                if (apiRes.ok) {
+                    const data = await apiRes.json();
+                    if (Array.isArray(data) && data.length > 0) {
+                        return data.map(cleanProductObj);
+                    }
+                }
+            } catch(e) {}
+
+            // 3. Fallback to embedded curatedBikes
+            return curatedBikes.map(cleanProductObj);
         }
 
         let allLoadedProducts = [...curatedBikes];
@@ -2396,26 +2413,39 @@
 
         document.addEventListener('DOMContentLoaded', async () => {
             checkShopInstallmentStatus();
-            // 1. Fetch live catalog from Cloud DB or server products.json
+            // 1. Fetch live catalog from server products.json
             try {
-                allLoadedProducts = await getLiveCatalog();
+                const catalog = await getLiveCatalog();
+                allLoadedProducts = catalog.map(cleanProductObj);
             } catch(e) { console.error('Catalog load error', e); }
 
-            // 2. Load saved cart
+            // 2. Load saved cart (with mandatory sanitization)
             try {
                 const storedCart = localStorage.getItem('abu_el_goukh_cart');
                 if (storedCart) {
-                    cart = JSON.parse(storedCart);
-                    updateCartUI();
+                    const parsedCart = JSON.parse(storedCart);
+                    if (Array.isArray(parsedCart)) {
+                        cart = parsedCart.map(item => ({
+                            ...item,
+                            image: sanitizeProductImage(item.image, item.id)
+                        }));
+                        localStorage.setItem('abu_el_goukh_cart', JSON.stringify(cart));
+                        updateCartUI();
+                    }
                 }
             } catch(e) { console.error(e); }
 
-            // 3. Sync with local admin products if any
+            // 3. Sync with local admin products if any (with mandatory sanitization and cache purge)
             try {
-                const adminProducts = JSON.parse(localStorage.getItem('abu_el_goukh_admin_products'));
-                if (adminProducts && adminProducts.length > 0) {
-                    const activeAdmin = adminProducts.filter(p => p.active !== false);
-                    allLoadedProducts = [...activeAdmin, ...allLoadedProducts.filter(cb => !activeAdmin.some(ap => ap.id === cb.id))];
+                const rawAdmin = localStorage.getItem('abu_el_goukh_admin_products');
+                if (rawAdmin) {
+                    const parsedAdmin = JSON.parse(rawAdmin);
+                    if (Array.isArray(parsedAdmin)) {
+                        const adminProducts = parsedAdmin.map(cleanProductObj);
+                        localStorage.setItem('abu_el_goukh_admin_products', JSON.stringify(adminProducts));
+                        const activeAdmin = adminProducts.filter(p => p.active !== false);
+                        allLoadedProducts = [...activeAdmin, ...allLoadedProducts.filter(cb => !activeAdmin.some(ap => ap.id === cb.id))];
+                    }
                 }
             } catch(e) { console.error(e); }
 

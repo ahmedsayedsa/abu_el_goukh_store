@@ -335,7 +335,7 @@
                     <div class="mt-6 pt-4 border-t border-trek-border">
                         <label class="block text-xs font-bold text-trek-black mb-1.5">هل لديك كود خصم ترويجي؟</label>
                         <div class="flex gap-2">
-                            <input type="text" id="promo-input" placeholder="مثال: GOUKH1925" class="flex-1 text-xs font-bold px-3 py-2.5 rounded-xl border border-trek-border focus:border-trek-black outline-none uppercase" dir="ltr">
+                            <input type="text" id="promo-input" placeholder="أدخل كود الخصم هنا" class="flex-1 text-xs font-bold px-3 py-2.5 rounded-xl border border-trek-border focus:border-trek-black outline-none uppercase" dir="ltr">
                             <button type="button" onclick="applyPromoCode()" class="bg-trek-black hover:bg-trek-charcoal text-white text-xs font-bold px-4 py-2.5 rounded-xl transition">تطبيق</button>
                         </div>
                         <div id="promo-msg" class="text-[11px] font-bold mt-1.5 hidden"></div>
@@ -628,24 +628,55 @@
             updateCalculations();
         }
 
+        let activePromo = null; // { valid: true, type, value, freeShipping, minOrder }
+
         function updateShippingGov() {
             const select = document.getElementById('cust-gov');
-            const selectedOption = select.options[select.selectedIndex];
+            const selectedOption = select ? select.options[select.selectedIndex] : null;
             if (selectedOption && selectedOption.dataset.fee) {
                 shippingFee = parseInt(selectedOption.dataset.fee, 10);
             } else {
                 shippingFee = 150;
             }
+            if (activePromo && activePromo.freeShipping) {
+                shippingFee = 0;
+            }
             updateCalculations();
         }
 
         function updateCalculations() {
-            let subtotal = cart.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
-            let discountAmount = Math.round(subtotal * (appliedDiscountPercent / 100));
-            let total = subtotal - discountAmount + shippingFee;
+            const subtotal = cart.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
+            let discountAmount = 0;
+
+            if (activePromo && activePromo.valid) {
+                if (activePromo.minOrder && subtotal < activePromo.minOrder) {
+                    const msg = document.getElementById('promo-msg');
+                    if (msg) {
+                        msg.classList.remove('hidden', 'text-emerald-600');
+                        msg.classList.add('text-trek-red');
+                        msg.innerText = `الحد الأدنى لتطبيق هذا الكود هو ${activePromo.minOrder.toLocaleString('en-US')} ج.م`;
+                    }
+                    activePromo = null;
+                    appliedDiscountPercent = 0;
+                } else {
+                    if (activePromo.freeShipping) {
+                        shippingFee = 0;
+                    }
+                    if (activePromo.type === 'fixed') {
+                        discountAmount = Math.min(subtotal, Math.round(Number(activePromo.value) || 0));
+                    } else {
+                        const pct = Math.min(100, Math.max(0, Number(activePromo.value) || 0));
+                        discountAmount = Math.round(subtotal * (pct / 100));
+                    }
+                }
+            } else if (appliedDiscountPercent > 0) {
+                discountAmount = Math.round(subtotal * (appliedDiscountPercent / 100));
+            }
+
+            const total = Math.max(0, subtotal - discountAmount + shippingFee);
 
             document.getElementById('price-subtotal').innerText = subtotal.toLocaleString('en-US') + ' ج.م';
-            document.getElementById('price-shipping').innerText = shippingFee.toLocaleString('en-US') + ' ج.م';
+            document.getElementById('price-shipping').innerText = (shippingFee === 0 ? 'مجاناً' : shippingFee.toLocaleString('en-US') + ' ج.م');
             
             const discRow = document.getElementById('discount-row');
             if (discountAmount > 0) {
@@ -658,25 +689,92 @@
             document.getElementById('price-total').innerText = total.toLocaleString('en-US') + ' ج.م';
         }
 
-        function applyPromoCode() {
-            const input = document.getElementById('promo-input').value.trim().toUpperCase();
+        async function applyPromoCode() {
+            const promoInputEl = document.getElementById('promo-input');
+            const input = promoInputEl ? promoInputEl.value.trim().toUpperCase() : '';
             const msg = document.getElementById('promo-msg');
-            msg.classList.remove('hidden', 'text-emerald-600', 'text-trek-red');
+            const btn = document.querySelector('button[onclick="applyPromoCode()"]');
+            if (msg) msg.classList.remove('hidden', 'text-emerald-600', 'text-trek-red');
 
-            if (input === 'GOUKH1925') {
-                appliedDiscountPercent = 5;
-                msg.classList.add('text-emerald-600');
-                msg.innerText = '✓ تم تطبيق خصم 5% الخاص بعملاء أبو الجوخ!';
-            } else if (input === 'FREESHIP') {
-                shippingFee = 0;
-                msg.classList.add('text-emerald-600');
-                msg.innerText = '✓ تم تطبيق الشحن المجاني بنجاح!';
-            } else {
-                appliedDiscountPercent = 0;
-                msg.classList.add('text-trek-red');
-                msg.innerText = 'كود الخصم غير صحيح أو منتهي الصلاحية.';
+            if (!input) {
+                if (msg) {
+                    msg.classList.add('text-trek-red');
+                    msg.innerText = 'يرجى إدخال كود الخصم أولاً.';
+                }
+                return;
             }
-            updateCalculations();
+
+            if (!/^[A-Z0-9_\-]{3,20}$/.test(input)) {
+                if (msg) {
+                    msg.classList.add('text-trek-red');
+                    msg.innerText = 'كود خصم غير صحيح أو منتهي.';
+                }
+                activePromo = null;
+                appliedDiscountPercent = 0;
+                updateShippingGov();
+                return;
+            }
+
+            const originalBtnText = btn ? btn.innerText : '';
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = `<svg class="animate-spin w-4 h-4 inline-block" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>`;
+            }
+
+            try {
+                const subtotal = cart.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
+                const res = await fetch('/api/discounts?action=validate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code: input, subtotal })
+                });
+
+                const data = await res.json();
+                if (res.ok && data && data.valid) {
+                    activePromo = data;
+                    if (data.type === 'percent') {
+                        appliedDiscountPercent = Number(data.value) || 0;
+                    }
+                    if (data.freeShipping) {
+                        shippingFee = 0;
+                    }
+                    if (msg) {
+                        msg.classList.add('text-emerald-600');
+                        if (data.freeShipping && (!data.value || Number(data.value) === 0)) {
+                            msg.innerText = '✓ تم تطبيق كود الشحن المجاني بنجاح!';
+                        } else if (data.type === 'percent') {
+                            msg.innerText = `✓ تم تطبيق خصم ${data.value}% بنجاح!`;
+                        } else {
+                            msg.innerText = `✓ تم تطبيق خصم بقيمة ${Number(data.value).toLocaleString('en-US')} ج.م بنجاح!`;
+                        }
+                    }
+                } else {
+                    activePromo = null;
+                    appliedDiscountPercent = 0;
+                    const select = document.getElementById('cust-gov');
+                    const selectedOption = select ? select.options[select.selectedIndex] : null;
+                    shippingFee = (selectedOption && selectedOption.dataset.fee) ? parseInt(selectedOption.dataset.fee, 10) : 150;
+
+                    if (msg) {
+                        msg.classList.add('text-trek-red');
+                        msg.innerText = (data && data.message) ? data.message : 'كود خصم غير صحيح أو منتهي';
+                    }
+                }
+            } catch (err) {
+                console.error('[Apply Promo Error]:', err);
+                activePromo = null;
+                appliedDiscountPercent = 0;
+                if (msg) {
+                    msg.classList.add('text-trek-red');
+                    msg.innerText = 'تعذر التحقق من كود الخصم حالياً. يرجى المحاولة بعد قليل.';
+                }
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = originalBtnText;
+                }
+                updateCalculations();
+            }
         }
 
         async function handlePlaceOrder(e) {

@@ -1,10 +1,93 @@
-import { verifyAdminToken } from './admin-auth.js';
+import { verifyAdminToken, getClientIp, sanitizeIp } from './admin-auth.js';
 
 function getFirebaseUrl(subpath = '') {
     const base = (process.env.FIREBASE_DATABASE_URL || 'https://abu-el-goukh-store-default-rtdb.firebaseio.com').replace(/\/+$/, '');
     const secret = (process.env.FIREBASE_AUTH_SECRET || process.env.FIREBASE_DATABASE_SECRET || process.env.FIREBASE_SECRET || '').trim();
     const query = secret ? `?auth=${encodeURIComponent(secret)}` : '';
     return `${base}${subpath}.json${query}`;
+}
+
+/**
+ * SECURITY FIX (Group 3 / Item 5):
+ * Rate Limiting for Public Promo Code Validation (POST /api/discounts?action=validate)
+ * Stores attempts count per IP in Firebase RTDB (/rate_limits/promo/{sanitized_ip}).
+ * Limit: 10 attempts per 10-minute window per IP.
+ * Fail-Closed: If Firebase cannot be reached, reject with 503 to prevent brute-force attacks.
+ */
+async function checkPromoRateLimit(ip) {
+    const cleanIp = sanitizeIp(ip);
+    const now = Date.now();
+    const WINDOW_MS = 10 * 60 * 1000; // 10 minutes
+    const MAX_ATTEMPTS = 10;
+    const rateLimitUrl = getFirebaseUrl(`/rate_limits/promo/${cleanIp}`);
+
+    try {
+        const res = await fetch(rateLimitUrl, {
+            headers: { 'Accept': 'application/json' },
+            signal: AbortSignal.timeout(3000)
+        });
+
+        if (!res.ok) {
+            console.error('[RateLimit Error] Failed to read promo rate limit from Firebase, status:', res.status);
+            return {
+                allowed: false,
+                statusCode: 503,
+                message: 'تعذر التحقق من كود الخصم مؤقتاً. يرجى المحاولة بعد قليل.'
+            };
+        }
+
+        const data = await res.json();
+        let record = data && typeof data === 'object' ? data : null;
+
+        if (record) {
+            if (record.lockedUntil && now < record.lockedUntil) {
+                const remainingMinutes = Math.max(1, Math.ceil((record.lockedUntil - now) / 60000));
+                return {
+                    allowed: false,
+                    statusCode: 429,
+                    message: `تم تجاوز عدد محاولات إدخال كود الخصم (10 محاولات كل 10 دقائق). يرجى المحاولة بعد ${remainingMinutes} دقيقة.`
+                };
+            }
+
+            if (!record.windowStart || (now - record.windowStart) > WINDOW_MS) {
+                record = { count: 1, windowStart: now };
+            } else {
+                record.count = (Number(record.count) || 0) + 1;
+                if (record.count > MAX_ATTEMPTS) {
+                    record.lockedUntil = now + WINDOW_MS;
+                    await fetch(rateLimitUrl, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(record),
+                        signal: AbortSignal.timeout(3000)
+                    });
+                    return {
+                        allowed: false,
+                        statusCode: 429,
+                        message: 'تم تجاوز عدد محاولات إدخال كود الخصم. يرجى المحاولة بعد 10 دقائق.'
+                    };
+                }
+            }
+        } else {
+            record = { count: 1, windowStart: now };
+        }
+
+        await fetch(rateLimitUrl, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(record),
+            signal: AbortSignal.timeout(3000)
+        });
+
+        return { allowed: true };
+    } catch (err) {
+        console.error('[RateLimit Error] Promo rate limit exception:', err.message);
+        return {
+            allowed: false,
+            statusCode: 503,
+            message: 'تعذر التحقق من كود الخصم مؤقتاً. يرجى المحاولة بعد قليل.'
+        };
+    }
 }
 
 const DEFAULT_CODES = {
@@ -47,6 +130,91 @@ export default async function handler(req, res) {
 
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
+    }
+
+    // ─────────────────────────────────────────────────────────────
+    // Public Endpoint: POST /api/discounts?action=validate
+    // Rate-limited per IP (10 requests per 10 mins in Firebase, Fail-Closed)
+    // ─────────────────────────────────────────────────────────────
+    if (req.method === 'POST' && (req.query?.action === 'validate' || req.body?.action === 'validate')) {
+        const clientIp = getClientIp(req);
+        const rateCheck = await checkPromoRateLimit(clientIp);
+        if (!rateCheck.allowed) {
+            return res.status(rateCheck.statusCode).json({
+                valid: false,
+                message: rateCheck.message
+            });
+        }
+
+        const body = req.body || {};
+        const codeRaw = String(body.code || req.query?.code || '').trim().toUpperCase();
+        if (!codeRaw || !/^[A-Z0-9_\-]{3,20}$/.test(codeRaw)) {
+            return res.status(200).json({
+                valid: false,
+                message: 'كود خصم غير صحيح أو منتهي'
+            });
+        }
+
+        try {
+            const fbRes = await fetch(getFirebaseUrl(`/discount_codes/${codeRaw}`), {
+                headers: { 'Accept': 'application/json' },
+                signal: AbortSignal.timeout(4000)
+            });
+
+            let promo = null;
+            if (fbRes.ok) {
+                promo = await fbRes.json();
+            }
+            if (!promo && DEFAULT_CODES[codeRaw]) {
+                promo = DEFAULT_CODES[codeRaw];
+            }
+
+            if (!promo || typeof promo !== 'object') {
+                return res.status(200).json({ valid: false, message: 'كود خصم غير صحيح أو منتهي' });
+            }
+
+            if (promo.active === false) {
+                return res.status(200).json({ valid: false, message: 'كود خصم غير صحيح أو منتهي' });
+            }
+
+            if (promo.expiresAt && Date.now() > new Date(promo.expiresAt).getTime()) {
+                return res.status(200).json({ valid: false, message: 'كود خصم غير صحيح أو منتهي' });
+            }
+
+            const minOrder = Number(promo.minSubtotal || promo.minOrder || 0);
+            const freeShipping = Boolean(promo.freeShipping);
+            const percent = Number(promo.percent ?? (promo.type === 'percentage' ? promo.value : 0));
+            const fixedAmt = Number(promo.type === 'fixed' ? (promo.value || promo.amount) : (promo.amount || 0));
+
+            let type = 'percent';
+            let value = percent;
+            if (fixedAmt > 0 && percent === 0) {
+                type = 'fixed';
+                value = fixedAmt;
+            }
+
+            const subtotal = Number(body.subtotal);
+            if (!isNaN(subtotal) && subtotal > 0 && minOrder > 0 && subtotal < minOrder) {
+                return res.status(200).json({
+                    valid: false,
+                    message: `الحد الأدنى لتطبيق هذا الكود هو ${minOrder} ج.م`
+                });
+            }
+
+            return res.status(200).json({
+                valid: true,
+                type,
+                value,
+                freeShipping,
+                minOrder
+            });
+        } catch (err) {
+            console.error('[Discounts Validate Error]:', err);
+            return res.status(503).json({
+                valid: false,
+                message: 'تعذر التحقق من كود الخصم مؤقتاً. يرجى المحاولة بعد قليل.'
+            });
+        }
     }
 
     // ─────────────────────────────────────────────────────────────

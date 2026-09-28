@@ -172,7 +172,7 @@
             
             <div class="bg-white p-5 rounded-2xl border border-trek-border shadow-sm flex items-center justify-between">
                 <div>
-                    <span class="text-xs text-trek-gray font-bold block mb-1">مبيعات وإيراد اليوم</span>
+                    <span class="text-xs text-trek-gray font-bold block mb-1">إيرادات مؤكدة (اليوم)</span>
                     <span id="stat-today-revenue" class="text-2xl font-black text-emerald-600 num-font">0 ج.م</span>
                     <span id="stat-today-orders" class="text-[11px] text-trek-gray font-semibold block mt-1">0 طلبات مسجلة اليوم</span>
                 </div>
@@ -3590,19 +3590,51 @@
                 totalUnitsEl.innerText = `${totalUnits} عجلة متوفرة بالمخزن`;
             }
 
-            // 2. Today's orders & revenue
+            // Helper to identify strictly confirmed orders (paid or cod or confirmed; exclude failed, cancelled, refunded, pending_payment)
+            const isConfirmedOrder = (o) => {
+                const s = (o.status || '').toLowerCase().trim();
+                const ps = (o.paymentStatus || '').toLowerCase().trim();
+                const pm = (o.paymentMethod || o.payment || '').toLowerCase().trim();
+
+                // Explicit exclusions
+                if (s === 'failed' || s === 'cancelled' || s === 'ملغي' || s === 'refunded' || s === 'مسترجع' || s === 'pending_payment' || s.includes('فاشل')) return false;
+                if (ps === 'failed' || ps === 'cancelled' || ps === 'refunded' || ps === 'pending_payment') return false;
+
+                // Inclusions: paid, cod, confirmed
+                if (ps === 'paid' || s === 'paid' || s === 'مدفوع') return true;
+                if (pm === 'cod' || pm.includes('كاش') || pm.includes('الاستلام')) return true;
+                if (s === 'confirmed' || s.includes('مؤكد') || s === 'completed' || s.includes('مكتمل') || s.includes('تم التوصيل')) return true;
+
+                return false;
+            };
+
+            const isExcludedOrder = (o) => {
+                const s = (o.status || '').toLowerCase().trim();
+                const ps = (o.paymentStatus || '').toLowerCase().trim();
+                return s === 'failed' || s === 'cancelled' || s === 'ملغي' || s === 'refunded' || s === 'مسترجع' || s === 'pending_payment' || s.includes('فاشل') || ps === 'failed' || ps === 'cancelled' || ps === 'refunded';
+            };
+
+            // 2. Today's confirmed orders & revenue
             const todayISO = new Date().toISOString().split('T')[0];
             const todayLocale = new Date().toLocaleDateString('ar-EG');
             const todayOrders = orders.filter(o => {
                 if (!o.date) return false;
                 return o.date.includes(todayISO) || o.date.includes(todayLocale) || o.date === 'اليوم';
             });
-            const todayRevenue = todayOrders.reduce((sum, o) => sum + (Number(o.total || o.subtotal) || 0), 0);
+            const todayConfirmedOrders = todayOrders.filter(isConfirmedOrder);
+            const todayExcludedCount = todayOrders.filter(isExcludedOrder).length;
+            const todayRevenue = todayConfirmedOrders.reduce((sum, o) => sum + (Number(o.total || o.subtotal) || 0), 0);
 
             const revEl = document.getElementById('stat-today-revenue');
             if (revEl) revEl.innerText = `${todayRevenue.toLocaleString('en-US')} ج.م`;
             const ordTodayEl = document.getElementById('stat-today-orders');
-            if (ordTodayEl) ordTodayEl.innerText = `${todayOrders.length} طلبات مسجلة اليوم`;
+            if (ordTodayEl) {
+                let note = `${todayConfirmedOrders.length} طلب مؤكد اليوم`;
+                if (todayExcludedCount > 0) {
+                    note += ` <span class="text-rose-500 font-bold">(${todayExcludedCount} ملغي/فاشل)</span>`;
+                }
+                ordTodayEl.innerHTML = note;
+            }
 
             // 3. Pending orders
             const pendingOrders = orders.filter(o => {

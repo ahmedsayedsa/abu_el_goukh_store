@@ -768,20 +768,6 @@
                 return;
             }
 
-            // For Cash on Delivery (COD) only: Order is immediately confirmed with no external gateway redirect.
-            // Deduplicate via sessionStorage using the exact same key used by order-success.html ('abu_tracked_purchase_' + orderId).
-            const isCod = paymentMethod === 'الدفع عند الاستلام' || (typeof paymentMethod === 'string' && (paymentMethod.includes('الاستلام') || paymentMethod.includes('كاش') || paymentMethod.toLowerCase() === 'cod'));
-            if (isCod) {
-                const purchaseStorageKey = 'abu_tracked_purchase_' + orderId;
-                if (window.trackStoreEvent && !sessionStorage.getItem(purchaseStorageKey)) {
-                    sessionStorage.setItem(purchaseStorageKey, 'true');
-                    window.trackStoreEvent('Purchase', {
-                        orderId: orderId,
-                        total: verifiedTotal,
-                        items: cart
-                    });
-                }
-            }
 
             // ─────────────────────────────────────────────────────────────
             // 1. PayTabs Hosted Payment Page

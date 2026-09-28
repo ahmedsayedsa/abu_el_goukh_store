@@ -11,12 +11,12 @@
     <meta name="keywords" content="عجل ابو الجوخ, اسعار العجل, ترنكس, زوم, شيمانو, مقاس 26, مقاس 29, عجل سرعات">
     <meta name="author" content="أبو الجوخ للدراجات - Abo El Goukh">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" id="canonical-url" href="https://aboelgoukhshop.com/product.html">
+    <link rel="canonical" id="canonical-url" href="https://abu-el-goukh-store.vercel.app/product.html">
 
     <!-- Open Graph Preview -->
     <meta property="og:locale" content="ar_EG">
     <meta property="og:type" content="product">
-    <meta property="og:url" id="og-url" content="https://aboelgoukhshop.com/product.html">
+    <meta property="og:url" id="og-url" content="https://abu-el-goukh-store.vercel.app/product.html">
     <meta property="og:title" id="og-title" content="تفاصيل دراجة أصلية | أبو الجوخ 1925">
     <!-- TODO: أعد ذكر التقسيط بعد تفعيل Paymob -->
     <meta property="og:description" id="og-desc" content="شاسيه ألومنيوم خفيف، سرعات شيمانو ياباني، وضمان معتمد وشحن سريع لكافة المحافظات.">
@@ -2379,7 +2379,8 @@
             const ogImage = document.getElementById('og-image');
             if (ogImage && currentProduct.image) ogImage.setAttribute('content', currentProduct.image);
 
-            const fullProductUrl = 'https://aboelgoukhshop.com/product.html?id=' + currentProduct.id;
+            const origin = (window.location.origin && window.location.origin.startsWith('http')) ? window.location.origin : 'https://abu-el-goukh-store.vercel.app';
+            const fullProductUrl = origin + '/product.html?id=' + currentProduct.id;
             const canonicalEl = document.getElementById('canonical-url');
             if (canonicalEl) canonicalEl.setAttribute('href', fullProductUrl);
             const ogUrlEl = document.getElementById('og-url');

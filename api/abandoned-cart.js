@@ -9,7 +9,7 @@ function getFirebaseUrl(subpath = '') {
 
 export default async function handler(req, res) {
     // SECURITY FIX (Vulnerability 5): Restrict CORS to trusted origins
-    const siteUrl = (process.env.SITE_URL || 'https://aboelgoukhshop.com').replace(/\/+$/, '');
+    const siteUrl = (process.env.SITE_URL || 'https://abu-el-goukh-store.vercel.app').replace(/\/+$/, '');
     const origin = req.headers?.origin || '';
     const isAllowedOrigin = origin && (
         origin === siteUrl ||

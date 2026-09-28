@@ -4,4 +4,4 @@ Allow: /
 Disallow: /admin.html
 Disallow: /api/
 
-Sitemap: https://aboelgoukhshop.com/sitemap.xml
+Sitemap: https://abu-el-goukh-store.vercel.app/sitemap.xml

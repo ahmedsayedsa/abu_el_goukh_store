@@ -1,5 +1,7 @@
 # Abu El Goukh 1925 Cycles - Official Robots.txt
 User-agent: *
 Allow: /
+Disallow: /admin.html
+Disallow: /api/
 
 Sitemap: https://aboelgoukhshop.com/sitemap.xml

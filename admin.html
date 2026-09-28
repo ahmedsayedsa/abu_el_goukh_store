@@ -112,7 +112,7 @@
             </form>
 
             <div class="text-center pt-6 mt-4 border-t border-trek-border text-[10px] text-trek-gray">
-                المقر والمعرض: ألف مسكن - شارع جسر السويس، القاهرة • هاتف: 01202925192
+                متجر إلكتروني معتمد • هاتف ومبيعات: 01114767140 • بريد: sales@dotsadv.com
             </div>
         </div>
     </div>
@@ -514,11 +514,11 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
                                 <label class="block text-xs font-bold text-trek-black mb-1">رقم هاتف إنستاباي المسجل:</label>
-                                <input type="text" id="instapay-phone" value="01202925192" placeholder="01202925192" class="w-full p-2.5 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white outline-none">
+                                <input type="text" id="instapay-phone" value="01114767140" placeholder="01114767140" class="w-full p-2.5 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white outline-none">
                             </div>
                             <div>
                                 <label class="block text-xs font-bold text-trek-black mb-1">رقم محفظة فودافون كاش:</label>
-                                <input type="text" id="vodafone-cash" value="01202925192" placeholder="010XXXXXXXX" class="w-full p-2.5 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white outline-none">
+                                <input type="text" id="vodafone-cash" value="01114767140" placeholder="010XXXXXXXX" class="w-full p-2.5 rounded-xl border border-trek-border text-xs font-mono dir-ltr bg-trek-cardbg focus:bg-white outline-none">
                             </div>
                         </div>
 
@@ -2927,7 +2927,7 @@
                     <div class="header">
                         <div>
                             <h1 style="margin:0; font-size: 24px;">شركة أبو الجوخ لتجارة الدراجات 1925</h1>
-                            <p style="margin: 5px 0 0 0; font-size: 12px; color: #666;">التوكيل المعتمد • المقر والمعرض: ألف مسكن - شارع جسر السويس، القاهرة • هاتف: 01202925192</p>
+                            <p style="margin: 5px 0 0 0; font-size: 12px; color: #666;">متجر إلكتروني معتمد • شحن وتوصيل لكافة محافظات مصر • هاتف: 01114767140 • بريد: sales@dotsadv.com</p>
                         </div>
                         <div style="text-align: left;">
                             <h2 style="margin:0; color:#D50000;">بوليصة شحن</h2>
@@ -3084,8 +3084,8 @@
             instapay: {
                 enabled: true,
                 ipa: 'aboelgoukh1925@instapay',
-                phone: '01202925192',
-                vodafoneCash: '01202925192',
+                phone: '01114767140',
+                vodafoneCash: '01114767140',
                 otherCash: '',
                 instructions: 'يرجى تحويل قيمة الطلب إلى عنوان إنستاباي أو محفظة فودافون كاش الموضحة، ثم إرسال سكرين شوت التحويل عبر الواتساب لتأكيد شحن الدراجة فوراً.'
             },
@@ -3134,8 +3134,8 @@
             const ip = cfg.instapay || {};
             if (document.getElementById('instapay-enabled')) document.getElementById('instapay-enabled').checked = ip.enabled !== false;
             if (document.getElementById('instapay-ipa')) document.getElementById('instapay-ipa').value = ip.ipa || 'aboelgoukh1925@instapay';
-            if (document.getElementById('instapay-phone')) document.getElementById('instapay-phone').value = ip.phone || '01202925192';
-            if (document.getElementById('vodafone-cash')) document.getElementById('vodafone-cash').value = ip.vodafoneCash || '01202925192';
+            if (document.getElementById('instapay-phone')) document.getElementById('instapay-phone').value = ip.phone || '01114767140';
+            if (document.getElementById('vodafone-cash')) document.getElementById('vodafone-cash').value = ip.vodafoneCash || '01114767140';
             if (document.getElementById('other-cash')) document.getElementById('other-cash').value = ip.otherCash || '';
             if (document.getElementById('instapay-notes')) document.getElementById('instapay-notes').value = ip.instructions || '';
 
@@ -3143,8 +3143,8 @@
             const fw = cfg.fawry || {};
             if (document.getElementById('fawry-enabled')) document.getElementById('fawry-enabled').checked = fw.enabled === true;
             if (document.getElementById('fawry-mode')) document.getElementById('fawry-mode').value = fw.mode || 'sandbox';
-            if (document.getElementById('fawry-merchant-code')) document.getElementById('fawry-merchant-code').value = fw.merchantCode || '';
-            if (document.getElementById('fawry-security-key')) document.getElementById('fawry-security-key').value = fw.securityKey || '';
+            if (document.getElementById('fawry-merchantCode')) document.getElementById('fawry-merchantCode').value = fw.merchantCode || '';
+            if (document.getElementById('fawry-securityKey')) document.getElementById('fawry-securityKey').value = fw.securityKey || '';
             if (document.getElementById('fawry-expiry')) document.getElementById('fawry-expiry').value = fw.expiry || 48;
 
             // COD
@@ -3181,8 +3181,8 @@
                 instapay: {
                     enabled: document.getElementById('instapay-enabled') ? document.getElementById('instapay-enabled').checked : true,
                     ipa: document.getElementById('instapay-ipa') ? document.getElementById('instapay-ipa').value.trim() : 'aboelgoukh1925@instapay',
-                    phone: document.getElementById('instapay-phone') ? document.getElementById('instapay-phone').value.trim() : '01202925192',
-                    vodafoneCash: document.getElementById('vodafone-cash') ? document.getElementById('vodafone-cash').value.trim() : '01202925192',
+                    phone: document.getElementById('instapay-phone') ? document.getElementById('instapay-phone').value.trim() : '01114767140',
+                    vodafoneCash: document.getElementById('vodafone-cash') ? document.getElementById('vodafone-cash').value.trim() : '01114767140',
                     otherCash: document.getElementById('other-cash') ? document.getElementById('other-cash').value.trim() : '',
                     instructions: document.getElementById('instapay-notes') ? document.getElementById('instapay-notes').value.trim() : ''
                 },

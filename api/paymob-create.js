@@ -65,7 +65,7 @@ export default async function handler(req, res) {
     const nameParts = String(customerName || 'عميل أبو الجوخ').trim().split(/\s+/);
     const firstName = nameParts[0] || 'عميل';
     const lastName = nameParts.slice(1).join(' ') || 'أبو الجوخ';
-    const phone = String(customerPhone || '01202925192').trim();
+    const phone = String(customerPhone || '01114767140').trim();
 
     // ─────────────────────────────────────────────────────────────
     // Method 1: Modern Paymob Unified Checkout (Intention API)

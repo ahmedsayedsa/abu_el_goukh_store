@@ -63,7 +63,7 @@ export default async function handler(req, res) {
     const baseUrl = `${protocol}://${host}`;
 
     const itemId = `BIKE-${String(orderId).replace(/[^a-zA-Z0-9_-]/g, '')}`;
-    const custProfileId = String(customerPhone || '01202925192').trim();
+    const custProfileId = String(customerPhone || '01114767140').trim();
     const retUrl = returnUrl || `${baseUrl}/order-success.html?gateway=fawry&order=${encodeURIComponent(orderId)}`;
 
     // Fawry standard SHA-256 signature for charge init:

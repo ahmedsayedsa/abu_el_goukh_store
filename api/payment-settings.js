@@ -23,8 +23,8 @@ export default async function handler(req, res) {
                 instapay: {
                     enabled: cfg.instapay?.enabled !== false,
                     ipa: cfg.instapay?.ipa || 'aboelgoukh1925@instapay',
-                    phone: cfg.instapay?.phone || '01202925192',
-                    vodafoneCash: cfg.instapay?.vodafoneCash || '01202925192',
+                    phone: cfg.instapay?.phone || '01114767140',
+                    vodafoneCash: cfg.instapay?.vodafoneCash || '01114767140',
                     instructions: cfg.instapay?.instructions || ''
                 },
                 cod: {
@@ -81,8 +81,8 @@ export default async function handler(req, res) {
             instapay: {
                 enabled: storedCfg.instapay?.enabled !== false,
                 ipa: storedCfg.instapay?.ipa || 'aboelgoukh1925@instapay',
-                phone: storedCfg.instapay?.phone || '01202925192',
-                vodafoneCash: storedCfg.instapay?.vodafoneCash || '01202925192',
+                phone: storedCfg.instapay?.phone || '01114767140',
+                vodafoneCash: storedCfg.instapay?.vodafoneCash || '01114767140',
                 otherCash: storedCfg.instapay?.otherCash || '',
                 instructions: storedCfg.instapay?.instructions || 'يرجى تحويل قيمة الطلب إلى عنوان إنستاباي أو محفظة فودافون كاش الموضحة، ثم إرسال سكرين شوت التحويل عبر الواتساب لتأكيد شحن الدراجة فوراً.'
             },

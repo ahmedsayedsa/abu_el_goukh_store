@@ -26,6 +26,94 @@ function getFirebaseUrl(subpath = '') {
     return `${base}${subpath}.json${query}`;
 }
 
+/**
+ * Returns true if ≥90% of catalog entries have a valid numeric id AND positive price.
+ * A Firebase node with only stock=9 (no id/price) is considered corrupt.
+ */
+function isCatalogValid(arr) {
+    if (!Array.isArray(arr) || arr.length === 0) return false;
+    const validCount = arr.filter(p => p && Number(p.id) > 0 && Number(p.price) > 0).length;
+    return validCount / arr.length >= 0.9;
+}
+
+function getLocalCatalogData() {
+    const catalogPath = path.join(process.cwd(), 'products.json');
+    if (fs.existsSync(catalogPath)) {
+        try {
+            const fileData = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
+            if (Array.isArray(fileData) && fileData.length > 0) return fileData;
+        } catch (e) {
+            console.error('[Price Engine] Failed to parse local products.json:', e.message);
+        }
+    }
+    return null;
+}
+
+/**
+ * Seeds /products in Firebase with products.json if Firebase is empty or corrupt.
+ * Uses if-match: null_etag (conditional PUT) so two concurrent cold-starts don't double-seed.
+ * After seeding, updates the in-memory cache.
+ */
+export async function seedCatalogIfEmpty() {
+    const localData = getLocalCatalogData();
+    if (!localData) return null;
+
+    // 1. Check current Firebase state
+    let fbArr = null;
+    try {
+        const fbRes = await fetch(getFirebaseUrl('/products'), {
+            headers: { 'Accept': 'application/json', 'X-Firebase-ETag': 'true' },
+            signal: AbortSignal.timeout(4000)
+        });
+        if (fbRes.ok) {
+            const raw = await fbRes.json();
+            if (Array.isArray(raw)) fbArr = raw;
+            else if (raw && typeof raw === 'object') fbArr = Object.values(raw);
+        }
+    } catch (e) {
+        // Can't reach Firebase - skip seeding
+        return null;
+    }
+
+    if (isCatalogValid(fbArr)) {
+        // Firebase already has a valid catalog - no seeding needed
+        return fbArr;
+    }
+
+    // 2. Attempt conditional seeding (null_etag → only succeeds if node is null/missing)
+    try {
+        const putRes = await fetch(getFirebaseUrl('/products'), {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'if-match': 'null_etag'
+            },
+            body: JSON.stringify(localData),
+            signal: AbortSignal.timeout(6000)
+        });
+
+        if (putRes.ok || putRes.status === 412) {
+            // 200: we seeded it.  412: another instance beat us (race prevented) — both OK.
+            const seeded = putRes.ok ? localData : (fbArr && isCatalogValid(fbArr) ? fbArr : localData);
+            cachedCatalog = seeded;
+            lastCacheTime = Date.now();
+            if (putRes.ok) {
+                console.log(`[Catalog Seed] Seeded ${localData.length} products into Firebase from products.json`);
+            }
+            return seeded;
+        } else {
+            console.error(`[Catalog Seed] PUT failed (${putRes.status})`);
+        }
+    } catch (seedErr) {
+        console.error('[Catalog Seed] Error:', seedErr.message);
+    }
+
+    // Fallback: use local data in memory
+    cachedCatalog = localData;
+    lastCacheTime = Date.now();
+    return localData;
+}
+
 export async function fetchAuthoritativeCatalog() {
     // 1. Fast in-memory cache check
     if (cachedCatalog && Array.isArray(cachedCatalog) && (Date.now() - lastCacheTime < CACHE_TTL_MS)) {
@@ -40,36 +128,39 @@ export async function fetchAuthoritativeCatalog() {
         });
         if (fbRes.ok) {
             const data = await fbRes.json();
+            let arr = null;
             if (Array.isArray(data) && data.length > 0) {
-                cachedCatalog = data;
-                lastCacheTime = Date.now();
-                return data;
+                arr = data;
             } else if (data && typeof data === 'object') {
-                const arr = Object.values(data);
-                if (arr.length > 0) {
-                    cachedCatalog = arr;
-                    lastCacheTime = Date.now();
-                    return arr;
-                }
+                const vals = Object.values(data);
+                if (vals.length > 0) arr = vals;
+            }
+
+            // BUND 1a: Only use Firebase data if it is a valid catalog (≥90% have id+price)
+            if (arr && isCatalogValid(arr)) {
+                cachedCatalog = arr;
+                lastCacheTime = Date.now();
+                return arr;
+            } else if (arr) {
+                console.error(
+                    `[Price Engine] Firebase catalog INVALID or CORRUPT: ${arr.length} entries, ` +
+                    `only ${arr.filter(p => p && Number(p.id) > 0 && Number(p.price) > 0).length} valid. ` +
+                    'Falling back to products.json and triggering re-seed.'
+                );
+                // Trigger background re-seed (don't await to avoid blocking the request)
+                seedCatalogIfEmpty().catch(() => {});
             }
         }
     } catch (fbErr) {
         console.warn('[Price Engine] Firebase live catalog fetch failed, attempting local fallback:', fbErr.message);
     }
 
-    // 3. Fallback to bundled products.json file if Firebase is unavailable
-    const catalogPath = path.join(process.cwd(), 'products.json');
-    if (fs.existsSync(catalogPath)) {
-        try {
-            const fileData = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
-            if (Array.isArray(fileData) && fileData.length > 0) {
-                cachedCatalog = fileData;
-                lastCacheTime = Date.now();
-                return fileData;
-            }
-        } catch (e) {
-            console.error('[Price Engine] Failed to parse local products.json fallback:', e.message);
-        }
+    // 3. Fallback to bundled products.json file if Firebase is unavailable or invalid
+    const localData = getLocalCatalogData();
+    if (localData) {
+        cachedCatalog = localData;
+        lastCacheTime = Date.now();
+        return localData;
     }
 
     // 4. If we had an older cache, return it rather than failing
@@ -80,6 +171,7 @@ export async function fetchAuthoritativeCatalog() {
     // SECURITY FIX: Fail-Closed if no catalog source could be loaded
     throw new Error('Server configuration error: Product catalog unavailable for verification.');
 }
+
 
 export const OFFICIAL_GOV_SHIPPING = {
     'القاهرة': 150,
@@ -174,7 +266,10 @@ export async function verifyOrderPrice(items, claimedTotal, discountCode = '', s
             price: officialPrice,
             quantity: qty,
             lineTotal,
-            catalogIndex
+            catalogIndex,
+            // BUND 1c: pass catalog stock so orders.js can use it as default (not hardcoded 10)
+            catalogStock: (catalogProduct.stock !== undefined && catalogProduct.stock !== null)
+                ? Number(catalogProduct.stock) : undefined
         });
     }
 

@@ -180,6 +180,14 @@ async function decrementCatalogStock(items) {
             return { success: false, failedItem: itemName, reason: 'product_not_found' };
         }
 
+        // BUND 1c: If this product has no stock defined in catalog, skip decrement safely
+        const catalogStock = orderedItem.catalogStock;
+        if (catalogStock === undefined || catalogStock === null) {
+            // No stock field defined at all → skip silently (unlimited/untracked product)
+            console.warn(`[Orders API] Product "${idKey}" has no stock field defined; skipping stock decrement.`);
+            continue;
+        }
+
         const stockUrl = getFirebaseUrl(`/products/${targetIndex}/stock`);
         let itemSuccess = false;
         let itemFailureReason = 'out_of_stock';
@@ -204,9 +212,34 @@ async function decrementCatalogStock(items) {
 
                 const etag = stockRes.headers.get('etag');
                 const currentStockRaw = await stockRes.json();
+
+                // BUND 1c: Use catalog stock as default (not hardcoded 10)
                 const currentStock = (currentStockRaw !== null && currentStockRaw !== undefined)
                     ? Number(currentStockRaw)
-                    : 10;
+                    : Number(catalogStock);
+
+                // BUND 1c: Verify the node id matches before writing stock
+                // Read the full node to check id integrity
+                const nodeUrl = getFirebaseUrl(`/products/${targetIndex}`);
+                try {
+                    const nodeRes = await fetch(nodeUrl, {
+                        headers: { 'Accept': 'application/json' },
+                        signal: AbortSignal.timeout(2000)
+                    });
+                    if (nodeRes.ok) {
+                        const nodeData = await nodeRes.json();
+                        if (nodeData && nodeData.id !== undefined && String(nodeData.id) !== String(idKey)) {
+                            console.warn(
+                                `[Orders API] ID MISMATCH at index ${targetIndex}: ` +
+                                `Firebase has id="${nodeData.id}" but order expects id="${idKey}". Skipping stock write.`
+                            );
+                            itemFailureReason = 'id_mismatch';
+                            break;
+                        }
+                    }
+                } catch (idCheckErr) {
+                    console.warn(`[Orders API] Could not verify node id at index ${targetIndex}:`, idCheckErr.message);
+                }
 
                 // Immediate rejection if current stock is less than ordered quantity
                 if (currentStock < qty) {
@@ -399,6 +432,21 @@ export default async function handler(req, res) {
             items, total, discountCode, shippingFee,
             customer, phone, altPhone, gov, city, address, notes, payment
         } = req.body || {};
+
+        // BUND 6h: Reject instapay orders if instapay is currently disabled in payment settings
+        if (String(payment || '').toLowerCase() === 'instapay') {
+            try {
+                const { getGatewayConfig } = await import('./_gateway-config.js');
+                const cfg = await getGatewayConfig();
+                if (!cfg.instapay || cfg.instapay.enabled !== true) {
+                    return res.status(400).json({ error: 'الدفع عبر إنستاباي / المحافظ غير مفعّل حالياً. يرجى اختيار طريقة دفع أخرى.' });
+                }
+            } catch (cfgErr) {
+                console.warn('[Orders API] Could not verify instapay settings; rejecting as Fail-Closed:', cfgErr.message);
+                return res.status(400).json({ error: 'تعذر التحقق من إعدادات الدفع. يرجى اختيار طريقة دفع أخرى.' });
+            }
+        }
+
 
         // Input validation & length limits
         if (!customer || String(customer).trim().length < 2) {

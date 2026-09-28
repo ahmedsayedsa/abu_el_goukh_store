@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { verifyAdminToken } from './admin-auth.js';
-import { clearCatalogCache } from './_verify-price.js';
+import { clearCatalogCache, seedCatalogIfEmpty } from './_verify-price.js';
 
 /**
  * Serverless Products Management Endpoint
@@ -77,11 +77,17 @@ export default async function handler(req, res) {
     // 1. GET: Retrieve Public Products Catalog
     // ─────────────────────────────────────────────────────────────
     if (req.method === 'GET') {
-        const fallback = getLocalProductsFallback();
-        if (Array.isArray(fallback) && fallback.length > 0) {
-            return res.status(200).json(fallback.map(cleanProduct));
+        // BUND 1d: seed Firebase if empty/corrupt, then serve Firebase if valid, else local fallback
+        try {
+            const seededCatalog = await seedCatalogIfEmpty();
+            if (seededCatalog && seededCatalog.length > 0) {
+                return res.status(200).json(seededCatalog.map(cleanProduct));
+            }
+        } catch (seedErr) {
+            console.warn('[Products API] seedCatalogIfEmpty error:', seedErr.message);
         }
 
+        // Try Firebase directly (may already be seeded)
         try {
             const fbRes = await fetch(getFirebaseUrl('/products'), {
                 headers: { 'Accept': 'application/json' },
@@ -90,15 +96,24 @@ export default async function handler(req, res) {
 
             if (fbRes.ok) {
                 const data = await fbRes.json();
-                if (Array.isArray(data) && data.length > 0) {
-                    return res.status(200).json(data.map(cleanProduct));
-                } else if (data && typeof data === 'object') {
-                    const arr = Object.values(data);
-                    if (arr.length > 0) return res.status(200).json(arr.map(cleanProduct));
+                let arr = null;
+                if (Array.isArray(data) && data.length > 0) arr = data;
+                else if (data && typeof data === 'object') {
+                    const vals = Object.values(data);
+                    if (vals.length > 0) arr = vals;
+                }
+                if (arr) {
+                    return res.status(200).json(arr.map(cleanProduct));
                 }
             }
         } catch (fbErr) {
             console.warn('[Products API] Firebase read failed, serving local fallback:', fbErr.message);
+        }
+
+        // Final fallback: serve local products.json
+        const fallback = getLocalProductsFallback();
+        if (Array.isArray(fallback) && fallback.length > 0) {
+            return res.status(200).json(fallback.map(cleanProduct));
         }
 
         return res.status(200).json([]);

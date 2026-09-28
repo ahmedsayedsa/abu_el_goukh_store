@@ -317,9 +317,6 @@
                     <button onclick="fetchCloudOrders(true)" class="px-3.5 py-2 bg-blue-50 hover:bg-blue-100 text-blue-800 text-xs font-bold rounded-xl border border-blue-300 transition flex items-center gap-1.5 shadow-2xs" title="مزامنة أحدث الطلبات من السحابة">
                         <span>🔄 مزامنة سحابية</span>
                     </button>
-                    <button onclick="addDemoOrder()" class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold rounded-xl border border-emerald-300 transition flex items-center gap-1.5">
-                        <span>+ طلب تجريبي</span>
-                    </button>
                     <button onclick="exportOrdersToCSV()" class="px-3.5 py-2 bg-trek-lightgray hover:bg-gray-200 text-trek-black text-xs font-bold rounded-xl border border-trek-border transition flex items-center gap-1.5">
                         <span>📥 تصدير Excel</span>
                     </button>
@@ -2575,14 +2572,9 @@
         }
 
         function getAdminAuthHeaders() {
-            const headers = {
+            return {
                 'Content-Type': 'application/json'
             };
-            const token = sessionStorage.getItem('abu_admin_jwt_token') || localStorage.getItem('abu_admin_jwt_token');
-            if (token) {
-                headers['Authorization'] = `Bearer ${token}`;
-            }
-            return headers;
         }
 
         async function saveProduct(e) {
@@ -3650,17 +3642,6 @@
         currentOrderFilter = 'all';
         let currentPaymentStatusFilter = 'all';
 
-        function getAdminAuthHeaders() {
-            const headers = {
-                'Content-Type': 'application/json'
-            };
-            const token = sessionStorage.getItem('abu_admin_jwt_token') || localStorage.getItem('abu_admin_jwt_token');
-            if (token) {
-                headers['Authorization'] = `Bearer ${token}`;
-            }
-            return headers;
-        }
-
         // Fetch Orders securely from Serverless API (/api/orders) & Merge with Local Orders
         async function fetchCloudOrders(showNotice = false) {
             const syncBtn = document.querySelector('button[onclick="fetchCloudOrders(true)"]');
@@ -4039,45 +4020,6 @@
             const activeBtn = document.getElementById(`btn-ord-${status === 'تم الشحن' ? 'shipped' : status === 'مكتمل' ? 'completed' : 'all'}`);
             if (activeBtn) activeBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-black bg-trek-black text-white transition';
             renderOrdersTable();
-        }
-
-        function addDemoOrder() {
-            const demoId = 'AEG-' + Math.floor(100000 + Math.random() * 900000);
-            const demoOrder = {
-                id: demoId,
-                date: new Date().toLocaleDateString('ar-EG') + ' ' + new Date().toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'}),
-                customer: 'محمود طارق عبد العزيز',
-                phone: '01202925192',
-                gov: 'القاهرة',
-                city: 'مدينة نصر',
-                address: 'شارع مكرم عبيد، عمارة 14، الدور الخامس',
-                items: [
-                    { name: 'دراجة ترنكس 136 برو ألومنيوم مقاس 29', price: 11500 }
-                ],
-                subtotal: 11500,
-                shipping: 150,
-                total: 11650,
-                payment: 'paytabs',
-                paymentStatus: 'paid',
-                paymentRef: 'PT-' + Math.floor(100000 + Math.random() * 900000),
-                paidAt: new Date().toLocaleString('ar-EG'),
-                status: 'جديد (قيد المراجعة)'
-            };
-            const orders = getStoredOrders();
-            orders.unshift(demoOrder);
-            saveStoredOrders(orders);
-
-            // Sync to Firebase Cloud DB
-            try {
-                fetch('https://abu-el-goukh-store-default-rtdb.firebaseio.com/orders/' + demoId + '.json', {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(demoOrder)
-                }).catch(e => console.warn(e));
-            } catch(e) { console.warn(e); }
-
-            renderOrdersTable();
-            alert('✓ تمت إضافة طلب تجريبي مدفوع إلكترونياً بنجاح وسُجل في السحابة!');
         }
 
         function exportOrdersToCSV() {

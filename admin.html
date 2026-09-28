@@ -2664,11 +2664,6 @@
             updateOrdersBadge();
         }
 
-        function calcInstallment(val) {
-            const num = Number(val) || 0;
-            const inst = Math.round(num / 12 * 1.15);
-            document.getElementById('input-installment').value = `${inst} ج.م / شهرياً`;
-        }
 
 
 
@@ -3513,13 +3508,7 @@
             }
 
             // Fallback to local cache if offline
-            try {
-                const cached = localStorage.getItem('abu_payment_gateway_settings');
-                if (cached) {
-                    currentPaymentConfig = { ...DEFAULT_PAYMENT_CONFIG, ...JSON.parse(cached) };
-                    loadPaymentSettingsToUI(currentPaymentConfig);
-                }
-            } catch(e) {}
+            // Removed dead localStorage read of abu_payment_gateway_settings
         }
 
         function copyCallbackUrl(id) {

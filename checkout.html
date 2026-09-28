@@ -352,7 +352,7 @@
                             <span id="price-shipping" class="font-bold text-trek-black num-font">150 ج.م</span>
                         </div>
                         <div id="discount-row" class="hidden flex justify-between text-emerald-600 font-bold">
-                            <span>خصم كود الترويج (5%):</span>
+                            <span id="promo-label">خصم كود الترويج:</span>
                             <span id="price-discount" class="num-font">-0 ج.م</span>
                         </div>
                         <div class="pt-3 border-t border-trek-border flex justify-between items-baseline">
@@ -529,21 +529,7 @@
                 }
             } catch(e) {}
 
-            // Fallback to local cache if offline
-            try {
-                const cached = localStorage.getItem('abu_payment_gateway_settings');
-                if (cached) {
-                    const cfg = JSON.parse(cached);
-                    if (cfg && typeof cfg === 'object' && cfg.instapay) {
-                        const ipaEl = document.getElementById('chk-instapay-ipa');
-                        const phoneEl = document.getElementById('chk-vodafone-cash');
-                        const notesEl = document.getElementById('chk-instapay-notes');
-                        if (ipaEl && cfg.instapay.ipa) ipaEl.innerText = cfg.instapay.ipa;
-                        if (phoneEl && cfg.instapay.vodafoneCash) phoneEl.innerText = cfg.instapay.vodafoneCash;
-                        if (notesEl && cfg.instapay.instructions) notesEl.innerText = cfg.instapay.instructions;
-                    }
-                }
-            } catch(e) {}
+            // Removed dead localStorage read of abu_payment_gateway_settings
         }
 
         // Load cart from localStorage or fallback
@@ -686,6 +672,17 @@
             if (discountAmount > 0) {
                 discRow.classList.remove('hidden');
                 document.getElementById('price-discount').innerText = '-' + discountAmount.toLocaleString('en-US') + ' ج.م';
+                
+                const promoLabel = document.getElementById('promo-label');
+                if (promoLabel) {
+                    if (activePromo && activePromo.type === 'percent') {
+                        promoLabel.innerText = `خصم كود الترويج (${activePromo.value}%):`;
+                    } else if (activePromo && activePromo.type === 'fixed') {
+                        promoLabel.innerText = 'خصم كود الترويج:';
+                    } else if (appliedDiscountPercent > 0) {
+                        promoLabel.innerText = `خصم كود الترويج (${appliedDiscountPercent}%):`;
+                    }
+                }
             } else {
                 discRow.classList.add('hidden');
             }

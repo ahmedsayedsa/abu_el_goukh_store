@@ -2355,18 +2355,7 @@
         }
 
         async function getLiveCatalog() {
-            // 1. Primary: Direct static products.json (deployed on Vercel CDN, authoritative and fresh)
-            try {
-                const resp = await fetch('products.json?v=' + Date.now());
-                if (resp.ok) {
-                    const liveBikes = await resp.json();
-                    if (Array.isArray(liveBikes) && liveBikes.length > 0) {
-                        return liveBikes.map(cleanProductObj);
-                    }
-                }
-            } catch(e) { console.warn('products.json fetch failed, trying API fallback', e); }
-
-            // 2. Secondary: Serverless API /api/products
+            // 1. Primary: /api/products (seeds Firebase if empty, returns authoritative catalog)
             try {
                 const apiRes = await fetch('/api/products?v=' + Date.now());
                 if (apiRes.ok) {
@@ -2375,9 +2364,20 @@
                         return data.map(cleanProductObj);
                     }
                 }
-            } catch(e) {}
+            } catch(e) { console.warn('[getLiveCatalog] API failed, trying static fallback', e); }
 
-            // 3. Fallback to embedded curatedBikes
+            // 2. Fallback: Direct static products.json (Vercel CDN)
+            try {
+                const resp = await fetch('products.json?v=' + Date.now());
+                if (resp.ok) {
+                    const liveBikes = await resp.json();
+                    if (Array.isArray(liveBikes) && liveBikes.length > 0) {
+                        return liveBikes.map(cleanProductObj);
+                    }
+                }
+            } catch(e) { console.warn('[getLiveCatalog] products.json fallback failed', e); }
+
+            // 3. Last resort: embedded curatedBikes
             return curatedBikes.map(cleanProductObj);
         }
 

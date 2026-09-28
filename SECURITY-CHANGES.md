@@ -507,3 +507,5 @@ curl -X POST "https://<your-domain>/api/payment-webhook?gateway=paymob&hmac=fake
 
 
 
+# #   S e c u r i t y   U p d a t e s \ n -   R e p l a c e d   e m p t y   F i r e b a s e   c a t a l o g   b u g   w i t h   a u t o - s e e d i n g   s t r a t e g y . \ n -   S t o c k   d e c r e m e n t s   n o w   v e r i f y   e x p e c t e d   p r o d u c t   p r o p e r t i e s   s t r i c t l y . \ n -   I n s t a p a y   s e t t i n g s   a r e   f u l l y   d r i v e n   f r o m   s e c u r e l y   v a l i d a t e d   A d m i n   U I   e n d p o i n t s ,   n o   h a r d c o d e d   d e f a u l t s . \ n  
+ 

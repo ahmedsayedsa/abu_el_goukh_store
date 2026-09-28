@@ -3831,7 +3831,7 @@
                 const pm = (o.paymentMethod || o.payment || '').toLowerCase().trim();
 
                 // Explicit exclusions
-                if (s === 'failed' || s === 'cancelled' || s === 'ملغي' || s === 'refunded' || s === 'مسترجع' || s === 'pending_payment' || s.includes('فاشل')) return false;
+                if (s === 'failed' || s === 'cancelled' || s.includes('ملغ') || s === 'refunded' || s === 'مسترجع' || s === 'مرتجع' || s === 'pending_payment' || s.includes('فاشل')) return false;
                 if (ps === 'failed' || ps === 'cancelled' || ps === 'refunded' || ps === 'pending_payment') return false;
 
                 // Inclusions: paid, cod, confirmed
@@ -3845,7 +3845,7 @@
             const isExcludedOrder = (o) => {
                 const s = (o.status || '').toLowerCase().trim();
                 const ps = (o.paymentStatus || '').toLowerCase().trim();
-                return s === 'failed' || s === 'cancelled' || s === 'ملغي' || s === 'refunded' || s === 'مسترجع' || s === 'pending_payment' || s.includes('فاشل') || ps === 'failed' || ps === 'cancelled' || ps === 'refunded';
+                return s === 'failed' || s === 'cancelled' || s.includes('ملغ') || s === 'refunded' || s === 'مسترجع' || s === 'مرتجع' || s === 'pending_payment' || s.includes('فاشل') || ps === 'failed' || ps === 'cancelled' || ps === 'refunded';
             };
 
             // 2. Today's confirmed orders & revenue

@@ -90,24 +90,9 @@ async function checkPromoRateLimit(ip) {
     }
 }
 
-const DEFAULT_CODES = {
-    'GOUKH1925': {
-        code: 'GOUKH1925',
-        percent: 5,
-        freeShipping: false,
-        minSubtotal: 0,
-        active: true,
-        description: 'خصم 5% رسمي بمناسبة مئوية أبو الجوخ 1925'
-    },
-    'FREESHIP': {
-        code: 'FREESHIP',
-        percent: 0,
-        freeShipping: true,
-        minSubtotal: 0,
-        active: true,
-        description: 'شحن مجاني لكافة محافظات مصر'
-    }
-};
+// NOTE: No hardcoded discount codes. Firebase /discount_codes is the single source of truth.
+// الأكواد دي لازم تتعمل من لوحة الأدمن بعد النشر.
+
 
 export default async function handler(req, res) {
     // SECURITY FIX (Vulnerability 5): Restrict CORS to trusted origins
@@ -165,9 +150,8 @@ export default async function handler(req, res) {
             if (fbRes.ok) {
                 promo = await fbRes.json();
             }
-            if (!promo && DEFAULT_CODES[codeRaw]) {
-                promo = DEFAULT_CODES[codeRaw];
-            }
+            // No fallback to hardcoded codes: Firebase /discount_codes is the single source of truth.
+
 
             if (!promo || typeof promo !== 'object') {
                 return res.status(200).json({ valid: false, message: 'كود خصم غير صحيح أو منتهي' });
@@ -244,10 +228,11 @@ export default async function handler(req, res) {
                     return res.status(200).json(data);
                 }
             }
-            return res.status(200).json(DEFAULT_CODES);
+            // Return empty object: codes must be created from admin panel
+            return res.status(200).json({});
         } catch (err) {
             console.error('[Discounts API GET Error]:', err);
-            return res.status(200).json(DEFAULT_CODES);
+            return res.status(503).json({ error: 'تعذر تحميل أكواد الخصم من Firebase' });
         }
     }
 

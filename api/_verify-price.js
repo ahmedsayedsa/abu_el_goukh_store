@@ -190,7 +190,7 @@ export async function verifyOrderPrice(items, claimedTotal, discountCode = '', s
     if (officialRate === undefined) {
         throw new Error('يرجى اختيار محافظة صحيحة من قائمة المحافظات المصرية لاحتساب مصاريف الشحن الرسمية.');
     }
-    const verifiedShipping = officialRate;
+    let verifiedShipping = officialRate;
 
     if (shippingFee !== null && shippingFee !== undefined && !isNaN(Number(shippingFee)) && Number(shippingFee) !== verifiedShipping) {
         console.warn(`[Shipping Check] Client attempted shipping fee ${shippingFee} EGP, authoritatively overridden to ${verifiedShipping} EGP for governorate "${cleanGov}".`);
@@ -244,15 +244,9 @@ export async function verifyOrderPrice(items, claimedTotal, discountCode = '', s
             // Non-blocking fallback
         }
 
-        // Fallback to built-in default codes
+        // No hardcoded fallback codes: Firebase is the single source of truth.
         if (!matched) {
-            if (code === 'GOUKH1925') {
-                verifiedDiscount = Math.round(verifiedSubtotal * 0.05); // 5% discount
-            } else if (code === 'FREESHIP') {
-                verifiedShipping = 0;
-            } else {
-                console.warn(`[Discount Engine] Unrecognized, expired or inactive discount code "${code}".`);
-            }
+            console.warn(`[Discount Engine] Unrecognized, expired or inactive discount code "${code}".`);
         }
     }
 

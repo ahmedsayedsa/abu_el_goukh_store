@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>أبو الجوخ 1925 | إتمام الطلب والشحن لجميع المحافظات</title>
-    <meta name="description" content="أتمم طلب دراجتك الأصلية من أبو الجوخ 1925. شحن سريع لكافة محافظات مصر، دراجات مفحوصة ومجمعة يدوياً وضمان استبدال واسترجاع 14 يوماً، مع تقسيط حتى 36 شهراً.">
+    <!-- TODO: أعد ذكر التقسيط بعد تفعيل Paymob -->
+    <meta name="description" content="أتمم طلب دراجتك الأصلية من أبو الجوخ 1925. شحن سريع لكافة محافظات مصر، دراجات مفحوصة ومجمعة يدوياً وضمان استبدال واسترجاع 14 يوماً.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -273,17 +274,19 @@
                             </div>
                         </label>
 
-                        <!-- Option 6: ValU / Aman Installments -->
+                        <!-- Option 6: ValU / Aman Installments (TODO: أعد تفعيل التقسيط بعد تفعيل Paymob) -->
+                        <div id="valu-payment-option" style="display:none">
                         <label class="flex items-start gap-4 p-4 rounded-xl border border-trek-border bg-trek-cardbg cursor-pointer transition hover:bg-white hover:border-amber-600">
                             <input type="radio" name="payment_method" value="valu" class="mt-1 text-amber-600 focus:ring-amber-600 w-4 h-4">
                             <div class="flex-1">
                                 <div class="flex items-center justify-between">
-                                    <span class="text-sm font-bold text-trek-black">تقسيط فوري حتى 36 شهراً (ValU • أمان • سهولة)</span>
-                                    <span class="bg-amber-100 text-amber-900 text-[10px] font-black px-2 py-0.5 rounded">تقسيط بدون مقدم</span>
+                                    <span class="text-sm font-bold text-trek-black">التقسيط عبر شركاء الدفع المعتمدين</span>
+                                    <span class="bg-amber-100 text-amber-900 text-[10px] font-black px-2 py-0.5 rounded">تقسيط مرن</span>
                                 </div>
-                                <p class="text-xs text-trek-gray mt-1">اختر مدة التقسيط من 6 إلى 36 شهراً عبر حسابك المفعل في تطبيق فاليو أو سهولة، وسيتم تأكيد القسط فورياً.</p>
+                                <p class="text-xs text-trek-gray mt-1">تظهر لك خطط التقسيط المتاحة حسب حدك الائتماني وشروط جهة التمويل في صفحة الدفع.</p>
                             </div>
                         </label>
+                        </div>
 
                     </div>
                 </div>
@@ -507,6 +510,10 @@
                             const paymobOpt = document.getElementById('paymob-payment-option');
                             if (paymobOpt && data.gateways.paymob !== undefined) {
                                 paymobOpt.style.display = data.gateways.paymob ? '' : 'none';
+                            }
+                            const valuOpt = document.getElementById('valu-payment-option');
+                            if (valuOpt && data.gateways.paymob !== undefined) {
+                                valuOpt.style.display = data.gateways.paymob ? '' : 'none';
                             }
                             const fawryOpt = document.getElementById('fawry-payment-option');
                             if (fawryOpt && data.gateways.fawry !== undefined) {

@@ -1,6 +1,6 @@
-import fs from 'fs';
+﻿import fs from 'fs';
 import path from 'path';
-import { isCatalogValid, seedCatalogIfEmpty } from './_catalog.js';
+import { isCatalogValid, seedCatalogIfEmpty, getFirebaseUrl } from './_catalog.js';
 /**
  * Server-Side Authoritative Price Verification Engine
  * SECURITY FIX:
@@ -19,23 +19,6 @@ export function clearCatalogCache() {
     lastCacheTime = 0;
 }
 
-function getFirebaseUrl(subpath = '') {
-    const base = (process.env.FIREBASE_DATABASE_URL || 'https://abu-el-goukh-store-default-rtdb.firebaseio.com').replace(/\/+$/, '');
-    const secret = (process.env.FIREBASE_AUTH_SECRET || process.env.FIREBASE_DATABASE_SECRET || process.env.FIREBASE_SECRET || '').trim();
-    const query = secret ? `?auth=${encodeURIComponent(secret)}` : '';
-    return `${base}${subpath}.json${query}`;
-}
-
-/**
- * Returns true if ≥90% of catalog entries have a valid numeric id AND positive price.
- * A Firebase node with only stock=9 (no id/price) is considered corrupt.
- */
-function isCatalogValid(arr) {
-    if (!Array.isArray(arr) || arr.length === 0) return false;
-    const validCount = arr.filter(p => p && Number(p.id) > 0 && Number(p.price) > 0).length;
-    return validCount / arr.length >= 0.9;
-}
-
 function getLocalCatalogData() {
     const catalogPath = path.join(process.cwd(), 'products.json');
     if (fs.existsSync(catalogPath)) {
@@ -49,70 +32,6 @@ function getLocalCatalogData() {
     return null;
 }
 
-/**
- * Seeds /products in Firebase with products.json if Firebase is empty or corrupt.
- * Uses if-match: null_etag (conditional PUT) so two concurrent cold-starts don't double-seed.
- * After seeding, updates the in-memory cache.
- */
-export async function seedCatalogIfEmpty() {
-    const localData = getLocalCatalogData();
-    if (!localData) return null;
-
-    // 1. Check current Firebase state
-    let fbArr = null;
-    try {
-        const fbRes = await fetch(getFirebaseUrl('/products'), {
-            headers: { 'Accept': 'application/json', 'X-Firebase-ETag': 'true' },
-            signal: AbortSignal.timeout(4000)
-        });
-        if (fbRes.ok) {
-            const raw = await fbRes.json();
-            if (Array.isArray(raw)) fbArr = raw;
-            else if (raw && typeof raw === 'object') fbArr = Object.values(raw);
-        }
-    } catch (e) {
-        // Can't reach Firebase - skip seeding
-        return null;
-    }
-
-    if (isCatalogValid(fbArr)) {
-        // Firebase already has a valid catalog - no seeding needed
-        return fbArr;
-    }
-
-    // 2. Attempt conditional seeding (null_etag → only succeeds if node is null/missing)
-    try {
-        const putRes = await fetch(getFirebaseUrl('/products'), {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'if-match': 'null_etag'
-            },
-            body: JSON.stringify(localData),
-            signal: AbortSignal.timeout(6000)
-        });
-
-        if (putRes.ok || putRes.status === 412) {
-            // 200: we seeded it.  412: another instance beat us (race prevented) — both OK.
-            const seeded = putRes.ok ? localData : (fbArr && isCatalogValid(fbArr) ? fbArr : localData);
-            cachedCatalog = seeded;
-            lastCacheTime = Date.now();
-            if (putRes.ok) {
-                console.log(`[Catalog Seed] Seeded ${localData.length} products into Firebase from products.json`);
-            }
-            return seeded;
-        } else {
-            console.error(`[Catalog Seed] PUT failed (${putRes.status})`);
-        }
-    } catch (seedErr) {
-        console.error('[Catalog Seed] Error:', seedErr.message);
-    }
-
-    // Fallback: use local data in memory
-    cachedCatalog = localData;
-    lastCacheTime = Date.now();
-    return localData;
-}
 
 export async function fetchAuthoritativeCatalog() {
     // 1. Fast in-memory cache check
@@ -136,7 +55,7 @@ export async function fetchAuthoritativeCatalog() {
                 if (vals.length > 0) arr = vals;
             }
 
-            // BUND 1a: Only use Firebase data if it is a valid catalog (≥90% have id+price)
+            // BUND 1a: Only use Firebase data if it is a valid catalog (â‰¥90% have id+price)
             if (arr && isCatalogValid(arr)) {
                 cachedCatalog = arr;
                 lastCacheTime = Date.now();
@@ -174,31 +93,31 @@ export async function fetchAuthoritativeCatalog() {
 
 
 export const OFFICIAL_GOV_SHIPPING = {
-    'القاهرة': 150,
-    'الجيزة': 150,
-    'القليوبية': 200,
-    'الإسكندرية': 250,
-    'الشرقية': 250,
-    'الدقهلية': 250,
-    'الغربية': 250,
-    'المنوفية': 250,
-    'البحيرة': 250,
-    'كفر الشيخ': 250,
-    'دمياط': 250,
-    'بورسعيد': 250,
-    'الإسماعيلية': 250,
-    'السويس': 250,
-    'الفيوم': 280,
-    'بني سويف': 300,
-    'المنيا': 320,
-    'أسيوط': 350,
-    'سوهاج': 350,
-    'قنا': 350,
-    'مطروح': 350,
-    'الأقصر': 380,
-    'أسوان': 400,
-    'البحر الأحمر': 400,
-    'جنوب سيناء': 400
+    'Ø§Ù„Ù‚Ø§Ù‡Ø±Ø©': 150,
+    'Ø§Ù„Ø¬ÙŠØ²Ø©': 150,
+    'Ø§Ù„Ù‚Ù„ÙŠÙˆØ¨ÙŠØ©': 200,
+    'Ø§Ù„Ø¥Ø³ÙƒÙ†Ø¯Ø±ÙŠØ©': 250,
+    'Ø§Ù„Ø´Ø±Ù‚ÙŠØ©': 250,
+    'Ø§Ù„Ø¯Ù‚Ù‡Ù„ÙŠØ©': 250,
+    'Ø§Ù„ØºØ±Ø¨ÙŠØ©': 250,
+    'Ø§Ù„Ù…Ù†ÙˆÙÙŠØ©': 250,
+    'Ø§Ù„Ø¨Ø­ÙŠØ±Ø©': 250,
+    'ÙƒÙØ± Ø§Ù„Ø´ÙŠØ®': 250,
+    'Ø¯Ù…ÙŠØ§Ø·': 250,
+    'Ø¨ÙˆØ±Ø³Ø¹ÙŠØ¯': 250,
+    'Ø§Ù„Ø¥Ø³Ù…Ø§Ø¹ÙŠÙ„ÙŠØ©': 250,
+    'Ø§Ù„Ø³ÙˆÙŠØ³': 250,
+    'Ø§Ù„ÙÙŠÙˆÙ…': 280,
+    'Ø¨Ù†ÙŠ Ø³ÙˆÙŠÙ': 300,
+    'Ø§Ù„Ù…Ù†ÙŠØ§': 320,
+    'Ø£Ø³ÙŠÙˆØ·': 350,
+    'Ø³ÙˆÙ‡Ø§Ø¬': 350,
+    'Ù‚Ù†Ø§': 350,
+    'Ù…Ø·Ø±ÙˆØ­': 350,
+    'Ø§Ù„Ø£Ù‚ØµØ±': 380,
+    'Ø£Ø³ÙˆØ§Ù†': 400,
+    'Ø§Ù„Ø¨Ø­Ø± Ø§Ù„Ø£Ø­Ù…Ø±': 400,
+    'Ø¬Ù†ÙˆØ¨ Ø³ÙŠÙ†Ø§Ø¡': 400
 };
 
 export async function verifyOrderPrice(items, claimedTotal, discountCode = '', shippingFee = null, gov = '') {
@@ -251,10 +170,10 @@ export async function verifyOrderPrice(items, claimedTotal, discountCode = '', s
             : 10;
 
         if (availableStock <= 0) {
-            throw new Error(`عذراً، المنتج "${catalogProduct.name}" غير متوفر حالياً في المخزن.`);
+            throw new Error(`Ø¹Ø°Ø±Ø§Ù‹ØŒ Ø§Ù„Ù…Ù†ØªØ¬ "${catalogProduct.name}" ØºÙŠØ± Ù…ØªÙˆÙØ± Ø­Ø§Ù„ÙŠØ§Ù‹ ÙÙŠ Ø§Ù„Ù…Ø®Ø²Ù†.`);
         }
         if (qty > availableStock) {
-            throw new Error(`الكمية المطلوبة من "${catalogProduct.name}" (${qty}) تتجاوز المخزون المتاح حالياً (${availableStock} قطع).`);
+            throw new Error(`Ø§Ù„ÙƒÙ…ÙŠØ© Ø§Ù„Ù…Ø·Ù„ÙˆØ¨Ø© Ù…Ù† "${catalogProduct.name}" (${qty}) ØªØªØ¬Ø§ÙˆØ² Ø§Ù„Ù…Ø®Ø²ÙˆÙ† Ø§Ù„Ù…ØªØ§Ø­ Ø­Ø§Ù„ÙŠØ§Ù‹ (${availableStock} Ù‚Ø·Ø¹).`);
         }
 
         const lineTotal = officialPrice * qty;
@@ -262,7 +181,7 @@ export async function verifyOrderPrice(items, claimedTotal, discountCode = '', s
 
         verifiedItems.push({
             id: idKey,
-            name: String(item.name || catalogProduct.name || 'دراجة هوائية').substring(0, 120),
+            name: String(item.name || catalogProduct.name || 'Ø¯Ø±Ø§Ø¬Ø© Ù‡ÙˆØ§Ø¦ÙŠØ©').substring(0, 120),
             price: officialPrice,
             quantity: qty,
             lineTotal,
@@ -283,7 +202,7 @@ export async function verifyOrderPrice(items, claimedTotal, discountCode = '', s
     // letting buyers in Upper Egypt / border governorates (up to 400 EGP) underpay shipping.
     // Now an unrecognized governorate rejects the order instead of guessing the price.
     if (officialRate === undefined) {
-        throw new Error('يرجى اختيار محافظة صحيحة من قائمة المحافظات المصرية لاحتساب مصاريف الشحن الرسمية.');
+        throw new Error('ÙŠØ±Ø¬Ù‰ Ø§Ø®ØªÙŠØ§Ø± Ù…Ø­Ø§ÙØ¸Ø© ØµØ­ÙŠØ­Ø© Ù…Ù† Ù‚Ø§Ø¦Ù…Ø© Ø§Ù„Ù…Ø­Ø§ÙØ¸Ø§Øª Ø§Ù„Ù…ØµØ±ÙŠØ© Ù„Ø§Ø­ØªØ³Ø§Ø¨ Ù…ØµØ§Ø±ÙŠÙ Ø§Ù„Ø´Ø­Ù† Ø§Ù„Ø±Ø³Ù…ÙŠØ©.');
     }
     let verifiedShipping = officialRate;
 

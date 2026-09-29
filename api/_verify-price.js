@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-
+import { isCatalogValid, seedCatalogIfEmpty } from './_catalog.js';
 /**
  * Server-Side Authoritative Price Verification Engine
  * SECURITY FIX:

@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+export { isCatalogValid, seedCatalogIfEmpty, getFirebaseUrl } from './_catalog.js';
 import { isCatalogValid, seedCatalogIfEmpty, getFirebaseUrl } from './_catalog.js';
 /**
  * Server-Side Authoritative Price Verification Engine

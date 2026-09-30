@@ -1,7 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import { verifyAdminToken } from './admin-auth.js';
-import { clearCatalogCache, seedCatalogIfEmpty } from './_verify-price.js';
+import { clearCatalogCache } from './_verify-price.js';
+import { seedCatalogIfEmpty } from './_catalog.js';
 
 /**
  * Serverless Products Management Endpoint

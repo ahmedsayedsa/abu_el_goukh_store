@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدونة ودليل الدراجات | أبو الجوخ 1925 - أدلة الشراء، الصيانة، وحاسبة المقاسات</title>
+    <meta name="description" content="دليلك الشامل لشراء وصيانة الدراجات الهوائية في مصر من توكيل أبو الجوخ 1925. جداول مقاسات العجل، مقارنات الموديلات الجبلية والسرعات، ونصائح الصيانة المنزلية.">
+    <meta name="keywords" content="مقاسات الدراجات, دليل مقاسات العجل, صيانة الدراجة الهوائية, دراجات جبلية مصر, اسعار العجل في مصر, ابو الجوخ 1925, سرعات شيمانو">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚲</text></svg>">
+
+    <!-- Open Graph / SEO -->
+    <meta property="og:title" content="مدونة ودليل الدراجات | أبو الجوخ 1925">
+    <meta property="og:description" content="أدلة الشراء الشاملة، صيانة الدراجات، وجداول المقاسات المعتمدة من توكيل أبو الجوخ.">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ar_EG">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Universal Pixels -->
+    <script src="pixels.js"></script>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        trek: {
+                            black: '#111111',
+                            red: '#CC0000',
+                            charcoal: '#1A1A1A',
+                            gray: '#555555',
+                            lightgray: '#F5F5F7',
+                            border: '#E5E5E7'
+                        }
+                    },
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        outfit: ['Outfit', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Cairo', sans-serif; background-color: #FAFAFB; color: #111111; }
+        .num-font { font-family: 'Outfit', sans-serif; }
+        .prose-custom h2 { font-size: 1.5rem; font-weight: 800; margin-top: 2rem; margin-bottom: 1rem; color: #111111; border-right: 4px solid #CC0000; padding-right: 0.75rem; }
+        .prose-custom h3 { font-size: 1.25rem; font-weight: 700; margin-top: 1.5rem; margin-bottom: 0.75rem; color: #1A1A1A; }
+        .prose-custom p { font-size: 1rem; line-height: 1.85; color: #444444; margin-bottom: 1.25rem; }
+        .prose-custom ul, .prose-custom ol { margin-bottom: 1.25rem; padding-right: 1.5rem; }
+        .prose-custom li { margin-bottom: 0.5rem; line-height: 1.75; color: #444444; }
+        .prose-custom strong { color: #111111; font-weight: 700; }
+        .tab-btn.active { background-color: #CC0000; color: #FFFFFF; border-color: #CC0000; }
+    </style>
+
+    <!-- Structured Data (Schema.org) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Blog",
+          "@id": "https://abu-el-goukh-store.vercel.app/blog.html",
+          "name": "مدونة ودليل أبو الجوخ للدراجات الهوائية",
+          "description": "مقالات متخصصة في اختيار وصيانة ومقاسات الدراجات في مصر",
+          "publisher": {
+            "@type": "Organization",
+            "name": "أبو الجوخ 1925",
+            "logo": "https://abu-el-goukh-store.vercel.app/abu_el_goukh_logo.png"
+          }
+        },
+        {
+          "@type": "HowTo",
+          "name": "كيفية اختيار مقاس الدراجة المناسب لطولك",
+          "description": "دليل خطوة بخطوة لاختيار مقاس الكادر وقطر الجنط المناسب لكل طول وعمر",
+          "step": [
+            {
+              "@type": "HowToStep",
+              "name": "قياس الطول الكلي",
+              "text": "قم بقياس طولك من الرأس إلى القدمين بدون حذاء بالسنتيمتر"
+            },
+            {
+              "@type": "HowToStep",
+              "name": "تحديد نوع القيادة",
+              "text": "اختر بين الدراجات الجبلية ذات الثبات العالي أو دراجات الطرق والسرعات"
+            },
+            {
+              "@type": "HowToStep",
+              "name": "مطابقة الطول مع جدول المقاسات",
+              "text": "راجع جدول مقاسات أبو الجوخ لتحديد مقاس الجنط والكادر المناسب"
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+</head>
+<body class="antialiased min-h-screen flex flex-col text-right">
+
+    <!-- TOP ANNOUNCEMENT & UTILITY BAR -->
+    <div class="bg-trek-charcoal text-white text-[11px] py-1.5 px-4 border-b border-white/10 hidden md:block">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3 text-white/80">
+                <span class="flex items-center gap-1.5">
+                    <span class="text-emerald-400">🚚</span>
+                    <span>شحن سريع لجميع محافظات مصر • تجميع وضبط يدوي معتمد 100%</span>
+                </span>
+                <span class="text-white/30">•</span>
+                <span class="flex items-center gap-1.5">
+                    <span>🛡️</span>
+                    <span>ضمان وصيانة معتمدة من توكيل أبو الجوخ 1925</span>
+                </span>
+            </div>
+            <div class="flex items-center gap-4 text-white/75 font-semibold">
+                <a href="track-order.html" class="hover:text-white transition flex items-center gap-1">📦 تتبع طلبك</a>
+                <span>•</span>
+                <a href="returns-policy.html" class="hover:text-white transition">الاسترجاع والضمان</a>
+                <span>•</span>
+                <a href="about.html" class="hover:text-white transition">تاريخ 1925</a>
+                <span>•</span>
+                <a href="index.html#locations" class="hover:text-white transition">📍 مقر الفرع</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN NAVIGATION BAR -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-trek-border shadow-sm transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-20 gap-4">
+                
+                <!-- Logo & Heritage Badge -->
+                <div class="flex items-center gap-3 sm:gap-6 flex-shrink-0">
+                    <a href="index.html" class="flex items-center gap-2.5 sm:gap-3.5 group">
+                        <img src="abu_el_goukh_logo.png" alt="أبو الجوخ" class="h-10 sm:h-12 w-auto object-contain rounded-md transition-transform group-hover:scale-105 drop-shadow-sm">
+                        <div class="hidden sm:block border-r border-trek-border pr-3">
+                            <span class="font-black text-lg lg:text-xl tracking-tight text-trek-black block leading-none">أبو الجوخ</span>
+                            <span class="text-[9px] uppercase tracking-wider text-trek-red font-black num-font block mt-0.5">EST. 1925 • التوكيل المعتمد</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden lg:flex items-center gap-6 xl:gap-8 text-xs lg:text-[13px] xl:text-[14px] font-bold text-trek-black flex-shrink-0">
+                    <a href="index.html" class="hover:text-trek-red transition">الرئيسية</a>
+                    <a href="shop.html" class="hover:text-trek-red transition flex items-center gap-1.5">
+                        <span>كتالوج العجل</span>
+                        <span class="bg-trek-red text-white text-[9px] font-black px-1.5 py-0.5 rounded-full num-font">67</span>
+                    </a>
+                    <a href="#size-calculator" class="hover:text-trek-red transition flex items-center gap-1.5 text-trek-black">
+                        <span>🎯 حاسبة المقاس</span>
+                    </a>
+                    <a href="blog.html" class="text-trek-red font-black flex items-center gap-1">
+                        <span>📖 المدونة والأدلة</span>
+                    </a>
+                    <a href="track-order.html" class="hover:text-trek-red transition text-trek-gray hover:text-trek-black">
+                        <span>تتبع طلبك</span>
+                    </a>
+                </nav>
+
+                <!-- Actions -->
+                <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+                    <a href="shop.html" class="py-2.5 px-4 rounded-xl bg-trek-red hover:bg-red-700 text-white text-xs font-bold transition shadow hidden sm:inline-flex items-center gap-1.5">
+                        <span>تصفح الأسطول 🚲</span>
+                    </a>
+                    <a href="https://wa.me/201114767140" target="_blank" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 px-4 rounded-xl transition shadow-sm">
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.007c.109.005.253-.042.395.299.144.347.491 1.199.534 1.286.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.174.086.275.072.376-.043.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.824z"/></svg>
+                        <span class="hidden sm:inline">تواصل فوراً</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO HEADER -->
+    <section class="bg-trek-black text-white py-14 sm:py-20 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="max-w-3xl space-y-4">
+                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-white text-xs font-black uppercase tracking-wider num-font">
+                    <span>📚 ABU EL GOUKH KNOWLEDGE HUB</span>
+                    <span>•</span>
+                    <span>خبرة 100 عام</span>
+                </span>
+                <h1 class="text-3xl sm:text-5xl font-black leading-tight">
+                    دليل وخبرات عالم الدراجات في مصر
+                </h1>
+                <p class="text-sm sm:text-base text-white/70 leading-relaxed">
+                    كل ما تحتاج معرفته لاختيار دراجتك المثالية، ضبط المقاسات بدقة متناهية، وإرشادات الصيانة المنزلية للحفاظ على دراجتك بأعلى أداء وجودة.
+                </p>
+                <div class="pt-2 flex flex-wrap gap-3">
+                    <a href="#size-calculator" class="bg-trek-red hover:bg-red-700 text-white text-xs sm:text-sm font-bold py-2.5 px-5 rounded-xl transition inline-flex items-center gap-2 shadow-lg">
+                        <span>🎯 جرب حاسبة المقاسات التفاعلية</span>
+                    </a>
+                    <a href="#articles-grid" class="bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-bold py-2.5 px-5 rounded-xl transition inline-flex items-center gap-2">
+                        <span>📖 تصفح المقالات والأدلة</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-trek-red/20 rounded-full blur-3xl pointer-events-none"></div>
+    </section>
+
+    <!-- INTERACTIVE SIZE CALCULATOR WIDGET -->
+    <section id="size-calculator" class="py-12 bg-gradient-to-b from-gray-100 to-white border-b border-trek-border">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6">
+            <div class="bg-white rounded-3xl border border-trek-border shadow-xl p-6 sm:p-10 relative overflow-hidden">
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pb-8 border-b border-gray-100">
+                    <div>
+                        <div class="inline-flex items-center gap-2 text-trek-red font-black text-xs uppercase mb-1">
+                            <span>⚡ أداة ذكية</span>
+                            <span>•</span>
+                            <span>خوارزمية أبو الجوخ المعتمدة</span>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-black text-trek-black">حاسبة مقاس الدراجة التفاعلية</h2>
+                        <p class="text-xs sm:text-sm text-trek-gray mt-1">أدخل طولك بالسنتيمتر لتحديد مقاس الجنط والشاسيه المناسب فوراً</p>
+                    </div>
+                    <div class="flex items-center gap-2 bg-trek-lightgray px-4 py-2 rounded-2xl border border-gray-200">
+                        <span class="text-2xl">🚲</span>
+                        <span class="text-xs font-bold text-trek-black">مطابقة فورية مع 67 موديل متوفر</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-8">
+                    <!-- Input 1: Rider Height -->
+                    <div class="space-y-2">
+                        <label class="block text-xs font-black text-trek-black">1. الطول بالسنتيمتر (سم):</label>
+                        <div class="relative">
+                            <input 
+                                type="number" 
+                                id="calc-height" 
+                                min="90" 
+                                max="210" 
+                                value="175" 
+                                class="w-full bg-gray-50 border-2 border-gray-200 focus:border-trek-red focus:bg-white rounded-xl py-3 px-4 text-left num-font text-lg font-black text-trek-black outline-none transition"
+                                placeholder="مثلاً: 175"
+                                oninput="calculateBikeSize()"
+                            >
+                            <span class="absolute left-3 top-3.5 text-xs text-gray-400 font-bold">cm</span>
+                        </div>
+                        <span class="text-[11px] text-gray-500 block">من 90 سم (أطفال) حتى 210 سم (كبار)</span>
+                    </div>
+
+                    <!-- Input 2: Rider Type -->
+                    <div class="space-y-2">
+                        <label class="block text-xs font-black text-trek-black">2. نمط القيادة المفضل:</label>
+                        <select 
+                            id="calc-style" 
+                            class="w-full bg-gray-50 border-2 border-gray-200 focus:border-trek-red focus:bg-white rounded-xl py-3 px-4 text-xs font-bold text-trek-black outline-none transition"
+                            onchange="calculateBikeSize()"
+                        >
+                            <option value="mountain">دراجة جبلية (Mountain / أقصى ثبات ومطبات)</option>
+                            <option value="road">دراجة طرق وسرعات (Road / أقصى سرعة)</option>
+                            <option value="hybrid">هايبرد ومدن (Hybrid / راحة وتدرج يومي)</option>
+                            <option value="kids">دراجة أطفال (Kids Bikes)</option>
+                        </select>
+                        <span class="text-[11px] text-gray-500 block">نوع الطريق الذي تسلكه غالباً</span>
+                    </div>
+
+                    <!-- Recommendation Box Result -->
+                    <div class="bg-trek-black text-white rounded-2xl p-5 flex flex-col justify-between relative shadow-lg">
+                        <div>
+                            <span class="text-[10px] text-trek-red font-black uppercase tracking-wider block mb-1">المقاس المثالي لك:</span>
+                            <div class="flex items-baseline gap-2">
+                                <span id="res-wheel-size" class="text-3xl font-black text-white num-font">27.5"</span>
+                                <span id="res-frame-size" class="text-sm font-bold text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded-md num-font">شاسيه M (17")</span>
+                            </div>
+                            <p id="res-desc" class="text-[11px] text-white/70 mt-2 leading-tight">
+                                يناسب تماماً الأطوال من 170 سم حتى 180 سم، يمنحك التوازن المثالي بين التسارع وسهولة المناورة في المطبات.
+                            </p>
+                        </div>
+                        <div class="pt-4 mt-2 border-t border-white/10">
+                            <a 
+                                id="res-shop-link" 
+                                href="shop.html" 
+                                class="w-full bg-trek-red hover:bg-red-700 text-white text-xs font-black py-2.5 px-3 rounded-xl transition flex items-center justify-center gap-1.5 shadow"
+                            >
+                                <span>تصفح الموديلات المطابقة لهذا المقاس</span>
+                                <span>←</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ARTICLES CATALOG & CATEGORY FILTER -->
+    <main id="articles-grid" class="flex-grow py-16 px-4 sm:px-6">
+        <div class="max-w-7xl mx-auto space-y-12">
+            
+            <!-- Filter Tabs -->
+            <div class="flex items-center justify-between flex-wrap gap-4 border-b border-trek-border pb-4">
+                <div>
+                    <h2 class="text-2xl sm:text-3xl font-black text-trek-black">مكتبة المقالات المتخصصة</h2>
+                    <p class="text-xs sm:text-sm text-trek-gray mt-1">تصفح الأدلة الفنية والشروحات التفصيلية لاحتراف عالم الدراجات</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="filterCategory('all')" class="tab-btn active px-4 py-2 rounded-xl text-xs font-bold border border-trek-border bg-white text-trek-black hover:border-trek-red transition">
+                        الكل (4)
+                    </button>
+                    <button onclick="filterCategory('sizing')" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold border border-trek-border bg-white text-trek-black hover:border-trek-red transition">
+                        📐 أدلة المقاسات
+                    </button>
+                    <button onclick="filterCategory('comparisons')" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold border border-trek-border bg-white text-trek-black hover:border-trek-red transition">
+                        🚴‍♂️ مقارنات الأنواع
+                    </button>
+                    <button onclick="filterCategory('maintenance')" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold border border-trek-border bg-white text-trek-black hover:border-trek-red transition">
+                        ⚙️ الصيانة والدعم
+                    </button>
+                    <button onclick="filterCategory('kids')" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold border border-trek-border bg-white text-trek-black hover:border-trek-red transition">
+                        👶 عجلات الأطفال
+                    </button>
+                </div>
+            </div>
+
+            <!-- Articles Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+                
+                <!-- ARTICLE CARD 1: Sizing Guide -->
+                <article class="article-card bg-white rounded-3xl border border-trek-border overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col group" data-category="sizing">
+                    <div class="h-56 bg-gradient-to-tr from-trek-charcoal to-gray-800 p-8 flex flex-col justify-between text-white relative overflow-hidden">
+                        <div class="flex items-center justify-between z-10">
+                            <span class="bg-trek-red text-white text-[10px] font-black px-3 py-1 rounded-full uppercase">دليل شامل</span>
+                            <span class="text-xs text-white/70 font-semibold num-font">⏱️ قراءة 5 دقائق</span>
+                        </div>
+                        <div class="z-10">
+                            <span class="text-xs text-amber-400 font-bold block mb-1">📐 أدلة الشراء والمقاسات</span>
+                            <h3 class="text-xl sm:text-2xl font-black text-white group-hover:text-red-400 transition">دليل المقاسات الشامل (2026): كيف تختار مقاس الدراجة المناسب لطولك وسنك؟</h3>
+                        </div>
+                        <div class="absolute -right-10 -bottom-10 w-44 h-44 bg-white/5 rounded-full blur-xl pointer-events-none"></div>
+                    </div>
+                    <div class="p-6 sm:p-8 flex-grow flex flex-col justify-between space-y-4">
+                        <p class="text-xs sm:text-sm text-trek-gray leading-relaxed">
+                            جدول تفصيلي يوضح العلاقة بين طول الراكب بالسنتيمتر ومقاس كادر الدراجة وقطر الجنط (20، 24، 26، 27.5، 29 بوصة)، لتجنب آلام الظهر وضمان أقصى راحة في القيادة.
+                        </p>
+                        <div class="pt-4 border-t border-gray-100 flex items-center justify-between">
+                            <button onclick="openArticleModal('article-sizing')" class="text-trek-red font-black text-xs sm:text-sm hover:underline inline-flex items-center gap-1">
+                                <span>قراءة المقال والجدول بالكامل</span>
+                                <span>←</span>
+                            </button>
+                            <span class="text-[11px] text-gray-400">تحديث: 2026</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- ARTICLE CARD 2: Comparison Guide -->
+                <article class="article-card bg-white rounded-3xl border border-trek-border overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col group" data-category="comparisons">
+                    <div class="h-56 bg-gradient-to-tr from-trek-charcoal to-gray-800 p-8 flex flex-col justify-between text-white relative overflow-hidden">
+                        <div class="flex items-center justify-between z-10">
+                            <span class="bg-amber-600 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase">مقارنة فنية</span>
+                            <span class="text-xs text-white/70 font-semibold num-font">⏱️ قراءة 4 دقائق</span>
+                        </div>
+                        <div class="z-10">
+                            <span class="text-xs text-amber-400 font-bold block mb-1">🚴‍♂️ مقارنات الأنواع</span>
+                            <h3 class="text-xl sm:text-2xl font-black text-white group-hover:text-red-400 transition">الدراجات الجبلية (MTB) أم دراجات الطرق (Road) أم الهايبرد؟ أيهم الأنسب لشوارع مصر؟</h3>
+                        </div>
+                        <div class="absolute -right-10 -bottom-10 w-44 h-44 bg-white/5 rounded-full blur-xl pointer-events-none"></div>
+                    </div>
+                    <div class="p-6 sm:p-8 flex-grow flex flex-col justify-between space-y-4">
+                        <p class="text-xs sm:text-sm text-trek-gray leading-relaxed">
+                            مقارنة عملية بين عجل المساعدين العريض المناسب للمطبات والشوارع المكسرة، وعجل السرعات الرفيع للمسافات السريعة، وعجل الهايبرد للمشاوير اليومية والرياضة الخفيفة.
+                        </p>
+                        <div class="pt-4 border-t border-gray-100 flex items-center justify-between">
+                            <button onclick="openArticleModal('article-comparison')" class="text-trek-red font-black text-xs sm:text-sm hover:underline inline-flex items-center gap-1">
+                                <span>قراءة المقارنة بالكامل</span>
+                                <span>←</span>
+                            </button>
+                            <span class="text-[11px] text-gray-400">تحديث: 2026</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- ARTICLE CARD 3: Maintenance Guide -->
+                <article class="article-card bg-white rounded-3xl border border-trek-border overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col group" data-category="maintenance">
+                    <div class="h-56 bg-gradient-to-tr from-trek-charcoal to-gray-800 p-8 flex flex-col justify-between text-white relative overflow-hidden">
+                        <div class="flex items-center justify-between z-10">
+                            <span class="bg-emerald-600 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase">دليل عملي</span>
+                            <span class="text-xs text-white/70 font-semibold num-font">⏱️ قراءة 6 دقائق</span>
+                        </div>
+                        <div class="z-10">
+                            <span class="text-xs text-emerald-400 font-bold block mb-1">⚙️ الصيانة والدعم الفني</span>
+                            <h3 class="text-xl sm:text-2xl font-black text-white group-hover:text-red-400 transition">صيانة الدراجة في المنزل: 5 خطوات لإطالة عمر دراجتك وضبط فرامل وسرعات شيمانو</h3>
+                        </div>
+                        <div class="absolute -right-10 -bottom-10 w-44 h-44 bg-white/5 rounded-full blur-xl pointer-events-none"></div>
+                    </div>
+                    <div class="p-6 sm:p-8 flex-grow flex flex-col justify-between space-y-4">
+                        <p class="text-xs sm:text-sm text-trek-gray leading-relaxed">
+                            تعلم الطريقة الصحيحة لغسيل الجنزير وتزييته بالزيت التخصصي (دون استخدام زيت الطهي)، ضبط مسامير الحدين L و H في شياكة السرعات، وفحص ضغط هواء الإطارات.
+                        </p>
+                        <div class="pt-4 border-t border-gray-100 flex items-center justify-between">
+                            <button onclick="openArticleModal('article-maintenance')" class="text-trek-red font-black text-xs sm:text-sm hover:underline inline-flex items-center gap-1">
+                                <span>قراءة خطوات الصيانة</span>
+                                <span>←</span>
+                            </button>
+                            <span class="text-[11px] text-gray-400">تحديث: 2026</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- ARTICLE CARD 4: Kids Bikes Guide -->
+                <article class="article-card bg-white rounded-3xl border border-trek-border overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col group" data-category="kids">
+                    <div class="h-56 bg-gradient-to-tr from-trek-charcoal to-gray-800 p-8 flex flex-col justify-between text-white relative overflow-hidden">
+                        <div class="flex items-center justify-between z-10">
+                            <span class="bg-purple-600 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase">دليل الآباء</span>
+                            <span class="text-xs text-white/70 font-semibold num-font">⏱️ قراءة 4 دقائق</span>
+                        </div>
+                        <div class="z-10">
+                            <span class="text-xs text-purple-300 font-bold block mb-1">👶 عجلات الأطفال</span>
+                            <h3 class="text-xl sm:text-2xl font-black text-white group-hover:text-red-400 transition">دليل أولياء الأمور: كيف تختار أول عجلة آمنة ومتينة لطفلك (من 3 حتى 12 سنة)؟</h3>
+                        </div>
+                        <div class="absolute -right-10 -bottom-10 w-44 h-44 bg-white/5 rounded-full blur-xl pointer-events-none"></div>
+                    </div>
+                    <div class="p-6 sm:p-8 flex-grow flex flex-col justify-between space-y-4">
+                        <p class="text-xs sm:text-sm text-trek-gray leading-relaxed">
+                            كيفية اختيار المقاس الصحيح حسب عمر وطول الطفل (مقاس 12، 16، 20 بوصة)، معايير أمان السندات الجانبية، فرامل اليد السلسة، والغطاء الواقي للجنزير.
+                        </p>
+                        <div class="pt-4 border-t border-gray-100 flex items-center justify-between">
+                            <button onclick="openArticleModal('article-kids')" class="text-trek-red font-black text-xs sm:text-sm hover:underline inline-flex items-center gap-1">
+                                <span>قراءة دليل الأطفال</span>
+                                <span>←</span>
+                            </button>
+                            <span class="text-[11px] text-gray-400">تحديث: 2026</span>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- FULL ARTICLE DETAIL MODAL / DRAWER -->
+    <div id="article-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden overflow-y-auto">
+        <div class="min-h-screen px-4 py-8 flex items-center justify-center">
+            <div class="bg-white w-full max-w-4xl rounded-3xl shadow-2xl border border-trek-border overflow-hidden relative animate-in fade-in zoom-in-95 duration-200">
+                
+                <!-- Modal Close Sticky Header -->
+                <div class="sticky top-0 z-20 bg-white/95 backdrop-blur-md px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-black text-trek-red uppercase num-font">ABU EL GOUKH • GUIDE</span>
+                    </div>
+                    <button onclick="closeArticleModal()" class="w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 hover:text-black transition">
+                        ✕
+                    </button>
+                </div>
+
+                <!-- Modal Content Injection Container -->
+                <div id="modal-body" class="p-6 sm:p-10 prose-custom text-right">
+                    <!-- Dynamic article HTML gets injected here -->
+                </div>
+
+                <!-- Modal Footer with CTA -->
+                <div class="bg-trek-lightgray p-6 sm:p-8 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div>
+                        <h4 class="font-black text-trek-black text-sm sm:text-base">هل تحتاج مساعدة فنية في اختيار دراجتك؟</h4>
+                        <p class="text-xs text-trek-gray mt-0.5">فريق فنيي أبو الجوخ 1925 متاح للرد على أي استفسار وتحديد المقاس الأنسب لك.</p>
+                    </div>
+                    <div class="flex items-center gap-3 w-full sm:w-auto">
+                        <a href="shop.html" class="flex-1 sm:flex-initial bg-trek-red hover:bg-red-700 text-white text-xs font-bold py-3 px-5 rounded-xl transition text-center shadow">
+                            تصفح المتجر 🚲
+                        </a>
+                        <a href="https://wa.me/201114767140" target="_blank" class="flex-1 sm:flex-initial bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-3 px-5 rounded-xl transition text-center">
+                            واتساب 💬
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HIDDEN ARTICLE TEMPLATES (For Instant Client-Side Rendering) -->
+    <div id="article-templates" class="hidden">
+        
+        <!-- ARTICLE 1: SIZING -->
+        <template id="template-article-sizing">
+            <div>
+                <span class="inline-block bg-trek-red/10 text-trek-red text-xs font-black px-3 py-1 rounded-full mb-3">📐 دليل المقاسات الشامل</span>
+                <h1 class="text-2xl sm:text-4xl font-black text-trek-black mb-4">دليل المقاسات الشامل (2026): كيف تختار مقاس الدراجة المناسب لطولك وسنك؟</h1>
+                <div class="flex items-center gap-4 text-xs text-gray-500 pb-6 border-b border-gray-100 mb-6">
+                    <span>✍️ إعداد: فريق الدعم الفني لأبو الجوخ</span>
+                    <span>•</span>
+                    <span>⏱️ وقت القراءة: 5 دقائق</span>
+                    <span>•</span>
+                    <span>📅 محدث لعام 2026</span>
+                </div>
+
+                <p>
+                    اختيار مقاس الدراجة الصحيح هو <strong>أهم خطوة على الإطلاق</strong> قبل شراء أي عجلة. اختيار مقاس غير متناسب مع طولك قد يسبب آلاماً في أسفل الظهر، إجهاداً سريعاً في الركبتين، وصعوبة في التحكم بالمقود والمناورة.
+                </p>
+
+                <h2>1. الفرق بين مقاس الجنط (Wheel Size) ومقاس الكادر (Frame Size)</h2>
+                <p>
+                    يقع الكثيرون في خطأ الخلط بين مقاسين أساسيين في عالم الدراجات:
+                </p>
+                <ul>
+                    <li><strong>مقاس الجنط (قطر الإطار):</strong> يقاس بالبوصة (مثال: 16", 20", 24", 26", 27.5", 29"). يحدد ارتفاع العجلة الكلي وسرعتها وتخطيها للمطبات.</li>
+                    <li><strong>مقاس الكادر (شاسيه العجلة):</strong> يقاس بالسنتيمتر أو البوصة أو الحروف (S, M, L, XL)، وهو المسافة بين كرسي الدراجة وبدال الحركة.</li>
+                </ul>
+
+                <h2>2. جدول مقاسات الدراجات المعتمد حسب طول الراكب</h2>
+                <div class="overflow-x-auto my-6">
+                    <table class="w-full text-right border-collapse bg-white rounded-xl shadow-sm border border-gray-200">
+                        <thead>
+                            <tr class="bg-trek-charcoal text-white text-xs">
+                                <th class="p-3">طول الراكب (سم)</th>
+                                <th class="p-3">الفئة العمرية</th>
+                                <th class="p-3">مقاس الجنط المناسب</th>
+                                <th class="p-3">مقاس الكادر (Frame)</th>
+                                <th class="p-3">الاستخدام النموذجي</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-xs divide-y divide-gray-100 text-gray-700">
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-3 font-bold num-font">90 - 105 سم</td>
+                                <td class="p-3">3 - 5 سنوات</td>
+                                <td class="p-3 font-bold text-trek-red num-font">12 بوصة</td>
+                                <td class="p-3">أطفال مع سندات</td>
+                                <td class="p-3">تعلم التوازن الأول</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-3 font-bold num-font">105 - 120 سم</td>
+                                <td class="p-3">5 - 7 سنوات</td>
+                                <td class="p-3 font-bold text-trek-red num-font">16 بوصة</td>
+                                <td class="p-3">أطفال</td>
+                                <td class="p-3">الانطلاق بدون سندات</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-3 font-bold num-font">120 - 135 سم</td>
+                                <td class="p-3">7 - 9 سنوات</td>
+                                <td class="p-3 font-bold text-trek-red num-font">20 بوصة</td>
+                                <td class="p-3">Junior</td>
+                                <td class="p-3">الحدائق والمشاوير القريبة</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-3 font-bold num-font">135 - 155 سم</td>
+                                <td class="p-3">9 - 13 سنة / مراهقين</td>
+                                <td class="p-3 font-bold text-trek-red num-font">24 بوصة</td>
+                                <td class="p-3">XS / 13-14"</td>
+                                <td class="p-3">أول دراجة سرعات حقيقية</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 bg-red-50/40">
+                                <td class="p-3 font-bold num-font">155 - 170 سم</td>
+                                <td class="p-3">كبار / شباب</td>
+                                <td class="p-3 font-bold text-trek-red num-font">26 بوصة</td>
+                                <td class="p-3 font-bold">S / 15-16"</td>
+                                <td class="p-3">الأكثر شعبية وسهولة بالتحكم</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 bg-red-50/40">
+                                <td class="p-3 font-bold num-font">170 - 182 سم</td>
+                                <td class="p-3">كبار / رجال</td>
+                                <td class="p-3 font-bold text-trek-red num-font">27.5 بوصة / 29"</td>
+                                <td class="p-3 font-bold">M / 17-18"</td>
+                                <td class="p-3">التوازن المثالي للسرعة والمطبات</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-3 font-bold num-font">182 - 195+ سم</td>
+                                <td class="p-3">كبار / أطوال عالية</td>
+                                <td class="p-3 font-bold text-trek-red num-font">29 بوصة</td>
+                                <td class="p-3 font-bold">L / XL (19-21")</td>
+                                <td class="p-3">أقصى سرعة وثبات وتخطي عوائق</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2>3. نصائح ذهبية عند ضبط ارتفاع الكرسي</h2>
+                <ol>
+                    <li><strong>قاعدة امتداد الساق:</strong> عندما تجلس على الكرسي وتضع كعب قدمك على البدال في أدنى نقطة له، يجب أن تكون رجلك مفرودة بنسبة 95% (مع انحناء طفيف جداً في الركبة).</li>
+                    <li><strong>عدم تجاوز علامة الأمان:</strong> لا ترفع ماسورة الكرسي أعلى من خط الـ (Minimum Insertion) المنقوش عليها لحماية الشاسيه من الكسر.</li>
+                </ol>
+            </div>
+        </template>
+
+        <!-- ARTICLE 2: COMPARISON -->
+        <template id="template-article-comparison">
+            <div>
+                <span class="inline-block bg-amber-600/10 text-amber-600 text-xs font-black px-3 py-1 rounded-full mb-3">🚴‍♂️ مقارنة الأنواع والموديلات</span>
+                <h1 class="text-2xl sm:text-4xl font-black text-trek-black mb-4">الدراجات الجبلية (MTB) أم دراجات الطرق (Road) أم الهايبرد؟ أيهم الأنسب لشوارع مصر؟</h1>
+                <div class="flex items-center gap-4 text-xs text-gray-500 pb-6 border-b border-gray-100 mb-6">
+                    <span>✍️ إعداد: مهندسو أبو الجوخ 1925</span>
+                    <span>•</span>
+                    <span>⏱️ وقت القراءة: 4 دقائق</span>
+                    <span>•</span>
+                    <span>📅 محدث لعام 2026</span>
+                </div>
+
+                <p>
+                    السؤال الأكثر تكراراً من كل من يقرر شراء دراجة في مصر: <em>"اشتري عجلة جبلية عشان المطبات، ولا عجلة سرعات عشان السرعة والخفة؟"</em>. إليك الإجابة العملية المبنية على طبيعة الشوارع المصرية:
+                </p>
+
+                <h2>1. الدراجات الجبلية (Mountain Bikes - MTB)</h2>
+                <p>
+                    <strong>المميزات:</strong> إطارات عريضة بنقشة خشنة توفر ثباتاً فائقاً، ومساعدين أماميين (Suspension Fork) لامتصاص الصدمات والمطبات والبالوعات والحفر.
+                </p>
+                <p>
+                    <strong>العيوب:</strong> وزنها أثقل نسبياً من عجل الطرق، ومقاومة الهواء والاحتكاك أعلى قليلاً.
+                </p>
+                <p>
+                    <strong>الخلاصة:</strong> إذا كنت تقود في شوارع غير ممهدة أو تبحث عن أقصى متانة وراحة دون الخوف من المطبات، فالدراجة الجبلية هي الخيار رقم 1.
+                </p>
+
+                <h2>2. دراجات الطرق والسباقات (Road Bikes)</h2>
+                <p>
+                    <strong>المميزات:</strong> شاسيه خفيف جداً، إطارات رفيعة وملساء، وسرعة انطلاق فائقة بمجهود بدني أقل.
+                </p>
+                <p>
+                    <strong>العيوب:</strong> حساسة جداً للحفر والمطبات، وضعية القيادة مائلة للأمام مما قد يجهد المبتدئين.
+                </p>
+                <p>
+                    <strong>الخلاصة:</strong> ممتازة للتمارين الصباحية في الطرق السريعة الممهدة (مثل التجمع، زايد، المعادي)، ولكنها غير مناسبة للشوارع المزدحمة المكسرة.
+                </p>
+
+                <h2>3. دراجات الهايبرد والمدن (Hybrid & City Bikes)</h2>
+                <p>
+                    تجمع بين راحة وضعية الجلوس المستقيمة للدراجات الجبلية مع خفة وسلاسة إطارات دراجات الطرق. خيار متوازن للمشاوير والعمل اليومي.
+                </p>
+            </div>
+        </template>
+
+        <!-- ARTICLE 3: MAINTENANCE -->
+        <template id="template-article-maintenance">
+            <div>
+                <span class="inline-block bg-emerald-600/10 text-emerald-600 text-xs font-black px-3 py-1 rounded-full mb-3">⚙️ الصيانة المنزلية</span>
+                <h1 class="text-2xl sm:text-4xl font-black text-trek-black mb-4">صيانة الدراجة في المنزل: 5 خطوات لإطالة عمر دراجتك وضبط سرعات شيمانو</h1>
+                <div class="flex items-center gap-4 text-xs text-gray-500 pb-6 border-b border-gray-100 mb-6">
+                    <span>✍️ إعداد: كبار فنيي ورش أبو الجوخ</span>
+                    <span>•</span>
+                    <span>⏱️ وقت القراءة: 6 دقائق</span>
+                    <span>•</span>
+                    <span>📅 محدث لعام 2026</span>
+                </div>
+
+                <p>
+                    الصيانة الدورية البسيطة في المنزل تضاعف عمر ناقل الحركة وشاسيه الدراجة وتوفر عليك مئات الجنيهات في قطع الغيار. إليك الخطوات الـ 5 التي يجب أن تقوم بها شهرياً:
+                </p>
+
+                <h2>1. غسيل الجنزير وتزييته بالزيت التخصصي</h2>
+                <p>
+                    <strong>تحذير هام:</strong> لا تستخدم زيت طعام أو شحم ثقيل أبداً على جنزير الدراجة، لأنه يجذب الأتربة والرمال ويتحول إلى معجون صنفرة يتلف تروس الكاسيت.
+                </p>
+                <ul>
+                    <li>استخدم مزيل شحوم (Degreaser) أو منظف خفيف لإزالة الأوساخ القديمة.</li>
+                    <li>جفف الجنزير بقطعة قماش جافة تماماً.</li>
+                    <li>ضع نقطة واحدة من زيت الدراجات التخصصي (Chain Lube) على كل عقلة من عقل الجنزير.</li>
+                    <li>امسح الزيت الزائد بقطعة قماش نظيفة.</li>
+                </ul>
+
+                <h2>2. فحص ضغط الهواء (Tire Pressure - PSI)</h2>
+                <p>
+                    ضغط الهواء المنخفض هو السبب الرئيسي لثقب الإطار عند الاصطدام بحافة مطب (Pinch Flat). راجع رقم الـ PSI المكتوب على جانب الكاوتش، واحرص على تزويد الهواء أسبوعياً.
+                </p>
+
+                <h2>3. فحص وضبط فرامل الديسك (Disc Brakes)</h2>
+                <p>
+                    تأكد من عدم وجود زيت أو شحم على ديسك الفرامل المعدني، وافحص سماكة تيل الفرامل (Pads). إذا سمعت صوت صرير حاد، نظف الديسك بكحول إيزوبروبيل نقي.
+                </p>
+
+                <h2>4. معايرة سرعات شيمانو (Derailleur Indexing)</h2>
+                <p>
+                    إذا كان الجنزير يتأخر في النقل بين التروس، يمكنك ضبط شدة السلك بواسطة بكرة الشد البلاستيكية (Barrel Adjuster) الموجودة في مقبض السرعات ربع لفة في كل مرة.
+                </p>
+            </div>
+        </template>
+
+        <!-- ARTICLE 4: KIDS -->
+        <template id="template-article-kids">
+            <div>
+                <span class="inline-block bg-purple-600/10 text-purple-600 text-xs font-black px-3 py-1 rounded-full mb-3">👶 دليل أولياء الأمور</span>
+                <h1 class="text-2xl sm:text-4xl font-black text-trek-black mb-4">دليل أولياء الأمور: كيف تختار أول عجلة آمنة ومتينة لطفلك (من 3 حتى 12 سنة)؟</h1>
+                <div class="flex items-center gap-4 text-xs text-gray-500 pb-6 border-b border-gray-100 mb-6">
+                    <span>✍️ إعداد: قسم سلامة الأطفال بأبو الجوخ</span>
+                    <span>•</span>
+                    <span>⏱️ وقت القراءة: 4 دقائق</span>
+                    <span>•</span>
+                    <span>📅 محدث لعام 2026</span>
+                </div>
+
+                <p>
+                    شراء أول دراجة للطفل لحظة لا تُنسى في طفولته، لكنها تتطلب وعياً بمعايير الأمان حتى يتعلم القيادة بحرية وبدون خوف من السقوط أو الإصابة.
+                </p>
+
+                <h2>1. لا تشترِ دراجة بمقاس أكبر "عشان تكبر معاه"!</h2>
+                <p>
+                    هذا هو الخطأ الأكثر شيوعاً الذي يقع فيه الآباء. العجلة الكبيرة تجعل الطفل عاجزاً عن وضع قدميه بثبات على الأرض عند التوقف الطارئ، وتصعّب عليه الوصول لمقابض الفرامل، مما يسبب له الخوف وربما العزوف عن ركوب الدراجة.
+                </p>
+
+                <h2>2. معايير الأمان الأساسية في دراجات أطفال أبو الجوخ</h2>
+                <ul>
+                    <li><strong>الغطاء الكامل للجنزير (Full Chain Guard):</strong> يمنع تماماً دخول ملابس الطفل أو أصابعه في التروس.</li>
+                    <li><strong>سندات جانبية قوية ومدعمة:</strong> تساعد الطفل على التوازن في البداية حتى يتم رفعها تدريجياً.</li>
+                    <li><strong>مقابض فرامل مصممة لأيدي الأطفال:</strong> مسافة قصيرة وسهلة الضغط بقوة أصابع الطفل.</li>
+                    <li><strong>حشوة حماية على المقود (Bar Pad):</strong> لامتصاص أي اصطدام غير مقصود.</li>
+                </ul>
+            </div>
+        </template>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-trek-charcoal text-white pt-12 pb-8 border-t border-white/10 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-8 border-b border-white/10">
+                <div class="md:col-span-2 space-y-3">
+                    <div class="flex items-center gap-2">
+                        <img src="abu_el_goukh_logo.png" alt="أبو الجوخ" class="h-10 w-auto object-contain rounded bg-white p-1">
+                        <div>
+                            <span class="font-black text-lg tracking-tight block">أبو الجوخ 1925</span>
+                            <span class="text-[9px] uppercase tracking-wider text-trek-red font-black num-font">ABU EL GOUKH • OFFICIAL HERITAGE</span>
+                        </div>
+                    </div>
+                    <p class="text-xs text-white/60 max-w-sm leading-relaxed">
+                        الاسم الأعرق في عالم الدراجات بمصر منذ 100 عام. شاسيه أصلي، سرعات شيمانو، فحص وتجميع يدوي وضمان استرجاع 14 يوماً.
+                    </p>
+                    <div class="text-[11px] text-white/70 space-y-1">
+                        <div>📍 متجر إلكتروني معتمد • شحن لكافة محافظات مصر</div>
+                        <div>📞 خدمة العملاء والمبيعات: <a href="tel:01114767140" class="num-font text-white font-bold hover:underline">01114767140</a></div>
+                        <div>✉️ البريد الإلكتروني: <a href="mailto:sales@dotsadv.com" class="num-font text-white/80 hover:text-white hover:underline">sales@dotsadv.com</a></div>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-black uppercase text-trek-red num-font mb-3">روابط هامة</h4>
+                    <ul class="space-y-2 text-xs text-white/70">
+                        <li><a href="index.html" class="hover:text-white transition">الرئيسية</a></li>
+                        <li><a href="shop.html" class="hover:text-white transition">كتالوج الدراجات</a></li>
+                        <li><a href="blog.html" class="text-white font-bold">المدونة ودليل المقاسات</a></li>
+                        <li><a href="track-order.html" class="hover:text-white transition">تتبع طلبك</a></li>
+                        <li><a href="about.html" class="hover:text-white transition">قصة أبو الجوخ (من نحن)</a></li>
+                        <li><a href="returns-policy.html" class="hover:text-white transition">سياسة الاسترجاع والاستبدال</a></li>
+                        <li><a href="privacy.html" class="hover:text-white transition">سياسة الخصوصية</a></li>
+                        <li><a href="terms.html" class="hover:text-white transition">شروط الاستخدام</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-black uppercase text-trek-red num-font mb-3">الضمان وحماية المستهلك</h4>
+                    <ul class="space-y-2 text-xs text-white/70">
+                        <li><a href="warranty.html" class="hover:text-white transition">شهادة الضمان 5 سنوات</a></li>
+                        <li><a href="shipping.html" class="hover:text-white transition">الشحن لكافة المحافظات</a></li>
+                        <li><a href="returns-policy.html" class="hover:text-white transition">شروط استبدال البضائع</a></li>
+                    </ul>
+                    <div class="mt-4 pt-3 border-t border-white/10 text-[10px] text-white/40">
+                        سجل تجاري: 104523 • بطاقة ضريبية: 341-890-120
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-6 flex flex-col sm:flex-row justify-between items-center text-xs text-white/40 gap-3">
+                <div>جميع الحقوق محفوظة © 2026 شركة أبو الجوخ لتجارة الدراجات • تصميم وتطوير <a href="https://www.dotsadv.com/" target="_blank" rel="noopener" class="text-white/60 hover:text-white underline transition font-medium" title="DOTS Advertising Agency - وكالة دوتس للدعاية والتسويق الرقمي">DOTS Advertising Agency</a></div>
+                <div class="flex gap-4">
+                    <a href="blog.html" class="hover:text-white">المدونة</a>
+                    <span>•</span>
+                    <a href="returns-policy.html" class="hover:text-white">سياسة الاسترجاع</a>
+                    <span>•</span>
+                    <a href="warranty.html" class="hover:text-white">الضمان</a>
+                    <span>•</span>
+                    <a href="about.html" class="hover:text-white">من نحن</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- FLOATING WHATSAPP BUTTON -->
+    <a 
+        href="https://wa.me/201114767140?text=مرحباً،%20أود%20الاستفسار%20عن%20مقاسات%20الدراجات" 
+        target="_blank" 
+        class="fixed bottom-6 left-6 z-50 w-14 h-14 bg-[#25D366] hover:bg-[#20ba59] text-white rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-110 group" 
+        title="تواصل معنا عبر واتساب"
+        aria-label="WhatsApp"
+    >
+        <svg class="w-8 h-8 fill-current" viewBox="0 0 24 24">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+        </svg>
+    </a>
+
+    <!-- CLIENT JAVASCRIPT -->
+    <script>
+        // --- 1. Interactive Size Calculator Engine ---
+        function calculateBikeSize() {
+            const height = parseInt(document.getElementById('calc-height').value) || 170;
+            const style = document.getElementById('calc-style').value;
+            
+            const wheelEl = document.getElementById('res-wheel-size');
+            const frameEl = document.getElementById('res-frame-size');
+            const descEl = document.getElementById('res-desc');
+            const shopLink = document.getElementById('res-shop-link');
+
+            let wheel = '26"';
+            let frame = 'M (17")';
+            let desc = '';
+            let filter = 'mountain';
+
+            if (height < 105) {
+                wheel = '12"';
+                frame = 'أطفال (3-5 سنين)';
+                desc = 'مقاس مثالي للأطفال الصغار لتعلم التوازن بأمان تام مع السندات الجانبية.';
+                filter = 'kids';
+            } else if (height < 120) {
+                wheel = '16"';
+                frame = 'أطفال (5-7 سنين)';
+                desc = 'مناسبة جداً لمرحلة الانطلاق بدون سندات، مع فرامل يد خفيفة وحماية كاملة للجنزير.';
+                filter = 'kids';
+            } else if (height < 135) {
+                wheel = '20"';
+                frame = 'ناشئين (7-9 سنين)';
+                desc = 'مقاس مثالي للمرحلة الابتدائية للتحكم والسرعة في النوادي والحدائق.';
+                filter = 'kids';
+            } else if (height < 155) {
+                wheel = '24"';
+                frame = 'XS / 14"';
+                desc = 'أول دراجة سرعات حقيقية للمراهقين مع شاسيه خفيف ومساعدين ممتصين للصدمات.';
+                filter = 'mountain';
+            } else if (height < 172) {
+                wheel = '26"';
+                frame = 'S / 15-16"';
+                desc = 'المقاس الأكثر مرونة وشعبية في مصر، يمنحك خفة حركة فائقة وسهولة في صعود المطبات.';
+                filter = 'mountain';
+            } else if (height < 185) {
+                wheel = style === 'road' ? '700c' : '27.5"';
+                frame = 'M / 17-18"';
+                desc = 'التوازن الذهبي بين السرعة العالية وثبات العجلات في المناورات وتخطي الحفر.';
+                filter = style;
+            } else {
+                wheel = '29"';
+                frame = 'L / 19-21"';
+                desc = 'أكبر قطر جنط لتوفير أقصى سرعة بالدورة الواحدة وثبات مريح جداً للأطوال العالية.';
+                filter = 'mountain';
+            }
+
+            wheelEl.innerText = wheel;
+            frameEl.innerText = frame;
+            descEl.innerText = desc;
+            shopLink.href = `shop.html?filter=${filter}`;
+        }
+
+        // --- 2. Category Filter ---
+        function filterCategory(cat) {
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const cards = document.querySelectorAll('.article-card');
+            cards.forEach(card => {
+                if (cat === 'all' || card.getAttribute('data-category') === cat) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // --- 3. Article Modal Viewer ---
+        function openArticleModal(templateId) {
+            const template = document.getElementById('template-' + templateId);
+            if (!template) return;
+
+            const modalBody = document.getElementById('modal-body');
+            modalBody.innerHTML = template.innerHTML;
+
+            const modal = document.getElementById('article-modal');
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+
+            // Push state for back button handling
+            history.pushState({ articleOpen: true }, '', '#read-' + templateId);
+        }
+
+        function closeArticleModal() {
+            const modal = document.getElementById('article-modal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+            if (window.location.hash.startsWith('#read-')) {
+                history.pushState('', document.title, window.location.pathname);
+            }
+        }
+
+        // Close on ESC or Back
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeArticleModal();
+        });
+
+        window.addEventListener('popstate', (e) => {
+            if (!e.state || !e.state.articleOpen) {
+                const modal = document.getElementById('article-modal');
+                if (!modal.classList.contains('hidden')) {
+                    modal.classList.add('hidden');
+                    document.body.style.overflow = '';
+                }
+            }
+        });
+
+        // Initialize calculator on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            calculateBikeSize();
+            if (window.location.hash.startsWith('#read-')) {
+                const tId = window.location.hash.replace('#read-', '');
+                openArticleModal(tId);
+            }
+        });
+    </script>
+</body>
+</html>

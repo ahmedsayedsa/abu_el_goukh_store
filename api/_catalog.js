@@ -1,7 +1,7 @@
 // api/_catalog.js
 // Centralized catalog utilities: Firebase URL helper, catalog validation, and conditional seeding.
 
-function getFirebaseUrl(path = '') {
+export function getFirebaseUrl(path = '') {
   const base = (process.env.FIREBASE_DATABASE_URL || '').replace(/\/+$/, '');
   const secret = (process.env.FIREBASE_AUTH_SECRET || process.env.FIREBASE_DATABASE_SECRET || process.env.FIREBASE_SECRET || '').trim();
   const query = secret ? `?auth=${encodeURIComponent(secret)}` : '';

@@ -1,4 +1,4 @@
-﻿import fs from 'fs';
+import fs from 'fs';
 import path from 'path';
 import { isCatalogValid, seedCatalogIfEmpty, getFirebaseUrl } from './_catalog.js';
 /**
@@ -18,6 +18,8 @@ export function clearCatalogCache() {
     cachedCatalog = null;
     lastCacheTime = 0;
 }
+
+
 
 function getLocalCatalogData() {
     const catalogPath = path.join(process.cwd(), 'products.json');
@@ -55,7 +57,7 @@ export async function fetchAuthoritativeCatalog() {
                 if (vals.length > 0) arr = vals;
             }
 
-            // BUND 1a: Only use Firebase data if it is a valid catalog (â‰¥90% have id+price)
+            // BUND 1a: Only use Firebase data if it is a valid catalog (≥90% have id+price)
             if (arr && isCatalogValid(arr)) {
                 cachedCatalog = arr;
                 lastCacheTime = Date.now();
@@ -93,31 +95,31 @@ export async function fetchAuthoritativeCatalog() {
 
 
 export const OFFICIAL_GOV_SHIPPING = {
-    'Ø§Ù„Ù‚Ø§Ù‡Ø±Ø©': 150,
-    'Ø§Ù„Ø¬ÙŠØ²Ø©': 150,
-    'Ø§Ù„Ù‚Ù„ÙŠÙˆØ¨ÙŠØ©': 200,
-    'Ø§Ù„Ø¥Ø³ÙƒÙ†Ø¯Ø±ÙŠØ©': 250,
-    'Ø§Ù„Ø´Ø±Ù‚ÙŠØ©': 250,
-    'Ø§Ù„Ø¯Ù‚Ù‡Ù„ÙŠØ©': 250,
-    'Ø§Ù„ØºØ±Ø¨ÙŠØ©': 250,
-    'Ø§Ù„Ù…Ù†ÙˆÙÙŠØ©': 250,
-    'Ø§Ù„Ø¨Ø­ÙŠØ±Ø©': 250,
-    'ÙƒÙØ± Ø§Ù„Ø´ÙŠØ®': 250,
-    'Ø¯Ù…ÙŠØ§Ø·': 250,
-    'Ø¨ÙˆØ±Ø³Ø¹ÙŠØ¯': 250,
-    'Ø§Ù„Ø¥Ø³Ù…Ø§Ø¹ÙŠÙ„ÙŠØ©': 250,
-    'Ø§Ù„Ø³ÙˆÙŠØ³': 250,
-    'Ø§Ù„ÙÙŠÙˆÙ…': 280,
-    'Ø¨Ù†ÙŠ Ø³ÙˆÙŠÙ': 300,
-    'Ø§Ù„Ù…Ù†ÙŠØ§': 320,
-    'Ø£Ø³ÙŠÙˆØ·': 350,
-    'Ø³ÙˆÙ‡Ø§Ø¬': 350,
-    'Ù‚Ù†Ø§': 350,
-    'Ù…Ø·Ø±ÙˆØ­': 350,
-    'Ø§Ù„Ø£Ù‚ØµØ±': 380,
-    'Ø£Ø³ÙˆØ§Ù†': 400,
-    'Ø§Ù„Ø¨Ø­Ø± Ø§Ù„Ø£Ø­Ù…Ø±': 400,
-    'Ø¬Ù†ÙˆØ¨ Ø³ÙŠÙ†Ø§Ø¡': 400
+    'القاهرة': 150,
+    'الجيزة': 150,
+    'القليوبية': 200,
+    'الإسكندرية': 250,
+    'الشرقية': 250,
+    'الدقهلية': 250,
+    'الغربية': 250,
+    'المنوفية': 250,
+    'البحيرة': 250,
+    'كفر الشيخ': 250,
+    'دمياط': 250,
+    'بورسعيد': 250,
+    'الإسماعيلية': 250,
+    'السويس': 250,
+    'الفيوم': 280,
+    'بني سويف': 300,
+    'المنيا': 320,
+    'أسيوط': 350,
+    'سوهاج': 350,
+    'قنا': 350,
+    'مطروح': 350,
+    'الأقصر': 380,
+    'أسوان': 400,
+    'البحر الأحمر': 400,
+    'جنوب سيناء': 400
 };
 
 export async function verifyOrderPrice(items, claimedTotal, discountCode = '', shippingFee = null, gov = '') {
@@ -170,10 +172,10 @@ export async function verifyOrderPrice(items, claimedTotal, discountCode = '', s
             : 10;
 
         if (availableStock <= 0) {
-            throw new Error(`Ø¹Ø°Ø±Ø§Ù‹ØŒ Ø§Ù„Ù…Ù†ØªØ¬ "${catalogProduct.name}" ØºÙŠØ± Ù…ØªÙˆÙØ± Ø­Ø§Ù„ÙŠØ§Ù‹ ÙÙŠ Ø§Ù„Ù…Ø®Ø²Ù†.`);
+            throw new Error(`عذراً، المنتج "${catalogProduct.name}" غير متوفر حالياً في المخزن.`);
         }
         if (qty > availableStock) {
-            throw new Error(`Ø§Ù„ÙƒÙ…ÙŠØ© Ø§Ù„Ù…Ø·Ù„ÙˆØ¨Ø© Ù…Ù† "${catalogProduct.name}" (${qty}) ØªØªØ¬Ø§ÙˆØ² Ø§Ù„Ù…Ø®Ø²ÙˆÙ† Ø§Ù„Ù…ØªØ§Ø­ Ø­Ø§Ù„ÙŠØ§Ù‹ (${availableStock} Ù‚Ø·Ø¹).`);
+            throw new Error(`الكمية المطلوبة من "${catalogProduct.name}" (${qty}) تتجاوز المخزون المتاح حالياً (${availableStock} قطع).`);
         }
 
         const lineTotal = officialPrice * qty;
@@ -181,7 +183,7 @@ export async function verifyOrderPrice(items, claimedTotal, discountCode = '', s
 
         verifiedItems.push({
             id: idKey,
-            name: String(item.name || catalogProduct.name || 'Ø¯Ø±Ø§Ø¬Ø© Ù‡ÙˆØ§Ø¦ÙŠØ©').substring(0, 120),
+            name: String(item.name || catalogProduct.name || 'دراجة هوائية').substring(0, 120),
             price: officialPrice,
             quantity: qty,
             lineTotal,
@@ -202,7 +204,7 @@ export async function verifyOrderPrice(items, claimedTotal, discountCode = '', s
     // letting buyers in Upper Egypt / border governorates (up to 400 EGP) underpay shipping.
     // Now an unrecognized governorate rejects the order instead of guessing the price.
     if (officialRate === undefined) {
-        throw new Error('ÙŠØ±Ø¬Ù‰ Ø§Ø®ØªÙŠØ§Ø± Ù…Ø­Ø§ÙØ¸Ø© ØµØ­ÙŠØ­Ø© Ù…Ù† Ù‚Ø§Ø¦Ù…Ø© Ø§Ù„Ù…Ø­Ø§ÙØ¸Ø§Øª Ø§Ù„Ù…ØµØ±ÙŠØ© Ù„Ø§Ø­ØªØ³Ø§Ø¨ Ù…ØµØ§Ø±ÙŠÙ Ø§Ù„Ø´Ø­Ù† Ø§Ù„Ø±Ø³Ù…ÙŠØ©.');
+        throw new Error('يرجى اختيار محافظة صحيحة من قائمة المحافظات المصرية لاحتساب مصاريف الشحن الرسمية.');
     }
     let verifiedShipping = officialRate;
 

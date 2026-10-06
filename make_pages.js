@@ -84,6 +84,7 @@ products.forEach(p => {
     const seoDesc = p.metaDescription || p.meta_desc || `اشتري ${p.name} الأصلية من توكيل أبو الجوخ 1925 بسعر ${priceFormatted} ج.م. شحن سريع لكافة المحافظات وضمان معتمد.`;
     const canonicalUrl = `${DOMAIN}/product-${p.id}.html`;
     const pImage = p.image || 'abu_el_goukh_logo.png';
+    const absoluteImage = pImage.startsWith('http') ? pImage : `${DOMAIN}/${pImage.replace(/^\/+/, '')}`;
     const pSku = p.sku || `ABU-${p.id}`;
     const pCategory = p.category || 'دراجات هوائية';
     const pBadge = p.badge || 'ORIGINAL';
@@ -102,7 +103,7 @@ products.forEach(p => {
     html = html.replace(/<meta property="og:url" id="og-url" content="[^"]*">/, `<meta property="og:url" id="og-url" content="${canonicalUrl}">`);
     html = html.replace(/<meta property="og:title" id="og-title" content="[^"]*">/, `<meta property="og:title" id="og-title" content="${escapeHtml(pageTitle)}">`);
     html = html.replace(/<meta property="og:description" id="og-desc" content="[^"]*">/, `<meta property="og:description" id="og-desc" content="${escapeHtml(seoDesc)}">`);
-    html = html.replace(/<meta property="og:image" id="og-image" content="[^"]*">/, `<meta property="og:image" id="og-image" content="${pImage}">`);
+    html = html.replace(/<meta property="og:image" id="og-image" content="[^"]*">/, `<meta property="og:image" id="og-image" content="${absoluteImage}">`);
 
     // 4. Breadcrumbs
     html = html.replace(/<span id="breadcrumb-category" class="hover:text-trek-black transition">[\s\S]*?<\/span>/, `<span id="breadcrumb-category" class="hover:text-trek-black transition">${escapeHtml(pCategory)}</span>`);
@@ -110,7 +111,7 @@ products.forEach(p => {
 
     // 5. Badge & Image
     html = html.replace(/<span id="product-badge"[^>]*>[\s\S]*?<\/span>/, `<span id="product-badge" class="bg-trek-red text-white text-[11px] font-black px-3.5 py-1 rounded-full uppercase tracking-wider num-font shadow-md">${escapeHtml(pBadge)}</span>`);
-    html = html.replace(/<img\s+id="product-main-image"[\s\S]*?>/, `<img id="product-main-image" src="${pImage}" alt="${escapeHtml(p.name)} - أبو الجوخ 1925" class="max-h-full max-w-full object-contain relative z-10 transition-transform duration-500 group-hover:scale-105 drop-shadow-[0_20px_25px_rgba(0,0,0,0.18)]">`);
+    html = html.replace(/<img\s+id="product-main-image"[\s\S]*?>/, `<img id="product-main-image" src="${pImage}" alt="${escapeHtml(p.name)}" class="max-h-full max-w-full object-contain relative z-10 transition-transform duration-500 group-hover:scale-105 drop-shadow-[0_20px_25px_rgba(0,0,0,0.18)]">`);
 
     // 6. Category & SKU
     html = html.replace(/<span id="product-category" class="font-bold text-trek-red uppercase tracking-wider">[\s\S]*?<\/span>/, `<span id="product-category" class="font-bold text-trek-red uppercase tracking-wider">${escapeHtml(pCategory)}</span>`);

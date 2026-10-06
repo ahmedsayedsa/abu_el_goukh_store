@@ -6,7 +6,6 @@
     <title>أبو الجوخ 1925 | كتالوج العجل الرسمي في مصر - أسعار ومواصفات أكثر من 60 موديل أصلي</title>
     
     <!-- Comprehensive SEO Meta Tags for Egyptian Bicycle Shoppers -->
-    <!-- TODO: أعد ذكر التقسيط بعد تفعيل Paymob -->
     <meta name="description" content="تصفح الكتالوج الرسمي لمحلات أبو الجوخ 2026 - أسعار ومواصفات دراجات هوائية أصلية في مصر (ترنكس Trinx، زوم Zoom، رودكس Roadix). شاسيه ألومنيوم، سرعات شيمانو ياباني، تجميع وضبط مجاني، وشحن لكافة المحافظات.">
     <meta name="keywords" content="اسعار العجل في مصر 2026, كتالوج عجل ابو الجوخ, عجل ترنكس 29, عجل زوم 26, عجل اطفال, عجل بناتي, عجل دبابات, عجل سرعات شيمانو, عجل ابو الجوخ اونلاين, شراء عجلة اونلاين مصر">
     <meta name="author" content="أبو الجوخ للدراجات - Abo El Goukh">
@@ -17,18 +16,16 @@
     <meta property="og:locale" content="ar_EG">
     <meta property="og:type" content="website">
     <meta property="og:title" content="كتالوج عجل أبو الجوخ 1925 | أكثر من 60 موديل أصلي بأفضل سعر في مصر">
-    <!-- TODO: أعد ذكر التقسيط بعد تفعيل Paymob -->
     <meta property="og:description" content="أسعار العجل الأصلي في مصر: ترنكس، زوم، دراجات جبلية، سباق، وأطفال مع شحن سريع وضمان استبدال واسترجاع 14 يوماً.">
-    <meta property="og:image" content="abu_el_goukh_logo.png">
+    <meta property="og:image" content="https://abu-el-goukh-store.vercel.app/abu_el_goukh_logo.png">
     <meta property="og:url" content="https://abu-el-goukh-store.vercel.app/shop.html">
     <meta property="og:site_name" content="أبو الجوخ - Abo El Goukh">
 
     <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="كتالوج عجل أبو الجوخ الرسمي 2026">
-    <!-- TODO: أعد ذكر التقسيط بعد تفعيل Paymob -->
     <meta name="twitter:description" content="دراجات هوائية أصلية مع الشحن السريع والضمان المعتمد لكافة المحافظات.">
-    <meta name="twitter:image" content="abu_el_goukh_logo.png">
+    <meta name="twitter:image" content="https://abu-el-goukh-store.vercel.app/abu_el_goukh_logo.png">
 
     <!-- Structured Data (JSON-LD) for Products & Collection -->
     <script type="application/ld+json">
@@ -1650,7 +1647,7 @@
                 .replace(/'/g, '&#039;');
         }
 
-        // SECURITY FIX: Only allow http(s) / data-image sources in <img src> attributes
+        // SECURITY FIX: Only allow http(s) / data-image sources in image source attributes
                 const BANNED_IMAGE_HASHES = [
             '1735153530582',
             '1735217352952',
@@ -1854,7 +1851,7 @@
             if (thumbsContainer) {
                 thumbsContainer.innerHTML = selectedBikes.map(b => `
                     <div class="relative group flex items-center gap-1.5 bg-white/10 px-2.5 py-1 rounded-xl flex-shrink-0 border border-white/10">
-                        <img src="${b.image}" class="w-7 h-7 object-contain bg-white rounded-lg p-0.5">
+                        <img src="${b.image}" alt="${escapeHtml(b.name || 'عجلة')}" class="w-7 h-7 object-contain bg-white rounded-lg p-0.5">
                         <span class="text-[11px] font-bold text-white max-w-[85px] sm:max-w-[120px] truncate">${b.name}</span>
                         <button onclick="event.stopPropagation(); toggleCompareBike(${b.id})" class="text-white/60 hover:text-white text-xs px-1">✕</button>
                     </div>
@@ -2254,7 +2251,7 @@
                         const safeItemId = Number(item.id) || 0;
                         return `
                             <div class="flex items-center gap-3 p-3 bg-trek-lightgray rounded-xl">
-                                <img src="${safeImage}" class="w-16 h-16 object-contain bg-white rounded-lg p-1" onerror="if(!this.dataset.triedBackup){this.dataset.triedBackup=1; this.src='images/bike_'+${safeItemId}+'.jpg';}">
+                                <img src="${safeImage}" alt="${escapeHtml(item.name || 'منتج')}" class="w-16 h-16 object-contain bg-white rounded-lg p-1" onerror="if(!this.dataset.triedBackup){this.dataset.triedBackup=1; this.src='images/bike_'+${safeItemId}+'.jpg';}">
                                 <div class="flex-1">
                                     <h4 class="text-xs font-bold text-trek-black line-clamp-1">${safeName}</h4>
                                     <div class="text-xs font-black text-trek-black num-font mt-1">${Number(item.price).toLocaleString('en-US')} ج.م</div>

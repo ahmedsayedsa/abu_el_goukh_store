@@ -2599,7 +2599,7 @@
                 return `
                     <tr class="hover:bg-gray-50/80 transition group">
                         <td class="py-3 px-4">
-                            <img src="${safeImage}" class="w-12 h-12 object-contain bg-white rounded-lg border border-trek-border p-1 group-hover:scale-105 transition" onerror="if(!this.dataset.triedBackup){this.dataset.triedBackup=1; this.src='images/bike_'+${Number(p.id) || 0}+'.jpg';}">
+                            <img src="${safeImage}" alt="${escapeHtml(p.name || 'منتج')}" class="w-12 h-12 object-contain bg-white rounded-lg border border-trek-border p-1 group-hover:scale-105 transition" onerror="if(!this.dataset.triedBackup){this.dataset.triedBackup=1; this.src='images/bike_'+${Number(p.id) || 0}+'.jpg';}">
                         </td>
                         <td class="py-3 px-4 font-bold text-trek-black">
                             <div class="text-xs line-clamp-1">${safeName}</div>
@@ -3940,7 +3940,7 @@
 
         }
 
-        // SECURITY FIX: Only allow http(s) and safe data-image URLs in <img src> attributes
+        // SECURITY FIX: Only allow http(s) and safe data-image URLs in image source attributes
         function sanitizeAdminImageUrl(url) {
             const s = String(url === null || url === undefined ? '' : url).trim();
             if (/^https?:\/\//i.test(s) || /^data:image\/(png|jpe?g|webp|gif);base64,/i.test(s) || /^images\//i.test(s)) {

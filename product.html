@@ -6,7 +6,6 @@
     <title id="page-meta-title">تفاصيل الدراجة | أبو الجوخ 1925 - أصل العجل في مصر</title>
     
     <!-- Comprehensive SEO Meta Tags -->
-    <!-- TODO: أعد ذكر التقسيط بعد تفعيل Paymob -->
     <meta name="description" id="page-meta-desc" content="المواصفات الكاملة وأسعار دراجات أبو الجوخ الأصلية مع الضمان المعتمد وشحن سريع لكافة المحافظات.">
     <meta name="keywords" content="عجل ابو الجوخ, اسعار العجل, ترنكس, زوم, شيمانو, مقاس 26, مقاس 29, عجل سرعات">
     <meta name="author" content="أبو الجوخ للدراجات - Abo El Goukh">
@@ -32,9 +31,8 @@
     <meta property="og:type" content="product">
     <meta property="og:url" id="og-url" content="https://abu-el-goukh-store.vercel.app/product.html">
     <meta property="og:title" id="og-title" content="تفاصيل دراجة أصلية | أبو الجوخ 1925">
-    <!-- TODO: أعد ذكر التقسيط بعد تفعيل Paymob -->
     <meta property="og:description" id="og-desc" content="شاسيه ألومنيوم خفيف، سرعات شيمانو ياباني، وضمان معتمد وشحن سريع لكافة المحافظات.">
-    <meta property="og:image" id="og-image" content="abu_el_goukh_logo.png">
+    <meta property="og:image" id="og-image" content="https://abu-el-goukh-store.vercel.app/abu_el_goukh_logo.png">
 
     <!-- Google Fonts: Cairo & Outfit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -353,7 +351,7 @@
                         </div>
                     </div>
 
-                    <!-- INSTALLMENT PARTNERS TRUST BANNER (TODO: أعد تفعيل التقسيط بعد تفعيل Paymob) -->
+                    <!-- INSTALLMENT PARTNERS TRUST BANNER -->
                     <div id="product-installment-banner" class="bg-gradient-to-r from-amber-50/90 via-orange-50/60 to-amber-50/90 p-4 sm:p-5 rounded-2xl border border-amber-200 space-y-3 hidden">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-2">
@@ -1858,7 +1856,7 @@
                 .replace(/'/g, '&#039;');
         }
 
-        // SECURITY FIX: Only allow http(s) / data-image sources in <img src> attributes
+        // SECURITY FIX: Only allow http(s) / data-image sources in image source attributes
         function sanitizeProductImageUrl(url) {
             const s = String(url === null || url === undefined ? '' : url).trim();
             if (/^https?:\/\//i.test(s) || /^data:image\/(png|jpe?g|webp|gif);base64,/i.test(s) || /^images\//i.test(s)) {
@@ -2135,7 +2133,7 @@
                 sum += Number(item.price);
                 return `
                     <div class="py-3 flex items-center justify-between gap-3 text-xs">
-                        <img src="${item.image}" class="w-12 h-12 object-contain bg-trek-lightgray p-1 rounded-lg">
+                        <img src="${item.image}" alt="${escapeHtml(item.name || 'منتج')}" class="w-12 h-12 object-contain bg-trek-lightgray p-1 rounded-lg">
                         <div class="flex-grow">
                             <h4 class="font-bold text-trek-black line-clamp-1">${item.name}</h4>
                             <span class="text-trek-gray num-font font-bold">${fmt(item.price)} ج.م</span>

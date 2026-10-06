@@ -12,6 +12,20 @@
     <meta name="author" content="أبو الجوخ للدراجات - Abo El Goukh">
     <meta name="robots" content="index, follow">
     <link rel="canonical" id="canonical-url" href="https://abu-el-goukh-store.vercel.app/product.html">
+    <script>
+        (function() {
+            try {
+                const params = new URLSearchParams(window.location.search);
+                const id = params.get('id');
+                const origin = (window.location.origin && window.location.origin.startsWith('http')) ? window.location.origin : 'https://abu-el-goukh-store.vercel.app';
+                const canonicalHref = id ? (origin + '/product.html?id=' + encodeURIComponent(id)) : (origin + '/product.html');
+                const canonicalEl = document.getElementById('canonical-url');
+                if (canonicalEl) canonicalEl.setAttribute('href', canonicalHref);
+                const ogUrlEl = document.getElementById('og-url');
+                if (ogUrlEl) ogUrlEl.setAttribute('content', canonicalHref);
+            } catch (e) {}
+        })();
+    </script>
 
     <!-- Open Graph Preview -->
     <meta property="og:locale" content="ar_EG">

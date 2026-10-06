@@ -142,7 +142,7 @@ products.forEach(p => {
             "url": canonicalUrl,
             "priceCurrency": "EGP",
             "price": priceNum,
-            "availability": (p.stock !== undefined && p.stock <= 0) ? "https://schema.org/OutOfStock" : "https://schema.org/InStock",
+            "availability": (p.inStock === false || (p.stock !== undefined && p.stock <= 0)) ? "https://schema.org/OutOfStock" : "https://schema.org/InStock",
             "itemCondition": "https://schema.org/NewCondition"
         }
     };

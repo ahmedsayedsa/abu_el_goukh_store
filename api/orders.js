@@ -13,7 +13,10 @@ import { verifyAdminToken, getClientIp, sanitizeIp } from './admin-auth.js';
  */
 
 function getFirebaseUrl(path = '') {
-    const base = (process.env.FIREBASE_DATABASE_URL || 'https://abu-el-goukh-store-default-rtdb.firebaseio.com').replace(/\/+$/, '');
+    const base = (process.env.FIREBASE_DATABASE_URL || '').trim().replace(/\/+$/, '');
+    if (!base) {
+        throw new Error('متغير البيئة FIREBASE_DATABASE_URL غير مضبوط في الخادم');
+    }
     const secret = (process.env.FIREBASE_AUTH_SECRET || process.env.FIREBASE_DATABASE_SECRET || process.env.FIREBASE_SECRET || '').trim();
     const query = secret ? `?auth=${encodeURIComponent(secret)}` : '';
     return `${base}${path}.json${query}`;
@@ -323,14 +326,14 @@ function generateSecureOrderId() {
 /**
  * SECURITY FIX (Vulnerability 4): Rate Limiting for Public Order Creation (POST /api/orders)
  * Stores order creation counts per IP in Firebase RTDB (/order_rate_limits/{sanitized_ip}).
- * Limit: 8 orders per 10-minute window per IP.
+ * Limit: 5 orders per 1-hour window per IP.
  * Fail-Closed: If Firebase cannot be reached, reject with 503 to protect backend from flooding.
  */
 async function checkOrderRateLimit(ip) {
     const cleanIp = sanitizeIp(ip);
     const now = Date.now();
-    const WINDOW_MS = 10 * 60 * 1000; // 10 minutes
-    const MAX_ORDERS = 8;
+    const WINDOW_MS = 60 * 60 * 1000; // 1 hour
+    const MAX_ORDERS = 5; // 5 orders per hour
     const rateLimitUrl = getFirebaseUrl(`/order_rate_limits/${cleanIp}`);
 
     try {
@@ -359,7 +362,7 @@ async function checkOrderRateLimit(ip) {
                 return {
                     allowed: false,
                     statusCode: 429,
-                    message: `تم تجاوز الحد المسموح لإنشاء الطلبات مؤقتاً (8 طلبات كل 10 دقائق). يرجى المحاولة بعد ${remainingMinutes} دقيقة.`
+                    message: `تم تجاوز الحد المسموح لإنشاء الطلبات مؤقتاً (5 طلبات في الساعة). يرجى المحاولة بعد ${remainingMinutes} دقيقة.`
                 };
             }
 
@@ -380,7 +383,7 @@ async function checkOrderRateLimit(ip) {
                     return {
                         allowed: false,
                         statusCode: 429,
-                        message: 'تم تجاوز الحد المسموح لإنشاء الطلبات مؤقتاً (8 طلبات كل 10 دقائق). يرجى المحاولة بعد قليل.'
+                        message: 'تم تجاوز الحد المسموح لإنشاء الطلبات مؤقتاً (5 طلبات في الساعة). يرجى المحاولة بعد 60 دقيقة.'
                     };
                 }
             }

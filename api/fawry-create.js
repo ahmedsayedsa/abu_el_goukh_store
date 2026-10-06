@@ -18,7 +18,7 @@ export default async function handler(req, res) {
     const {
         expiry, orderId, total, items, promoCode,
         shippingFee, gov, cartDescription, customerName,
-        customerPhone, customerEmail, returnUrl
+        customerPhone, customerEmail
     } = req.body || {};
 
     if (!orderId) {
@@ -58,13 +58,12 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'Invalid verified order total.' });
     }
 
-    const host = req.headers['host'] || 'abu-el-goukh-store.vercel.app';
-    const protocol = host.includes('localhost') ? 'http' : 'https';
-    const baseUrl = `${protocol}://${host}`;
+    // SECURITY FIX: Base URL strictly resolved from trusted SITE_URL environment variable (Anti-Host Header Injection)
+    const baseUrl = (process.env.SITE_URL || 'https://abu-el-goukh-store.vercel.app').trim().replace(/\/+$/, '');
 
     const itemId = `BIKE-${String(orderId).replace(/[^a-zA-Z0-9_-]/g, '')}`;
     const custProfileId = String(customerPhone || '01114767140').trim();
-    const retUrl = returnUrl || `${baseUrl}/order-success.html?gateway=fawry&order=${encodeURIComponent(orderId)}`;
+    const retUrl = `${baseUrl}/order-success.html?gateway=fawry&order=${encodeURIComponent(orderId)}`;
 
     // Fawry standard SHA-256 signature for charge init:
     // merchantCode + merchantRefNum + customerProfileId + returnUrl + itemId + quantity + price + securityKey

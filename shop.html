@@ -1727,16 +1727,13 @@
                 const badgeClass = p.badge === 'FLAGSHIP' ? 'bg-trek-red text-white' : 'bg-trek-black text-white';
                 const isCompared = compareList.includes(p.id);
 
-                const stock = Number(p.stock !== undefined ? p.stock : 10);
+                const inStock = (p.inStock !== undefined) ? Boolean(p.inStock) : (p.stock !== undefined ? Number(p.stock) > 0 : true);
                 let stockBadgeHtml = '';
                 let buyButtonHtml = '';
 
-                if (stock <= 0) {
+                if (!inStock) {
                     stockBadgeHtml = `<span class="text-[10px] font-bold text-red-700 bg-red-50 px-2 py-0.5 rounded">غير متوفر حالياً</span>`;
                     buyButtonHtml = `<button disabled class="flex-grow py-2 px-3 bg-gray-200 text-gray-400 font-bold text-[11px] rounded-lg cursor-not-allowed flex items-center justify-center gap-1"><span>🚫 نفذت الكمية</span></button>`;
-                } else if (stock <= 3) {
-                    stockBadgeHtml = `<span class="text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded">باقي ${stock} فقط!</span>`;
-                    buyButtonHtml = `<button onclick="event.stopPropagation(); buyNowDirect(${p.id});" class="flex-grow py-2 px-3 bg-trek-red hover:bg-red-700 text-white font-bold text-[11px] rounded-lg transition flex items-center justify-center gap-1 shadow-sm"><span>⚡ شراء فوري</span></button>`;
                 } else {
                     stockBadgeHtml = `<span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">متوفر</span>`;
                     buyButtonHtml = `<button onclick="event.stopPropagation(); buyNowDirect(${p.id});" class="flex-grow py-2 px-3 bg-trek-red hover:bg-red-700 text-white font-bold text-[11px] rounded-lg transition flex items-center justify-center gap-1 shadow-sm"><span>⚡ شراء فوري</span></button>`;
@@ -1882,8 +1879,8 @@
             let html = `
                 <div class="grid ${gridCols} gap-6 text-right">
                     ${bikes.map(b => {
-                        const stock = Number(b.stock !== undefined ? b.stock : 10);
-                        const stockText = stock <= 0 ? '<span class="text-red-600 font-bold">غير متوفر حالياً 🚫</span>' : (stock <= 3 ? `<span class="text-amber-600 font-bold">باقي ${stock} قطع فقط! ⚠️</span>` : '<span class="text-emerald-600 font-bold">متوفر في المخزن 🟢</span>');
+                        const inStock = (b.inStock !== undefined) ? Boolean(b.inStock) : (b.stock !== undefined ? Number(b.stock) > 0 : true);
+                        const stockText = !inStock ? '<span class="text-red-600 font-bold">غير متوفر حالياً 🚫</span>' : '<span class="text-emerald-600 font-bold">متوفر في المخزن 🟢</span>';
                         const safeImage = sanitizeShopImageUrl(b.image);
                         const safeName = esc(b.name);
                         const safeBadge = esc(b.badge || 'ORIGINAL');
@@ -2021,8 +2018,7 @@
             // 6. In-Stock Only
             if (filterState.inStockOnly) {
                 filtered = filtered.filter(p => {
-                    const stock = p.stock !== undefined ? Number(p.stock) : 10;
-                    return stock > 0;
+                    return (p.inStock !== undefined) ? Boolean(p.inStock) : (p.stock !== undefined ? Number(p.stock) > 0 : true);
                 });
             }
 
@@ -2166,15 +2162,12 @@
                 }
             };
             document.getElementById('modal-sku').innerText = 'SKU: ' + p.sku;
-            const stock = Number(p.stock !== undefined ? p.stock : 10);
+            const inStock = (p.inStock !== undefined) ? Boolean(p.inStock) : (p.stock !== undefined ? Number(p.stock) > 0 : true);
             const stockBadge = document.getElementById('modal-stock-badge');
             if (stockBadge) {
-                if (stock <= 0) {
+                if (!inStock) {
                     stockBadge.className = 'text-[10px] font-bold text-red-700 bg-red-50 px-2 py-0.5 rounded';
                     stockBadge.innerText = 'غير متوفر حالياً';
-                } else if (stock <= 3) {
-                    stockBadge.className = 'text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded';
-                    stockBadge.innerText = `باقي ${stock} قطع فقط!`;
                 } else {
                     stockBadge.className = 'text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded';
                     stockBadge.innerText = 'متوفر في المخزن';

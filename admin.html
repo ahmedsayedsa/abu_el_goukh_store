@@ -4294,7 +4294,7 @@
         window.addEventListener('DOMContentLoaded', async () => {
             // 1. Fetch live products from /api/products (Serverless API)
             try {
-                const resp = await fetch('/api/products');
+                const resp = await fetch('/api/products', { headers: getAdminAuthHeaders() });
                 if (resp.ok) {
                     const cloudBikes = await resp.json();
                     if (Array.isArray(cloudBikes) && cloudBikes.length > 0) {

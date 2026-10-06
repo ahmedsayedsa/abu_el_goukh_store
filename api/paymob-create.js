@@ -16,7 +16,7 @@ export default async function handler(req, res) {
     const {
         orderId, total, items, promoCode, shippingFee, gov,
         cartDescription, customerName, customerPhone,
-        customerCity, customerState, customerAddress, returnUrl,
+        customerCity, customerState, customerAddress,
         paymentMethod
     } = req.body || {};
 
@@ -67,15 +67,14 @@ export default async function handler(req, res) {
     const lastName = nameParts.slice(1).join(' ') || 'أبو الجوخ';
     const phone = String(customerPhone || '01114767140').trim();
 
+    // SECURITY FIX: Base URL strictly resolved from trusted SITE_URL environment variable (Anti-Host Header Injection)
+    const baseUrl = (process.env.SITE_URL || 'https://abu-el-goukh-store.vercel.app').trim().replace(/\/+$/, '');
+
     // ─────────────────────────────────────────────────────────────
     // Method 1: Modern Paymob Unified Checkout (Intention API)
     // ─────────────────────────────────────────────────────────────
     if (secretKey && secretKey.length > 10) {
         try {
-            const host = req.headers['host'] || 'abu-el-goukh-store.vercel.app';
-            const protocol = host.includes('localhost') ? 'http' : 'https';
-            const baseUrl = `${protocol}://${host}`;
-
             const intMethods = [];
             if (integrationId && !isNaN(Number(integrationId))) {
                 intMethods.push(Number(integrationId));
@@ -116,7 +115,7 @@ export default async function handler(req, res) {
                     order_id: String(orderId)
                 },
                 notification_url: `${baseUrl}/api/payment-webhook?gateway=paymob`,
-                redirection_url: returnUrl || `${baseUrl}/order-success.html?gateway=paymob&order=${encodeURIComponent(orderId)}`
+                redirection_url: `${baseUrl}/order-success.html?gateway=paymob&order=${encodeURIComponent(orderId)}`
             };
 
             const intentionRes = await fetch('https://accept.paymob.com/v1/intention/', {
@@ -219,7 +218,7 @@ export default async function handler(req, res) {
                 },
                 currency: 'EGP',
                 integration_id: effectiveIntegrationId,
-                lock_order_when_paid: 'false'
+                lock_order_when_paid: true
             })
         });
         const keyData = await keyRes.json();

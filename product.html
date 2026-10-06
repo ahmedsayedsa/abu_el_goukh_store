@@ -1934,9 +1934,9 @@
             const mobileBuyNowBtn = document.querySelector('div.md\\:hidden button[onclick="buyNowCurrentProduct()"]');
             const mobileCartBtn = document.querySelector('div.md\\:hidden button[onclick="addToCartCurrentProduct()"]');
 
-            const stock = Number(product.stock !== undefined ? product.stock : 10);
+            const isAvailable = (product.inStock !== undefined) ? Boolean(product.inStock) : (product.stock !== undefined ? Number(product.stock) > 0 : true);
 
-            if (stock <= 0) {
+            if (!isAvailable) {
                 if (stockStatusEl) {
                     stockStatusEl.className = "text-[11px] font-bold text-red-600 flex items-center gap-1.5";
                     stockStatusEl.innerHTML = '<span class="w-2 h-2 rounded-full bg-red-500"></span><span>نفذت الكمية حالياً - غير متوفر بالمخزن</span>';
@@ -1959,11 +1959,6 @@
                 if (mobileCartBtn) {
                     mobileCartBtn.disabled = true;
                     mobileCartBtn.className = "p-2.5 bg-gray-200 text-gray-400 rounded-xl text-xs font-bold cursor-not-allowed";
-                }
-            } else if (stock <= 3) {
-                if (stockStatusEl) {
-                    stockStatusEl.className = "text-[11px] font-bold text-amber-700 flex items-center gap-1.5";
-                    stockStatusEl.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-500 animate-ping"></span><span>باقي <strong class="num-font text-xs">${stock}</strong> قطع فقط في المخزن - اطلب قبل نفاذ الكمية!</span>`;
                 }
             } else {
                 if (stockStatusEl) {

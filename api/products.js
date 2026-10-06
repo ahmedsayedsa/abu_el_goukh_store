@@ -14,7 +14,10 @@ import { seedCatalogIfEmpty } from './_catalog.js';
  */
 
 function getFirebaseUrl(subpath = '') {
-    const base = (process.env.FIREBASE_DATABASE_URL || 'https://abu-el-goukh-store-default-rtdb.firebaseio.com').replace(/\/+$/, '');
+    const base = (process.env.FIREBASE_DATABASE_URL || '').trim().replace(/\/+$/, '');
+    if (!base) {
+        throw new Error('متغير البيئة FIREBASE_DATABASE_URL غير مضبوط في الخادم');
+    }
     const secret = (
         process.env.FIREBASE_AUTH_SECRET ||
         process.env.FIREBASE_DATABASE_SECRET ||
@@ -59,30 +62,49 @@ function sanitizeProductImage(url, id) {
     return s;
 }
 
-function cleanProduct(p) {
+function cleanProduct(p, isAdmin = false) {
     if (!p) return p;
     const cleanImg = sanitizeProductImage(p.image, p.id);
     let cleanImages = [cleanImg];
     if (Array.isArray(p.images) && p.images.length > 0) {
         cleanImages = p.images.map(img => sanitizeProductImage(img, p.id));
     }
+    const inStock = (p.stock !== undefined && p.stock !== null)
+        ? (Number(p.stock) > 0)
+        : (p.inStock !== undefined ? Boolean(p.inStock) : true);
+
+    if (isAdmin) {
+        return {
+            ...p,
+            image: cleanImg,
+            images: cleanImages,
+            inStock
+        };
+    }
+
+    // Public / Non-Admin Response: Hide exact stock count from public clients
+    const { stock, ...rest } = p;
     return {
-        ...p,
+        ...rest,
         image: cleanImg,
-        images: cleanImages
+        images: cleanImages,
+        inStock
     };
 }
 
 export default async function handler(req, res) {
     // ─────────────────────────────────────────────────────────────
-    // 1. GET: Retrieve Public Products Catalog
+    // 1. GET: Retrieve Public Products Catalog (Exact stock for Admin only)
     // ─────────────────────────────────────────────────────────────
     if (req.method === 'GET') {
+        const auth = verifyAdminToken(req);
+        const isAdmin = Boolean(auth && auth.valid);
+
         // BUND 1d: seed Firebase if empty/corrupt, then serve Firebase if valid, else local fallback
         try {
             const seededCatalog = await seedCatalogIfEmpty();
             if (seededCatalog && seededCatalog.length > 0) {
-                return res.status(200).json(seededCatalog.map(cleanProduct));
+                return res.status(200).json(seededCatalog.map(p => cleanProduct(p, isAdmin)));
             }
         } catch (seedErr) {
             console.warn('[Products API] seedCatalogIfEmpty error:', seedErr.message);
@@ -104,7 +126,7 @@ export default async function handler(req, res) {
                     if (vals.length > 0) arr = vals;
                 }
                 if (arr) {
-                    return res.status(200).json(arr.map(cleanProduct));
+                    return res.status(200).json(arr.map(p => cleanProduct(p, isAdmin)));
                 }
             }
         } catch (fbErr) {
@@ -114,7 +136,7 @@ export default async function handler(req, res) {
         // Final fallback: serve local products.json
         const fallback = getLocalProductsFallback();
         if (Array.isArray(fallback) && fallback.length > 0) {
-            return res.status(200).json(fallback.map(cleanProduct));
+            return res.status(200).json(fallback.map(p => cleanProduct(p, isAdmin)));
         }
 
         return res.status(200).json([]);

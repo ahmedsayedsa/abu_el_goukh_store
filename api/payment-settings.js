@@ -2,7 +2,10 @@ import { verifyAdminToken } from './admin-auth.js';
 import { getGatewayConfig } from './_gateway-config.js';
 
 function getFirebaseUrl(path = '') {
-    const base = (process.env.FIREBASE_DATABASE_URL || 'https://abu-el-goukh-store-default-rtdb.firebaseio.com').replace(/\/+$/, '');
+    const base = (process.env.FIREBASE_DATABASE_URL || '').trim().replace(/\/+$/, '');
+    if (!base) {
+        throw new Error('متغير البيئة FIREBASE_DATABASE_URL غير مضبوط في الخادم');
+    }
     const secret = (process.env.FIREBASE_AUTH_SECRET || process.env.FIREBASE_DATABASE_SECRET || process.env.FIREBASE_SECRET || '').trim();
     const query = secret ? `?auth=${encodeURIComponent(secret)}` : '';
     return `${base}${path}.json${query}`;

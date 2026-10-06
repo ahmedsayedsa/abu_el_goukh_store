@@ -9,4 +9,5 @@ npm-debug.log*
 # Vercel & IDE
 .vercel
 .freebuff
+fresh_firebase_test.mjs
 

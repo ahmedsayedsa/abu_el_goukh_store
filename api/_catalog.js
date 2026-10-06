@@ -2,7 +2,10 @@
 // Centralized catalog utilities: Firebase URL helper, catalog validation, and conditional seeding.
 
 export function getFirebaseUrl(path = '') {
-  const base = (process.env.FIREBASE_DATABASE_URL || '').replace(/\/+$/, '');
+  const base = (process.env.FIREBASE_DATABASE_URL || '').trim().replace(/\/+$/, '');
+  if (!base) {
+    throw new Error('متغير البيئة FIREBASE_DATABASE_URL غير مضبوط في الخادم');
+  }
   const secret = (process.env.FIREBASE_AUTH_SECRET || process.env.FIREBASE_DATABASE_SECRET || process.env.FIREBASE_SECRET || '').trim();
   const query = secret ? `?auth=${encodeURIComponent(secret)}` : '';
   return `${base}${path}.json${query}`;

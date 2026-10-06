@@ -6,7 +6,10 @@
  */
 export async function getGatewayConfig() {
     try {
-        const base = (process.env.FIREBASE_DATABASE_URL || 'https://abu-el-goukh-store-default-rtdb.firebaseio.com').replace(/\/+$/, '');
+        const base = (process.env.FIREBASE_DATABASE_URL || '').trim().replace(/\/+$/, '');
+        if (!base) {
+            return {};
+        }
         const secret = (process.env.FIREBASE_AUTH_SECRET || process.env.FIREBASE_DATABASE_SECRET || process.env.FIREBASE_SECRET || '').trim();
         const query = secret ? `?auth=${encodeURIComponent(secret)}` : '';
         const res = await fetch(`${base}/payment_gateway_settings.json${query}`);

@@ -17,6 +17,14 @@ const extractBetween = (str, start, end) => {
 const headAndNav = extractBetween(headerFooterStr, '<!DOCTYPE html>', '</header>');
 const footer = extractBetween(headerFooterStr, '<footer', '</html>');
 
+const privacyHead = headAndNav
+    .replace(/<title>[\s\S]*?<\/title>/, '<title>سياسة الخصوصية | أبو الجوخ 1925</title>')
+    .replace(/<meta name="description" content="[^"]*">/, '<meta name="description" content="سياسة الخصوصية وحماية بيانات العملاء في متجر أبو الجوخ 1925 للدراجات.">');
+
+const termsHead = headAndNav
+    .replace(/<title>[\s\S]*?<\/title>/, '<title>شروط الاستخدام | أبو الجوخ 1925</title>')
+    .replace(/<meta name="description" content="[^"]*">/, '<meta name="description" content="شروط وأحكام الشراء والاستخدام في متجر أبو الجوخ 1925 للدراجات.">');
+
 const privacyContent = `
     <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <h1 class="text-3xl font-black mb-8">سياسة الخصوصية</h1>
@@ -55,8 +63,8 @@ const termsContent = `
     </main>
 `;
 
-fs.writeFileSync('privacy.html', headAndNav + privacyContent + footer);
-fs.writeFileSync('terms.html', headAndNav + termsContent + footer);
+fs.writeFileSync('privacy.html', privacyHead + privacyContent + footer);
+fs.writeFileSync('terms.html', termsHead + termsContent + footer);
 console.log('Static legal pages built (privacy.html, terms.html).');
 
 // ==========================================
@@ -167,6 +175,7 @@ const corePages = [
     { url: `${DOMAIN}/warranty.html`, priority: '0.6', changefreq: 'monthly' },
     { url: `${DOMAIN}/shipping.html`, priority: '0.6', changefreq: 'monthly' },
     { url: `${DOMAIN}/returns-policy.html`, priority: '0.6', changefreq: 'monthly' },
+    { url: `${DOMAIN}/contact.html`, priority: '0.6', changefreq: 'monthly' },
     { url: `${DOMAIN}/about.html`, priority: '0.6', changefreq: 'monthly' },
     { url: `${DOMAIN}/track-order.html`, priority: '0.6', changefreq: 'monthly' },
     { url: `${DOMAIN}/privacy.html`, priority: '0.5', changefreq: 'monthly' },

@@ -43,6 +43,12 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://abu-el-goukh-store.vercel.app/contact.html</loc>
+    <lastmod>2026-10-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://abu-el-goukh-store.vercel.app/about.html</loc>
     <lastmod>2026-10-06</lastmod>
     <changefreq>monthly</changefreq>

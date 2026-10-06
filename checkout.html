@@ -81,7 +81,7 @@
             <p class="text-xs sm:text-sm text-trek-gray mt-1">يرجى ملء بيانات التوصيل بدقة لضمان سرعة التسليم خلال 24 - 48 ساعة لباب منزلك.</p>
         </div>
 
-        <form id="checkout-form" onsubmit="handlePlaceOrder(event)" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <form id="checkout-form" onsubmit="handlePlaceOrder(event)" novalidate class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
             <!-- Left Form Area (7 Cols) -->
             <div class="lg:col-span-7 space-y-6">
@@ -776,6 +776,124 @@
                 updateCalculations();
             }
         }
+
+        
+        function setFieldError(fieldId, errorMsg) {
+            const field = document.getElementById(fieldId);
+            const errEl = document.getElementById('err-' + fieldId);
+            if (field) {
+                field.classList.add('border-red-500', 'focus:border-red-500', 'bg-red-50/20');
+                field.classList.remove('border-trek-border', 'focus:border-trek-black');
+            }
+            if (errEl) {
+                errEl.innerText = errorMsg;
+                errEl.classList.remove('hidden');
+            }
+        }
+
+        function clearFieldError(fieldId) {
+            const field = document.getElementById(fieldId);
+            const errEl = document.getElementById('err-' + fieldId);
+            if (field) {
+                field.classList.remove('border-red-500', 'focus:border-red-500', 'bg-red-50/20');
+                field.classList.add('border-trek-border', 'focus:border-trek-black');
+            }
+            if (errEl) {
+                errEl.innerText = '';
+                errEl.classList.add('hidden');
+            }
+        }
+
+        function validateCheckoutForm() {
+            let isValid = true;
+            let firstInvalidEl = null;
+
+            const nameEl = document.getElementById('cust-name');
+            const phoneEl = document.getElementById('cust-phone');
+            const altPhoneEl = document.getElementById('cust-alt-phone');
+            const govEl = document.getElementById('cust-gov');
+            const cityEl = document.getElementById('cust-city');
+            const addressEl = document.getElementById('cust-address');
+
+            // 1. Name validation
+            const nameVal = nameEl ? nameEl.value.trim() : '';
+            if (!nameVal || nameVal.length < 3) {
+                setFieldError('cust-name', 'يرجى كتابة الاسم ثلاثي أو ثنائي على الأقل.');
+                isValid = false;
+                if (!firstInvalidEl) firstInvalidEl = nameEl;
+            } else {
+                clearFieldError('cust-name');
+            }
+
+            // 2. Egyptian Phone validation: 01xxxxxxxxx (11 digits)
+            const phoneVal = phoneEl ? phoneEl.value.trim() : '';
+            const phoneRegex = /^01[0125][0-9]{8}$/;
+            if (!phoneVal || !phoneRegex.test(phoneVal)) {
+                setFieldError('cust-phone', 'يرجى إدخال رقم موبايل مصري صحيح مكون من 11 رقماً يبدأ بـ 01 (مثل 01012345678).');
+                isValid = false;
+                if (!firstInvalidEl) firstInvalidEl = phoneEl;
+            } else {
+                clearFieldError('cust-phone');
+            }
+
+            // 2b. Alt phone (optional)
+            const altPhoneVal = altPhoneEl ? altPhoneEl.value.trim() : '';
+            if (altPhoneVal && !phoneRegex.test(altPhoneVal)) {
+                setFieldError('cust-alt-phone', 'يرجى إدخال رقم هاتف بديل صحيح مكون من 11 رقماً يبدأ بـ 01.');
+                isValid = false;
+                if (!firstInvalidEl) firstInvalidEl = altPhoneEl;
+            } else {
+                clearFieldError('cust-alt-phone');
+            }
+
+            // 3. Governorate validation
+            const govVal = govEl ? govEl.value.trim() : '';
+            if (!govVal) {
+                setFieldError('cust-gov', 'يرجى اختيار المحافظة لتحديد وجهة الشحن.');
+                isValid = false;
+                if (!firstInvalidEl) firstInvalidEl = govEl;
+            } else {
+                clearFieldError('cust-gov');
+            }
+
+            // 4. City validation
+            const cityVal = cityEl ? cityEl.value.trim() : '';
+            if (!cityVal || cityVal.length < 2) {
+                setFieldError('cust-city', 'يرجى إدخال اسم المدينة أو المركز أو الحي.');
+                isValid = false;
+                if (!firstInvalidEl) firstInvalidEl = cityEl;
+            } else {
+                clearFieldError('cust-city');
+            }
+
+            // 5. Address validation
+            const addressVal = addressEl ? addressEl.value.trim() : '';
+            if (!addressVal || addressVal.length < 5) {
+                setFieldError('cust-address', 'يرجى كتابة العنوان بالتفصيل (اسم الشارع، رقم العمارة/الشقة، وأقرب علامة مميزة).');
+                isValid = false;
+                if (!firstInvalidEl) firstInvalidEl = addressEl;
+            } else {
+                clearFieldError('cust-address');
+            }
+
+            if (!isValid && firstInvalidEl) {
+                firstInvalidEl.focus();
+                firstInvalidEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            return isValid;
+        }
+
+        // Live validation clearing
+        document.addEventListener('DOMContentLoaded', () => {
+            ['cust-name', 'cust-phone', 'cust-alt-phone', 'cust-gov', 'cust-city', 'cust-address'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', () => clearFieldError(id));
+                    el.addEventListener('change', () => clearFieldError(id));
+                }
+            });
+        });
 
         async function handlePlaceOrder(e) {
             e.preventDefault();

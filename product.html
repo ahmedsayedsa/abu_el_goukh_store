@@ -2443,11 +2443,13 @@
 
             const origin = (window.location.origin && window.location.origin.startsWith('http')) ? window.location.origin : 'https://abu-el-goukh-store.vercel.app';
             const isStaticPage = window.location.pathname.includes('product-');
-            const fullProductUrl = isStaticPage ? (origin + '/product-' + currentProduct.id + '.html') : (origin + '/product.html?id=' + currentProduct.id);
-            const canonicalEl = document.getElementById('canonical-url');
-            if (canonicalEl) canonicalEl.setAttribute('href', fullProductUrl);
-            const ogUrlEl = document.getElementById('og-url');
-            if (ogUrlEl) ogUrlEl.setAttribute('content', fullProductUrl);
+            if (!isStaticPage) {
+                const fullProductUrl = origin + '/product.html?id=' + currentProduct.id;
+                const canonicalEl = document.getElementById('canonical-url');
+                if (canonicalEl) canonicalEl.setAttribute('href', fullProductUrl);
+                const ogUrlEl = document.getElementById('og-url');
+                if (ogUrlEl) ogUrlEl.setAttribute('content', fullProductUrl);
+            }
 
             // Breadcrumbs
             document.getElementById('breadcrumb-category').innerText = currentProduct.category || 'دراجات هوائية';

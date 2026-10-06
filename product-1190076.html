@@ -12,20 +12,6 @@
     <meta name="author" content="أبو الجوخ للدراجات - Abo El Goukh">
     <meta name="robots" content="index, follow">
     <link rel="canonical" id="canonical-url" href="https://abu-el-goukh-store.vercel.app/product-1190076.html">
-    <script>
-        (function() {
-            try {
-                const params = new URLSearchParams(window.location.search);
-                const id = params.get('id');
-                const origin = (window.location.origin && window.location.origin.startsWith('http')) ? window.location.origin : 'https://abu-el-goukh-store.vercel.app';
-                const canonicalHref = id ? (origin + '/product.html?id=' + encodeURIComponent(id)) : (origin + '/product.html');
-                const canonicalEl = document.getElementById('canonical-url');
-                if (canonicalEl) canonicalEl.setAttribute('href', canonicalHref);
-                const ogUrlEl = document.getElementById('og-url');
-                if (ogUrlEl) ogUrlEl.setAttribute('content', canonicalHref);
-            } catch (e) {}
-        })();
-    </script>
 
     <!-- Open Graph Preview -->
     <meta property="og:locale" content="ar_EG">
@@ -2431,11 +2417,13 @@
 
             const origin = (window.location.origin && window.location.origin.startsWith('http')) ? window.location.origin : 'https://abu-el-goukh-store.vercel.app';
             const isStaticPage = window.location.pathname.includes('product-');
-            const fullProductUrl = isStaticPage ? (origin + '/product-' + currentProduct.id + '.html') : (origin + '/product.html?id=' + currentProduct.id);
-            const canonicalEl = document.getElementById('canonical-url');
-            if (canonicalEl) canonicalEl.setAttribute('href', fullProductUrl);
-            const ogUrlEl = document.getElementById('og-url');
-            if (ogUrlEl) ogUrlEl.setAttribute('content', fullProductUrl);
+            if (!isStaticPage) {
+                const fullProductUrl = origin + '/product.html?id=' + currentProduct.id;
+                const canonicalEl = document.getElementById('canonical-url');
+                if (canonicalEl) canonicalEl.setAttribute('href', fullProductUrl);
+                const ogUrlEl = document.getElementById('og-url');
+                if (ogUrlEl) ogUrlEl.setAttribute('content', fullProductUrl);
+            }
 
             // Breadcrumbs
             document.getElementById('breadcrumb-category').innerText = currentProduct.category || 'دراجات هوائية';

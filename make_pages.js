@@ -95,9 +95,8 @@ products.forEach(p => {
     html = html.replace(/<title id="page-meta-title">[\s\S]*?<\/title>/, `<title id="page-meta-title">${escapeHtml(pageTitle)}</title>`);
     html = html.replace(/<meta name="description" id="page-meta-desc" content="[^"]*">/, `<meta name="description" id="page-meta-desc" content="${escapeHtml(seoDesc)}">`);
 
-    // 2. Self-referencing Canonical Link & dynamic script
-    const canonicalReplacement = `<link rel="canonical" id="canonical-url" href="${canonicalUrl}">`;
-    html = html.replace(/<link rel="canonical" id="canonical-url" href="[^"]*">/, canonicalReplacement);
+    // 2. Self-referencing Canonical Link & remove head dynamic script from static pages
+    html = html.replace(/<link rel="canonical" id="canonical-url" href="[^"]*">[\s\S]*?<\/script>/, `<link rel="canonical" id="canonical-url" href="${canonicalUrl}">`);
 
     // 3. Open Graph
     html = html.replace(/<meta property="og:url" id="og-url" content="[^"]*">/, `<meta property="og:url" id="og-url" content="${canonicalUrl}">`);

@@ -90,7 +90,7 @@ products.forEach(p => {
     const priceFormatted = priceNum.toLocaleString('en-US');
     const pageTitle = `${p.name} | أبو الجوخ 1925 - أصل العجل في مصر`;
     const seoDesc = p.metaDescription || p.meta_desc || `اشتري ${p.name} الأصلية من توكيل أبو الجوخ 1925 بسعر ${priceFormatted} ج.م. شحن سريع لكافة المحافظات وضمان معتمد.`;
-    const canonicalUrl = `${DOMAIN}/product-${p.id}.html`;
+    const canonicalUrl = `${DOMAIN}/product-${p.id}`;
     const pImage = p.image || 'abu_el_goukh_logo.png';
     const absoluteImage = pImage.startsWith('http') ? pImage : `${DOMAIN}/${pImage.replace(/^\/+/, '')}`;
     const pSku = p.sku || `ABU-${p.id}`;
@@ -169,17 +169,17 @@ console.log(`Pre-rendered ${products.length} static product pages (product-{id}.
 // ==========================================
 const corePages = [
     { url: `${DOMAIN}/`, priority: '1.0', changefreq: 'daily' },
-    { url: `${DOMAIN}/shop.html`, priority: '0.9', changefreq: 'daily' },
-    { url: `${DOMAIN}/blog.html`, priority: '0.85', changefreq: 'weekly' },
-    { url: `${DOMAIN}/checkout.html`, priority: '0.7', changefreq: 'weekly' },
-    { url: `${DOMAIN}/warranty.html`, priority: '0.6', changefreq: 'monthly' },
-    { url: `${DOMAIN}/shipping.html`, priority: '0.6', changefreq: 'monthly' },
-    { url: `${DOMAIN}/returns-policy.html`, priority: '0.6', changefreq: 'monthly' },
-    { url: `${DOMAIN}/contact.html`, priority: '0.6', changefreq: 'monthly' },
-    { url: `${DOMAIN}/about.html`, priority: '0.6', changefreq: 'monthly' },
-    { url: `${DOMAIN}/track-order.html`, priority: '0.6', changefreq: 'monthly' },
-    { url: `${DOMAIN}/privacy.html`, priority: '0.5', changefreq: 'monthly' },
-    { url: `${DOMAIN}/terms.html`, priority: '0.5', changefreq: 'monthly' }
+    { url: `${DOMAIN}/shop`, priority: '0.9', changefreq: 'daily' },
+    { url: `${DOMAIN}/blog`, priority: '0.85', changefreq: 'weekly' },
+    { url: `${DOMAIN}/checkout`, priority: '0.7', changefreq: 'weekly' },
+    { url: `${DOMAIN}/warranty`, priority: '0.6', changefreq: 'monthly' },
+    { url: `${DOMAIN}/shipping`, priority: '0.6', changefreq: 'monthly' },
+    { url: `${DOMAIN}/returns-policy`, priority: '0.6', changefreq: 'monthly' },
+    { url: `${DOMAIN}/contact`, priority: '0.6', changefreq: 'monthly' },
+    { url: `${DOMAIN}/about`, priority: '0.6', changefreq: 'monthly' },
+    { url: `${DOMAIN}/track-order`, priority: '0.6', changefreq: 'monthly' },
+    { url: `${DOMAIN}/privacy`, priority: '0.5', changefreq: 'monthly' },
+    { url: `${DOMAIN}/terms`, priority: '0.5', changefreq: 'monthly' }
 ];
 
 const today = new Date().toISOString().split('T')[0];

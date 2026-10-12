@@ -179,7 +179,10 @@ const corePages = [
     { url: `${DOMAIN}/about`, priority: '0.6', changefreq: 'monthly' },
     { url: `${DOMAIN}/track-order`, priority: '0.6', changefreq: 'monthly' },
     { url: `${DOMAIN}/privacy`, priority: '0.5', changefreq: 'monthly' },
-    { url: `${DOMAIN}/terms`, priority: '0.5', changefreq: 'monthly' }
+    { url: `${DOMAIN}/terms`, priority: '0.5', changefreq: 'monthly' },
+    { url: `${DOMAIN}/blog-as3ar-el-agal-2026`, priority: '0.9', changefreq: 'monthly' },
+    { url: `${DOMAIN}/blog-trinx-guide`, priority: '0.9', changefreq: 'monthly' },
+    { url: `${DOMAIN}/blog-bike-maintenance-home`, priority: '0.9', changefreq: 'monthly' }
 ];
 
 const today = new Date().toISOString().split('T')[0];
@@ -191,7 +194,7 @@ corePages.forEach(p => {
 });
 
 products.forEach(p => {
-    sitemapXml += `  <url>\n    <loc>${DOMAIN}/product-${p.id}.html</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
+    sitemapXml += `  <url>\n    <loc>${DOMAIN}/product-${p.id}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
 });
 
 sitemapXml += `</urlset>\n`;

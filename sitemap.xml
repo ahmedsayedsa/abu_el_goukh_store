@@ -19,12 +19,6 @@
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://abu-el-goukh-store.vercel.app/checkout</loc>
-    <lastmod>2026-10-12</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://abu-el-goukh-store.vercel.app/warranty</loc>
     <lastmod>2026-10-12</lastmod>
     <changefreq>monthly</changefreq>
@@ -50,12 +44,6 @@
   </url>
   <url>
     <loc>https://abu-el-goukh-store.vercel.app/about</loc>
-    <lastmod>2026-10-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://abu-el-goukh-store.vercel.app/track-order</loc>
     <lastmod>2026-10-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

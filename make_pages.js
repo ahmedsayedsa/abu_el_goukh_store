@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
+const DOMAIN = 'https://abu-el-goukh-store.vercel.app';
+
 // ==========================================
 // 1. Build Privacy and Terms Pages
 // ==========================================
@@ -19,11 +21,13 @@ const footer = extractBetween(headerFooterStr, '<footer', '</html>');
 
 const privacyHead = headAndNav
     .replace(/<title>[\s\S]*?<\/title>/, '<title>سياسة الخصوصية | أبو الجوخ 1925</title>')
-    .replace(/<meta name="description" content="[^"]*">/, '<meta name="description" content="سياسة الخصوصية وحماية بيانات العملاء في متجر أبو الجوخ 1925 للدراجات.">');
+    .replace(/<meta name="description" content="[^"]*">/, '<meta name="description" content="سياسة الخصوصية وحماية بيانات العملاء في متجر أبو الجوخ 1925 للدراجات.">')
+    .replace(/<link rel="canonical"[^>]*>/, `<link rel="canonical" href="${DOMAIN}/privacy">`);
 
 const termsHead = headAndNav
     .replace(/<title>[\s\S]*?<\/title>/, '<title>شروط الاستخدام | أبو الجوخ 1925</title>')
-    .replace(/<meta name="description" content="[^"]*">/, '<meta name="description" content="شروط وأحكام الشراء والاستخدام في متجر أبو الجوخ 1925 للدراجات.">');
+    .replace(/<meta name="description" content="[^"]*">/, '<meta name="description" content="شروط وأحكام الشراء والاستخدام في متجر أبو الجوخ 1925 للدراجات.">')
+    .replace(/<link rel="canonical"[^>]*>/, `<link rel="canonical" href="${DOMAIN}/terms">`);
 
 const privacyContent = `
     <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -82,8 +86,6 @@ function escapeHtml(str) {
 
 const products = JSON.parse(fs.readFileSync('products.json', 'utf8'));
 const productTemplate = fs.readFileSync('product.html', 'utf8');
-
-const DOMAIN = 'https://abu-el-goukh-store.vercel.app';
 
 products.forEach(p => {
     const priceNum = Number(p.price) || 0;
@@ -171,13 +173,11 @@ const corePages = [
     { url: `${DOMAIN}/`, priority: '1.0', changefreq: 'daily' },
     { url: `${DOMAIN}/shop`, priority: '0.9', changefreq: 'daily' },
     { url: `${DOMAIN}/blog`, priority: '0.85', changefreq: 'weekly' },
-    { url: `${DOMAIN}/checkout`, priority: '0.7', changefreq: 'weekly' },
     { url: `${DOMAIN}/warranty`, priority: '0.6', changefreq: 'monthly' },
     { url: `${DOMAIN}/shipping`, priority: '0.6', changefreq: 'monthly' },
     { url: `${DOMAIN}/returns-policy`, priority: '0.6', changefreq: 'monthly' },
     { url: `${DOMAIN}/contact`, priority: '0.6', changefreq: 'monthly' },
     { url: `${DOMAIN}/about`, priority: '0.6', changefreq: 'monthly' },
-    { url: `${DOMAIN}/track-order`, priority: '0.6', changefreq: 'monthly' },
     { url: `${DOMAIN}/privacy`, priority: '0.5', changefreq: 'monthly' },
     { url: `${DOMAIN}/terms`, priority: '0.5', changefreq: 'monthly' },
     { url: `${DOMAIN}/blog-as3ar-el-agal-2026`, priority: '0.9', changefreq: 'monthly' },

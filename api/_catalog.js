@@ -14,7 +14,7 @@ export function getFirebaseUrl(path = '') {
 export function isCatalogValid(catalog) {
   const entries = Object.values(catalog || {});
   if (entries.length === 0) return false;
-  const validCount = entries.filter(p => typeof p.id === 'string' && p.id.trim() !== '' && typeof p.price === 'number' && p.price > 0).length;
+  const validCount = entries.filter(p => (typeof p.id === 'string' || typeof p.id === 'number') && String(p.id).trim() !== '' && typeof p.price === 'number' && p.price > 0).length;
   return validCount / entries.length >= 0.9;
 }
 

@@ -1,5 +1,318 @@
 [
   {
+    "id": 1700101,
+    "name": "دراجة جبلية هادور إيجو Hador Ego 29 ألومنيوم",
+    "category": "دراجات جبلية",
+    "cat_key": "mountain",
+    "price": 14000,
+    "sku": "ABU-HADOR-29",
+    "image": "images/hador_ego_29.webp",
+    "badge": "FLAGSHIP",
+    "specs": "شاسيه ألومنيوم طيران خفيف 6061 • 21 سرعة شيمانو ياباني أصلي • فرامل ديسك ومساعد هيدروليك أمامي • مقاس 29\"",
+    "images": [
+      "images/hador_ego_29.webp",
+      "images/hador_ego_29_clean.png",
+      "images/bike_1700101.jpg"
+    ],
+    "reviews": [
+      {
+        "name": "م. أحمد الشريف",
+        "rating": 5,
+        "comment": "عجلة هادور إيجو 29 ممتازة جداً وشاسيه ألومنيوم فائق الخفة، ركوبها مريح جداً على السرعات العالية والمطالع.",
+        "date": "2026-10-14"
+      }
+    ],
+    "inStock": true
+  },
+  {
+    "id": 1700102,
+    "name": "دراجة جبلية ترينكس Trinx M600 PRO مقاس 29",
+    "category": "دراجات جبلية",
+    "cat_key": "mountain",
+    "price": 10600,
+    "sku": "ABU-TRINX-M600",
+    "badge": "PRO GRADE",
+    "specs": "فريم ألومنيوم طيران خفيف • 24 سرعة شيمانو ياباني • فرامل ديسك هيدروليك ومساعد قفل Lockout • مقاس 29\"",
+    "images": [
+      "images/trinx_m600_29.webp",
+      "images/trinx_m600_29_clean.png",
+      "images/bike_1700102.jpg"
+    ],
+    "reviews": [
+      {
+        "name": "كابتن زياد منصور",
+        "rating": 5,
+        "comment": "ترينكس M600 برو غنية عن التعريف، سرعات ناعمة جداً وثبات عالي في المنحدرات والطرق السريعة.",
+        "date": "2026-10-14"
+      }
+    ],
+    "inStock": true
+  },
+  {
+    "id": 1700104,
+    "name": "دراجة طريق وسباق ترينكس Trinx Tempo 1.4 Road",
+    "category": "دراجات سرعة وطريق",
+    "cat_key": "road",
+    "price": 10500,
+    "sku": "ABU-TRINX-TEMPO",
+    "badge": "SPEED ROAD",
+    "specs": "فريم ألومنيوم أيروديناميك فائق الخفة • سرعات شيمانو ياباني للسباقات • مقود منخفض احترافي لقطع مسافات طويلة بأقل جهد",
+    "images": [
+      "images/trinx_tempo_road.webp",
+      "images/trinx_tempo_road_clean.png",
+      "images/bike_1700104.jpg"
+    ],
+    "reviews": [
+      {
+        "name": "د. هيثم السعدني",
+        "rating": 5,
+        "comment": "العجلة سريعة جداً على الأسفلت وخفيفة في الحمل، أفضل اختيار لعشاق السرعة والمسافات الطويلة.",
+        "date": "2026-10-14"
+      }
+    ],
+    "inStock": true
+  },
+  {
+    "id": 1700103,
+    "name": "دراجة جبلية ترينكس Trinx M500 PRO مقاس 29",
+    "category": "دراجات جبلية",
+    "cat_key": "mountain",
+    "price": 10300,
+    "sku": "ABU-TRINX-M500",
+    "badge": "BESTSELLER",
+    "specs": "فريم ألومنيوم معالج حرارياً • 24 سرعة شيمانو أصلي • فرامل ديسك ومساعد أمامي للطرق الوعرة • مقاس 29\"",
+    "images": [
+      "images/trinx_m500_29.webp",
+      "images/trinx_m500_29_clean.png",
+      "images/bike_1700103.jpg"
+    ],
+    "reviews": [
+      {
+        "name": "أ. عمر فاروق",
+        "rating": 5,
+        "comment": "سلسلة M500 اعتمادية جداً، العجلة وصلت مجمعة ومضبوطة بالمللي والفرامل الديسك استجابتها فورية.",
+        "date": "2026-10-14"
+      }
+    ],
+    "inStock": true
+  },
+  {
+    "id": 1700106,
+    "name": "دراجة جبلية جلاكسي Galaxy A5 مقاس 29",
+    "category": "دراجات جبلية",
+    "cat_key": "mountain",
+    "price": 9100,
+    "sku": "ABU-GALAXY-A5",
+    "badge": "ORIGINAL",
+    "specs": "مقاس 29 بوصة للسرعات العالية • 21 سرعة شيمانو • فريم ألومنيوم ومساعد أمامي ممتص للصدمات وفرامل ديسك",
+    "images": [
+      "images/galaxy_a5_29.webp",
+      "images/galaxy_a5_29_clean.png",
+      "images/bike_1700106.jpg"
+    ],
+    "reviews": [
+      {
+        "name": "أ. طارق عبد الوهاب",
+        "rating": 5,
+        "comment": "جلاكسي A5 خامة ممتازة وثبات غير عادي على الطرق السريعة بفضل المقاس 29.",
+        "date": "2026-10-14"
+      }
+    ],
+    "inStock": true
+  },
+  {
+    "id": 1700107,
+    "name": "دراجة جبلية جلاكسي Galaxy XC11 مقاس 26",
+    "category": "دراجات جبلية",
+    "cat_key": "mountain",
+    "price": 9200,
+    "sku": "ABU-GALAXY-XC11",
+    "badge": "POPULAR",
+    "specs": "فريم ألومنيوم خفيف • سرعات شيمانو 24 سرعة • فرامل ديسك هيدروليكية ومساعد أمامي بنظام قفل • مقاس 26\"",
+    "images": [
+      "images/galaxy_xc11_26.webp",
+      "images/galaxy_xc11_26_clean.png",
+      "images/bike_1700107.jpg"
+    ],
+    "reviews": [
+      {
+        "name": "كابتن سيف الدين",
+        "rating": 5,
+        "comment": "عجلة محترمة جداً وشكلها شيك، الفرامل الهيدروليك بتفرق جامد في الأمان والتحكم.",
+        "date": "2026-10-14"
+      }
+    ],
+    "inStock": true
+  },
+  {
+    "id": 1700108,
+    "name": "دراجة جبلية جلاكسي Galaxy MT16 مقاس 26",
+    "category": "دراجات جبلية",
+    "cat_key": "mountain",
+    "price": 7500,
+    "sku": "ABU-GALAXY-MT16",
+    "badge": "BEST VALUE",
+    "specs": "مقاس 26 بوصة • 21 سرعة شيمانو Tourney TZ • فرامل ديسك ميكانيكية وشاسيه صلب متين ومساعد أمامي",
+    "images": [
+      "images/galaxy_mt16_26.webp",
+      "images/galaxy_mt16_26_clean.png",
+      "images/bike_1700108.jpg"
+    ],
+    "reviews": [
+      {
+        "name": "أ. إبراهيم خليل",
+        "rating": 5,
+        "comment": "أفضل قيمة مقابل سعر، متينة وتستحمل الاستخدام اليومي الشاق بدون أي مشاكل.",
+        "date": "2026-10-14"
+      }
+    ],
+    "inStock": true
+  },
+  {
+    "id": 1700105,
+    "name": "دراجة جبلية ترينكس Trinx M136 مقاس 26",
+    "category": "دراجات جبلية",
+    "cat_key": "mountain",
+    "price": 9150,
+    "sku": "ABU-TRINX-M136-26",
+    "badge": "ORIGINAL",
+    "specs": "شاسيه ألومنيوم 6061 خفيف ومتين • 21 سرعة شيمانو ياباني • فرامل ديسك ميكانيكية دقيقة ومساعد أمامي • مقاس 26\"",
+    "images": [
+      "images/trinx_m136_26.webp",
+      "images/trinx_m136_26_clean.png",
+      "images/bike_1700105.jpg"
+    ],
+    "reviews": [
+      {
+        "name": "م. ماجد عبد الرؤوف",
+        "rating": 5,
+        "comment": "أشهر عجلة ترينكس في مصر، مقاس 26 عملي جداً للمناورات في شوارع القاهرة وتعدي المطبات بسلاسة.",
+        "date": "2026-10-14"
+      }
+    ],
+    "inStock": true
+  },
+  {
+    "id": 1700109,
+    "name": "دراجة جبلية فونيكس Phoenix 2601 مقاس 26",
+    "category": "دراجات جبلية",
+    "cat_key": "mountain",
+    "price": 6950,
+    "sku": "ABU-PHOENIX-2601",
+    "badge": "ORIGINAL",
+    "specs": "فريم ألومنيوم متين • 21 سرعة • عجلات ألومنيوم مزدوجة • مساعد أمامي للطرق والمدقات • مقاس 26\"",
+    "images": [
+      "images/phoenix_2601_26.webp",
+      "images/phoenix_2601_26_clean.png",
+      "images/bike_1700109.jpg"
+    ],
+    "reviews": [
+      {
+        "name": "م. حسام النجار",
+        "rating": 5,
+        "comment": "ماركة فونيكس عريقة وتقفيل الموديل 2601 ممتاز جداً، الوان وتصميم رياضي مريح.",
+        "date": "2026-10-14"
+      }
+    ],
+    "inStock": true
+  },
+  {
+    "id": 1700110,
+    "name": "دراجة دبابات إيطاليانو فات بايك Italiano مقاس 26",
+    "category": "دبابات وفات بايك",
+    "cat_key": "fat",
+    "price": 5500,
+    "sku": "ABU-ITALIANO-FAT",
+    "badge": "FAT TIRE",
+    "specs": "كاوتش عريض 26×4.00 للرمال والشواطئ والطرق الوعرة • 21 سرعة شيمانو • فرامل ديسك مزدوجة ومساعدين لامتصاص الصدمات",
+    "images": [
+      "images/italiano_26.webp",
+      "images/italiano_26_clean.png",
+      "images/bike_1700110.jpg"
+    ],
+    "reviews": [
+      {
+        "name": "أ. محمود رشاد",
+        "rating": 5,
+        "comment": "عجلة دبابة حقيقية، شكلها يخطف العين في الشارع وثبات جبار على الرمل والمطبات.",
+        "date": "2026-10-14"
+      }
+    ],
+    "inStock": true
+  },
+  {
+    "id": 1700111,
+    "name": "دراجة أطفال ميلانو Milano مقاس 20",
+    "category": "دراجات أطفال وبناتي",
+    "cat_key": "kids",
+    "price": 2750,
+    "sku": "ABU-MILANO-20",
+    "badge": "KIDS BEST",
+    "specs": "مقاس 20 بوصة للأعمار 7-11 سنة • فريم ستيل متين • كرسي أمامي وخلفي • جرس وسيرين ملون ومساند حماية",
+    "images": [
+      "images/milano_20.webp",
+      "images/milano_20_clean.png",
+      "images/bike_1700111.jpg"
+    ],
+    "reviews": [
+      {
+        "name": "أ. رانيا توفيق",
+        "rating": 5,
+        "comment": "اشتريتها لابني مقاس 20 ممتازة جداً وألوانها مبهجة وجت متقفلة جاهزة على الركوب فوراً.",
+        "date": "2026-10-14"
+      }
+    ],
+    "inStock": true
+  },
+  {
+    "id": 1700112,
+    "name": "دراجة أطفال ميلانو Milano مقاس 16",
+    "category": "دراجات أطفال وبناتي",
+    "cat_key": "kids",
+    "price": 2600,
+    "sku": "ABU-MILANO-16",
+    "badge": "KIDS BEST",
+    "specs": "مقاس 16 بوصة للأعمار 4-7 سنوات • عجلات مساعدة خلفية للاتزان • فريم فولاذي قوي وكرسي مريح وجرس صوتي",
+    "images": [
+      "images/milano_16.webp",
+      "images/milano_16_clean.png",
+      "images/bike_1700112.jpg"
+    ],
+    "reviews": [
+      {
+        "name": "د. دينا كامل",
+        "rating": 5,
+        "comment": "العجلة أمان جداً وعجلاتها المساعدة متينة، بنتي اتعلمت عليها من أول يوم بكل ثقة.",
+        "date": "2026-10-14"
+      }
+    ],
+    "inStock": true
+  },
+  {
+    "id": 1700113,
+    "name": "دراجة أطفال ميلانو Milano مقاس 12",
+    "category": "دراجات أطفال وبناتي",
+    "cat_key": "kids",
+    "price": 2350,
+    "sku": "ABU-MILANO-12",
+    "badge": "KIDS BEST",
+    "specs": "مقاس 12 بوصة للأطفال 3-5 سنوات • عجلات مساعدة مانعة للانقلاب • فريم فولاذي آمن وحماية كاملة للجنزير والسلسلة",
+    "images": [
+      "images/milano_12.webp",
+      "images/milano_12_clean.png",
+      "images/bike_1700113.jpg"
+    ],
+    "reviews": [
+      {
+        "name": "أ. محمد عبد الفتاح",
+        "rating": 5,
+        "comment": "هدية ممتازة للأطفال الصغار، خامات قوية وتجميع محكم ومقاس مظبوط جداً.",
+        "date": "2026-10-14"
+      }
+    ],
+    "inStock": true
+  },
+  {
     "id": 1189653,
     "name": "M136 Pro",
     "category": "دراجات جبلية",
@@ -1988,319 +2301,6 @@
         "rating": 5,
         "comment": "تعامل راقي جداً من أبو الجوخ، استلام الدراجة مجمعة ومضبوطة بالكامل والدفع أونلاين كان سلس وسريع عبر فاليو.",
         "date": "2026-02-25"
-      }
-    ],
-    "inStock": true
-  },
-  {
-    "id": 1700101,
-    "name": "دراجة جبلية هادور إيجو Hador Ego 29 ألومنيوم",
-    "category": "دراجات جبلية",
-    "cat_key": "mountain",
-    "price": 14000,
-    "sku": "ABU-HADOR-29",
-    "image": "images/hador_ego_29.webp",
-    "badge": "FLAGSHIP",
-    "specs": "شاسيه ألومنيوم طيران خفيف 6061 • 21 سرعة شيمانو ياباني أصلي • فرامل ديسك ومساعد هيدروليك أمامي • مقاس 29\"",
-    "images": [
-      "images/hador_ego_29.webp",
-      "images/hador_ego_29_clean.png",
-      "images/bike_1700101.jpg"
-    ],
-    "reviews": [
-      {
-        "name": "م. أحمد الشريف",
-        "rating": 5,
-        "comment": "عجلة هادور إيجو 29 ممتازة جداً وشاسيه ألومنيوم فائق الخفة، ركوبها مريح جداً على السرعات العالية والمطالع.",
-        "date": "2026-10-14"
-      }
-    ],
-    "inStock": true
-  },
-  {
-    "id": 1700102,
-    "name": "دراجة جبلية ترينكس Trinx M600 PRO مقاس 29",
-    "category": "دراجات جبلية",
-    "cat_key": "mountain",
-    "price": 10600,
-    "sku": "ABU-TRINX-M600",
-    "badge": "PRO GRADE",
-    "specs": "فريم ألومنيوم طيران خفيف • 24 سرعة شيمانو ياباني • فرامل ديسك هيدروليك ومساعد قفل Lockout • مقاس 29\"",
-    "images": [
-      "images/trinx_m600_29.webp",
-      "images/trinx_m600_29_clean.png",
-      "images/bike_1700102.jpg"
-    ],
-    "reviews": [
-      {
-        "name": "كابتن زياد منصور",
-        "rating": 5,
-        "comment": "ترينكس M600 برو غنية عن التعريف، سرعات ناعمة جداً وثبات عالي في المنحدرات والطرق السريعة.",
-        "date": "2026-10-14"
-      }
-    ],
-    "inStock": true
-  },
-  {
-    "id": 1700103,
-    "name": "دراجة جبلية ترينكس Trinx M500 PRO مقاس 29",
-    "category": "دراجات جبلية",
-    "cat_key": "mountain",
-    "price": 10300,
-    "sku": "ABU-TRINX-M500",
-    "badge": "BESTSELLER",
-    "specs": "فريم ألومنيوم معالج حرارياً • 24 سرعة شيمانو أصلي • فرامل ديسك ومساعد أمامي للطرق الوعرة • مقاس 29\"",
-    "images": [
-      "images/trinx_m500_29.webp",
-      "images/trinx_m500_29_clean.png",
-      "images/bike_1700103.jpg"
-    ],
-    "reviews": [
-      {
-        "name": "أ. عمر فاروق",
-        "rating": 5,
-        "comment": "سلسلة M500 اعتمادية جداً، العجلة وصلت مجمعة ومضبوطة بالمللي والفرامل الديسك استجابتها فورية.",
-        "date": "2026-10-14"
-      }
-    ],
-    "inStock": true
-  },
-  {
-    "id": 1700104,
-    "name": "دراجة طريق وسباق ترينكس Trinx Tempo 1.4 Road",
-    "category": "دراجات سرعة وطريق",
-    "cat_key": "road",
-    "price": 10500,
-    "sku": "ABU-TRINX-TEMPO",
-    "badge": "SPEED ROAD",
-    "specs": "فريم ألومنيوم أيروديناميك فائق الخفة • سرعات شيمانو ياباني للسباقات • مقود منخفض احترافي لقطع مسافات طويلة بأقل جهد",
-    "images": [
-      "images/trinx_tempo_road.webp",
-      "images/trinx_tempo_road_clean.png",
-      "images/bike_1700104.jpg"
-    ],
-    "reviews": [
-      {
-        "name": "د. هيثم السعدني",
-        "rating": 5,
-        "comment": "العجلة سريعة جداً على الأسفلت وخفيفة في الحمل، أفضل اختيار لعشاق السرعة والمسافات الطويلة.",
-        "date": "2026-10-14"
-      }
-    ],
-    "inStock": true
-  },
-  {
-    "id": 1700105,
-    "name": "دراجة جبلية ترينكس Trinx M136 مقاس 26",
-    "category": "دراجات جبلية",
-    "cat_key": "mountain",
-    "price": 9150,
-    "sku": "ABU-TRINX-M136-26",
-    "badge": "ORIGINAL",
-    "specs": "شاسيه ألومنيوم 6061 خفيف ومتين • 21 سرعة شيمانو ياباني • فرامل ديسك ميكانيكية دقيقة ومساعد أمامي • مقاس 26\"",
-    "images": [
-      "images/trinx_m136_26.webp",
-      "images/trinx_m136_26_clean.png",
-      "images/bike_1700105.jpg"
-    ],
-    "reviews": [
-      {
-        "name": "م. ماجد عبد الرؤوف",
-        "rating": 5,
-        "comment": "أشهر عجلة ترينكس في مصر، مقاس 26 عملي جداً للمناورات في شوارع القاهرة وتعدي المطبات بسلاسة.",
-        "date": "2026-10-14"
-      }
-    ],
-    "inStock": true
-  },
-  {
-    "id": 1700106,
-    "name": "دراجة جبلية جلاكسي Galaxy A5 مقاس 29",
-    "category": "دراجات جبلية",
-    "cat_key": "mountain",
-    "price": 9100,
-    "sku": "ABU-GALAXY-A5",
-    "badge": "ORIGINAL",
-    "specs": "مقاس 29 بوصة للسرعات العالية • 21 سرعة شيمانو • فريم ألومنيوم ومساعد أمامي ممتص للصدمات وفرامل ديسك",
-    "images": [
-      "images/galaxy_a5_29.webp",
-      "images/galaxy_a5_29_clean.png",
-      "images/bike_1700106.jpg"
-    ],
-    "reviews": [
-      {
-        "name": "أ. طارق عبد الوهاب",
-        "rating": 5,
-        "comment": "جلاكسي A5 خامة ممتازة وثبات غير عادي على الطرق السريعة بفضل المقاس 29.",
-        "date": "2026-10-14"
-      }
-    ],
-    "inStock": true
-  },
-  {
-    "id": 1700107,
-    "name": "دراجة جبلية جلاكسي Galaxy XC11 مقاس 26",
-    "category": "دراجات جبلية",
-    "cat_key": "mountain",
-    "price": 9200,
-    "sku": "ABU-GALAXY-XC11",
-    "badge": "POPULAR",
-    "specs": "فريم ألومنيوم خفيف • سرعات شيمانو 24 سرعة • فرامل ديسك هيدروليكية ومساعد أمامي بنظام قفل • مقاس 26\"",
-    "images": [
-      "images/galaxy_xc11_26.webp",
-      "images/galaxy_xc11_26_clean.png",
-      "images/bike_1700107.jpg"
-    ],
-    "reviews": [
-      {
-        "name": "كابتن سيف الدين",
-        "rating": 5,
-        "comment": "عجلة محترمة جداً وشكلها شيك، الفرامل الهيدروليك بتفرق جامد في الأمان والتحكم.",
-        "date": "2026-10-14"
-      }
-    ],
-    "inStock": true
-  },
-  {
-    "id": 1700108,
-    "name": "دراجة جبلية جلاكسي Galaxy MT16 مقاس 26",
-    "category": "دراجات جبلية",
-    "cat_key": "mountain",
-    "price": 7500,
-    "sku": "ABU-GALAXY-MT16",
-    "badge": "BEST VALUE",
-    "specs": "مقاس 26 بوصة • 21 سرعة شيمانو Tourney TZ • فرامل ديسك ميكانيكية وشاسيه صلب متين ومساعد أمامي",
-    "images": [
-      "images/galaxy_mt16_26.webp",
-      "images/galaxy_mt16_26_clean.png",
-      "images/bike_1700108.jpg"
-    ],
-    "reviews": [
-      {
-        "name": "أ. إبراهيم خليل",
-        "rating": 5,
-        "comment": "أفضل قيمة مقابل سعر، متينة وتستحمل الاستخدام اليومي الشاق بدون أي مشاكل.",
-        "date": "2026-10-14"
-      }
-    ],
-    "inStock": true
-  },
-  {
-    "id": 1700109,
-    "name": "دراجة جبلية فونيكس Phoenix 2601 مقاس 26",
-    "category": "دراجات جبلية",
-    "cat_key": "mountain",
-    "price": 6950,
-    "sku": "ABU-PHOENIX-2601",
-    "badge": "ORIGINAL",
-    "specs": "فريم ألومنيوم متين • 21 سرعة • عجلات ألومنيوم مزدوجة • مساعد أمامي للطرق والمدقات • مقاس 26\"",
-    "images": [
-      "images/phoenix_2601_26.webp",
-      "images/phoenix_2601_26_clean.png",
-      "images/bike_1700109.jpg"
-    ],
-    "reviews": [
-      {
-        "name": "م. حسام النجار",
-        "rating": 5,
-        "comment": "ماركة فونيكس عريقة وتقفيل الموديل 2601 ممتاز جداً، الوان وتصميم رياضي مريح.",
-        "date": "2026-10-14"
-      }
-    ],
-    "inStock": true
-  },
-  {
-    "id": 1700110,
-    "name": "دراجة دبابات إيطاليانو فات بايك Italiano مقاس 26",
-    "category": "دبابات وفات بايك",
-    "cat_key": "fat",
-    "price": 5500,
-    "sku": "ABU-ITALIANO-FAT",
-    "badge": "FAT TIRE",
-    "specs": "كاوتش عريض 26×4.00 للرمال والشواطئ والطرق الوعرة • 21 سرعة شيمانو • فرامل ديسك مزدوجة ومساعدين لامتصاص الصدمات",
-    "images": [
-      "images/italiano_26.webp",
-      "images/italiano_26_clean.png",
-      "images/bike_1700110.jpg"
-    ],
-    "reviews": [
-      {
-        "name": "أ. محمود رشاد",
-        "rating": 5,
-        "comment": "عجلة دبابة حقيقية، شكلها يخطف العين في الشارع وثبات جبار على الرمل والمطبات.",
-        "date": "2026-10-14"
-      }
-    ],
-    "inStock": true
-  },
-  {
-    "id": 1700111,
-    "name": "دراجة أطفال ميلانو Milano مقاس 20",
-    "category": "دراجات أطفال وبناتي",
-    "cat_key": "kids",
-    "price": 2750,
-    "sku": "ABU-MILANO-20",
-    "badge": "KIDS BEST",
-    "specs": "مقاس 20 بوصة للأعمار 7-11 سنة • فريم ستيل متين • كرسي أمامي وخلفي • جرس وسيرين ملون ومساند حماية",
-    "images": [
-      "images/milano_20.webp",
-      "images/milano_20_clean.png",
-      "images/bike_1700111.jpg"
-    ],
-    "reviews": [
-      {
-        "name": "أ. رانيا توفيق",
-        "rating": 5,
-        "comment": "اشتريتها لابني مقاس 20 ممتازة جداً وألوانها مبهجة وجت متقفلة جاهزة على الركوب فوراً.",
-        "date": "2026-10-14"
-      }
-    ],
-    "inStock": true
-  },
-  {
-    "id": 1700112,
-    "name": "دراجة أطفال ميلانو Milano مقاس 16",
-    "category": "دراجات أطفال وبناتي",
-    "cat_key": "kids",
-    "price": 2600,
-    "sku": "ABU-MILANO-16",
-    "badge": "KIDS BEST",
-    "specs": "مقاس 16 بوصة للأعمار 4-7 سنوات • عجلات مساعدة خلفية للاتزان • فريم فولاذي قوي وكرسي مريح وجرس صوتي",
-    "images": [
-      "images/milano_16.webp",
-      "images/milano_16_clean.png",
-      "images/bike_1700112.jpg"
-    ],
-    "reviews": [
-      {
-        "name": "د. دينا كامل",
-        "rating": 5,
-        "comment": "العجلة أمان جداً وعجلاتها المساعدة متينة، بنتي اتعلمت عليها من أول يوم بكل ثقة.",
-        "date": "2026-10-14"
-      }
-    ],
-    "inStock": true
-  },
-  {
-    "id": 1700113,
-    "name": "دراجة أطفال ميلانو Milano مقاس 12",
-    "category": "دراجات أطفال وبناتي",
-    "cat_key": "kids",
-    "price": 2350,
-    "sku": "ABU-MILANO-12",
-    "badge": "KIDS BEST",
-    "specs": "مقاس 12 بوصة للأطفال 3-5 سنوات • عجلات مساعدة مانعة للانقلاب • فريم فولاذي آمن وحماية كاملة للجنزير والسلسلة",
-    "images": [
-      "images/milano_12.webp",
-      "images/milano_12_clean.png",
-      "images/bike_1700113.jpg"
-    ],
-    "reviews": [
-      {
-        "name": "أ. محمد عبد الفتاح",
-        "rating": 5,
-        "comment": "هدية ممتازة للأطفال الصغار، خامات قوية وتجميع محكم ومقاس مظبوط جداً.",
-        "date": "2026-10-14"
       }
     ],
     "inStock": true

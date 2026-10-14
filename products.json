@@ -46,7 +46,8 @@
         "date": "2026-10-14"
       }
     ],
-    "inStock": true
+    "inStock": true,
+    "image": "images/trinx_m600_29.webp"
   },
   {
     "id": 1700104,
@@ -70,7 +71,8 @@
         "date": "2026-10-14"
       }
     ],
-    "inStock": true
+    "inStock": true,
+    "image": "images/trinx_tempo_road.webp"
   },
   {
     "id": 1700103,
@@ -94,7 +96,8 @@
         "date": "2026-10-14"
       }
     ],
-    "inStock": true
+    "inStock": true,
+    "image": "images/trinx_m500_29.webp"
   },
   {
     "id": 1700106,
@@ -118,7 +121,8 @@
         "date": "2026-10-14"
       }
     ],
-    "inStock": true
+    "inStock": true,
+    "image": "images/galaxy_a5_29.webp"
   },
   {
     "id": 1700107,
@@ -142,7 +146,8 @@
         "date": "2026-10-14"
       }
     ],
-    "inStock": true
+    "inStock": true,
+    "image": "images/galaxy_xc11_26.webp"
   },
   {
     "id": 1700108,
@@ -166,7 +171,8 @@
         "date": "2026-10-14"
       }
     ],
-    "inStock": true
+    "inStock": true,
+    "image": "images/galaxy_mt16_26.webp"
   },
   {
     "id": 1700105,
@@ -190,7 +196,8 @@
         "date": "2026-10-14"
       }
     ],
-    "inStock": true
+    "inStock": true,
+    "image": "images/trinx_m136_26.webp"
   },
   {
     "id": 1700109,
@@ -214,7 +221,8 @@
         "date": "2026-10-14"
       }
     ],
-    "inStock": true
+    "inStock": true,
+    "image": "images/phoenix_2601_26.webp"
   },
   {
     "id": 1700110,
@@ -238,7 +246,8 @@
         "date": "2026-10-14"
       }
     ],
-    "inStock": true
+    "inStock": true,
+    "image": "images/italiano_26.webp"
   },
   {
     "id": 1700111,
@@ -262,7 +271,8 @@
         "date": "2026-10-14"
       }
     ],
-    "inStock": true
+    "inStock": true,
+    "image": "images/milano_20.webp"
   },
   {
     "id": 1700112,
@@ -286,7 +296,8 @@
         "date": "2026-10-14"
       }
     ],
-    "inStock": true
+    "inStock": true,
+    "image": "images/milano_16.webp"
   },
   {
     "id": 1700113,
@@ -310,7 +321,8 @@
         "date": "2026-10-14"
       }
     ],
-    "inStock": true
+    "inStock": true,
+    "image": "images/milano_12.webp"
   },
   {
     "id": 1189653,

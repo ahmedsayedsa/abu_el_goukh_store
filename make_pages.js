@@ -98,7 +98,7 @@ products.forEach(p => {
     const pageTitle = `${p.name} (${pSku}) | أبو الجوخ 1925 - أصل العجل في مصر`;
     const seoDesc = p.metaDescription || p.meta_desc || `اشتري ${p.name} كود ${pSku} الأصلية من توكيل أبو الجوخ 1925 بسعر ${priceFormatted} ج.م. شحن سريع لكافة المحافظات وضمان معتمد.`;
     const canonicalUrl = `${DOMAIN}/product-${p.id}`;
-    const pImage = p.image || 'abu_el_goukh_logo.png';
+    const pImage = p.image || (p.images && p.images[0]) || 'abu_el_goukh_logo.png';
     const absoluteImage = pImage.startsWith('http') ? pImage : `${DOMAIN}/${pImage.replace(/^\/+/, '')}`;
     const pCategory = p.category || 'دراجات هوائية';
     const pBadge = p.badge || 'ORIGINAL';
@@ -138,6 +138,41 @@ products.forEach(p => {
     // 8. Price
     html = html.replace(/<span id="product-price" class="text-3xl sm:text-4xl font-black text-trek-black num-font">[\s\S]*?<\/span>/, `<span id="product-price" class="text-3xl sm:text-4xl font-black text-trek-black num-font">${priceFormatted}</span>`);
     html = html.replace(/<span id="mobile-sticky-price" class="text-base font-black text-trek-black num-font">[\s\S]*?<\/span>/, `<span id="mobile-sticky-price" class="text-base font-black text-trek-black num-font">${priceFormatted}</span>`);
+
+    // 8b. Pre-render 4 Static Related Products (Internal Linking Mesh)
+    let relatedMatches = products.filter(item => item.cat_key === p.cat_key && item.id !== p.id);
+    if (relatedMatches.length < 4) {
+        relatedMatches = products.filter(item => item.id !== p.id);
+    }
+    const selectedFour = relatedMatches.slice(0, 4);
+    const relatedCardsHtml = selectedFour.map(rel => {
+        const relPrice = (Number(rel.price) || 0).toLocaleString('en-US');
+        const relImg = rel.image || (rel.images && rel.images[0]) || 'abu_el_goukh_logo.png';
+        const relSku = rel.sku || `ABU-${rel.id}`;
+        return `
+                    <div class="bg-white border border-trek-border hover:border-trek-black rounded-2xl p-4 transition-all duration-300 hover:shadow-lg flex flex-col justify-between group">
+                        <a href="/product-${rel.id}" class="block">
+                            <div class="h-40 flex items-center justify-center p-2 relative bg-trek-lightgray/50 rounded-xl mb-3">
+                                <img src="${relImg}" alt="${escapeHtml(rel.name)}" loading="lazy" class="max-h-full object-contain transition-transform duration-300 group-hover:scale-105">
+                            </div>
+                            <span class="text-[10px] font-bold text-trek-red uppercase num-font">${escapeHtml(relSku)}</span>
+                            <h3 class="text-xs font-bold text-trek-black line-clamp-2 mt-1 group-hover:text-trek-red transition">
+                                ${escapeHtml(rel.name)}
+                            </h3>
+                        </a>
+                        <div class="mt-4 pt-3 border-t border-trek-border flex items-center justify-between">
+                            <span class="text-sm font-black text-trek-black num-font">${relPrice} ج.م</span>
+                            <a href="/product-${rel.id}" class="text-xs font-bold text-trek-red hover:underline">
+                                التفاصيل ←
+                            </a>
+                        </div>
+                    </div>`;
+    }).join('\n');
+
+    html = html.replace(
+        /<div id="related-bikes-container"[^>]*>[\s\S]*?<\/div>/,
+        `<div id="related-bikes-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">\n${relatedCardsHtml}\n                </div>`
+    );
 
     // 9. Static JSON-LD Structured Data in head (100% absolute image URLs for Google)
     const rawImages = (p.images && p.images.length > 0) ? p.images : [pImage];

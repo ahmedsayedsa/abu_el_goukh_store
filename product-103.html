@@ -797,7 +797,78 @@
                 </div>
 
                 <div id="related-bikes-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <!-- Related cards injected via JS -->
+
+                    <div class="bg-white border border-trek-border hover:border-trek-black rounded-2xl p-4 transition-all duration-300 hover:shadow-lg flex flex-col justify-between group">
+                        <a href="/product-101" class="block">
+                            <div class="h-40 flex items-center justify-center p-2 relative bg-trek-lightgray/50 rounded-xl mb-3">
+                                <img src="images/bike_101.jpg" alt="خوذة أمان Trek Bontrager هوائية أصلية فائقة الخفة" loading="lazy" class="max-h-full object-contain transition-transform duration-300 group-hover:scale-105">
+                            </div>
+                            <span class="text-[10px] font-bold text-trek-red uppercase num-font">ACC-HELMET-01</span>
+                            <h3 class="text-xs font-bold text-trek-black line-clamp-2 mt-1 group-hover:text-trek-red transition">
+                                خوذة أمان Trek Bontrager هوائية أصلية فائقة الخفة
+                            </h3>
+                        </a>
+                        <div class="mt-4 pt-3 border-t border-trek-border flex items-center justify-between">
+                            <span class="text-sm font-black text-trek-black num-font">1,200 ج.م</span>
+                            <a href="/product-101" class="text-xs font-bold text-trek-red hover:underline">
+                                التفاصيل ←
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-trek-border hover:border-trek-black rounded-2xl p-4 transition-all duration-300 hover:shadow-lg flex flex-col justify-between group">
+                        <a href="/product-102" class="block">
+                            <div class="h-40 flex items-center justify-center p-2 relative bg-trek-lightgray/50 rounded-xl mb-3">
+                                <img src="images/bike_102.jpg" alt="قفل شفرة رقمي 5 أرقام مصفح ضد القطع والسرقة" loading="lazy" class="max-h-full object-contain transition-transform duration-300 group-hover:scale-105">
+                            </div>
+                            <span class="text-[10px] font-bold text-trek-red uppercase num-font">ACC-LOCK-05</span>
+                            <h3 class="text-xs font-bold text-trek-black line-clamp-2 mt-1 group-hover:text-trek-red transition">
+                                قفل شفرة رقمي 5 أرقام مصفح ضد القطع والسرقة
+                            </h3>
+                        </a>
+                        <div class="mt-4 pt-3 border-t border-trek-border flex items-center justify-between">
+                            <span class="text-sm font-black text-trek-black num-font">650 ج.م</span>
+                            <a href="/product-102" class="text-xs font-bold text-trek-red hover:underline">
+                                التفاصيل ←
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-trek-border hover:border-trek-black rounded-2xl p-4 transition-all duration-300 hover:shadow-lg flex flex-col justify-between group">
+                        <a href="/product-104" class="block">
+                            <div class="h-40 flex items-center justify-center p-2 relative bg-trek-lightgray/50 rounded-xl mb-3">
+                                <img src="images/bike_104.jpg" alt="منفاخ يدوي محمول سبائك ألومنيوم مع عداد ضغط باروميتر" loading="lazy" class="max-h-full object-contain transition-transform duration-300 group-hover:scale-105">
+                            </div>
+                            <span class="text-[10px] font-bold text-trek-red uppercase num-font">ACC-PUMP-BARO</span>
+                            <h3 class="text-xs font-bold text-trek-black line-clamp-2 mt-1 group-hover:text-trek-red transition">
+                                منفاخ يدوي محمول سبائك ألومنيوم مع عداد ضغط باروميتر
+                            </h3>
+                        </a>
+                        <div class="mt-4 pt-3 border-t border-trek-border flex items-center justify-between">
+                            <span class="text-sm font-black text-trek-black num-font">450 ج.م</span>
+                            <a href="/product-104" class="text-xs font-bold text-trek-red hover:underline">
+                                التفاصيل ←
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-trek-border hover:border-trek-black rounded-2xl p-4 transition-all duration-300 hover:shadow-lg flex flex-col justify-between group">
+                        <a href="/product-105" class="block">
+                            <div class="h-40 flex items-center justify-center p-2 relative bg-trek-lightgray/50 rounded-xl mb-3">
+                                <img src="images/bike_105.jpg" alt="حامل زمزمية ألومنيوم طيران خفيف + زمزمية عازلة للحرارة" loading="lazy" class="max-h-full object-contain transition-transform duration-300 group-hover:scale-105">
+                            </div>
+                            <span class="text-[10px] font-bold text-trek-red uppercase num-font">ACC-BOTTLE-SET</span>
+                            <h3 class="text-xs font-bold text-trek-black line-clamp-2 mt-1 group-hover:text-trek-red transition">
+                                حامل زمزمية ألومنيوم طيران خفيف + زمزمية عازلة للحرارة
+                            </h3>
+                        </a>
+                        <div class="mt-4 pt-3 border-t border-trek-border flex items-center justify-between">
+                            <span class="text-sm font-black text-trek-black num-font">350 ج.م</span>
+                            <a href="/product-105" class="text-xs font-bold text-trek-red hover:underline">
+                                التفاصيل ←
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -2304,7 +2375,7 @@
             container.innerHTML = selectedFour.map(p => {
                 return `
                     <div class="bg-white border border-trek-border hover:border-trek-black rounded-2xl p-4 transition-all duration-300 hover:shadow-lg flex flex-col justify-between group">
-                        <a href="product.html?id=${p.id}" class="block">
+                        <a href="/product-${p.id}" class="block">
                             <div class="h-40 flex items-center justify-center p-2 relative bg-trek-lightgray/50 rounded-xl mb-3">
                                 <img src="${sanitizeProductImageUrl(sanitizeProductImage(p.image, p.id))}" alt="${escapeHtml(p.name)}" class="max-h-full object-contain transition-transform duration-300 group-hover:scale-105" onerror="if(!this.dataset.triedBackup){this.dataset.triedBackup=1; this.src='images/bike_'+Number(p.id)+'.jpg';}">
                             </div>
@@ -2315,7 +2386,7 @@
                         </a>
                         <div class="mt-4 pt-3 border-t border-trek-border flex items-center justify-between">
                             <span class="text-sm font-black text-trek-black num-font">${fmt(p.price)} ج.م</span>
-                            <a href="product.html?id=${p.id}" class="text-xs font-bold text-trek-red hover:underline">
+                            <a href="/product-${p.id}" class="text-xs font-bold text-trek-red hover:underline">
                                 التفاصيل ←
                             </a>
                         </div>

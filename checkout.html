@@ -31,7 +31,7 @@
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
             <div class="flex items-center gap-6">
                 <a href="index.html" class="flex items-center gap-2.5 group">
-                    <img src="abu_el_goukh_logo.png" alt="أبو الجوخ 1925" class="h-10 sm:h-12 w-auto object-contain">
+                    <img loading="lazy" src="abu_el_goukh_logo.png" alt="أبو الجوخ 1925" class="h-10 sm:h-12 w-auto object-contain">
                     <div class="hidden sm:block border-r border-trek-border pr-3">
                         <span class="font-black text-xl text-trek-black block leading-none">أبو الجوخ</span>
                         <span class="text-[9px] uppercase tracking-wider text-trek-red font-black num-font block mt-0.5">EST. 1925 • الدفع الآمن</span>
@@ -580,7 +580,7 @@
                 const safeSpecs = escapeHtml(item.specs || 'شاسيه ألومنيوم • ضمان الوكيل');
                 return `
                     <div class="flex items-center gap-3 p-3 bg-trek-lightgray rounded-xl border border-trek-border">
-                        <img src="${safeImage}" alt="${safeName}" class="w-16 h-16 object-contain bg-white rounded-lg p-1 border border-trek-border">
+                        <img loading="lazy" src="${safeImage}" alt="${safeName}" class="w-16 h-16 object-contain bg-white rounded-lg p-1 border border-trek-border">
                         <div class="flex-1 min-w-0">
                             <h4 class="text-xs font-bold text-trek-black line-clamp-1">${safeName}</h4>
                             <p class="text-[10px] text-trek-gray mt-0.5">${safeSpecs}</p>

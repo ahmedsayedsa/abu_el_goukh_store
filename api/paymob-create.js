@@ -68,7 +68,7 @@ export default async function handler(req, res) {
     const phone = String(customerPhone || '01114767140').trim();
 
     // SECURITY FIX: Base URL strictly resolved from trusted SITE_URL environment variable (Anti-Host Header Injection)
-    const baseUrl = (process.env.SITE_URL || 'https://abu-el-goukh-store.vercel.app').trim().replace(/\/+$/, '');
+    const baseUrl = (process.env.SITE_URL || 'https://store.primeasset.company').trim().replace(/\/+$/, '');
 
     // ─────────────────────────────────────────────────────────────
     // Method 1: Modern Paymob Unified Checkout (Intention API)

@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const DOMAIN = 'https://abu-el-goukh-store.vercel.app';
+const DOMAIN = 'https://store.primeasset.company';
 
 // ==========================================
 // 1. Build Privacy and Terms Pages

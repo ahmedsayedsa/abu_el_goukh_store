@@ -99,10 +99,11 @@ async function checkPromoRateLimit(ip) {
 
 export default async function handler(req, res) {
     // SECURITY FIX (Vulnerability 5): Restrict CORS to trusted origins
-    const siteUrl = (process.env.SITE_URL || 'https://abu-el-goukh-store.vercel.app').replace(/\/+$/, '');
+    const siteUrl = (process.env.SITE_URL || 'https://store.primeasset.company').replace(/\/+$/, '');
     const origin = req.headers?.origin || '';
     const isAllowedOrigin = origin && (
         origin === siteUrl ||
+        origin === 'https://store.primeasset.company' ||
         origin === 'https://abu-el-goukh-store.vercel.app' ||
         /^https:\/\/[a-z0-9-]+-ahmedsayedsas-projects\.vercel\.app$/i.test(origin) ||
         /^https:\/\/[a-z0-9-]+-abu-el-goukh-store\.vercel\.app$/i.test(origin) ||

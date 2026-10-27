@@ -58,7 +58,7 @@ export default async function handler(req, res) {
     }
 
     // SECURITY FIX: Base URL strictly resolved from trusted SITE_URL environment variable (Anti-Host Header Injection)
-    const baseUrl = (process.env.SITE_URL || 'https://abu-el-goukh-store.vercel.app').trim().replace(/\/+$/, '');
+    const baseUrl = (process.env.SITE_URL || 'https://store.primeasset.company').trim().replace(/\/+$/, '');
 
     const ptEndpoint = 'https://secure-egypt.paytabs.com/payment/request';
 

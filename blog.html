@@ -39,46 +39,7 @@
     </style>
 
     <!-- Structured Data (Schema.org) -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "Blog",
-          "@id": "https://store.primeasset.company/blog.html",
-          "name": "مدونة ودليل أبو الجوخ للدراجات الهوائية",
-          "description": "مقالات متخصصة في اختيار وصيانة ومقاسات الدراجات في مصر",
-          "publisher": {
-            "@type": "Organization",
-            "name": "أبو الجوخ 1925",
-            "logo": "https://store.primeasset.company/abu_el_goukh_logo.png"
-          }
-        },
-        {
-          "@type": "HowTo",
-          "name": "كيفية اختيار مقاس الدراجة المناسب لطولك",
-          "description": "دليل خطوة بخطوة لاختيار مقاس الكادر وقطر الجنط المناسب لكل طول وعمر",
-          "step": [
-            {
-              "@type": "HowToStep",
-              "name": "قياس الطول الكلي",
-              "text": "قم بقياس طولك من الرأس إلى القدمين بدون حذاء بالسنتيمتر"
-            },
-            {
-              "@type": "HowToStep",
-              "name": "تحديد نوع القيادة",
-              "text": "اختر بين الدراجات الجبلية ذات الثبات العالي أو دراجات الطرق والسرعات"
-            },
-            {
-              "@type": "HowToStep",
-              "name": "مطابقة الطول مع جدول المقاسات",
-              "text": "راجع جدول مقاسات أبو الجوخ لتحديد مقاس الجنط والكادر المناسب"
-            }
-          ]
-        }
-      ]
-    }
-    </script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Blog","@id":"https://store.primeasset.company/blog.html","name":"مدونة ودليل أبو الجوخ للدراجات الهوائية","description":"مقالات متخصصة في اختيار وصيانة ومقاسات الدراجات في مصر","publisher":{"@type":"Organization","name":"أبو الجوخ 1925","logo":"https://store.primeasset.company/abu_el_goukh_logo.png"}}]}</script>
 </head>
 <body class="antialiased min-h-screen flex flex-col text-right">
 
@@ -97,13 +58,13 @@
                 </span>
             </div>
             <div class="flex items-center gap-4 text-white/75 font-semibold">
-                <a href="track-order.html" class="hover:text-white transition flex items-center gap-1">📦 تتبع طلبك</a>
+                <a href="/track-order" class="hover:text-white transition flex items-center gap-1">📦 تتبع طلبك</a>
                 <span>•</span>
-                <a href="returns-policy.html" class="hover:text-white transition">الاسترجاع والضمان</a>
+                <a href="/returns-policy" class="hover:text-white transition">الاسترجاع والضمان</a>
                 <span>•</span>
-                <a href="about.html" class="hover:text-white transition">تاريخ 1925</a>
+                <a href="/about" class="hover:text-white transition">تاريخ 1925</a>
                 <span>•</span>
-                <a href="index.html#locations" class="hover:text-white transition">📍 مقر الفرع</a>
+                <a href="/#locations" class="hover:text-white transition">📍 مقر الفرع</a>
             </div>
         </div>
     </div>
@@ -115,7 +76,7 @@
                 
                 <!-- Logo & Heritage Badge -->
                 <div class="flex items-center gap-3 sm:gap-6 flex-shrink-0">
-                    <a href="index.html" class="flex items-center gap-2.5 sm:gap-3.5 group">
+                    <a href="/" class="flex items-center gap-2.5 sm:gap-3.5 group">
                         <img loading="lazy" src="abu_el_goukh_logo.png" alt="أبو الجوخ" class="h-10 sm:h-12 w-auto object-contain rounded-md transition-transform group-hover:scale-105 drop-shadow-sm">
                         <div class="hidden sm:block border-r border-trek-border pr-3">
                             <span class="font-black text-lg lg:text-xl tracking-tight text-trek-black block leading-none">أبو الجوخ</span>
@@ -126,25 +87,25 @@
 
                 <!-- Desktop Navigation Links -->
                 <nav class="hidden lg:flex items-center gap-6 xl:gap-8 text-xs lg:text-[13px] xl:text-[14px] font-bold text-trek-black flex-shrink-0">
-                    <a href="index.html" class="hover:text-trek-red transition">الرئيسية</a>
-                    <a href="shop.html" class="hover:text-trek-red transition flex items-center gap-1.5">
+                    <a href="/" class="hover:text-trek-red transition">الرئيسية</a>
+                    <a href="/shop" class="hover:text-trek-red transition flex items-center gap-1.5">
                         <span>كتالوج العجل</span>
                         <span class="bg-trek-red text-white text-[9px] font-black px-1.5 py-0.5 rounded-full num-font">80</span>
                     </a>
                     <a href="#size-calculator" class="hover:text-trek-red transition flex items-center gap-1.5 text-trek-black">
                         <span>🎯 حاسبة المقاس</span>
                     </a>
-                    <a href="blog.html" class="text-trek-red font-black flex items-center gap-1">
+                    <a href="/blog" class="text-trek-red font-black flex items-center gap-1">
                         <span>📖 المدونة والأدلة</span>
                     </a>
-                    <a href="track-order.html" class="hover:text-trek-red transition text-trek-gray hover:text-trek-black">
+                    <a href="/track-order" class="hover:text-trek-red transition text-trek-gray hover:text-trek-black">
                         <span>تتبع طلبك</span>
                     </a>
                 </nav>
 
                 <!-- Actions -->
                 <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
-                    <a href="shop.html" class="py-2.5 px-4 rounded-xl bg-trek-red hover:bg-red-700 text-white text-xs font-bold transition shadow hidden sm:inline-flex items-center gap-1.5">
+                    <a href="/shop" class="py-2.5 px-4 rounded-xl bg-trek-red hover:bg-red-700 text-white text-xs font-bold transition shadow hidden sm:inline-flex items-center gap-1.5">
                         <span>تصفح الأسطول 🚲</span>
                     </a>
                     <a href="https://wa.me/201114767140" target="_blank" class="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 px-4 rounded-xl transition shadow-sm">
@@ -255,7 +216,7 @@
                         <div class="pt-4 mt-2 border-t border-white/10">
                             <a 
                                 id="res-shop-link" 
-                                href="shop.html" 
+                                href="/shop" 
                                 class="w-full bg-trek-red hover:bg-red-700 text-white text-xs font-black py-2.5 px-3 rounded-xl transition flex items-center justify-center gap-1.5 shadow"
                             >
                                 <span>تصفح الموديلات المطابقة لهذا المقاس</span>
@@ -426,7 +387,7 @@
                             متوسط أسعار الدراجات الهوائية في مصر 2026: عجل أطفال، جبلي، رود، هايبرد وكهربائي — مع نصائح الشراء الذكي من توكيل أبو الجوخ 1925.
                         </p>
                         <div class="pt-4 border-t border-gray-100 flex items-center justify-between">
-                            <a href="blog-as3ar-el-agal-2026.html" class="text-trek-red font-black text-xs sm:text-sm hover:underline inline-flex items-center gap-1">
+                            <a href="/blog-as3ar-el-agal-2026" class="text-trek-red font-black text-xs sm:text-sm hover:underline inline-flex items-center gap-1">
                                 <span>قراءة المقال كامل</span>
                                 <span>←</span>
                             </a>
@@ -453,7 +414,7 @@
                             الفرق بين موديلات ترينكس الجبلية والرود والهايبرد، إزاي تختار المقاس الصح حسب طولك، وأشهر أخطاء الشراء اللي لازم تتجنبها.
                         </p>
                         <div class="pt-4 border-t border-gray-100 flex items-center justify-between">
-                            <a href="blog-trinx-guide.html" class="text-trek-red font-black text-xs sm:text-sm hover:underline inline-flex items-center gap-1">
+                            <a href="/blog-trinx-guide" class="text-trek-red font-black text-xs sm:text-sm hover:underline inline-flex items-center gap-1">
                                 <span>قراءة المقال كامل</span>
                                 <span>←</span>
                             </a>
@@ -480,7 +441,7 @@
                             دليل عملي لصيانة الدراجة في البيت: تنظيف الجنزير، ضبط الفرامل، نفخ الكاوتش — خطوة بخطوة بأدوات بسيطة.
                         </p>
                         <div class="pt-4 border-t border-gray-100 flex items-center justify-between">
-                            <a href="blog-bike-maintenance-home.html" class="text-trek-red font-black text-xs sm:text-sm hover:underline inline-flex items-center gap-1">
+                            <a href="/blog-bike-maintenance-home" class="text-trek-red font-black text-xs sm:text-sm hover:underline inline-flex items-center gap-1">
                                 <span>قراءة المقال كامل</span>
                                 <span>←</span>
                             </a>
@@ -506,7 +467,7 @@
                             جدول بسيط يربط مقاس الجنط من 12 لحد 29 بوصة بطولك أو سن طفلك، مع اختبار الوقوف فوق الكادر والفرق بين مقاس الجنط ومقاس الكادر — عشان متشتريش مقاس يوجع ركبك.
                         </p>
                         <div class="pt-4 border-t border-gray-100 flex items-center justify-between">
-                            <a href="blog-bike-size-guide.html" class="text-trek-red font-black text-xs sm:text-sm hover:underline inline-flex items-center gap-1">
+                            <a href="/blog-bike-size-guide" class="text-trek-red font-black text-xs sm:text-sm hover:underline inline-flex items-center gap-1">
                                 <span>قراءة المقال كامل</span>
                                 <span>←</span>
                             </a>
@@ -532,7 +493,7 @@
                             تشيك ليست عملية: فحص أسبوعي في 10 دقايق للكاوتش والجنزير والفرامل، وصيانة شهرية للتشحيم والسلوك — ونصائح تخزين تحمي عجلتك من حر مصر وترابها.
                         </p>
                         <div class="pt-4 border-t border-gray-100 flex items-center justify-between">
-                            <a href="blog-bike-care-basics.html" class="text-trek-red font-black text-xs sm:text-sm hover:underline inline-flex items-center gap-1">
+                            <a href="/blog-bike-care-basics" class="text-trek-red font-black text-xs sm:text-sm hover:underline inline-flex items-center gap-1">
                                 <span>قراءة المقال كامل</span>
                                 <span>←</span>
                             </a>
@@ -558,7 +519,7 @@
                             إزاي تشتري عجلتك بالتقسيط من المتجر خطوة بخطوة عبر أمان أو فاليو أو بالبطاقة البنكية — والمدة والقسط بيظهروا لك قبل ما تأكد طلبك، من غير مفاجآت.
                         </p>
                         <div class="pt-4 border-t border-gray-100 flex items-center justify-between">
-                            <a href="blog-bike-installments.html" class="text-trek-red font-black text-xs sm:text-sm hover:underline inline-flex items-center gap-1">
+                            <a href="/blog-bike-installments" class="text-trek-red font-black text-xs sm:text-sm hover:underline inline-flex items-center gap-1">
                                 <span>قراءة المقال كامل</span>
                                 <span>←</span>
                             </a>
@@ -584,7 +545,7 @@
                             مقارنة صادقة في الكاوتش والمساعدين والوزن والقعدة والأسعار، وواقع حفر ومطبات شوارع مصر — ومين يشتري إيه، ولماذا الهايبرد ممكن يكون الحل الوسط الصح ليك.
                         </p>
                         <div class="pt-4 border-t border-gray-100 flex items-center justify-between">
-                            <a href="blog-city-vs-mountain.html" class="text-trek-red font-black text-xs sm:text-sm hover:underline inline-flex items-center gap-1">
+                            <a href="/blog-city-vs-mountain" class="text-trek-red font-black text-xs sm:text-sm hover:underline inline-flex items-center gap-1">
                                 <span>قراءة المقال كامل</span>
                                 <span>←</span>
                             </a>
@@ -624,7 +585,7 @@
                         <p class="text-xs text-trek-gray mt-0.5">فريق فنيي أبو الجوخ 1925 متاح للرد على أي استفسار وتحديد المقاس الأنسب لك.</p>
                     </div>
                     <div class="flex items-center gap-3 w-full sm:w-auto">
-                        <a href="shop.html" class="flex-1 sm:flex-initial bg-trek-red hover:bg-red-700 text-white text-xs font-bold py-3 px-5 rounded-xl transition text-center shadow">
+                        <a href="/shop" class="flex-1 sm:flex-initial bg-trek-red hover:bg-red-700 text-white text-xs font-bold py-3 px-5 rounded-xl transition text-center shadow">
                             تصفح المتجر 🚲
                         </a>
                         <a href="https://wa.me/201114767140" target="_blank" class="flex-1 sm:flex-initial bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-3 px-5 rounded-xl transition text-center">
@@ -889,23 +850,23 @@
                 <div>
                     <h4 class="text-xs font-black uppercase text-trek-red num-font mb-3">روابط هامة</h4>
                     <ul class="space-y-2 text-xs text-white/70">
-                        <li><a href="index.html" class="hover:text-white transition">الرئيسية</a></li>
-                        <li><a href="shop.html" class="hover:text-white transition">كتالوج الدراجات</a></li>
-                        <li><a href="blog.html" class="text-white font-bold">المدونة ودليل المقاسات</a></li>
-                        <li><a href="track-order.html" class="hover:text-white transition">تتبع طلبك</a></li>
-                        <li><a href="about.html" class="hover:text-white transition">قصة أبو الجوخ (من نحن)</a></li>
-                        <li><a href="returns-policy.html" class="hover:text-white transition">سياسة الاسترجاع والاستبدال</a></li>
-                        <li><a href="privacy.html" class="hover:text-white transition">سياسة الخصوصية</a></li>
-                        <li><a href="terms.html" class="hover:text-white transition">شروط الاستخدام</a></li>
+                        <li><a href="/" class="hover:text-white transition">الرئيسية</a></li>
+                        <li><a href="/shop" class="hover:text-white transition">كتالوج الدراجات</a></li>
+                        <li><a href="/blog" class="text-white font-bold">المدونة ودليل المقاسات</a></li>
+                        <li><a href="/track-order" class="hover:text-white transition">تتبع طلبك</a></li>
+                        <li><a href="/about" class="hover:text-white transition">قصة أبو الجوخ (من نحن)</a></li>
+                        <li><a href="/returns-policy" class="hover:text-white transition">سياسة الاسترجاع والاستبدال</a></li>
+                        <li><a href="/privacy" class="hover:text-white transition">سياسة الخصوصية</a></li>
+                        <li><a href="/terms" class="hover:text-white transition">شروط الاستخدام</a></li>
                     </ul>
                 </div>
 
                 <div>
                     <h4 class="text-xs font-black uppercase text-trek-red num-font mb-3">الضمان وحماية المستهلك</h4>
                     <ul class="space-y-2 text-xs text-white/70">
-                        <li><a href="warranty.html" class="hover:text-white transition">شهادة الضمان 5 سنوات</a></li>
-                        <li><a href="shipping.html" class="hover:text-white transition">الشحن لكافة المحافظات</a></li>
-                        <li><a href="returns-policy.html" class="hover:text-white transition">شروط استبدال البضائع</a></li>
+                        <li><a href="/warranty" class="hover:text-white transition">شهادة الضمان 5 سنوات</a></li>
+                        <li><a href="/shipping" class="hover:text-white transition">الشحن لكافة المحافظات</a></li>
+                        <li><a href="/returns-policy" class="hover:text-white transition">شروط استبدال البضائع</a></li>
                     </ul>
                     <div class="mt-4 pt-3 border-t border-white/10 text-[10px] text-white/40">
                         سجل تجاري: 104523 • بطاقة ضريبية: 341-890-120
@@ -916,13 +877,13 @@
             <div class="pt-6 flex flex-col sm:flex-row justify-between items-center text-xs text-white/40 gap-3">
                 <div>جميع الحقوق محفوظة © 2026 شركة أبو الجوخ لتجارة الدراجات • تصميم وتطوير <a href="https://www.dotsadv.com/" target="_blank" rel="noopener" class="text-white/60 hover:text-white underline transition font-medium" title="DOTS Advertising Agency - وكالة دوتس للدعاية والتسويق الرقمي">DOTS Advertising Agency</a></div>
                 <div class="flex gap-4">
-                    <a href="blog.html" class="hover:text-white">المدونة</a>
+                    <a href="/blog" class="hover:text-white">المدونة</a>
                     <span>•</span>
-                    <a href="returns-policy.html" class="hover:text-white">سياسة الاسترجاع</a>
+                    <a href="/returns-policy" class="hover:text-white">سياسة الاسترجاع</a>
                     <span>•</span>
-                    <a href="warranty.html" class="hover:text-white">الضمان</a>
+                    <a href="/warranty" class="hover:text-white">الضمان</a>
                     <span>•</span>
-                    <a href="about.html" class="hover:text-white">من نحن</a>
+                    <a href="/about" class="hover:text-white">من نحن</a>
                 </div>
             </div>
         </div>

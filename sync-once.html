@@ -30,16 +30,19 @@ document.getElementById('go').addEventListener('click', async () => {
     const a = await (await fetch('/catalog-sync.json')).json();
     out.textContent = 'الملف جاهز: ' + a.length + ' منتج. بيبعت لقاعدة البيانات...';
     let tok = null;
+    const JWT_RE = /^eyJ[A-Za-z0-9_\-]+\.[A-Za-z0-9_\-]+\.[A-Za-z0-9_\-]+$/;
     for (const s of [localStorage, sessionStorage]) {
       try {
         for (let i = 0; i < s.length; i++) {
           const k = s.key(i), v = s.getItem(k);
           if (!v) continue;
-          let c = v;
-          try { c = JSON.parse(v).token || c; } catch (e) {}
-          if (typeof c === 'string' && c.length > 20) tok = c;
+          let cands = [v];
+          try { const o = JSON.parse(v); if (o && o.token) cands.push(o.token); } catch (e) {}
+          for (const c of cands) { if (typeof c === 'string' && JWT_RE.test(c.trim())) { tok = c.trim(); break; } }
+          if (tok) break;
         }
       } catch (e) {}
+      if (tok) break;
     }
     const h = { 'Content-Type': 'application/json' };
     if (tok) h.Authorization = 'Bearer ' + tok;

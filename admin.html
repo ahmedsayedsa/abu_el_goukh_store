@@ -22,7 +22,7 @@
     </style>
 
     <style id="admin-mobile-fix">
-        /* ===== طبقة إصلاح الموبايل للوحة التحكم (2026-11-07) — لا تؤثر على الديسكتوب ===== */
+        /* ===== طبقة إصلاح الموبايل للوحة التحكم v2 (2026-11-07) — لا تؤثر على الديسكتوب ===== */
         @media (max-width: 768px) {
             html, body { overflow-x: hidden !important; }
             body { -webkit-text-size-adjust: 100%; }
@@ -35,20 +35,35 @@
             [class*="text-[9px]"], [class*="text-[10px]"] { font-size: 12px !important; }
             [class*="text-[11px]"] { font-size: 12.5px !important; }
 
-            /* أهداف لمس مريحة */
-            button, [role="button"] { min-height: 40px; }
+            /* أهداف لمس مريحة + السماح للأزرار بالانكماش داخل الصفوف الملتفة */
+            button, [role="button"] { min-height: 40px; min-width: 0 !important; }
             input[type="checkbox"], input[type="radio"] { min-height: 0; }
+            button > span { white-space: normal !important; overflow-wrap: break-word; }
+
+            /* التبويبات الرئيسية: شبكتين في الصف بعرض مرن بدل القص من الشاشة */
+            [id^="main-tab-"] { flex: 1 1 44% !important; min-width: 0 !important; justify-content: center; padding: 10px 8px !important; text-align: center; }
 
             /* الهيدر يلتف بدل ما ينضغط */
             header [class*="h-16"] { height: auto !important; min-height: 4rem; flex-wrap: wrap; row-gap: 0.5rem; padding-top: 0.5rem; padding-bottom: 0.5rem; }
 
-            /* الجداول: خلايا أضيق وخط أوضح وأول عمود ثابت أثناء السحب */
+            /* الجداول العادية القصيرة: خلايا أضيق وأول عمود ثابت */
             table { font-size: 13px; }
             table th, table td { padding: 8px 10px !important; }
-            table th:first-child, table td:first-child { position: sticky; inset-inline-start: 0; z-index: 2; }
-            table th:first-child { background-color: #F1F3F5; }
-            table td:first-child { background-color: #FFFFFF; }
+            table:not(.m-card-table) th:first-child, table:not(.m-card-table) td:first-child { position: sticky; inset-inline-start: 0; z-index: 2; }
+            table:not(.m-card-table) th:first-child { background-color: #F1F3F5; }
+            table:not(.m-card-table) td:first-child { background-color: #FFFFFF; }
             [class*="overflow-x-auto"] { -webkit-overflow-scrolling: touch; }
+
+            /* الجداول الكبيرة تتحول لكروت: كل صف كارت وكل خلية سطر بعنوانها */
+            table.m-card-table { display: block; width: 100%; font-size: 13px; }
+            table.m-card-table thead { display: none; }
+            table.m-card-table tbody { display: block; width: 100%; }
+            table.m-card-table tr { display: block; width: auto; border: 1px solid #E7E7EA; border-radius: 14px; margin: 10px; padding: 4px 12px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+            table.m-card-table td { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; width: 100%; padding: 7px 0 !important; border: none !important; border-bottom: 1px dashed #F0F0F2 !important; position: static !important; background: transparent !important; text-align: left; }
+            table.m-card-table tr td:last-child { border-bottom: none !important; }
+            table.m-card-table td::before { content: attr(data-label); font-weight: 800; font-size: 11px; color: #6B7280; text-align: right; flex: 0 0 34%; padding-top: 2px; }
+            table.m-card-table td > * { min-width: 0; }
+            table.m-card-table td img { max-width: 84px; height: auto; border-radius: 10px; }
 
             /* النوافذ المنبثقة: شيت شبه كامل الشاشة بيتمرر من جوه */
             [class*="fixed"][class*="inset-0"] { padding: 0.5rem !important; }
@@ -58,6 +73,34 @@
             }
         }
     </style>
+    <script id="admin-mobile-fix-js">
+        /* وسم خلايا الجداول الكبيرة بعناوين أعمدتها (لعرض الكروت على الموبايل فقط) */
+        (function () {
+            function tag(table) {
+                if (!table.tHead) return;
+                var ths = table.tHead.querySelectorAll('th');
+                if (ths.length < 5) return;
+                table.classList.add('m-card-table');
+                var labels = [];
+                ths.forEach(function (th) { labels.push(th.textContent.trim()); });
+                table.querySelectorAll('tbody tr').forEach(function (tr) {
+                    tr.querySelectorAll('td').forEach(function (td, idx) {
+                        if (labels[idx]) td.setAttribute('data-label', labels[idx]);
+                    });
+                });
+            }
+            function scan() { document.querySelectorAll('table').forEach(tag); }
+            var pending = false;
+            var obs = new MutationObserver(function () {
+                if (pending) return;
+                pending = true;
+                setTimeout(function () { pending = false; scan(); }, 150);
+            });
+            function start() { scan(); if (document.body) obs.observe(document.body, { childList: true, subtree: true }); }
+            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+            else start();
+        })();
+    </script>
 </head>
 <body class="bg-[#F8F9FA] text-trek-black min-h-screen">
 

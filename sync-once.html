@@ -2,62 +2,12 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>مزامنة الكتالوج</title>
-<style>
-body{font-family:sans-serif;background:#0A0A0C;color:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;padding:20px;box-sizing:border-box}
-.box{max-width:480px;width:100%;text-align:center}
-button{background:#C8102E;color:#fff;border:0;border-radius:14px;padding:18px 34px;font-size:19px;font-weight:800;cursor:pointer;width:100%}
-button:disabled{opacity:.5}
-#out{margin-top:22px;font-size:16px;line-height:1.9;white-space:pre-wrap;word-break:break-word}
-</style>
+<meta http-equiv="refresh" content="0; url=/shop">
+<title>تمت المزامنة</title>
 </head>
 <body>
-<div class="box">
-<h2>مزامنة كتالوج المتجر</h2>
-<p>الصفحة دي بتنقل الكتالوج الجديد (77 منتج) لقاعدة البيانات. لازم تكون مسجل دخول لوحة التحكم في نفس المتصفح.</p>
-<button id="go">ابدأ المزامنة</button>
-<div id="out"></div>
-</div>
-<script>
-document.getElementById('go').addEventListener('click', async () => {
-  const out = document.getElementById('out');
-  const btn = document.getElementById('go');
-  btn.disabled = true;
-  try {
-    out.textContent = 'بيجيب ملف الكتالوج الجديد...';
-    const a = await (await fetch('/catalog-sync.json')).json();
-    out.textContent = 'الملف جاهز: ' + a.length + ' منتج. بيبعت لقاعدة البيانات...';
-    let tok = null;
-    const JWT_RE = /^eyJ[A-Za-z0-9_\-]+\.[A-Za-z0-9_\-]+\.[A-Za-z0-9_\-]+$/;
-    for (const s of [localStorage, sessionStorage]) {
-      try {
-        for (let i = 0; i < s.length; i++) {
-          const k = s.key(i), v = s.getItem(k);
-          if (!v) continue;
-          let cands = [v];
-          try { const o = JSON.parse(v); if (o && o.token) cands.push(o.token); } catch (e) {}
-          for (const c of cands) { if (typeof c === 'string' && JWT_RE.test(c.trim())) { tok = c.trim(); break; } }
-          if (tok) break;
-        }
-      } catch (e) {}
-      if (tok) break;
-    }
-    const h = { 'Content-Type': 'application/json' };
-    if (tok) h.Authorization = 'Bearer ' + tok;
-    const r = await fetch('/api/products', { method: 'PUT', headers: h, credentials: 'include', body: JSON.stringify(a) });
-    const txt = await r.text();
-    if (!r.ok) { out.textContent = 'فشلت المزامنة: PUT ' + r.status + '\n' + txt.slice(0, 300); btn.disabled = false; return; }
-    const check = await (await fetch('/api/products')).json();
-    const items = Array.isArray(check) ? check : (check.products || []);
-    const m = items.find(p => String(p.sku) === '76079');
-    out.textContent = 'تمت المزامنة بنجاح ✅\nعدد المنتجات الآن: ' + items.length + (m ? '\nM136 Pro سعره الآن: ' + m.price : '');
-  } catch (e) {
-    out.textContent = 'حصل خطأ: ' + e.message;
-    btn.disabled = false;
-  }
-});
-</script>
+<p>تمت المزامنة. جارٍ تحويلك للمتجر...</p>
+<script>location.replace('/shop');</script>
 </body>
 </html>

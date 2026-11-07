@@ -20,6 +20,44 @@
         }
         .num-font { font-family: 'Outfit', sans-serif; }
     </style>
+
+    <style id="admin-mobile-fix">
+        /* ===== طبقة إصلاح الموبايل للوحة التحكم (2026-11-07) — لا تؤثر على الديسكتوب ===== */
+        @media (max-width: 768px) {
+            html, body { overflow-x: hidden !important; }
+            body { -webkit-text-size-adjust: 100%; }
+            img, svg, video, canvas { max-width: 100%; }
+
+            /* منع الزوم التلقائي في آيفون عند التركيز + خط مقروء في الحقول */
+            input, select, textarea { font-size: 16px !important; }
+
+            /* رفع أصغر أحجام الخط لأرضية مقروءة */
+            [class*="text-[9px]"], [class*="text-[10px]"] { font-size: 12px !important; }
+            [class*="text-[11px]"] { font-size: 12.5px !important; }
+
+            /* أهداف لمس مريحة */
+            button, [role="button"] { min-height: 40px; }
+            input[type="checkbox"], input[type="radio"] { min-height: 0; }
+
+            /* الهيدر يلتف بدل ما ينضغط */
+            header [class*="h-16"] { height: auto !important; min-height: 4rem; flex-wrap: wrap; row-gap: 0.5rem; padding-top: 0.5rem; padding-bottom: 0.5rem; }
+
+            /* الجداول: خلايا أضيق وخط أوضح وأول عمود ثابت أثناء السحب */
+            table { font-size: 13px; }
+            table th, table td { padding: 8px 10px !important; }
+            table th:first-child, table td:first-child { position: sticky; inset-inline-start: 0; z-index: 2; }
+            table th:first-child { background-color: #F1F3F5; }
+            table td:first-child { background-color: #FFFFFF; }
+            [class*="overflow-x-auto"] { -webkit-overflow-scrolling: touch; }
+
+            /* النوافذ المنبثقة: شيت شبه كامل الشاشة بيتمرر من جوه */
+            [class*="fixed"][class*="inset-0"] { padding: 0.5rem !important; }
+            [class*="fixed"][class*="inset-0"] > div:not([class*="absolute"]) {
+                width: 100% !important; max-height: calc(100dvh - 1rem);
+                overflow-y: auto; -webkit-overflow-scrolling: touch;
+            }
+        }
+    </style>
 </head>
 <body class="bg-[#F8F9FA] text-trek-black min-h-screen">
 

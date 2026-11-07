@@ -1,48 +1,379 @@
 {
-  "cleanUrls": true,
-  "trailingSlash": false,
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "X-Frame-Options",
-          "value": "SAMEORIGIN"
-        },
-        {
-          "key": "X-XSS-Protection",
-          "value": "1; mode=block"
-        },
-        {
-          "key": "Referrer-Policy",
-          "value": "strict-origin-when-cross-origin"
-        },
-        {
-          "key": "Strict-Transport-Security",
-          "value": "max-age=63072000; includeSubDomains; preload"
-        },
-        {
-          "key": "Permissions-Policy",
-          "value": "camera=(), microphone=(), geolocation=()"
-        },
-        {
-          "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://connect.facebook.net https://analytics.tiktok.com https://sc-static.net https://www.googletagmanager.com https://www.google-analytics.com https://www.youtube.com https://s.ytimg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; media-src 'self' https: blob:; connect-src 'self' https:; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com https://accept.paymob.com https://atfawry.com; frame-ancestors 'self';"
-        }
-      ]
-    },
-    {
-      "source": "/(.*)\\.(png|jpg|jpeg|svg|webp|ico)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
-      ]
-    }
-  ]
+ "redirects": [
+  {
+   "source": "/product-1700101",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1700102",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1700104",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1700103",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1700106",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1700107",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1700108",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1700105",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1700109",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1700110",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1700111",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1700112",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1700113",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1189653",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1189697",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1189711",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1189712",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1189713",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1189715",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1189716",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1189718",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1190074",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1190076",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1190077",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1190082",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1190088",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1190090",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1190093",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1190095",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1190100",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1190102",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1195103",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1198891",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1198965",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1198966",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1198971",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1198973",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1198974",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1198976",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1199234",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1201500",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1201501",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1201504",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1201505",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1201506",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1201507",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1201508",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1516235",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1516237",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1516238",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1516239",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1516242",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1516247",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1516250",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1516255",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1516335",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1516337",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1581338",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1581341",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1581344",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1611369",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1668524",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1668533",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1668541",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1668543",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1668545",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1668547",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1668559",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1668565",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1668568",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1668571",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1668575",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1668580",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1668605",
+   "destination": "/shop",
+   "permanent": true
+  },
+  {
+   "source": "/product-1670341",
+   "destination": "/shop",
+   "permanent": true
+  }
+ ]
 }

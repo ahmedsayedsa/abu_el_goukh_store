@@ -542,26 +542,6 @@
  {
   "active": true,
   "badge": "",
-  "cat_key": "mountain",
-  "category": "دراجات جبلية",
-  "frame": "حديد",
-  "gears": "21",
-  "id": 1900028,
-  "image": "https://store.primeasset.company/images/71023.jpg",
-  "images": [
-   "https://store.primeasset.company/images/71023.jpg"
-  ],
-  "metaDescription": "عجلة ريس روكيت مقاس 26 — هيكل حديد، 21 سرعة، مساعد أمامي، فرامل ديسك، سلة أمامية ورفارف.",
-  "name": "عجلة ريس روكيت مقاس 26",
-  "price": 6350,
-  "size": "26",
-  "sku": "71023",
-  "specs": "21 سرعة • فرامل ديسك أمامية وخلفية • مساعد أمامي • سلة أمامية • حمالة خلفية • رفارف • مسند جانبي",
-  "inStock": true
- },
- {
-  "active": true,
-  "badge": "",
   "cat_key": "road",
   "category": "دراجات سباق وطريق",
   "frame": "ألومنيوم",

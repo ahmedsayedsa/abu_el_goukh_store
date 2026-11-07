@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>أدوات الكتالوج — أبو الجوخ</title>
+<style>
+:root{--red:#C8102E;--bg:#0A0A0C;--card:#151518;--line:#2a2a2e;--txt:#f2f2f2;--mut:#a7a7ad}
+*{box-sizing:border-box}
+body{font-family:'Segoe UI',Tahoma,sans-serif;background:var(--bg);color:var(--txt);margin:0;padding:16px}
+.wrap{max-width:760px;margin:0 auto}
+h1{font-size:21px;margin:6px 0 2px}
+.sub{color:var(--mut);font-size:13px;margin:0 0 14px;line-height:1.8}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px}
+.card h2{font-size:16px;margin:0 0 4px}
+.card p{color:var(--mut);font-size:13px;line-height:1.9;margin:0 0 12px}
+label{display:block;font-size:13px;margin:10px 0 5px;color:var(--txt)}
+input[type=number],select,input[type=file]{width:100%;background:#0e0e10;color:var(--txt);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:16px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row>*{flex:1;min-width:140px}
+button{background:var(--red);color:#fff;border:0;border-radius:12px;padding:13px 18px;font-size:15px;font-weight:800;cursor:pointer;width:100%;margin-top:12px}
+button.sec{background:#232327;border:1px solid var(--line)}
+button:disabled{opacity:.45}
+.check{display:flex;align-items:center;gap:8px;font-size:14px;margin-top:12px}
+.check input{width:20px;height:20px}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
+th,td{border-bottom:1px solid var(--line);padding:7px 5px;text-align:right}
+.msg{margin-top:12px;font-size:14px;line-height:1.9;white-space:pre-wrap;word-break:break-word}
+.ok{color:#4ade80}.err{color:#f87171}.warn{color:#fbbf24}
+.radio{display:flex;gap:16px;margin-top:8px;font-size:14px;flex-wrap:wrap}
+.radio label{display:flex;gap:6px;align-items:center;margin:0}
+.count{font-size:13px;color:var(--mut)}
+a.back{color:var(--mut);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<a class="back" href="/admin">← رجوع للوحة التحكم</a>
+<h1>أدوات الكتالوج</h1>
+<p class="sub">الأدوات دي بتشتغل على قاعدة بيانات المتجر مباشرة (نفس اللي المتجر بيعرض منها). لازم تكون مسجل دخول لوحة التحكم في نفس المتصفح. عدد المنتجات حاليًا: <b id="prod-count">...</b></p>
+
+<div class="card">
+<h2>١) تعديل الأسعار بالنسبة %</h2>
+<p>مثال: سعر الصرف زاد — ارفع كل الأسعار ٥% مرة واحدة. التقريب بيخلي كل سعر ينتهي بـ٥٠ أو ١٠٠ (تقريب لفوق). قبل النشر هتنزل نسخة احتياطية تلقائيًا.</p>
+<div class="row">
+<div><label>التصنيف</label><select id="bp-cat"><option value="all">كل التصنيفات</option></select></div>
+<div><label>النسبة % (سالب للخصم)</label><input type="number" id="bp-pct" step="0.5" placeholder="5"></div>
+</div>
+<label class="check"><input type="checkbox" id="bp-round" checked> تقريب لفوق لأقرب ٥٠ (ينتهي بـ٥٠ أو ١٠٠)</label>
+<button id="bp-preview" class="sec">معاينة الأسعار الجديدة</button>
+<div id="bp-out" class="msg"></div>
+<button id="bp-apply" disabled>نشر الأسعار الجديدة</button>
+</div>
+
+<div class="card">
+<h2>٢) أبلود منتجات كتير (استيراد)</h2>
+<p>ارفع ملف JSON (صيغة تصدير المتجر) أو CSV بالأعمدة: sku, name, price, category, cat_key, size, image, specs. الدمج بيحدّث المنتج بنفس الـSKU أو يضيفه جديد. الاستبدال الكامل بيستبدل الكتالوج كله بالملف.</p>
+<input type="file" id="im-file" accept=".json,.csv">
+<div class="radio">
+<label><input type="radio" name="im-mode" value="merge" checked> دمج بالـSKU (الأأمن)</label>
+<label><input type="radio" name="im-mode" value="replace"> استبدال كامل</label>
+</div>
+<button id="im-preview" class="sec">معاينة الملف</button>
+<div id="im-out" class="msg"></div>
+<button id="im-apply" disabled>نشر المنتجات</button>
+<div class="row">
+<button id="im-template" class="sec">تنزيل قالب CSV</button>
+</div>
+</div>
+
+<div class="card">
+<h2>٣) تصدير / نسخة احتياطية</h2>
+<p>تنزيل الكتالوج الحالي كله في ملف JSON واحد — ينفع نسخة احتياطية أو أساس لتعديل ورفع تاني.</p>
+<button id="ex-btn" class="sec">تصدير الكتالوج الحالي</button>
+<div id="ex-out" class="msg"></div>
+</div>
+</div>
+
+<script>
+let CATALOG = [];
+let bpPlan = null;
+let imPlan = null;
+
+function getToken() {
+  const JWT_RE = /^eyJ[A-Za-z0-9_\-]+\.[A-Za-z0-9_\-]+\.[A-Za-z0-9_\-]+$/;
+  for (const s of [localStorage, sessionStorage]) {
+    try {
+      for (let i = 0; i < s.length; i++) {
+        const v = s.getItem(s.key(i));
+        if (!v) continue;
+        let cands = [v];
+        try { const o = JSON.parse(v); if (o && o.token) cands.push(o.token); } catch (e) {}
+        for (const c of cands) { if (typeof c === 'string' && JWT_RE.test(c.trim())) return c.trim(); }
+      }
+    } catch (e) {}
+  }
+  return null;
+}
+function authHeaders() {
+  const h = { 'Content-Type': 'application/json' };
+  const t = getToken();
+  if (t) h.Authorization = 'Bearer ' + t;
+  return h;
+}
+async function loadCatalog() {
+  const r = await fetch('/api/products?v=' + Date.now());
+  if (!r.ok) throw new Error('GET ' + r.status);
+  const d = await r.json();
+  CATALOG = Array.isArray(d) ? d : (d.products || []);
+  document.getElementById('prod-count').textContent = CATALOG.length;
+  const sel = document.getElementById('bp-cat');
+  const cats = {};
+  CATALOG.forEach(p => { if (p.cat_key) cats[p.cat_key] = p.category || p.cat_key; });
+  Object.keys(cats).forEach(k => {
+    const o = document.createElement('option');
+    o.value = k; o.textContent = cats[k];
+    sel.appendChild(o);
+  });
+  return CATALOG;
+}
+function download(name, text) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
+  a.download = name;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+}
+function backupName(tag) {
+  return 'catalog-backup-' + tag + '-' + new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-') + '.json';
+}
+async function putCatalog(items, outEl) {
+  download(backupName('before'), JSON.stringify(CATALOG, null, 1));
+  const r = await fetch('/api/products', { method: 'PUT', headers: authHeaders(), credentials: 'include', body: JSON.stringify(items) });
+  const txt = await r.text();
+  if (!r.ok) {
+    outEl.innerHTML = '<span class="err">فشل النشر: PUT ' + r.status + '\n' + txt.slice(0, 250) + (r.status === 401 ? '\nسجل دخول لوحة التحكم في نفس المتصفح الأول وبعدين جرب تاني.' : '') + '</span>';
+    return false;
+  }
+  await loadCatalog();
+  return true;
+}
+function ceil50(v) { return Math.ceil(v / 50) * 50; }
+
+/* ---------- bulk price ---------- */
+document.getElementById('bp-preview').addEventListener('click', () => {
+  const out = document.getElementById('bp-out');
+  const pct = parseFloat(document.getElementById('bp-pct').value);
+  const cat = document.getElementById('bp-cat').value;
+  const round = document.getElementById('bp-round').checked;
+  if (isNaN(pct) || pct === 0 || pct < -90 || pct > 500) { out.innerHTML = '<span class="err">دخل نسبة صحيحة بين -90 و 500 (مش صفر).</span>'; return; }
+  const factor = 1 + pct / 100;
+  bpPlan = CATALOG.map(p => ({ ...p }));
+  let affected = 0, totalDelta = 0;
+  const rows = [];
+  bpPlan.forEach(p => {
+    if (cat !== 'all' && p.cat_key !== cat) return;
+    const oldPrice = Number(p.price) || 0;
+    let np = oldPrice * factor;
+    np = round ? ceil50(np) : Math.round(np);
+    if (np !== oldPrice) { affected++; totalDelta += np - oldPrice; p.price = np; if (rows.length < 15) rows.push([p.name, oldPrice, np]); }
+  });
+  if (!affected) { out.innerHTML = '<span class="warn">مفيش أسعار هتتغير بالنسبه دي.</span>'; document.getElementById('bp-apply').disabled = true; return; }
+  let html = '<span class="ok">هيتغير ' + affected + ' منتج — إجمالي الفرق: ' + totalDelta.toLocaleString('en-US') + ' ج.م</span>';
+  html += '<table><tr><th>المنتج</th><th>القديم</th><th>الجديد</th></tr>' + rows.map(r => '<tr><td>' + r[0] + '</td><td>' + r[1].toLocaleString('en-US') + '</td><td>' + r[2].toLocaleString('en-US') + '</td></tr>').join('') + '</table>';
+  if (affected > 15) html += '<div class="count">... و' + (affected - 15) + ' منتج تاني</div>';
+  out.innerHTML = html;
+  document.getElementById('bp-apply').disabled = false;
+});
+document.getElementById('bp-apply').addEventListener('click', async () => {
+  const out = document.getElementById('bp-out');
+  if (!bpPlan) return;
+  document.getElementById('bp-apply').disabled = true;
+  out.innerHTML = 'بينشر... (نزلت نسخة احتياطية قبل النشر)';
+  const ok = await putCatalog(bpPlan, out);
+  if (ok) { out.innerHTML = '<span class="ok">تم نشر الأسعار الجديدة ✅ العدد الحالي: ' + CATALOG.length + ' منتج. حدث صفحة المتجر وشوف النتيجة.</span>'; bpPlan = null; }
+  else document.getElementById('bp-apply').disabled = false;
+});
+
+/* ---------- import ---------- */
+function parseCSV(text) {
+  const rows = [];
+  let row = [], cell = '', inQ = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQ) {
+      if (c === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else inQ = false; }
+      else cell += c;
+    } else if (c === '"') inQ = true;
+    else if (c === ',') { row.push(cell); cell = ''; }
+    else if (c === '\n' || c === '\r') {
+      if (c === '\r' && text[i + 1] === '\n') i++;
+      row.push(cell); cell = '';
+      if (row.length > 1 || row[0] !== '') rows.push(row);
+      row = [];
+    } else cell += c;
+  }
+  row.push(cell);
+  if (row.length > 1 || row[0] !== '') rows.push(row);
+  if (!rows.length) return [];
+  const head = rows[0].map(h => String(h).trim().toLowerCase());
+  return rows.slice(1).map(r => {
+    const o = {};
+    head.forEach((h, idx) => { o[h] = (r[idx] !== undefined ? String(r[idx]).trim() : ''); });
+    return o;
+  }).filter(o => Object.values(o).some(v => v !== ''));
+}
+function normalizeItem(raw, id) {
+  const sku = String(raw.sku || '').trim();
+  const name = String(raw.name || '').trim();
+  const price = Number(String(raw.price).replace(/[^0-9.]/g, ''));
+  if (!sku || !name || !(price > 0)) return null;
+  const img = String(raw.image || ('images/' + sku + '.jpg')).trim();
+  const fullImg = img.startsWith('http') ? img : ('https://store.primeasset.company/' + img.replace(/^\//, ''));
+  return {
+    id: id,
+    name: name,
+    category: String(raw.category || 'دراجات').trim(),
+    cat_key: String(raw.cat_key || 'mountain').trim(),
+    price: price,
+    sku: sku,
+    image: fullImg,
+    images: [fullImg],
+    badge: String(raw.badge || ''),
+    specs: String(raw.specs || ''),
+    frame: String(raw.frame || ''),
+    gears: String(raw.gears || ''),
+    size: String(raw.size || ''),
+    metaDescription: name,
+    active: true,
+    inStock: true
+  };
+}
+document.getElementById('im-preview').addEventListener('click', async () => {
+  const out = document.getElementById('im-out');
+  const f = document.getElementById('im-file').files[0];
+  document.getElementById('im-apply').disabled = true;
+  imPlan = null;
+  if (!f) { out.innerHTML = '<span class="err">اختار ملف الأول.</span>'; return; }
+  const mode = document.querySelector('input[name="im-mode"]:checked').value;
+  let raws = [];
+  try {
+    const text = await f.text();
+    if (f.name.toLowerCase().endsWith('.json')) { const j = JSON.parse(text); raws = Array.isArray(j) ? j : (j.products || []); }
+    else raws = parseCSV(text);
+  } catch (e) { out.innerHTML = '<span class="err">الملف مش سليم: ' + e.message + '</span>'; return; }
+  if (!raws.length) { out.innerHTML = '<span class="err">الملف فاضي أو صيغته مش مفهومة.</span>'; return; }
+  const skipped = [];
+  if (mode === 'replace') {
+    let nextId = 1900001;
+    const items = [];
+    raws.forEach(r => {
+      const keepId = Number(r.id) > 0 ? Number(r.id) : null;
+      const n = (r.name && r.price !== undefined && r.sku && r.cat_key && r.image) ? { ...r, id: keepId || nextId } : normalizeItem(r, keepId || nextId);
+      if (n) { items.push(n); nextId = Math.max(nextId, Number(n.id) + 1); } else skipped.push(String(r.sku || r.name || '?'));
+    });
+    if (!items.length) { out.innerHTML = '<span class="err">مفيش منتج سليم واحد في الملف.</span>'; return; }
+    imPlan = items;
+    out.innerHTML = '<span class="warn">استبدال كامل: الملف فيه ' + items.length + ' منتج سليم وهيستبدل الكتالوج الحالي (' + CATALOG.length + ').</span>' + (skipped.length ? '\n<span class="err">اتخطى ' + skipped.length + ': ' + skipped.slice(0, 6).join('، ') + '</span>' : '');
+  } else {
+    const bySku = new Map(CATALOG.map(p => [String(p.sku), p]));
+    let maxId = CATALOG.reduce((m, p) => Math.max(m, Number(p.id) || 0), 0);
+    let added = 0, updated = 0;
+    const merged = CATALOG.map(p => ({ ...p }));
+    const idxBySku = new Map(merged.map((p, i) => [String(p.sku), i]));
+    raws.forEach(r => {
+      const sku = String(r.sku || '').trim();
+      if (!sku) { skipped.push('?'); return; }
+      if (idxBySku.has(sku)) {
+        const cur = merged[idxBySku.get(sku)];
+        const n = normalizeItem({ ...cur, ...r, sku: sku }, cur.id);
+        if (n) { merged[idxBySku.get(sku)] = { ...cur, ...n, id: cur.id, images: cur.images && cur.images.length ? cur.images : n.images }; updated++; }
+        else skipped.push(sku);
+      } else {
+        const n = normalizeItem(r, ++maxId);
+        if (n) { merged.push(n); idxBySku.set(sku, merged.length - 1); added++; }
+        else skipped.push(sku);
+      }
+    });
+    if (!added && !updated) { out.innerHTML = '<span class="err">مفيش منتج سليم في الملف.</span>' + (skipped.length ? ' اتخطى: ' + skipped.slice(0, 6).join('، ') : ''); return; }
+    imPlan = merged;
+    out.innerHTML = '<span class="ok">دمج: ' + added + ' منتج جديد + ' + updated + ' تحديث — الإجمالي بعد النشر: ' + merged.length + ' منتج.</span>' + (skipped.length ? '\n<span class="err">اتخطى ' + skipped.length + ': ' + skipped.slice(0, 6).join('، ') + '</span>' : '');
+  }
+  document.getElementById('im-apply').disabled = false;
+});
+document.getElementById('im-apply').addEventListener('click', async () => {
+  const out = document.getElementById('im-out');
+  if (!imPlan) return;
+  document.getElementById('im-apply').disabled = true;
+  out.innerHTML = 'بينشر... (نزلت نسخة احتياطية قبل النشر)';
+  const ok = await putCatalog(imPlan, out);
+  if (ok) { out.innerHTML = '<span class="ok">تم النشر ✅ العدد الحالي: ' + CATALOG.length + ' منتج.</span>'; imPlan = null; }
+  else document.getElementById('im-apply').disabled = false;
+});
+document.getElementById('im-template').addEventListener('click', () => {
+  const csv = 'sku,name,price,category,cat_key,size,image,specs\n12345,دراجة مثال مقاس 26,8500,دراجات جبلية,mountain,26,images/12345.jpg,21 سرعة - فرامل ديسك\n';
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv' }));
+  a.download = 'catalog-template.csv';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+});
+
+/* ---------- export ---------- */
+document.getElementById('ex-btn').addEventListener('click', async () => {
+  const out = document.getElementById('ex-out');
+  try {
+    await loadCatalog();
+    download(backupName('export'), JSON.stringify(CATALOG, null, 1));
+    out.innerHTML = '<span class="ok">نزل ملف فيه ' + CATALOG.length + ' منتج.</span>';
+  } catch (e) { out.innerHTML = '<span class="err">فشل التصدير: ' + e.message + '</span>'; }
+});
+
+loadCatalog().catch(e => {
+  document.getElementById('prod-count').textContent = 'خطأ';
+  document.getElementById('bp-out').innerHTML = '<span class="err">مش قادر أقرأ الكتالوج: ' + e.message + '</span>';
+});
+</script>
+</body>
+</html>

@@ -546,6 +546,18 @@ const curatedBikes = [
   "inStock": true
  },
  {
+  "id": 1900028,
+  "name": "عجلة ريس روكيت مقاس 26",
+  "category": "دراجات جبلية",
+  "cat_key": "mountain",
+  "price": 6350,
+  "sku": "71023",
+  "image": "images/71023.jpg",
+  "badge": "",
+  "specs": "21 سرعة • فرامل ديسك أمامية وخلفية • مساعد أمامي • سلة أمامية • حمالة خلفية • رفارف • مسند جانبي",
+  "inStock": true
+ },
+ {
   "id": 1900029,
   "name": "دراجة هايبرد Galaxy RL600H مقاس 700C",
   "category": "دراجات سباق وطريق",
@@ -1669,6 +1681,20 @@ window.trackStoreEvent('AddToCart', { id: p.id, name: p.name, price: p.price });
 }
 window.location.href = 'checkout.html';
 }
+function buildCatPills(products) {
+const container = document.querySelector('.cat-pill') ? document.querySelector('.cat-pill').parentElement : null;
+if (!container || !Array.isArray(products)) return;
+const LABELS = { all: 'الكل', mountain: 'جبلية (Mountain)', road: 'طرق وسرعة (Road)', kids: 'أطفال وبناتي (Kids)', fat: 'دبابات (Fat)', electric: 'كهربائية (Electric)', folding: 'قابلة للطي (Folding)', city: 'مدينة (City)', accessories: 'إكسسوارات وقطع غيار' };
+const ORDER = ['all', 'mountain', 'road', 'kids', 'fat', 'electric', 'folding', 'city', 'accessories'];
+const present = {};
+products.forEach(p => { const k = p.cat_key || 'accessories'; if (!present[k]) present[k] = p.category || k; });
+const keys = ORDER.filter(k => k === 'all' || present[k]);
+Object.keys(present).forEach(k => { if (!keys.includes(k)) keys.push(k); });
+const active = (window.filterState && filterState.category) || 'all';
+const baseCls = 'cat-pill whitespace-nowrap bg-trek-lightgray hover:bg-trek-border text-trek-black text-xs font-semibold px-4 py-2 rounded-full transition flex-shrink-0';
+const actCls = 'cat-pill whitespace-nowrap bg-trek-black text-white text-xs font-bold px-4 py-2 rounded-full transition shadow-sm flex-shrink-0';
+container.innerHTML = keys.map(k => '<button onclick="filterCategory(\'' + k + '\')" id="btn-cat-' + k + '" class="' + (k === active ? actCls : baseCls) + '"> ' + (LABELS[k] || present[k] || k) + ' </button>').join('');
+}
 async function getLiveCatalog() {
 // 1. Primary: /api/products (seeds Firebase if empty, returns authoritative catalog)
 try {
@@ -1727,6 +1753,7 @@ checkShopInstallmentStatus();
 try {
 const catalog = await getLiveCatalog();
 allLoadedProducts = catalog.map(cleanProductObj);
+try { buildCatPills(allLoadedProducts); } catch(e) {}
 } catch(e) { console.error('Catalog load error', e); }
 // 2. Load saved cart (with mandatory sanitization)
 try {
